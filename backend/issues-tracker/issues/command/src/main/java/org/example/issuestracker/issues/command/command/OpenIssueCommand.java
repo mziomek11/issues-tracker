@@ -1,4 +1,4 @@
-package org.example.issuestracker.issues.command.application.command;
+package org.example.issuestracker.issues.command.command;
 
 import org.example.issuestracker.issues.command.domain.IssueContent;
 import org.example.issuestracker.issues.command.domain.IssueId;
