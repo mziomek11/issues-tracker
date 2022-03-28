@@ -40,11 +40,19 @@
     >
         <constructor-arg ref="commandDispatcher" />
         <constructor-arg ref="openIssueCommandHandler" />
+        <constructor-arg ref="closeIssueCommandHandler" />
     </bean>
 
     <bean
         id="openIssueCommandHandler"
-        class="org.example.issuestracker.issues.command.command.handler.OpenIssueCommandHandler"
+        class="org.example.issuestracker.issues.command.application.command.handler.OpenIssueCommandHandler"
+    >
+        <constructor-arg ref="issueEventSourcingHandler"/>
+    </bean>
+
+    <bean
+            id="closeIssueCommandHandler"
+            class="org.example.issuestracker.issues.command.application.command.handler.CloseIssueCommandHandler"
     >
         <constructor-arg ref="issueEventSourcingHandler"/>
     </bean>

@@ -3,6 +3,7 @@ package org.example.issuestracker.issues.command.domain;
 import org.example.cqrs.domain.AggregateRoot;
 import org.example.issuestracker.issues.common.domain.IssueStatus;
 import org.example.issuestracker.issues.common.domain.IssueType;
+import org.example.issuestracker.issues.common.event.IssueClosedEvent;
 import org.example.issuestracker.issues.common.event.IssueOpenedEvent;
 
 public class Issue extends AggregateRoot {
@@ -21,6 +22,19 @@ public class Issue extends AggregateRoot {
         ));
     }
 
+    @Override
+    public IssueId getId() {
+        return issueId;
+    }
+
+    public void close() {
+        if (isClosed()) {
+            throw new IssueClosedException();
+        }
+
+        raiseEvent(new IssueClosedEvent(issueId.toString()));
+    }
+
     public void on(IssueOpenedEvent issueOpenedEvent) {
         this.issueId = IssueId.fromString(issueOpenedEvent.getId());
         this.issueType = issueOpenedEvent.getIssueType();
@@ -28,8 +42,11 @@ public class Issue extends AggregateRoot {
         this.issueContent = new IssueContent(issueOpenedEvent.getIssueContent());
     }
 
-    @Override
-    public IssueId getId() {
-        return issueId;
+    public void on(IssueClosedEvent issueClosedEvent) {
+        this.issueStatus = IssueStatus.CLOSED;
+    }
+
+    private boolean isClosed() {
+        return issueStatus.equals(IssueStatus.CLOSED);
     }
 }

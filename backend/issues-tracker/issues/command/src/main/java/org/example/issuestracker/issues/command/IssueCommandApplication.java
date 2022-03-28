@@ -1,6 +1,7 @@
 package org.example.issuestracker.issues.command;
 
-import org.example.issuestracker.issues.command.command.OpenIssueCommand;
+import org.example.issuestracker.issues.command.application.command.CloseIssueCommand;
+import org.example.issuestracker.issues.command.application.command.OpenIssueCommand;
 import org.example.issuestracker.issues.command.infrastructure.command.IssueCommandGateway;
 import org.example.issuestracker.issues.common.domain.IssueType;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -11,8 +12,11 @@ class IssueCommandApplication {
     public static void main(String[] args) {
         var context = new ClassPathXmlApplicationContext("beans.xml");
         var commandGateway = context.getBean("commandGateway", IssueCommandGateway.class);
-        var command = new OpenIssueCommand(UUID.randomUUID(), IssueType.BUG, "Example text");
+        var uuid = UUID.randomUUID();
+        var openCommand = new OpenIssueCommand(uuid, IssueType.BUG, "Example text");
+        var goodCloseCommand = new CloseIssueCommand(uuid);
 
-        commandGateway.dispatch(command);
+        commandGateway.dispatch(openCommand);
+        commandGateway.dispatch(goodCloseCommand);
     }
 }

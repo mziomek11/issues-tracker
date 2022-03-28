@@ -3,7 +3,6 @@ package org.example.issuestracker.issues.command.infrastructure.event;
 import org.example.cqrs.domain.AggregateId;
 import org.example.cqrs.event.*;
 import org.example.cqrs.domain.AggregateConcurrencyException;
-import org.example.cqrs.domain.AggregateNotFoundException;
 import org.example.issuestracker.issues.command.domain.Issue;
 
 import java.util.Date;
@@ -49,10 +48,6 @@ public class IssueEventStore implements EventStore {
     @Override
     public List<BaseEvent> getEvents(AggregateId aggregateId) {
         var events = eventStoreRepository.findByAggregateId(aggregateId);
-
-        if (events.isEmpty()) {
-            throw new AggregateNotFoundException(aggregateId);
-        }
 
         return events
                 .stream()
