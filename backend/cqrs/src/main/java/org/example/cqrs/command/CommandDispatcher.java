@@ -1,6 +1,4 @@
-package org.example.cqrs.infrastructure;
-
-import org.example.cqrs.command.CommandHandler;
+package org.example.cqrs.command;
 
 public interface CommandDispatcher {
     <T> void registerHandler(Class<T> type, CommandHandler<T> handler);

@@ -11,6 +11,8 @@ public class Issue extends AggregateRoot {
     private IssueStatus issueStatus;
     private IssueContent issueContent;
 
+    public Issue() {}
+
     public Issue(IssueId issueId, IssueType issueType, IssueContent issueContent) {
         raiseEvent(new IssueOpenedEvent(
                 issueId.toString(),

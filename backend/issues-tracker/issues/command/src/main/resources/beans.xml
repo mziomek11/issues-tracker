@@ -5,14 +5,38 @@
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean
-            id="commandDispatcher"
-            class="org.example.issuestracker.issues.command.infrastructure.IssuesCommandDispatcher"
+            id="issueEventProducer"
+            class="org.example.issuestracker.issues.command.infrastructure.event.IssueEventProducer"
+    />
+
+    <bean
+        id="issueEventStoreRepository"
+        class="org.example.issuestracker.issues.command.infrastructure.event.InMemoryIssueEventStoreRepository"
+    />
+
+    <bean
+        id="issueEventStore"
+        class="org.example.issuestracker.issues.command.infrastructure.event.IssueEventStore"
     >
+        <constructor-arg ref="issueEventStoreRepository" />
+        <constructor-arg ref="issueEventProducer" />
     </bean>
 
     <bean
+        id="issueEventSourcingHandler"
+        class="org.example.issuestracker.issues.command.infrastructure.event.IssueEventSourcingHandler"
+    >
+        <constructor-arg ref="issueEventStore"/>
+    </bean>
+
+    <bean
+            id="commandDispatcher"
+            class="org.example.issuestracker.issues.command.infrastructure.command.IssueCommandDispatcher"
+    />
+
+    <bean
         id="commandGateway"
-        class="org.example.issuestracker.issues.command.infrastructure.IssuesCommandGateway"
+        class="org.example.issuestracker.issues.command.infrastructure.command.IssueCommandGateway"
     >
         <constructor-arg ref="commandDispatcher" />
         <constructor-arg ref="openIssueCommandHandler" />
@@ -21,5 +45,7 @@
     <bean
         id="openIssueCommandHandler"
         class="org.example.issuestracker.issues.command.command.handler.OpenIssueCommandHandler"
-    ></bean>
+    >
+        <constructor-arg ref="issueEventSourcingHandler"/>
+    </bean>
 </beans>

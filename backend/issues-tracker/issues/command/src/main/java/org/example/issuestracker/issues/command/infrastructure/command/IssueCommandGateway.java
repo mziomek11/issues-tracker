@@ -1,14 +1,14 @@
-package org.example.issuestracker.issues.command.infrastructure;
+package org.example.issuestracker.issues.command.infrastructure.command;
 
-import org.example.cqrs.infrastructure.CommandDispatcher;
-import org.example.cqrs.infrastructure.CommandGateway;
+import org.example.cqrs.command.CommandDispatcher;
+import org.example.cqrs.command.CommandGateway;
 import org.example.issuestracker.issues.command.command.OpenIssueCommand;
 import org.example.issuestracker.issues.command.command.handler.OpenIssueCommandHandler;
 
-public class IssuesCommandGateway implements CommandGateway {
+public class IssueCommandGateway implements CommandGateway {
     private final CommandDispatcher commandDispatcher;
 
-    public IssuesCommandGateway(
+    public IssueCommandGateway(
             CommandDispatcher commandDispatcher,
             OpenIssueCommandHandler openIssueCommandHandler
     ) {
