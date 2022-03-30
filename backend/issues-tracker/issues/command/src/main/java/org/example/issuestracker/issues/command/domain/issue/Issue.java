@@ -81,10 +81,19 @@ public class Issue extends AggregateRoot {
     public void changeCommentContent(CommentId commentId, CommentContent commentContent) {
         ensureIsOpen();
 
-        var comment = findCommentById(commentId).orElseThrow(() -> new CommentNotFoundException(id, commentId));
+        var comment = findCommentByIdOrThrow(commentId);
         comment.ensureCanChangeContentTo(commentContent);
 
         raiseEvent(issueCommentContentChanged(id, commentId, commentContent));
+    }
+
+    public void hideComment(CommentId commentId) {
+        ensureIsOpen();
+
+        var comment = findCommentByIdOrThrow(commentId);
+        comment.ensureCanHide();
+
+        raiseEvent(issueCommentHidden(id, commentId));
     }
 
     public void on(IssueOpenedEvent issueOpenedEvent) {
@@ -127,6 +136,13 @@ public class Issue extends AggregateRoot {
         comment.changeContent(commentContent);
     }
 
+    public void on(IssueCommentHiddenEvent issueCommentHiddenEvent) {
+        var commentId = CommentId.fromString(issueCommentHiddenEvent.getCommentId());
+        var comment = findCommentById(commentId).get();
+
+        comment.hide();
+    }
+
     @Override
     public IssueId getId() {
         return id;
@@ -144,6 +160,10 @@ public class Issue extends AggregateRoot {
 
     private boolean hasComment(CommentId commentId) {
         return findCommentById(commentId).isPresent();
+    }
+
+    private Comment findCommentByIdOrThrow(CommentId commentId) {
+        return findCommentById(commentId).orElseThrow(() -> new CommentNotFoundException(id, commentId));
     }
 
     private Optional<Comment> findCommentById(CommentId commentId) {

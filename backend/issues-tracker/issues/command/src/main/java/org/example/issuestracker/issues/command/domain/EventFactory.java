@@ -54,5 +54,9 @@ public class EventFactory {
         return new IssueCommentContentChangedEvent(issueId.toString(), commentId.toString(), commentContent.getText());
     }
 
+    public static IssueCommentHiddenEvent issueCommentHidden(IssueId issueId, CommentId commentId) {
+        return new IssueCommentHiddenEvent(issueId.toString(), commentId.toString());
+    }
+
     private EventFactory() {}
 }

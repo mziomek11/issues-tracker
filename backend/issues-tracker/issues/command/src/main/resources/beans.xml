@@ -45,6 +45,7 @@
         <constructor-arg ref="changeIssueTypeCommandHandler" />
         <constructor-arg ref="commentIssueCommandHandler" />
         <constructor-arg ref="changeIssueCommentContentCommandHandler" />
+        <constructor-arg ref="hideIssueCommentCommandHandler" />
     </bean>
 
     <bean
@@ -85,6 +86,13 @@
     <bean
             id="changeIssueCommentContentCommandHandler"
             class="org.example.issuestracker.issues.command.application.command.handler.ChangeIssueCommentContentCommandHandler"
+    >
+        <constructor-arg ref="issueEventSourcingHandler"/>
+    </bean>
+
+    <bean
+            id="hideIssueCommentCommandHandler"
+            class="org.example.issuestracker.issues.command.application.command.handler.HideIssueCommentCommandHandler"
     >
         <constructor-arg ref="issueEventSourcingHandler"/>
     </bean>
