@@ -2,7 +2,7 @@ package org.example.issuestracker.issues.command.domain.comment;
 
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentAlreadyHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentAlreadySetException;
-import org.example.issuestracker.issues.common.domain.CommentStatus;
+import org.example.issuestracker.issues.common.domain.comment.CommentStatus;
 
 public class Comment {
     private final CommentId id;

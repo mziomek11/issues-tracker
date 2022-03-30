@@ -2,7 +2,7 @@ package org.example.issuestracker.issues.command;
 
 import org.example.issuestracker.issues.command.application.command.*;
 import org.example.issuestracker.issues.command.infrastructure.command.IssueCommandGateway;
-import org.example.issuestracker.issues.common.domain.IssueType;
+import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.UUID;

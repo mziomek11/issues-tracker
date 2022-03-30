@@ -5,7 +5,9 @@ import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
-import org.example.issuestracker.issues.common.domain.IssueType;
+import org.example.issuestracker.issues.command.domain.vote.VoterId;
+import org.example.issuestracker.issues.common.domain.issue.IssueType;
+import org.example.issuestracker.issues.common.domain.vote.VoteType;
 import org.example.issuestracker.issues.common.event.*;
 
 public class EventFactory {
@@ -56,6 +58,10 @@ public class EventFactory {
 
     public static IssueCommentHiddenEvent issueCommentHidden(IssueId issueId, CommentId commentId) {
         return new IssueCommentHiddenEvent(issueId.toString(), commentId.toString());
+    }
+
+    public static IssueVotedEvent issueVoted(IssueId issueId, VoterId voterId, VoteType voteType) {
+        return new IssueVotedEvent(issueId.toString(), voterId.toString(), voteType);
     }
 
     private EventFactory() {}

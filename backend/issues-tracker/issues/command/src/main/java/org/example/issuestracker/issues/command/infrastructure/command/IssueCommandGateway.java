@@ -16,7 +16,8 @@ public class IssueCommandGateway implements CommandGateway {
             ChangeIssueTypeCommandHandler changeIssueTypeCommandHandler,
             CommentIssueCommandHandler commentIssueCommandHandler,
             ChangeIssueCommentContentCommandHandler changeIssueCommentContentCommandHandler,
-            HideIssueCommentCommandHandler hideIssueCommentCommandHandler
+            HideIssueCommentCommandHandler hideIssueCommentCommandHandler,
+            VoteIssueCommandHandler voteIssueCommandHandler
     ) {
         this.commandDispatcher = commandDispatcher;
         this.commandDispatcher.registerHandler(OpenIssueCommand.class, openIssueCommandHandler);
@@ -26,6 +27,7 @@ public class IssueCommandGateway implements CommandGateway {
         this.commandDispatcher.registerHandler(CommentIssueCommand.class, commentIssueCommandHandler);
         this.commandDispatcher.registerHandler(ChangeIssueCommentContentCommand.class, changeIssueCommentContentCommandHandler);
         this.commandDispatcher.registerHandler(HideIssueCommentCommand.class, hideIssueCommentCommandHandler);
+        this.commandDispatcher.registerHandler(VoteIssueCommand.class, voteIssueCommandHandler);
     }
 
     @Override

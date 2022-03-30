@@ -5,13 +5,16 @@ import org.example.issuestracker.issues.command.domain.comment.Comment;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
-import org.example.issuestracker.issues.common.domain.IssueStatus;
-import org.example.issuestracker.issues.common.domain.IssueType;
+import org.example.issuestracker.issues.command.domain.vote.Vote;
+import org.example.issuestracker.issues.command.domain.vote.VoterId;
+import org.example.issuestracker.issues.common.domain.issue.IssueStatus;
+import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import org.example.issuestracker.issues.common.event.*;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.example.issuestracker.issues.command.domain.EventFactory.*;
 
@@ -21,7 +24,8 @@ public class Issue extends AggregateRoot {
     private IssueStatus status;
     private IssueContent content;
     private IssueName name;
-    private final Set<Comment> comments = new HashSet<>();
+    private Set<Comment> comments = new HashSet<>();
+    private Set<Vote> votes = new HashSet<>();
 
     public static Issue open(IssueId id, IssueType type, IssueContent content, IssueName name) {
         var issue = new Issue();
@@ -96,6 +100,24 @@ public class Issue extends AggregateRoot {
         raiseEvent(issueCommentHidden(id, commentId));
     }
 
+    public void vote(Vote vote) {
+        ensureIsOpen();
+
+        var optionalExistingVote = findVoteByVoterId(vote.getVoterId());
+        if (optionalExistingVote.isEmpty()) {
+            raiseEvent(issueVoted(id, vote.getVoterId(), vote.getType()));
+
+            return;
+        }
+
+        var existingVote = optionalExistingVote.get();
+        if (vote.hasTheSameTypeAs(existingVote)) {
+            throw new VoteAlreadyExistsException();
+        }
+
+        raiseEvent(issueVoted(id, vote.getVoterId(), vote.getType()));
+    }
+
     public void on(IssueOpenedEvent issueOpenedEvent) {
         this.id = IssueId.fromString(issueOpenedEvent.getId());
         this.type = issueOpenedEvent.getIssueType();
@@ -143,6 +165,19 @@ public class Issue extends AggregateRoot {
         comment.hide();
     }
 
+    public void on(IssueVotedEvent issueVotedEvent) {
+        var voterId = VoterId.fromString(issueVotedEvent.getVoterId());
+        var newVotes = votes
+                .stream()
+                .filter(vote -> !vote.getVoterId().equals(voterId))
+                .collect(Collectors.toSet());
+
+        var newVote = new Vote(voterId, issueVotedEvent.getVoteType());
+        newVotes.add(newVote);
+
+        votes = newVotes;
+    }
+
     @Override
     public IssueId getId() {
         return id;
@@ -170,6 +205,13 @@ public class Issue extends AggregateRoot {
         return comments
                 .stream()
                 .filter(comment -> comment.getId().equals(commentId))
+                .findFirst();
+    }
+
+    private Optional<Vote> findVoteByVoterId(VoterId voterId) {
+        return votes
+                .stream()
+                .filter(vote -> vote.getVoterId().equals(voterId))
                 .findFirst();
     }
 }

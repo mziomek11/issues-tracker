@@ -3,7 +3,7 @@ package org.example.issuestracker.issues.command.application.command;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
-import org.example.issuestracker.issues.common.domain.IssueType;
+import org.example.issuestracker.issues.common.domain.issue.IssueType;
 
 import java.util.UUID;
 
