@@ -6,17 +6,25 @@ import org.example.issuestracker.issues.common.domain.comment.CommentStatus;
 
 public class Comment {
     private final CommentId id;
-    private CommentContent content;
-    private CommentStatus status = CommentStatus.ACTIVE;
+    private final CommentContent content;
+    private final CommentStatus status;
 
     public Comment(CommentId id, CommentContent content) {
         this.id = id;
         this.content = content;
+        this.status = CommentStatus.ACTIVE;
     }
 
-    public void hide() {
+    private Comment(CommentId id, CommentContent content, CommentStatus status) {
+        this.id = id;
+        this.content = content;
+        this.status = status;
+    }
+
+    public Comment hide() {
         ensureCanHide();
-        this.status = CommentStatus.HIDDEN;
+
+        return new Comment(id, content, CommentStatus.HIDDEN);
     }
 
     public void ensureCanHide() {
@@ -25,12 +33,13 @@ public class Comment {
         }
     }
 
-    public void changeContent(CommentContent newContent) {
-        ensureCanChangeContentTo(newContent);
-        this.content = content;
+    public Comment changeContent(CommentContent newContent) {
+        ensureCanChangeContent(newContent);
+
+        return new Comment(id, newContent, status);
     }
 
-    public void ensureCanChangeContentTo(CommentContent newContent) {
+    public void ensureCanChangeContent(CommentContent newContent) {
         if (content.equals(newContent)) {
             throw new CommentContentAlreadySetException();
         }

@@ -4,17 +4,14 @@ import org.example.cqrs.domain.AggregateRoot;
 import org.example.issuestracker.issues.command.domain.comment.Comment;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
+import org.example.issuestracker.issues.command.domain.comment.Comments;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
+import org.example.issuestracker.issues.command.domain.vote.Votes;
 import org.example.issuestracker.issues.common.domain.issue.IssueStatus;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import org.example.issuestracker.issues.common.event.*;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.example.issuestracker.issues.command.domain.EventFactory.*;
 
@@ -24,8 +21,8 @@ public class Issue extends AggregateRoot {
     private IssueStatus status;
     private IssueContent content;
     private IssueName name;
-    private Set<Comment> comments = new HashSet<>();
-    private Set<Vote> votes = new HashSet<>();
+    private Comments comments = new Comments();
+    private Votes votes = new Votes();
 
     public static Issue open(IssueId id, IssueType type, IssueContent content, IssueName name) {
         var issue = new Issue();
@@ -74,72 +71,54 @@ public class Issue extends AggregateRoot {
 
     public void comment(Comment comment) {
         ensureIsOpen();
-
-        if (hasComment(comment.getId())) {
-            throw new CommentWithIdAlreadyExistsException(id, comment.getId());
-        }
+        comments.ensureCanAdd(comment);
 
         raiseEvent(issueCommented(id, comment.getId(), comment.getContent()));
     }
 
     public void changeCommentContent(CommentId commentId, CommentContent commentContent) {
         ensureIsOpen();
-
-        var comment = findCommentByIdOrThrow(commentId);
-        comment.ensureCanChangeContentTo(commentContent);
+        comments.ensureCanChangeContent(commentId, commentContent);
 
         raiseEvent(issueCommentContentChanged(id, commentId, commentContent));
     }
 
     public void hideComment(CommentId commentId) {
         ensureIsOpen();
-
-        var comment = findCommentByIdOrThrow(commentId);
-        comment.ensureCanHide();
+        comments.ensureCanHide(commentId);
 
         raiseEvent(issueCommentHidden(id, commentId));
     }
 
     public void vote(Vote vote) {
         ensureIsOpen();
-
-        var optionalExistingVote = findVoteByVoterId(vote.getVoterId());
-        if (optionalExistingVote.isEmpty()) {
-            raiseEvent(issueVoted(id, vote.getVoterId(), vote.getType()));
-
-            return;
-        }
-
-        var existingVote = optionalExistingVote.get();
-        if (vote.hasTheSameTypeAs(existingVote)) {
-            throw new VoteAlreadyExistsException();
-        }
+        votes.ensureCanAdd(vote);
 
         raiseEvent(issueVoted(id, vote.getVoterId(), vote.getType()));
     }
 
     public void on(IssueOpenedEvent issueOpenedEvent) {
-        this.id = IssueId.fromString(issueOpenedEvent.getId());
-        this.type = issueOpenedEvent.getIssueType();
-        this.status = IssueStatus.OPENED;
-        this.content = new IssueContent(issueOpenedEvent.getIssueContent());
-        this.name = new IssueName(issueOpenedEvent.getIssueName());
+        id = IssueId.fromString(issueOpenedEvent.getId());
+        type = issueOpenedEvent.getIssueType();
+        status = IssueStatus.OPENED;
+        content = new IssueContent(issueOpenedEvent.getIssueContent());
+        name = new IssueName(issueOpenedEvent.getIssueName());
     }
 
     public void on(IssueClosedEvent issueClosedEvent) {
-        this.status = IssueStatus.CLOSED;
+        status = IssueStatus.CLOSED;
     }
 
     public void on(IssueRenamedEvent issueRenamedEvent) {
-        this.name = new IssueName(issueRenamedEvent.getIssueName());
+        name = new IssueName(issueRenamedEvent.getIssueName());
     }
 
     public void on(IssueTypeChangedEvent issueTypeChangedEvent) {
-        this.type = issueTypeChangedEvent.getIssueType();
+        type = issueTypeChangedEvent.getIssueType();
     }
 
     public void on(IssueContentChangedEvent issueContentChangedEvent) {
-        this.content = new IssueContent(issueContentChangedEvent.getIssueContent());
+        content = new IssueContent(issueContentChangedEvent.getIssueContent());
     }
 
     public void on(IssueCommentedEvent issueCommentedEvent) {
@@ -147,35 +126,27 @@ public class Issue extends AggregateRoot {
         var commentContent = new CommentContent(issueCommentedEvent.getCommentContent());
         var comment = new Comment(commentId, commentContent);
 
-        comments.add(comment);
+        comments = comments.add(comment);
     }
 
     public void on(IssueCommentContentChangedEvent issueCommentContentChangedEvent) {
         var commentId = CommentId.fromString(issueCommentContentChangedEvent.getCommentId());
         var commentContent = new CommentContent(issueCommentContentChangedEvent.getCommentContent());
-        var comment = findCommentById(commentId).get();
 
-        comment.changeContent(commentContent);
+        comments = comments.changeContent(commentId, commentContent);
     }
 
     public void on(IssueCommentHiddenEvent issueCommentHiddenEvent) {
         var commentId = CommentId.fromString(issueCommentHiddenEvent.getCommentId());
-        var comment = findCommentById(commentId).get();
 
-        comment.hide();
+        comments = comments.hide(commentId);
     }
 
     public void on(IssueVotedEvent issueVotedEvent) {
         var voterId = VoterId.fromString(issueVotedEvent.getVoterId());
-        var newVotes = votes
-                .stream()
-                .filter(vote -> !vote.getVoterId().equals(voterId))
-                .collect(Collectors.toSet());
-
         var newVote = new Vote(voterId, issueVotedEvent.getVoteType());
-        newVotes.add(newVote);
 
-        votes = newVotes;
+        votes = votes.add(newVote);
     }
 
     @Override
@@ -191,27 +162,5 @@ public class Issue extends AggregateRoot {
 
     private boolean isClosed() {
         return status.equals(IssueStatus.CLOSED);
-    }
-
-    private boolean hasComment(CommentId commentId) {
-        return findCommentById(commentId).isPresent();
-    }
-
-    private Comment findCommentByIdOrThrow(CommentId commentId) {
-        return findCommentById(commentId).orElseThrow(() -> new CommentNotFoundException(id, commentId));
-    }
-
-    private Optional<Comment> findCommentById(CommentId commentId) {
-        return comments
-                .stream()
-                .filter(comment -> comment.getId().equals(commentId))
-                .findFirst();
-    }
-
-    private Optional<Vote> findVoteByVoterId(VoterId voterId) {
-        return votes
-                .stream()
-                .filter(vote -> vote.getVoterId().equals(voterId))
-                .findFirst();
     }
 }
