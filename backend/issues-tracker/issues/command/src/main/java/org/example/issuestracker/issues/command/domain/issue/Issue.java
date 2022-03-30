@@ -4,16 +4,14 @@ import org.example.cqrs.domain.AggregateRoot;
 import org.example.issuestracker.issues.command.domain.comment.Comment;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueContentAlreadySetException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueNameAlreadySetException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeAlreadySetException;
+import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.issuestracker.issues.common.domain.IssueStatus;
 import org.example.issuestracker.issues.common.domain.IssueType;
 import org.example.issuestracker.issues.common.event.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.example.issuestracker.issues.command.domain.EventFactory.*;
 
@@ -23,7 +21,7 @@ public class Issue extends AggregateRoot {
     private IssueStatus status;
     private IssueContent content;
     private IssueName name;
-    private List<Comment> comments = new ArrayList<>();
+    private final Set<Comment> comments = new HashSet<>();
 
     public static Issue open(IssueId id, IssueType type, IssueContent content, IssueName name) {
         var issue = new Issue();
@@ -72,7 +70,21 @@ public class Issue extends AggregateRoot {
 
     public void comment(Comment comment) {
         ensureIsOpen();
+
+        if (hasComment(comment.getId())) {
+            throw new CommentWithIdAlreadyExistsException(id, comment.getId());
+        }
+
         raiseEvent(issueCommented(id, comment.getId(), comment.getContent()));
+    }
+
+    public void changeCommentContent(CommentId commentId, CommentContent commentContent) {
+        ensureIsOpen();
+
+        var comment = findCommentById(commentId).orElseThrow(() -> new CommentNotFoundException(id, commentId));
+        comment.ensureCanChangeContentTo(commentContent);
+
+        raiseEvent(issueCommentContentChanged(id, commentId, commentContent));
     }
 
     public void on(IssueOpenedEvent issueOpenedEvent) {
@@ -107,6 +119,14 @@ public class Issue extends AggregateRoot {
         comments.add(comment);
     }
 
+    public void on(IssueCommentContentChangedEvent issueCommentContentChangedEvent) {
+        var commentId = CommentId.fromString(issueCommentContentChangedEvent.getCommentId());
+        var commentContent = new CommentContent(issueCommentContentChangedEvent.getCommentContent());
+        var comment = findCommentById(commentId).get();
+
+        comment.changeContent(commentContent);
+    }
+
     @Override
     public IssueId getId() {
         return id;
@@ -120,5 +140,16 @@ public class Issue extends AggregateRoot {
 
     private boolean isClosed() {
         return status.equals(IssueStatus.CLOSED);
+    }
+
+    private boolean hasComment(CommentId commentId) {
+        return findCommentById(commentId).isPresent();
+    }
+
+    private Optional<Comment> findCommentById(CommentId commentId) {
+        return comments
+                .stream()
+                .filter(comment -> comment.getId().equals(commentId))
+                .findFirst();
     }
 }

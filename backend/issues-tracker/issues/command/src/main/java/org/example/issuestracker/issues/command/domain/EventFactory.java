@@ -46,5 +46,13 @@ public class EventFactory {
         );
     }
 
+    public static IssueCommentContentChangedEvent issueCommentContentChanged(
+            IssueId issueId,
+            CommentId commentId,
+            CommentContent commentContent
+    ) {
+        return new IssueCommentContentChangedEvent(issueId.toString(), commentId.toString(), commentContent.getText());
+    }
+
     private EventFactory() {}
 }
