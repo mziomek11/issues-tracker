@@ -41,6 +41,8 @@
         <constructor-arg ref="commandDispatcher" />
         <constructor-arg ref="openIssueCommandHandler" />
         <constructor-arg ref="closeIssueCommandHandler" />
+        <constructor-arg ref="renameIssueCommandHandler" />
+        <constructor-arg ref="changeIssueTypeCommandHandler" />
     </bean>
 
     <bean
@@ -53,6 +55,20 @@
     <bean
             id="closeIssueCommandHandler"
             class="org.example.issuestracker.issues.command.application.command.handler.CloseIssueCommandHandler"
+    >
+        <constructor-arg ref="issueEventSourcingHandler"/>
+    </bean>
+
+    <bean
+            id="renameIssueCommandHandler"
+            class="org.example.issuestracker.issues.command.application.command.handler.RenameIssueCommandHandler"
+    >
+        <constructor-arg ref="issueEventSourcingHandler"/>
+    </bean>
+
+    <bean
+            id="changeIssueTypeCommandHandler"
+            class="org.example.issuestracker.issues.command.application.command.handler.ChangeIssueTypeCommandHandler"
     >
         <constructor-arg ref="issueEventSourcingHandler"/>
     </bean>

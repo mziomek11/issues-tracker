@@ -2,10 +2,10 @@ package org.example.issuestracker.issues.command.domain;
 
 import java.util.Objects;
 
-public class IssueContent {
+public class IssueName {
     private final String text;
 
-    public IssueContent(String text) {
+    public IssueName(String text) {
         this.text = Objects.requireNonNull(text);
     }
 

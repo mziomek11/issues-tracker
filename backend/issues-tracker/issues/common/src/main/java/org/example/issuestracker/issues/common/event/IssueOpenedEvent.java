@@ -8,12 +8,14 @@ import java.util.Objects;
 public class IssueOpenedEvent extends BaseEvent {
     private final IssueType issueType;
     private final String issueContent;
+    private final String issueName;
 
-    public IssueOpenedEvent(String id, IssueType issueType, String issueContent) {
+    public IssueOpenedEvent(String id, IssueType issueType, String issueContent, String issueName) {
         super(id);
 
         this.issueType = issueType;
         this.issueContent = Objects.requireNonNull(issueContent);
+        this.issueName = Objects.requireNonNull(issueName);
     }
 
     public IssueType getIssueType() {
@@ -22,5 +24,9 @@ public class IssueOpenedEvent extends BaseEvent {
 
     public String getIssueContent() {
         return issueContent;
+    }
+
+    public String getIssueName() {
+        return issueName;
     }
 }
