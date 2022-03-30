@@ -90,6 +90,13 @@ public class Issue extends AggregateRoot {
         raiseEvent(issueCommentHidden(id, commentId));
     }
 
+    public void voteComment(CommentId commentId, Vote vote) {
+        ensureIsOpen();
+        comments.ensureCanVote(commentId, vote);
+
+        raiseEvent(issueCommentVoted(id, commentId, vote.getVoterId(), vote.getType()));
+    }
+
     public void vote(Vote vote) {
         ensureIsOpen();
         votes.ensureCanAdd(vote);

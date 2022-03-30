@@ -64,5 +64,14 @@ public class EventFactory {
         return new IssueVotedEvent(issueId.toString(), voterId.toString(), voteType);
     }
 
+    public static IssueCommentVotedEvent issueCommentVoted(
+            IssueId issueId,
+            CommentId commentId,
+            VoterId voterId,
+            VoteType voteType
+    ) {
+        return new IssueCommentVotedEvent(issueId.toString(), commentId.toString(), voterId.toString(), voteType);
+    }
+
     private EventFactory() {}
 }

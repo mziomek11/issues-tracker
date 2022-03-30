@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.domain.comment;
 
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdAlreadyExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.CommentNotFoundException;
+import org.example.issuestracker.issues.command.domain.vote.Vote;
 
 import java.util.*;
 import java.util.function.Function;
@@ -53,10 +54,22 @@ public class Comments {
         return updateComment(id, comment -> comment.hide());
     }
 
-    public void ensureCanHide(CommentId commentId) {
-        var comment = findCommentByIdOrThrow(commentId);
+    public void ensureCanHide(CommentId id) {
+        var comment = findCommentByIdOrThrow(id);
 
         comment.ensureCanHide();
+    }
+
+    public Comments vote(CommentId id, Vote vote) {
+        ensureCanVote(id, vote);
+
+        return updateComment(id, comment -> comment.vote(vote));
+    }
+
+    public void ensureCanVote(CommentId id, Vote vote) {
+        var comment = findCommentByIdOrThrow(id);
+
+        comment.ensureCanVote(vote);
     }
 
     private Comments updateComment(CommentId id, Function<Comment, Comment> mapper) {
