@@ -3,10 +3,10 @@ package org.example.cqrs.domain;
 import java.util.Objects;
 import java.util.UUID;
 
-public abstract class AggregateId {
+public abstract class EntityId {
     private final UUID id;
 
-    protected AggregateId(UUID id) {
+    protected EntityId(UUID id) {
         this.id = Objects.requireNonNull(id);
     }
 
@@ -18,8 +18,8 @@ public abstract class AggregateId {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AggregateId)) return false;
-        AggregateId that = (AggregateId) o;
+        if (!(o instanceof EntityId)) return false;
+        EntityId that = (EntityId) o;
         return Objects.equals(id, that.id);
     }
 

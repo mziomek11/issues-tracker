@@ -3,7 +3,7 @@ package org.example.issuestracker.issues.command.infrastructure.event;
 import org.example.cqrs.domain.AggregateId;
 import org.example.cqrs.event.*;
 import org.example.cqrs.domain.AggregateConcurrencyException;
-import org.example.issuestracker.issues.command.domain.Issue;
+import org.example.issuestracker.issues.command.domain.issue.Issue;
 
 import java.util.Date;
 import java.util.List;

@@ -7,8 +7,8 @@ import java.util.Objects;
 public class IssueContentChangedEvent extends BaseEvent {
     private final String issueContent;
 
-    public IssueContentChangedEvent(String id, String issueContent) {
-        super(id);
+    public IssueContentChangedEvent(String issueId, String issueContent) {
+        super(issueId);
 
         this.issueContent = Objects.requireNonNull(issueContent);
     }

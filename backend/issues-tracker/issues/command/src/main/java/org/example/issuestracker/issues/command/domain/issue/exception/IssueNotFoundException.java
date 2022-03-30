@@ -1,6 +1,6 @@
-package org.example.issuestracker.issues.command.application.exception;
+package org.example.issuestracker.issues.command.domain.issue.exception;
 
-import org.example.issuestracker.issues.command.domain.IssueId;
+import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
 public class IssueNotFoundException extends RuntimeException {
     private IssueId issueId;

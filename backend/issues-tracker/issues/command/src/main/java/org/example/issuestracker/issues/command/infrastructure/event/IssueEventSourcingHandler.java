@@ -5,7 +5,7 @@ import org.example.cqrs.domain.AggregateRoot;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventSourcingHandler;
 import org.example.cqrs.event.EventStore;
-import org.example.issuestracker.issues.command.domain.Issue;
+import org.example.issuestracker.issues.command.domain.issue.Issue;
 
 import java.util.Comparator;
 import java.util.Optional;

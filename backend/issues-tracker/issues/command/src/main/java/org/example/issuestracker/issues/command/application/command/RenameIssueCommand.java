@@ -1,7 +1,7 @@
 package org.example.issuestracker.issues.command.application.command;
 
-import org.example.issuestracker.issues.command.domain.IssueId;
-import org.example.issuestracker.issues.command.domain.IssueName;
+import org.example.issuestracker.issues.command.domain.issue.IssueId;
+import org.example.issuestracker.issues.command.domain.issue.IssueName;
 
 import java.util.UUID;
 

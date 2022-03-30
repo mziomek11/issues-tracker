@@ -1,4 +1,4 @@
-package org.example.issuestracker.issues.command.domain;
+package org.example.issuestracker.issues.command.domain.issue;
 
 import org.example.cqrs.domain.AggregateId;
 

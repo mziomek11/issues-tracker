@@ -6,8 +6,8 @@ import org.example.issuestracker.issues.common.domain.IssueType;
 public class IssueTypeChangedEvent extends BaseEvent {
     private final IssueType issueType;
 
-    public IssueTypeChangedEvent(String id, IssueType issueType) {
-        super(id);
+    public IssueTypeChangedEvent(String issueId, IssueType issueType) {
+        super(issueId);
 
         this.issueType = issueType;
     }

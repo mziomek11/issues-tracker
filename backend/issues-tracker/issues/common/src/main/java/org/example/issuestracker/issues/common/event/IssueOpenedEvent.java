@@ -10,8 +10,8 @@ public class IssueOpenedEvent extends BaseEvent {
     private final String issueContent;
     private final String issueName;
 
-    public IssueOpenedEvent(String id, IssueType issueType, String issueContent, String issueName) {
-        super(id);
+    public IssueOpenedEvent(String issueId, IssueType issueType, String issueContent, String issueName) {
+        super(issueId);
 
         this.issueType = issueType;
         this.issueContent = Objects.requireNonNull(issueContent);
