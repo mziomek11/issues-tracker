@@ -3,10 +3,7 @@ package org.example.issuestracker.issues.command.domain;
 import org.example.cqrs.domain.AggregateRoot;
 import org.example.issuestracker.issues.common.domain.IssueStatus;
 import org.example.issuestracker.issues.common.domain.IssueType;
-import org.example.issuestracker.issues.common.event.IssueClosedEvent;
-import org.example.issuestracker.issues.common.event.IssueOpenedEvent;
-import org.example.issuestracker.issues.common.event.IssueRenamedEvent;
-import org.example.issuestracker.issues.common.event.IssueTypeChangedEvent;
+import org.example.issuestracker.issues.common.event.*;
 
 public class Issue extends AggregateRoot {
     private IssueId issueId;
@@ -52,6 +49,10 @@ public class Issue extends AggregateRoot {
             throw new IssueClosedException();
         }
 
+        if (issueName.equals(newIssueName)) {
+            throw new IssueNameAlreadySetException();
+        }
+
         raiseEvent(new IssueRenamedEvent(issueId.toString(), newIssueName.getText()));
     }
 
@@ -65,6 +66,18 @@ public class Issue extends AggregateRoot {
         }
 
         raiseEvent(new IssueTypeChangedEvent(issueId.toString(), newIssueType));
+    }
+
+    public void changeContent(IssueContent newIssueContent) {
+        if (isClosed()) {
+            throw new IssueClosedException();
+        }
+
+        if (issueContent.equals(newIssueContent)) {
+            throw new IssueContentAlreadySetException();
+        }
+
+        raiseEvent(new IssueContentChangedEvent(issueId.toString(), issueContent.getText()));
     }
 
     public void on(IssueOpenedEvent issueOpenedEvent) {
@@ -85,5 +98,9 @@ public class Issue extends AggregateRoot {
 
     public void on(IssueTypeChangedEvent issueTypeChangedEvent) {
         this.issueType = issueTypeChangedEvent.getIssueType();
+    }
+
+    public void on(IssueContentChangedEvent issueContentChangedEvent) {
+        this.issueContent = new IssueContent(issueContentChangedEvent.getIssueContent());
     }
 }
