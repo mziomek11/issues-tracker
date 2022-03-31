@@ -23,7 +23,7 @@ public class Votes {
      * existing vote with given.
      *
      * @param vote to be added
-     * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
+     * @throws VoteAlreadyExistsException see {@link Votes#ensureCanAdd(Vote)}
      */
     public Votes add(Vote vote) {
         ensureCanAdd(vote);

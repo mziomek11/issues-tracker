@@ -26,7 +26,7 @@ public class Comments {
      * Adds comment to comments
      *
      * @param comment to be added
-     * @throws CommentWithIdExistsException if comment with given id already exists
+     * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
      */
     public Comments add(Comment comment) {
         ensureCanAdd(comment);
@@ -41,7 +41,7 @@ public class Comments {
      * Ensures that comment can be added to comments
      *
      * @param comment to be added
-     * @throws CommentWithIdExistsException if comment with given id already exists
+     * @throws CommentWithIdExistsException if comment with given id exists
      */
     public void ensureCanAdd(Comment comment) {
         var optionalExistingComment = findCommentById(comment.getId());
@@ -56,8 +56,8 @@ public class Comments {
      *
      * @param id of comment that should be updated
      * @param content to be set
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws CommentContentSetException if comment already has given content
+     * @throws CommentNotFoundException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
+     * @throws CommentContentSetException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      */
     public Comments changeContent(CommentId id, CommentContent content) {
         ensureCanChangeContent(id, content);
@@ -70,8 +70,8 @@ public class Comments {
      *
      * @param id of comment that should be updated
      * @param content to be set
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws CommentContentSetException if comment already has given content
+     * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
+     * @throws CommentContentSetException see {@link Comment#ensureCanChangeContent(CommentContent)}
      */
     public void ensureCanChangeContent(CommentId id, CommentContent content) {
         var comment = findCommentByIdOrThrow(id);
@@ -83,8 +83,8 @@ public class Comments {
      * Hides comment with given id
      *
      * @param id of comment that should be hidden
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws CommentHiddenException if comment is already hidden
+     * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
+     * @throws CommentHiddenException see {@link Comments#ensureCanHide(CommentId)}
      */
     public Comments hide(CommentId id) {
         ensureCanHide(id);
@@ -96,8 +96,8 @@ public class Comments {
      * Ensures that comment can be hidden
      *
      * @param id of comment that should be hidden
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws CommentHiddenException if comment is already hidden
+     * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
+     * @throws CommentHiddenException see {@link Comment#ensureCanHide()}
      */
     public void ensureCanHide(CommentId id) {
         var comment = findCommentByIdOrThrow(id);
@@ -110,8 +110,8 @@ public class Comments {
      *
      * @param id of the comment
      * @param vote to be added
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
+     * @throws CommentNotFoundException see {@link Comments#ensureCanVote(CommentId, Vote)}
+     * @throws VoteAlreadyExistsException see {@link Comments#ensureCanVote(CommentId, Vote)}
      */
     public Comments vote(CommentId id, Vote vote) {
         ensureCanVote(id, vote);
@@ -124,8 +124,8 @@ public class Comments {
      *
      * @param id of the comment
      * @param vote to be added
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
+     * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
+     * @throws VoteAlreadyExistsException see {@link Comment#ensureCanVote(Vote)}
      */
     public void ensureCanVote(CommentId id, Vote vote) {
         var comment = findCommentByIdOrThrow(id);

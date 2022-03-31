@@ -53,7 +53,7 @@ public class Issue extends AggregateRoot {
      * Renames issue
      *
      * @param newName to be set
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueNameSetException if given name is the same as current name
      */
     public void rename(IssueName newName) {
@@ -70,7 +70,7 @@ public class Issue extends AggregateRoot {
      * Changes issue type
      *
      * @param newType to be set
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueTypeSetException if given type is the same as current type
      */
     public void changeType(IssueType newType) {
@@ -87,7 +87,7 @@ public class Issue extends AggregateRoot {
      * Changes issue content
      *
      * @param newContent to be set
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueContentSetException if given content is the same as current content
      */
     public void changeContent(IssueContent newContent) {
@@ -104,8 +104,8 @@ public class Issue extends AggregateRoot {
      * Adds comment to issue
      *
      * @param comment to be added
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
-     * @throws CommentWithIdExistsException if comment with given id already exists
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
+     * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
      */
     public void comment(Comment comment) {
         ensureIsOpen();
@@ -119,9 +119,9 @@ public class Issue extends AggregateRoot {
      *
      * @param commentId of comment to be changed
      * @param commentContent to be set
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws CommentContentSetException if comment already has given content
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
+     * @throws CommentNotFoundException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
+     * @throws CommentContentSetException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      */
     public void changeCommentContent(CommentId commentId, CommentContent commentContent) {
         ensureIsOpen();
@@ -134,9 +134,9 @@ public class Issue extends AggregateRoot {
      * Hides issues comment
      *
      * @param commentId of comment to be hidden
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws CommentHiddenException if comment is already hidden
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
+     * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
+     * @throws CommentHiddenException see {@link Comments#ensureCanHide(CommentId)}
      */
     public void hideComment(CommentId commentId) {
         ensureIsOpen();
@@ -150,9 +150,9 @@ public class Issue extends AggregateRoot {
      *
      * @param commentId of comment to be hidden
      * @param vote to be added
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
-     * @throws CommentNotFoundException if comment with given id does not exist
-     * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
+     * @throws CommentNotFoundException see {@link Comments#ensureCanVote(CommentId, Vote)}
+     * @throws VoteAlreadyExistsException see {@link Comments#ensureCanVote(CommentId, Vote)}
      */
     public void voteComment(CommentId commentId, Vote vote) {
         ensureIsOpen();
@@ -165,8 +165,8 @@ public class Issue extends AggregateRoot {
      * Adds vote to the issue
      *
      * @param vote to be added
-     * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
-     * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
+     * @throws VoteAlreadyExistsException see {@link Votes#ensureCanAdd(Vote)}
      */
     public void vote(Vote vote) {
         ensureIsOpen();
