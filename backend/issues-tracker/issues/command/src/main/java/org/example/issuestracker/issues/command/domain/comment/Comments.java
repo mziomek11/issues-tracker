@@ -44,10 +44,10 @@ public class Comments {
      * @throws CommentWithIdExistsException if comment with given id exists
      */
     public void ensureCanAdd(Comment comment) {
-        var optionalExistingComment = findCommentById(comment.getId());
+        var optionalExistingComment = findCommentById(comment.id());
 
         if (optionalExistingComment.isPresent()) {
-            throw new CommentWithIdExistsException(comment.getId());
+            throw new CommentWithIdExistsException(comment.id());
         }
     }
 
@@ -146,7 +146,7 @@ public class Comments {
 
         var newComments = commentList
                 .stream()
-                .filter(comment -> !comment.getId().equals(id))
+                .filter(comment -> !comment.id().equals(id))
                 .collect(Collectors.toList());
 
         newComments.add(newComment);
@@ -167,7 +167,7 @@ public class Comments {
     private Optional<Comment> findCommentById(CommentId id) {
         return commentList
                 .stream()
-                .filter(comment -> comment.getId().equals(id))
+                .filter(comment -> comment.id().equals(id))
                 .findFirst();
     }
 }

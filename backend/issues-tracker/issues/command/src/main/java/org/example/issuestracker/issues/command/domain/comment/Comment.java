@@ -7,24 +7,9 @@ import org.example.issuestracker.issues.command.domain.vote.Votes;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 import org.example.issuestracker.issues.common.domain.comment.CommentStatus;
 
-public class Comment {
-    private final CommentId id;
-    private final CommentContent content;
-    private final CommentStatus status;
-    private final Votes votes;
-
+public record Comment(CommentId id, CommentContent content, CommentStatus status, Votes votes) {
     public Comment(CommentId id, CommentContent content) {
-        this.id = id;
-        this.content = content;
-        this.status = CommentStatus.ACTIVE;
-        this.votes = new Votes();
-    }
-
-    private Comment(CommentId id, CommentContent content, CommentStatus status, Votes votes) {
-        this.id = id;
-        this.content = content;
-        this.status = status;
-        this.votes = votes;
+        this(id, content, CommentStatus.ACTIVE, new Votes());
     }
 
     /**
@@ -95,14 +80,6 @@ public class Comment {
      */
     public void ensureCanVote(Vote vote) {
         votes.ensureCanAdd(vote);
-    }
-
-    public CommentId getId() {
-        return id;
-    }
-
-    public CommentContent getContent() {
-        return content;
     }
 
     private boolean isHidden() {

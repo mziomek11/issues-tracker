@@ -113,7 +113,7 @@ public class Issue extends AggregateRoot {
         ensureIsOpen();
         comments.ensureCanAdd(comment);
 
-        raiseEvent(issueCommented(id, comment.getId(), comment.getContent()));
+        raiseEvent(issueCommented(id, comment.id(), comment.content()));
     }
 
     /**
@@ -160,7 +160,7 @@ public class Issue extends AggregateRoot {
         ensureIsOpen();
         comments.ensureCanVote(commentId, vote);
 
-        raiseEvent(issueCommentVoted(id, commentId, vote.getVoterId(), vote.getType()));
+        raiseEvent(issueCommentVoted(id, commentId, vote.voterId(), vote.type()));
     }
 
     /**
@@ -174,7 +174,7 @@ public class Issue extends AggregateRoot {
         ensureIsOpen();
         votes.ensureCanAdd(vote);
 
-        raiseEvent(issueVoted(id, vote.getVoterId(), vote.getType()));
+        raiseEvent(issueVoted(id, vote.voterId(), vote.type()));
     }
 
     /**

@@ -15,8 +15,8 @@ public class EventFactory {
         return new IssueOpenedEvent(
                 id.toString(),
                 type,
-                content.getText(),
-                name.getText()
+                content.text(),
+                name.text()
         );
     }
 
@@ -25,7 +25,7 @@ public class EventFactory {
     }
 
     public static IssueRenamedEvent issueRenamed(IssueId id, IssueName name) {
-        return new IssueRenamedEvent(id.toString(), name.getText());
+        return new IssueRenamedEvent(id.toString(), name.text());
     }
 
     public static IssueTypeChangedEvent issueTypeChanged(IssueId id, IssueType type) {
@@ -33,7 +33,7 @@ public class EventFactory {
     }
 
     public static IssueContentChangedEvent issueContentChanged(IssueId id, IssueContent content) {
-        return new IssueContentChangedEvent(id.toString(), content.getText());
+        return new IssueContentChangedEvent(id.toString(), content.text());
     }
 
     public static IssueCommentedEvent issueCommented(
@@ -44,7 +44,7 @@ public class EventFactory {
         return new IssueCommentedEvent(
                 issueId.toString(),
                 commentId.toString(),
-                commentContent.getText()
+                commentContent.text()
         );
     }
 
@@ -53,7 +53,7 @@ public class EventFactory {
             CommentId commentId,
             CommentContent commentContent
     ) {
-        return new IssueCommentContentChangedEvent(issueId.toString(), commentId.toString(), commentContent.getText());
+        return new IssueCommentContentChangedEvent(issueId.toString(), commentId.toString(), commentContent.text());
     }
 
     public static IssueCommentHiddenEvent issueCommentHidden(IssueId issueId, CommentId commentId) {

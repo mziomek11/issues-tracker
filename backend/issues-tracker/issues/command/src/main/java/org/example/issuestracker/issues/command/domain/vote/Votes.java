@@ -30,7 +30,7 @@ public class Votes {
 
         var newVotes = voteSet
                 .stream()
-                .filter(existingVote -> !existingVote.getVoterId().equals(vote.getVoterId()))
+                .filter(existingVote -> !existingVote.voterId().equals(vote.voterId()))
                 .collect(Collectors.toSet());
 
         newVotes.add(vote);
@@ -46,7 +46,7 @@ public class Votes {
      */
     public void ensureCanAdd(Vote vote) {
         if (contains(vote)) {
-            throw new VoteAlreadyExistsException(vote.getVoterId(), vote.getType());
+            throw new VoteAlreadyExistsException(vote.voterId(), vote.type());
         }
     }
 
@@ -56,7 +56,7 @@ public class Votes {
      * @param vote to be checked
      */
     private boolean contains(Vote vote) {
-        var optionalExistingVote = findVoteByVoterId(vote.getVoterId());
+        var optionalExistingVote = findVoteByVoterId(vote.voterId());
 
         if (optionalExistingVote.isEmpty()) {
             return false;
@@ -70,7 +70,7 @@ public class Votes {
     private Optional<Vote> findVoteByVoterId(VoterId voterId) {
         return voteSet
                 .stream()
-                .filter(vote -> vote.getVoterId().equals(voterId))
+                .filter(vote -> vote.voterId().equals(voterId))
                 .findFirst();
     }
 }
