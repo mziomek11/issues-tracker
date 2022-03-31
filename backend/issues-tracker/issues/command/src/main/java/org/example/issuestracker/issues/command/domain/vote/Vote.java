@@ -11,8 +11,13 @@ public class Vote {
         this.type = type;
     }
 
-    public boolean hasTheSameTypeAs(Vote anotherVote) {
-        return type.equals(anotherVote.getType());
+    /**
+     * Checks if votes have the same types
+     *
+     * @param vote to be compared
+     */
+    public boolean hasTheSameTypeAs(Vote vote) {
+        return type.equals(vote.getType());
     }
 
     public VoterId getVoterId() {

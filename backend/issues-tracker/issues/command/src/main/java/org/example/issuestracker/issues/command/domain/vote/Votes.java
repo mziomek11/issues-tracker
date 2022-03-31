@@ -8,22 +8,53 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Votes {
-    private final Set<Vote> votes;
+    private final Set<Vote> voteSet;
 
     public Votes() {
-        this.votes = new HashSet<>();
+        this.voteSet = new HashSet<>();
     }
 
-    public Votes(Set<Vote> votes) {
-        this.votes = votes;
+    public Votes(Set<Vote> voteSet) {
+        this.voteSet = voteSet;
     }
 
+    /**
+     * Adds vote to votes if vote with given voter id does not exist. Otherwise replaces
+     * existing vote with given.
+     *
+     * @param vote to be added
+     * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
+     */
+    public Votes add(Vote vote) {
+        ensureCanAdd(vote);
+
+        var newVotes = voteSet
+                .stream()
+                .filter(existingVote -> !existingVote.getVoterId().equals(vote.getVoterId()))
+                .collect(Collectors.toSet());
+
+        newVotes.add(vote);
+
+        return new Votes(newVotes);
+    }
+
+    /**
+     * Ensures that vote can be added to the votes
+     *
+     * @param vote to be added
+     * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
+     */
     public void ensureCanAdd(Vote vote) {
         if (contains(vote)) {
-            throw new VoteAlreadyExistsException();
+            throw new VoteAlreadyExistsException(vote.getVoterId(), vote.getType());
         }
     }
 
+    /**
+     * Checks if vote with given voter id and type already exists
+     *
+     * @param vote to be checked
+     */
     private boolean contains(Vote vote) {
         var optionalExistingVote = findVoteByVoterId(vote.getVoterId());
 
@@ -36,21 +67,8 @@ public class Votes {
         return vote.hasTheSameTypeAs(existingVote);
     }
 
-    public Votes add(Vote newVote) {
-        ensureCanAdd(newVote);
-
-        var newVotes = votes
-                .stream()
-                .filter(vote -> !vote.getVoterId().equals(newVote.getVoterId()))
-                .collect(Collectors.toSet());
-
-        newVotes.add(newVote);
-
-        return new Votes(newVotes);
-    }
-
     private Optional<Vote> findVoteByVoterId(VoterId voterId) {
-        return votes
+        return voteSet
                 .stream()
                 .filter(vote -> vote.getVoterId().equals(voterId))
                 .findFirst();

@@ -19,7 +19,7 @@ import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlread
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
 import org.example.issuestracker.issues.common.event.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -489,7 +489,7 @@ class IssueTest {
         sut.voteComment(firstComment.getId(), anotherVote);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThat(sut.getUncommittedChanges().size()).isEqualTo(2);
     }
 
     @Test
