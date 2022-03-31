@@ -2,10 +2,10 @@ package org.example.issuestracker.issues.command.domain.comment.exception;
 
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 
-public class CommentWithIdAlreadyExistsException extends RuntimeException {
-    private CommentId commentId;
+public class CommentWithIdExistsException extends RuntimeException {
+    private final CommentId commentId;
 
-    public CommentWithIdAlreadyExistsException(CommentId commentId) {
+    public CommentWithIdExistsException(CommentId commentId) {
         this.commentId = commentId;
     }
 

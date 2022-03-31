@@ -1,28 +1,28 @@
 package org.example.issuestracker.issues.command.domain.comment;
 
-import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdAlreadyExistsException;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public class Comments {
-    private final List<Comment> comments;
+    private final List<Comment> commentList;
 
     public Comments() {
-        this.comments = new ArrayList<>();
+        this.commentList = new ArrayList<>();
     }
 
-    public Comments(List<Comment> comments) {
-        this.comments = comments;
+    public Comments(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     public Comments add(Comment comment) {
         ensureCanAdd(comment);
 
-        var newComments = new ArrayList<>(comments);
+        var newComments = new ArrayList<>(commentList);
         newComments.add(comment);
 
         return new Comments(newComments);
@@ -32,7 +32,7 @@ public class Comments {
         var optionalExistingComment = findCommentById(comment.getId());
 
         if (optionalExistingComment.isPresent()) {
-            throw new CommentWithIdAlreadyExistsException(comment.getId());
+            throw new CommentWithIdExistsException(comment.getId());
         }
     }
 
@@ -51,7 +51,7 @@ public class Comments {
     public Comments hide(CommentId id) {
         ensureCanHide(id);
 
-        return updateComment(id, comment -> comment.hide());
+        return updateComment(id, Comment::hide);
     }
 
     public void ensureCanHide(CommentId id) {
@@ -72,11 +72,11 @@ public class Comments {
         comment.ensureCanVote(vote);
     }
 
-    private Comments updateComment(CommentId id, Function<Comment, Comment> mapper) {
+    private Comments updateComment(CommentId id, UnaryOperator<Comment> mapper) {
         var oldComment = findCommentByIdOrThrow(id);
         var newComment = mapper.apply(oldComment);
 
-        var newComments = comments
+        var newComments = commentList
                 .stream()
                 .filter(comment -> !comment.getId().equals(id))
                 .collect(Collectors.toList());
@@ -91,7 +91,7 @@ public class Comments {
     }
 
     private Optional<Comment> findCommentById(CommentId commentId) {
-        return comments
+        return commentList
                 .stream()
                 .filter(comment -> comment.getId().equals(commentId))
                 .findFirst();

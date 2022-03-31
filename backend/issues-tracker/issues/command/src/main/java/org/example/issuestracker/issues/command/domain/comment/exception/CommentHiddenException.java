@@ -1,4 +1,4 @@
 package org.example.issuestracker.issues.command.domain.comment.exception;
 
-public class CommentAlreadyHiddenException extends RuntimeException {
+public class CommentHiddenException extends RuntimeException {
 }

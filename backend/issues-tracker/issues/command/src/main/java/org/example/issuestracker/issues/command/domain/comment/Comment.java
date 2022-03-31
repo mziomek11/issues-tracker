@@ -1,7 +1,7 @@
 package org.example.issuestracker.issues.command.domain.comment;
 
-import org.example.issuestracker.issues.command.domain.comment.exception.CommentAlreadyHiddenException;
-import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentAlreadySetException;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.Votes;
 import org.example.issuestracker.issues.common.domain.comment.CommentStatus;
@@ -34,7 +34,7 @@ public class Comment {
 
     public void ensureCanHide() {
         if (isHidden()) {
-            throw new CommentAlreadyHiddenException();
+            throw new CommentHiddenException();
         }
     }
 
@@ -46,7 +46,7 @@ public class Comment {
 
     public void ensureCanChangeContent(CommentContent newContent) {
         if (content.equals(newContent)) {
-            throw new CommentContentAlreadySetException();
+            throw new CommentContentSetException();
         }
     }
 

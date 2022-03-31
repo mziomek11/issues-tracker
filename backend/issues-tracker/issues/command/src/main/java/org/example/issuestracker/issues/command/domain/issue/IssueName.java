@@ -17,4 +17,17 @@ public class IssueName {
     public String toString() {
         return text;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IssueName)) return false;
+        IssueName issueName = (IssueName) o;
+        return Objects.equals(text, issueName.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(text);
+    }
 }

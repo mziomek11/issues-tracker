@@ -43,7 +43,7 @@ public class Issue extends AggregateRoot {
         ensureIsOpen();
 
         if (name.equals(newName)) {
-            throw new IssueNameAlreadySetException();
+            throw new IssueNameSetException();
         }
 
         raiseEvent(issueRenamed(id, newName));
@@ -53,7 +53,7 @@ public class Issue extends AggregateRoot {
         ensureIsOpen();
 
         if (type.equals(newType)) {
-            throw new IssueTypeAlreadySetException();
+            throw new IssueTypeSetException();
         }
 
         raiseEvent(issueTypeChanged(id, newType));
@@ -63,7 +63,7 @@ public class Issue extends AggregateRoot {
         ensureIsOpen();
 
         if (content.equals(newContent)) {
-            throw new IssueContentAlreadySetException();
+            throw new IssueContentSetException();
         }
 
         raiseEvent(issueContentChanged(id, newContent));
@@ -147,6 +147,14 @@ public class Issue extends AggregateRoot {
         var commentId = CommentId.fromString(issueCommentHiddenEvent.getCommentId());
 
         comments = comments.hide(commentId);
+    }
+
+    public void on(IssueCommentVotedEvent issueCommentVotedEvent) {
+        var commentId = CommentId.fromString(issueCommentVotedEvent.getCommentId());
+        var voterId = VoterId.fromString(issueCommentVotedEvent.getVoterId());
+        var vote = new Vote(voterId, issueCommentVotedEvent.getVoteType());
+
+        comments = comments.vote(commentId, vote);
     }
 
     public void on(IssueVotedEvent issueVotedEvent) {

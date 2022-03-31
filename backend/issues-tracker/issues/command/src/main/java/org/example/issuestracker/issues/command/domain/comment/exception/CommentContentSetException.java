@@ -1,4 +1,4 @@
 package org.example.issuestracker.issues.command.domain.comment.exception;
 
-public class CommentContentAlreadySetException extends RuntimeException {
+public class CommentContentSetException extends RuntimeException {
 }
