@@ -37,7 +37,6 @@ class IssueTest {
     private final String FIRST_COMMENT_ID = FIRST_COMMENT_UUID.toString();
     private final String FIRST_COMMENT_CONTENT = "Example first comment content";
     private final UUID SECOND_COMMENT_UUID = UUID.randomUUID();
-    private final String SECOND_COMMENT_CONTENT = "Example second comment content";
 
     private final VoterId FIRST_VOTER_ID = new VoterId(UUID.randomUUID());
     private final VoterId SECOND_VOTER_ID = new VoterId(UUID.randomUUID());
@@ -90,7 +89,7 @@ class IssueTest {
         sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(() -> sut.close());
+        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(sut::close);
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -315,13 +314,14 @@ class IssueTest {
         var content = new CommentContent("Another content");
         var sut = openIssue();
         var firstComment = createFirstComment();
+        var firstCommentId = firstComment.id();
         sut.comment(firstComment);
         sut.close();
         sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(IssueClosedException.class)
-                .isThrownBy(() -> sut.changeCommentContent(firstComment.id(), content));
+                .isThrownBy(() -> sut.changeCommentContent(firstCommentId, content));
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -331,12 +331,13 @@ class IssueTest {
         var content = new CommentContent(FIRST_COMMENT_CONTENT);
         var sut = openIssue();
         var firstComment = createFirstComment();
+        var firstCommentId = firstComment.id();
         sut.comment(firstComment);
         sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(CommentContentSetException.class)
-                .isThrownBy(() -> sut.changeCommentContent(firstComment.id(), content));
+                .isThrownBy(() -> sut.changeCommentContent(firstCommentId, content));
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -383,13 +384,14 @@ class IssueTest {
         // Arrange
         var sut = openIssue();
         var firstComment = createFirstComment();
+        var firstCommentId = firstComment.id();
         sut.comment(firstComment);
         sut.close();
         sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(IssueClosedException.class)
-                .isThrownBy(() -> sut.hideComment(firstComment.id()));
+                .isThrownBy(() -> sut.hideComment(firstCommentId));
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -398,10 +400,11 @@ class IssueTest {
         // Arrange
         var sut = openIssue();
         var firstComment = createFirstComment();
+        var firstCommentId = firstComment.id();
 
         // Assert
         assertThatExceptionOfType(CommentNotFoundException.class)
-                .isThrownBy(() -> sut.hideComment(firstComment.id()));
+                .isThrownBy(() -> sut.hideComment(firstCommentId));
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -410,13 +413,14 @@ class IssueTest {
         // Arrange
         var sut = openIssue();
         var firstComment = createFirstComment();
+        var firstCommentId = firstComment.id();
         sut.comment(firstComment);
-        sut.hideComment(firstComment.id());
+        sut.hideComment(firstCommentId);
         sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(CommentHiddenException.class)
-                .isThrownBy(() -> sut.hideComment(firstComment.id()));
+                .isThrownBy(() -> sut.hideComment(firstCommentId));
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -451,6 +455,7 @@ class IssueTest {
         // Arrange
         var sut = openIssue();
         var firstComment = createFirstComment();
+        var firstCommentId = firstComment.id();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
         sut.comment(firstComment);
         sut.close();
@@ -458,7 +463,7 @@ class IssueTest {
 
         // Assert
         assertThatExceptionOfType(IssueClosedException.class)
-                .isThrownBy(() -> sut.voteComment(firstComment.id(), vote));
+                .isThrownBy(() -> sut.voteComment(firstCommentId, vote));
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -498,14 +503,15 @@ class IssueTest {
         // Arrange
         var sut = openIssue();
         var firstComment = createFirstComment();
+        var firstCommentId = firstComment.id();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
         sut.comment(firstComment);
-        sut.voteComment(firstComment.id(), vote);
+        sut.voteComment(firstCommentId, vote);
         sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(VoteAlreadyExistsException.class)
-                .isThrownBy(() -> sut.voteComment(firstComment.id(), vote));
+                .isThrownBy(() -> sut.voteComment(firstCommentId, vote));
         assertThat(sut.getUncommittedChanges().size()).isZero();
     }
 
@@ -611,7 +617,7 @@ class IssueTest {
 
     private Comment createSecondComment() {
         var id = new CommentId(SECOND_COMMENT_UUID);
-        var content = new CommentContent(SECOND_COMMENT_CONTENT);
+        var content = new CommentContent("Example second comment content");
 
         return new Comment(id, content);
     }
