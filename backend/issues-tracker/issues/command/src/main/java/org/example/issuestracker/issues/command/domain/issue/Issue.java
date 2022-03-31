@@ -37,7 +37,9 @@ public class Issue extends AggregateRoot {
         return issue;
     }
 
-    public Issue() {}
+    public Issue() {
+        // Required to apply events
+    }
 
     public void close() {
         ensureIsOpen();
