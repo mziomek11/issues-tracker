@@ -4,8 +4,8 @@ import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
 public class IssueContentSetException extends IllegalStateException {
-    private final IssueId issueId;
-    private final IssueContent issueContent;
+    private final transient IssueId issueId;
+    private final transient IssueContent issueContent;
 
     public IssueContentSetException(IssueId issueId, IssueContent issueContent) {
         this.issueId = issueId;

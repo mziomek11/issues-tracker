@@ -4,8 +4,8 @@ import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
 
 public class VoteAlreadyExistsException extends IllegalStateException {
-    private final VoterId voterId;
-    private final VoteType voteType;
+    private final transient VoterId voterId;
+    private final transient VoteType voteType;
 
     public VoteAlreadyExistsException(VoterId voterId, VoteType voteType) {
         this.voterId = voterId;

@@ -4,8 +4,8 @@ import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 
 public class IssueTypeSetException extends IllegalStateException {
-    private final IssueId issueId;
-    private final IssueType issueType;
+    private final transient IssueId issueId;
+    private final transient IssueType issueType;
 
     public IssueTypeSetException(IssueId issueId, IssueType issueType) {
         this.issueId = issueId;

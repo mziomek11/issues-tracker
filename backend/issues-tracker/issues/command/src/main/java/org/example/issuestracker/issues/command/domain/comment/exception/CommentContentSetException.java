@@ -4,8 +4,8 @@ import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 
 public class CommentContentSetException extends IllegalStateException {
-    private final CommentId commentId;
-    private final CommentContent commentContent;
+    private final transient CommentId commentId;
+    private final transient CommentContent commentContent;
 
     public CommentContentSetException(CommentId commentId, CommentContent commentContent) {
         this.commentId = commentId;
