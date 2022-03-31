@@ -3,7 +3,7 @@ package org.example.issuestracker.issues.command.domain.comment.exception;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 
-public class CommentContentSetException extends RuntimeException {
+public class CommentContentSetException extends IllegalStateException {
     private final CommentId commentId;
     private final CommentContent commentContent;
 

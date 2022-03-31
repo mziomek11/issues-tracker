@@ -2,7 +2,7 @@ package org.example.issuestracker.issues.command.domain.issue.exception;
 
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
-public class IssueClosedException extends RuntimeException {
+public class IssueClosedException extends IllegalStateException {
     private final IssueId issueId;
 
     public IssueClosedException(IssueId issueId) {

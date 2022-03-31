@@ -2,7 +2,7 @@ package org.example.issuestracker.issues.command.domain.comment.exception;
 
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 
-public class CommentWithIdExistsException extends RuntimeException {
+public class CommentWithIdExistsException extends IllegalStateException {
     private final CommentId commentId;
 
     public CommentWithIdExistsException(CommentId commentId) {

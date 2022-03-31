@@ -3,7 +3,7 @@ package org.example.issuestracker.issues.command.domain.issue.exception;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 
-public class IssueTypeSetException extends RuntimeException {
+public class IssueTypeSetException extends IllegalStateException {
     private final IssueId issueId;
     private final IssueType issueType;
 

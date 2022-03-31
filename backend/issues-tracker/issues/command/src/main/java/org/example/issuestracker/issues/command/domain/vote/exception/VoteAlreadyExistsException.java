@@ -3,7 +3,7 @@ package org.example.issuestracker.issues.command.domain.vote.exception;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
 
-public class VoteAlreadyExistsException extends RuntimeException {
+public class VoteAlreadyExistsException extends IllegalStateException {
     private final VoterId voterId;
     private final VoteType voteType;
 
