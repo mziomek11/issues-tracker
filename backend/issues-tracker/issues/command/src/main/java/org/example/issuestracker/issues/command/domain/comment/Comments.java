@@ -3,7 +3,7 @@ package org.example.issuestracker.issues.command.domain.comment;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
-import org.example.issuestracker.issues.command.domain.issue.exception.CommentNotFoundException;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 

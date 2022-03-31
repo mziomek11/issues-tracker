@@ -1,9 +1,9 @@
-package org.example.issuestracker.issues.command.domain.issue.exception;
+package org.example.issuestracker.issues.command.domain.comment.exception;
 
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 
 public class CommentNotFoundException extends RuntimeException {
-    private CommentId commentId;
+    private final CommentId commentId;
 
     public CommentNotFoundException(CommentId commentId) {
         this.commentId = commentId;
