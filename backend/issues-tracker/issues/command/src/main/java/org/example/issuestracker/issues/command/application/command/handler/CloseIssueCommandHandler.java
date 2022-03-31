@@ -16,8 +16,8 @@ public class CloseIssueCommandHandler implements CommandHandler<CloseIssueComman
     @Override
     public void handle(CloseIssueCommand command) {
         var issue = eventSourcingHandler
-                .getById(command.getIssueId())
-                .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
+                .getById(command.issueId())
+                .orElseThrow(() -> new IssueNotFoundException(command.issueId()));
 
         issue.close();
 

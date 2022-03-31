@@ -5,20 +5,8 @@ import org.example.issuestracker.issues.command.domain.issue.IssueName;
 
 import java.util.UUID;
 
-public class RenameIssueCommand {
-    private final IssueId issueId;
-    private final IssueName issueName;
-
+public record RenameIssueCommand(IssueId issueId, IssueName issueName) {
     public RenameIssueCommand(UUID issueId, String issueName) {
-        this.issueId = new IssueId(issueId);
-        this.issueName = new IssueName(issueName);
-    }
-
-    public IssueId getIssueId() {
-        return issueId;
-    }
-
-    public IssueName getIssueName() {
-        return issueName;
+        this(new IssueId(issueId), new IssueName(issueName));
     }
 }

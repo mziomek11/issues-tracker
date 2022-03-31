@@ -5,20 +5,8 @@ import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
 import java.util.UUID;
 
-public class ChangeIssueContentCommand {
-    private final IssueId issueId;
-    private final IssueContent issueContent;
-
+public record ChangeIssueContentCommand(IssueId issueId, IssueContent issueContent) {
     public ChangeIssueContentCommand(UUID issueId, String text) {
-        this.issueId = new IssueId(issueId);
-        this.issueContent = new IssueContent(text);
-    }
-
-    public IssueId getIssueId() {
-        return issueId;
-    }
-
-    public IssueContent getIssueContent() {
-        return  issueContent;
+        this(new IssueId(issueId), new IssueContent(text));
     }
 }

@@ -16,10 +16,10 @@ public class HideIssueCommentCommandHandler implements CommandHandler<HideIssueC
     @Override
     public void handle(HideIssueCommentCommand command) {
         var issue = eventSourcingHandler
-                .getById(command.getIssueId())
-                .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
+                .getById(command.issueId())
+                .orElseThrow(() -> new IssueNotFoundException(command.issueId()));
 
-        issue.hideComment(command.getCommentId());
+        issue.hideComment(command.commentId());
 
         eventSourcingHandler.save(issue);
     }

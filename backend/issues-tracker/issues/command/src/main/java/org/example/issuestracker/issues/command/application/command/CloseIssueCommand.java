@@ -4,14 +4,8 @@ import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
 import java.util.UUID;
 
-public class CloseIssueCommand {
-    private final IssueId issueId;
-
+public record CloseIssueCommand(IssueId issueId) {
     public CloseIssueCommand(UUID issueId) {
-        this.issueId = new IssueId(issueId);
-    }
-
-    public IssueId getIssueId() {
-        return issueId;
+        this(new IssueId(issueId));
     }
 }

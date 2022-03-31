@@ -15,10 +15,10 @@ public class OpenIssueCommandHandler implements CommandHandler<OpenIssueCommand>
     @Override
     public void handle(OpenIssueCommand command) {
         var issue = Issue.open(
-                command.getIssueId(),
-                command.getIssueType(),
-                command.getIssueContent(),
-                command.getIssueName()
+                command.issueId(),
+                command.issueType(),
+                command.issueContent(),
+                command.issueName()
         );
 
         eventSourcingHandler.save(issue);

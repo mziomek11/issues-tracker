@@ -18,10 +18,10 @@ public class CommentIssueCommandHandler implements CommandHandler<CommentIssueCo
     @Override
     public void handle(CommentIssueCommand command) {
         var issue = eventSourcingHandler
-                .getById(command.getIssueId())
-                .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
+                .getById(command.issueId())
+                .orElseThrow(() -> new IssueNotFoundException(command.issueId()));
 
-        var comment = new Comment(CommentId.generate(), command.getCommentContent());
+        var comment = new Comment(CommentId.generate(), command.commentContent());
         issue.comment(comment);
 
         eventSourcingHandler.save(issue);
