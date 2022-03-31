@@ -48,6 +48,8 @@ class IssueTest {
         var id = new IssueId(randomUUID);
         var content = new IssueContent("Example content");
         var name = new IssueName("Example name");
+
+        // Act
         var sut = Issue.open(id, IssueType.BUG, content, name);
 
         // Assert
