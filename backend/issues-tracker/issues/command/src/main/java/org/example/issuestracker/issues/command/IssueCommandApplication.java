@@ -12,15 +12,41 @@ class IssueCommandApplication {
         var context = new ClassPathXmlApplicationContext("beans.xml");
         var commandGateway = context.getBean("commandGateway", IssueCommandGateway.class);
         var uuid = UUID.randomUUID();
-        var openCommand = new OpenIssueCommand(uuid, IssueType.BUG, "Example text", "Example title");
-        var renameCommand = new RenameIssueCommand(uuid, "new name");
-        var closeCommand = new CloseIssueCommand(uuid);
-        var changeTypeCommand = new ChangeIssueTypeCommand(uuid, IssueType.ENHANCEMENT);
-        var commentCommand = new CommentIssueCommand(uuid, "Example comment");
+        var openCommand = OpenIssueCommand
+                .builder()
+                .issueName("asd")
+                .issueContent("example content")
+                .issueType(IssueType.BUG)
+                .issueId(uuid)
+                .build();
+
+        var renameCommand = RenameIssueCommand
+                .builder()
+                .issueId(uuid)
+                .issueName("new name")
+                .build();
+
+        var closeCommand = CloseIssueCommand
+                .builder()
+                .issueId(uuid)
+                .build();
+
+        var changeTypeCommand = ChangeIssueTypeCommand
+                .builder()
+                .issueId(uuid)
+                .issueType(IssueType.ENHANCEMENT)
+                .build();
+
+        var commentCommand = CommentIssueCommand
+                .builder()
+                .issueId(uuid)
+                .commentId(UUID.randomUUID())
+                .commentContent("")
+                .build();
 
         commandGateway.dispatch(openCommand);
         commandGateway.dispatch(renameCommand);
-        commandGateway.dispatch(changeTypeCommand);;
+        commandGateway.dispatch(changeTypeCommand);
         commandGateway.dispatch(commentCommand);
         commandGateway.dispatch(closeCommand);
     }

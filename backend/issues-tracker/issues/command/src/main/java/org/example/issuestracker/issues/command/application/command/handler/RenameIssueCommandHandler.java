@@ -16,10 +16,10 @@ public class RenameIssueCommandHandler implements CommandHandler<RenameIssueComm
     @Override
     public void handle(RenameIssueCommand command) {
         var issue = eventSourcingHandler
-                .getById(command.issueId())
-                .orElseThrow(() -> new IssueNotFoundException(command.issueId()));
+                .getById(command.getIssueId())
+                .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.rename(command.issueName());
+        issue.rename(command.getIssueName());
 
         eventSourcingHandler.save(issue);
     }

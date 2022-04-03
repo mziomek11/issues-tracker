@@ -16,10 +16,10 @@ public class ChangeIssueTypeCommandHandler implements CommandHandler<ChangeIssue
     @Override
     public void handle(ChangeIssueTypeCommand command) {
         var issue = eventSourcingHandler
-                .getById(command.issueId())
-                .orElseThrow(() -> new IssueNotFoundException(command.issueId()));
+                .getById(command.getIssueId())
+                .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.changeType(command.issueType());
+        issue.changeType(command.getIssueType());
 
         eventSourcingHandler.save(issue);
     }

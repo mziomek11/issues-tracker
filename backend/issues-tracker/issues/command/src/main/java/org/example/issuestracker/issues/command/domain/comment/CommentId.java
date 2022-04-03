@@ -9,10 +9,6 @@ public class CommentId extends EntityId {
         return new CommentId(UUID.fromString(value));
     }
 
-    public static CommentId generate() {
-        return new CommentId(UUID.randomUUID());
-    }
-
     public CommentId(UUID id) {
         super(id);
     }

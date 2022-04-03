@@ -16,10 +16,10 @@ public class ChangeIssueCommentContentCommandHandler implements CommandHandler<C
     @Override
     public void handle(ChangeIssueCommentContentCommand command) {
         var issue = eventSourcingHandler
-                .getById(command.issueId())
-                .orElseThrow(() -> new IssueNotFoundException(command.issueId()));
+                .getById(command.getIssueId())
+                .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.changeCommentContent(command.commentId(), command.commentContent());
+        issue.changeCommentContent(command.getCommentId(), command.getCommentContent());
 
         eventSourcingHandler.save(issue);
     }

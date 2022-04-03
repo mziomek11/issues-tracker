@@ -17,10 +17,10 @@ public class VoteIssueCommandHandler implements CommandHandler<VoteIssueCommand>
     @Override
     public void handle(VoteIssueCommand command) {
         var issue = eventSourcingHandler
-                .getById(command.issueId())
-                .orElseThrow(() -> new IssueNotFoundException(command.issueId()));
+                .getById(command.getIssueId())
+                .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        var vote = new Vote(command.voterId(), command.voteType());
+        var vote = new Vote(command.getVoterId(), command.getVoteType());
         issue.vote(vote);
 
         eventSourcingHandler.save(issue);

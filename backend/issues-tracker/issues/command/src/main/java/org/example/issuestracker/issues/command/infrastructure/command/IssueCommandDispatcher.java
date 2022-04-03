@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.infrastructure.command;
 
 import org.example.cqrs.command.CommandHandler;
 import org.example.cqrs.command.CommandDispatcher;
+import org.example.cqrs.command.CommandHandlerNotFoundException;
 import org.example.cqrs.command.TooManyCommandHandlersException;
 
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ public class IssueCommandDispatcher implements CommandDispatcher {
     @Override
     public void dispatch(Object command) {
         var handlers = registry.get(command.getClass());
+
+        if (handlers == null) {
+            throw new CommandHandlerNotFoundException();
+        }
 
         handlers.get(0).handle(command);
     }
