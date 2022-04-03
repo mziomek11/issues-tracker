@@ -2,6 +2,7 @@ package org.example.issuetracker.issues.domain.issue;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.assertj.core.api.ThrowableAssert;
 import org.example.issuestracker.issues.command.domain.comment.Comment;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
@@ -28,17 +29,22 @@ import java.util.UUID;
 
 class IssueTest {
     private final UUID ISSUE_UUID = UUID.randomUUID();
-    private final String ISSUE_ID = ISSUE_UUID.toString();
-    private final String ISSUE_NAME = "Example name";
-    private final String ISSUE_CONTENT = "Example content";
+    private final String ISSUE_ID_PLAIN = ISSUE_UUID.toString();
+    private final String ISSUE_NAME_PLAIN = "Example name";
+    private final String ISSUE_CONTENT_PLAIN = "Example content";
     private final IssueType ISSUE_TYPE = IssueType.BUG;
 
     private final UUID FIRST_COMMENT_UUID = UUID.randomUUID();
-    private final String FIRST_COMMENT_ID = FIRST_COMMENT_UUID.toString();
-    private final String FIRST_COMMENT_CONTENT = "Example first comment content";
+    private final CommentId FIRST_COMMENT_ID = new CommentId(FIRST_COMMENT_UUID);
+    private final String FIRST_COMMENT_ID_PLAIN = FIRST_COMMENT_UUID.toString();
+    private final String FIRST_COMMENT_CONTENT_PLAIN = "Example first comment content";
     private final UUID SECOND_COMMENT_UUID = UUID.randomUUID();
+    private final CommentId SECOND_COMMENT_ID = new CommentId(SECOND_COMMENT_UUID);
 
-    private final VoterId FIRST_VOTER_ID = new VoterId(UUID.randomUUID());
+
+    private final UUID FIRST_VOTER_UUID = UUID.randomUUID();
+    private final VoterId FIRST_VOTER_ID = new VoterId(FIRST_VOTER_UUID);
+    private final String FIRST_VOTER_ID_PLAIN = FIRST_VOTER_UUID.toString();
     private final VoterId SECOND_VOTER_ID = new VoterId(UUID.randomUUID());
 
     @Test
@@ -53,12 +59,9 @@ class IssueTest {
         var sut = Issue.open(id, IssueType.BUG, content, name);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueOpenedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueOpenedEvent.class);
-
-        var issueOpenedEvent = (IssueOpenedEvent) event;
+        var issueOpenedEvent = (IssueOpenedEvent) sut.getUncommittedChanges().get(0);
         assertThat(issueOpenedEvent.getIssueContent()).isEqualTo("Example content");
         assertThat(issueOpenedEvent.getIssueType()).isEqualTo(IssueType.BUG);
         assertThat(issueOpenedEvent.getId()).isEqualTo(randomUUID.toString());
@@ -68,187 +71,164 @@ class IssueTest {
     @Test
     void closingIssueRaisesIssueClosedEvent() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
 
         // Act
         sut.close();
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueClosedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueClosedEvent.class);
-
-        var issueCloseEvent = (IssueClosedEvent) event;
-        assertThat(issueCloseEvent.getId()).isEqualTo(ISSUE_ID);
+        var issueCloseEvent = (IssueClosedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueCloseEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
     }
 
     @Test
     void issueCanBeClosedOnlyOnce() {
         // Arrange
-        var sut = openIssue();
-        sut.close();
-        sut.markChangesAsCommitted();
+        var sut = createClosedIssue();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(sut::close);
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(sut::close);
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void renamingIssueRaisesIssueRenamedEvent() {
         // Arrange
+        var sut = createIssue();
         var name = new IssueName("Another name");
-        var sut = openIssue();
 
         // Act
         sut.rename(name);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueRenamedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueRenamedEvent.class);
-
-        var issueRenamedEvent = (IssueRenamedEvent) event;
-        assertThat(issueRenamedEvent.getId()).isEqualTo(ISSUE_ID);
+        var issueRenamedEvent = (IssueRenamedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueRenamedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
         assertThat(issueRenamedEvent.getIssueName()).isEqualTo("Another name");
     }
 
     @Test
     void closedIssueCanNotBeRenamed() {
         // Arrange
+        var sut = createClosedIssue();
         var name = new IssueName("Another name");
-        var sut = openIssue();
-        sut.close();
-        sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(() -> sut.rename(name));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.rename(name));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void issueCanNotBeRenamedToTheSameName() {
         // Arrange
-        var newName = new IssueName(ISSUE_NAME);
-        var sut = openIssue();
+        var sut = createIssue();
+        var newName = new IssueName(ISSUE_NAME_PLAIN);
 
         // Assert
         assertThatExceptionOfType(IssueNameSetException.class).isThrownBy(() -> sut.rename(newName));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void changingIssueTypeRaisesIssueTypeChangeEvent() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
 
         // Act
         sut.changeType(IssueType.ENHANCEMENT);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueTypeChangedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueTypeChangedEvent.class);
-
-        var issueTypeChangedEvent = (IssueTypeChangedEvent) event;
-        assertThat(issueTypeChangedEvent.getId()).isEqualTo(ISSUE_ID);
+        var issueTypeChangedEvent = (IssueTypeChangedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueTypeChangedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
         assertThat(issueTypeChangedEvent.getIssueType()).isEqualTo(IssueType.ENHANCEMENT);
     }
 
     @Test
     void typeOfClosedIssueCanNotBeChanged() {
         // Arrange
-        var sut = openIssue();
-        sut.close();
-        sut.markChangesAsCommitted();
+        var sut = createClosedIssue();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(() -> sut.changeType(IssueType.ENHANCEMENT));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.changeType(IssueType.ENHANCEMENT));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void typeOfIssueCanNotBeChangedToTheSameType() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
 
         // Assert
         assertThatExceptionOfType(IssueTypeSetException.class).isThrownBy(() -> sut.changeType(ISSUE_TYPE));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void changingIssueContentRaisesIssueContentChangedEvent() {
         // Arrange
+        var sut = createIssue();
         var content = new IssueContent("Another content");
-        var sut = openIssue();
 
         // Act
         sut.changeContent(content);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueContentChangedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueContentChangedEvent.class);
-
-        var issueContentChangedEvent = (IssueContentChangedEvent) event;
-        assertThat(issueContentChangedEvent.getId()).isEqualTo(ISSUE_ID);
+        var issueContentChangedEvent = (IssueContentChangedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueContentChangedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
         assertThat(issueContentChangedEvent.getIssueContent()).isEqualTo("Another content");
     }
 
     @Test
     void contentOfClosedIssueCanNotBeChanged() {
         // Arrange
+        var sut = createClosedIssue();
         var content = new IssueContent("Another content");
-        var sut = openIssue();
-        sut.close();
-        sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(() -> sut.changeContent(content));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.changeContent(content));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void contentOfIssueCanNotBeChangedToTheSameContent() {
         // Arrange
-        var content = new IssueContent(ISSUE_CONTENT);
-        var sut = openIssue();
+        var sut = createIssue();
+        var content = new IssueContent(ISSUE_CONTENT_PLAIN);
 
         // Assert
         assertThatExceptionOfType(IssueContentSetException.class).isThrownBy(() -> sut.changeContent(content));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void commentingIssueRaisesIssueCommentedEvent() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
         var firstComment = createFirstComment();
 
         // Act
         sut.comment(firstComment);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueCommentedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueCommentedEvent.class);
-
-        var issueCommentedEvent = (IssueCommentedEvent) event;
-        assertThat(issueCommentedEvent.getId()).isEqualTo(ISSUE_ID);
-        assertThat(issueCommentedEvent.getCommentContent()).isEqualTo(FIRST_COMMENT_CONTENT);
-        assertThat(issueCommentedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID);
+        var issueCommentedEvent = (IssueCommentedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueCommentedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueCommentedEvent.getCommentContent()).isEqualTo(FIRST_COMMENT_CONTENT_PLAIN);
+        assertThat(issueCommentedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
     }
 
     @Test
     void issueCanHaveManyComments() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
         var firstComment = createFirstComment();
         var secondComment = createSecondComment();
 
@@ -257,323 +237,251 @@ class IssueTest {
         sut.comment(secondComment);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(2);
+        assertThatAmountOfRaisedEventsIsEqualTo(sut, 2);
     }
 
     @Test
     void closedIssueCanNotBeCommented() {
         // Arrange
-        var sut = openIssue();
+        var sut = createClosedIssue();
         var firstComment = createFirstComment();
-        sut.close();
-        sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(() -> sut.comment(firstComment));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.comment(firstComment));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void issueCanNotHaveTwoCommentsWithTheSameId() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssueWithFirstComment();
         var firstComment = createFirstComment();
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(CommentWithIdExistsException.class).isThrownBy(() -> sut.comment(firstComment));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void changingIssueCommentContentRaisesChangedIssueCommentContentEvent() {
         // Arrange
+        var sut = createIssueWithFirstComment();
         var content = new CommentContent("Another content");
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
 
         // Act
-        sut.changeCommentContent(firstComment.id(), content);
+        sut.changeCommentContent(FIRST_COMMENT_ID, content);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueCommentContentChangedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueCommentContentChangedEvent.class);
-
-        var issueCommentContentChangedEvent = (IssueCommentContentChangedEvent) event;
-        assertThat(issueCommentContentChangedEvent.getId()).isEqualTo(ISSUE_ID);
-        assertThat(issueCommentContentChangedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID);
+        var issueCommentContentChangedEvent = (IssueCommentContentChangedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueCommentContentChangedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueCommentContentChangedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
         assertThat(issueCommentContentChangedEvent.getCommentContent()).isEqualTo("Another content");
     }
 
     @Test
     void contentOfCommentCanNotBeChangedWhenIssueIsClosed() {
         // Arrange
+        var sut = createClosedIssueWithFirstComment();
         var content = new CommentContent("Another content");
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var firstCommentId = firstComment.id();
-        sut.comment(firstComment);
-        sut.close();
-        sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class)
-                .isThrownBy(() -> sut.changeCommentContent(firstCommentId, content));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.changeCommentContent(FIRST_COMMENT_ID, content));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void contentOfCommentCanNotBeChangedToTheSameContent() {
         // Arrange
-        var content = new CommentContent(FIRST_COMMENT_CONTENT);
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var firstCommentId = firstComment.id();
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
+        var sut = createIssueWithFirstComment();
+        var content = new CommentContent(FIRST_COMMENT_CONTENT_PLAIN);
 
         // Assert
         assertThatExceptionOfType(CommentContentSetException.class)
-                .isThrownBy(() -> sut.changeCommentContent(firstCommentId, content));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+                .isThrownBy(() -> sut.changeCommentContent(FIRST_COMMENT_ID, content));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void contentOfNotExistingCommentCanNotBeChanged() {
         // Arrange
+        var sut = createIssueWithFirstComment();
         var content = new CommentContent("Another content");
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var secondCommentId = createSecondComment().id();
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(CommentNotFoundException.class)
-                .isThrownBy(() -> sut.changeCommentContent(secondCommentId, content));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatCommentNotFoundExceptionIsThrownBy(() -> sut.changeCommentContent(SECOND_COMMENT_ID, content));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void hidingCommentRaisesIssueCommentHiddenEvent() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
+        var sut = createIssueWithFirstComment();
 
         // Act
-        sut.hideComment(firstComment.id());
+        sut.hideComment(FIRST_COMMENT_ID);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueCommentHiddenEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueCommentHiddenEvent.class);
-
-        var issueCommentHiddenEvent = (IssueCommentHiddenEvent) event;
-        assertThat(issueCommentHiddenEvent.getId()).isEqualTo(ISSUE_ID);
-        assertThat(issueCommentHiddenEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID);
+        var issueCommentHiddenEvent = (IssueCommentHiddenEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueCommentHiddenEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueCommentHiddenEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
     }
 
     @Test
-    void commentContentCanNotBeHiddenWhenIssueIsClosed() {
+    void commentCanNotBeHiddenWhenIssueIsClosed() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var firstCommentId = firstComment.id();
-        sut.comment(firstComment);
-        sut.close();
-        sut.markChangesAsCommitted();
+        var sut = createClosedIssueWithFirstComment();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class)
-                .isThrownBy(() -> sut.hideComment(firstCommentId));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.hideComment(FIRST_COMMENT_ID));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void notExistingCommentCanNotBeHidden() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var firstCommentId = firstComment.id();
+        var sut = createIssue();
 
         // Assert
-        assertThatExceptionOfType(CommentNotFoundException.class)
-                .isThrownBy(() -> sut.hideComment(firstCommentId));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatCommentNotFoundExceptionIsThrownBy(() -> sut.hideComment(FIRST_COMMENT_ID));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void hiddenCommentCanNotBeHiddenAgain() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var firstCommentId = firstComment.id();
-        sut.comment(firstComment);
-        sut.hideComment(firstCommentId);
+        var sut = createIssueWithFirstComment();
+        sut.hideComment(FIRST_COMMENT_ID);
         sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(CommentHiddenException.class)
-                .isThrownBy(() -> sut.hideComment(firstCommentId));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+                .isThrownBy(() -> sut.hideComment(FIRST_COMMENT_ID));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @ParameterizedTest
     @EnumSource(VoteType.class)
     void votingCommentRaisesIssueCommentVotedEvent(VoteType voteType) {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
+        var sut = createIssueWithFirstComment();
         var vote = new Vote(FIRST_VOTER_ID, voteType);
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
 
         // Act
-        sut.voteComment(firstComment.id(), vote);
+        sut.voteComment(FIRST_COMMENT_ID, vote);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueCommentVotedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueCommentVotedEvent.class);
-
-        var issueCommentVotedEvent = (IssueCommentVotedEvent) event;
-        assertThat(issueCommentVotedEvent.getId()).isEqualTo(ISSUE_ID);
-        assertThat(issueCommentVotedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID);
-        assertThat(issueCommentVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_ID.toString());
+        var issueCommentVotedEvent = (IssueCommentVotedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueCommentVotedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueCommentVotedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
+        assertThat(issueCommentVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_ID_PLAIN);
         assertThat(issueCommentVotedEvent.getVoteType()).isEqualTo(voteType);
     }
 
     @Test
     void commentCanNotBeVotedWhenIssueIsClosed() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var firstCommentId = firstComment.id();
+        var sut = createClosedIssueWithFirstComment();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
-        sut.comment(firstComment);
-        sut.close();
-        sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class)
-                .isThrownBy(() -> sut.voteComment(firstCommentId, vote));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.voteComment(FIRST_COMMENT_ID, vote));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void notExistingCommentCanNotBeVoted() {
         // Arrange
-        var sut = openIssue();
-        var commentId = new CommentId(FIRST_COMMENT_UUID);
+        var sut = createIssue();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
 
         // Assert
-        assertThatExceptionOfType(CommentNotFoundException.class)
-                .isThrownBy(() -> sut.voteComment(commentId, vote));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatCommentNotFoundExceptionIsThrownBy(() -> sut.voteComment(FIRST_COMMENT_ID, vote));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void voterCanVoteCommentWithDifferentVoteTypes() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
+        var sut = createIssueWithFirstComment();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
         var anotherVote = new Vote(FIRST_VOTER_ID, VoteType.DOWN);
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
 
         // Act
-        sut.voteComment(firstComment.id(), vote);
-        sut.voteComment(firstComment.id(), anotherVote);
+        sut.voteComment(FIRST_COMMENT_ID, vote);
+        sut.voteComment(FIRST_COMMENT_ID, anotherVote);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(2);
+        assertThatAmountOfRaisedEventsIsEqualTo(sut, 2);
     }
 
     @Test
     void voterCanNotVoteCommentWithTheSameVoteType() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
-        var firstCommentId = firstComment.id();
+        var sut = createIssueWithFirstComment();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
-        sut.comment(firstComment);
-        sut.voteComment(firstCommentId, vote);
+        sut.voteComment(FIRST_COMMENT_ID, vote);
         sut.markChangesAsCommitted();
 
         // Assert
         assertThatExceptionOfType(VoteAlreadyExistsException.class)
-                .isThrownBy(() -> sut.voteComment(firstCommentId, vote));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+                .isThrownBy(() -> sut.voteComment(FIRST_COMMENT_ID, vote));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void commentCanHaveManyVotes() {
         // Arrange
-        var sut = openIssue();
-        var firstComment = createFirstComment();
+        var sut = createIssueWithFirstComment();
         var firstVote = new Vote(FIRST_VOTER_ID, VoteType.UP);
         var secondVote = new Vote(SECOND_VOTER_ID, VoteType.UP);
-        sut.comment(firstComment);
-        sut.markChangesAsCommitted();
 
         // Act
-        sut.voteComment(firstComment.id(), firstVote);
-        sut.voteComment(firstComment.id(), secondVote);
+        sut.voteComment(FIRST_COMMENT_ID, firstVote);
+        sut.voteComment(FIRST_COMMENT_ID, secondVote);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(2);
+        assertThatAmountOfRaisedEventsIsEqualTo(sut, 2);
     }
 
     @Test
     void votingIssueRaisesIssueVotedEvent() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
 
         // Act
         sut.vote(vote);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(1);
+        assertThatTheOnlyRaisedEventIs(sut, IssueVotedEvent.class);
 
-        var event = sut.getUncommittedChanges().get(0);
-        assertThat(event).isInstanceOf(IssueVotedEvent.class);
-
-        var issueVotedEvent = (IssueVotedEvent) event;
-        assertThat(issueVotedEvent.getId()).isEqualTo(ISSUE_ID);
-        assertThat(issueVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_ID.toString());
+        var issueVotedEvent = (IssueVotedEvent) sut.getUncommittedChanges().get(0);
+        assertThat(issueVotedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_ID_PLAIN);
         assertThat(issueVotedEvent.getVoteType()).isEqualTo(VoteType.UP);
     }
 
     @Test
     void closedIssueCanNotBeVoted() {
         // Arrange
-        var sut = openIssue();
+        var sut = createClosedIssue();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
-        sut.close();
-        sut.markChangesAsCommitted();
 
         // Assert
-        assertThatExceptionOfType(IssueClosedException.class)
-                .isThrownBy(() -> sut.vote(vote));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatIssueClosedExceptionIsThrownBy(() -> sut.vote(vote));
+        assertThatNoEventsAreRaised(sut);
     }
 
     @Test
     void voterCanVoteIssueWithDifferentVoteTypes() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
         var anotherVote = new Vote(FIRST_VOTER_ID, VoteType.DOWN);
 
@@ -582,13 +490,13 @@ class IssueTest {
         sut.vote(anotherVote);
 
         // Assert
-        assertThat(sut.getUncommittedChanges().size()).isEqualTo(2);
+        assertThatAmountOfRaisedEventsIsEqualTo(sut, 2);
     }
 
     @Test
     void voterCanNotVoteIssueWithTheSameVotesTypes() {
         // Arrange
-        var sut = openIssue();
+        var sut = createIssue();
         var vote = new Vote(FIRST_VOTER_ID, VoteType.UP);
         sut.vote(vote);
         sut.markChangesAsCommitted();
@@ -596,13 +504,13 @@ class IssueTest {
         // Assert
         assertThatExceptionOfType(VoteAlreadyExistsException.class)
                 .isThrownBy(() -> sut.vote(vote));
-        assertThat(sut.getUncommittedChanges().size()).isZero();
+        assertThatNoEventsAreRaised(sut);
     }
 
-    private Issue openIssue() {
+    private Issue createIssue() {
         var id = new IssueId(ISSUE_UUID);
-        var content = new IssueContent(ISSUE_CONTENT);
-        var name = new IssueName(ISSUE_NAME);
+        var content = new IssueContent(ISSUE_CONTENT_PLAIN);
+        var name = new IssueName(ISSUE_NAME_PLAIN);
         var issue = Issue.open(id, ISSUE_TYPE, content, name);
 
         issue.markChangesAsCommitted();
@@ -610,9 +518,38 @@ class IssueTest {
         return issue;
     }
 
+    private Issue createClosedIssue() {
+        var issue = createIssue();
+        issue.close();
+        issue.markChangesAsCommitted();
+
+        return issue;
+    }
+
+    private Issue createIssueWithFirstComment() {
+        var issue = createIssue();
+        var firstComment = createFirstComment();
+
+        issue.comment(firstComment);
+        issue.markChangesAsCommitted();
+
+        return issue;
+    }
+
+    private Issue createClosedIssueWithFirstComment() {
+        var issue = createIssue();
+        var firstComment = createFirstComment();
+
+        issue.comment(firstComment);
+        issue.close();
+        issue.markChangesAsCommitted();
+
+        return issue;
+    }
+
     private Comment createFirstComment() {
         var id = new CommentId(FIRST_COMMENT_UUID);
-        var content = new CommentContent(FIRST_COMMENT_CONTENT);
+        var content = new CommentContent(FIRST_COMMENT_CONTENT_PLAIN);
 
         return new Comment(id, content);
     }
@@ -624,4 +561,26 @@ class IssueTest {
         return new Comment(id, content);
     }
 
+    private void assertThatTheOnlyRaisedEventIs(Issue issue, Class<?> clazz) {
+        assertThat(issue.getUncommittedChanges().size()).isEqualTo(1);
+
+        var event = issue.getUncommittedChanges().get(0);
+        assertThat(event).isInstanceOf(clazz);
+    }
+
+    private void assertThatNoEventsAreRaised(Issue issue) {
+        assertThatAmountOfRaisedEventsIsEqualTo(issue, 0);
+    }
+
+    private void assertThatAmountOfRaisedEventsIsEqualTo(Issue issue, int amount) {
+        assertThat(issue.getUncommittedChanges().size()).isEqualTo(amount);
+    }
+
+    private void assertThatIssueClosedExceptionIsThrownBy(ThrowableAssert.ThrowingCallable throwingCallable) {
+        assertThatExceptionOfType(IssueClosedException.class).isThrownBy(throwingCallable);
+    }
+
+    private void assertThatCommentNotFoundExceptionIsThrownBy(ThrowableAssert.ThrowingCallable throwingCallable) {
+        assertThatExceptionOfType(CommentNotFoundException.class).isThrownBy(throwingCallable);
+    }
 }
