@@ -41,14 +41,19 @@ public class Issue extends AggregateRoot {
         // Required to apply events
     }
 
-    public void close() {
-        ensureIsOpen();
-        raiseEvent(issueClosed(id));
-    }
-
     @Override
     public IssueId getId() {
         return id;
+    }
+
+    /**
+     * Closes issue
+     *
+     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
+     */
+    public void close() {
+        ensureIsOpen();
+        raiseEvent(issueClosed(id));
     }
 
     /**
@@ -133,7 +138,7 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Hides issues comment
+     * Hides issue comment
      *
      * @param commentId of comment to be hidden
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
