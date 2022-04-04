@@ -2,7 +2,6 @@ package org.example.issuestracker.issues.command.application.command;
 
 import jakarta.validation.constraints.NotNull;
 import org.example.cqrs.command.CommandBuilder;
-import org.example.cqrs.command.CommandValidationException;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
@@ -61,9 +60,6 @@ public class VoteIssueCommand {
             return this;
         }
 
-        /**
-         * @throws CommandValidationException see {@linkplain CommandBuilder#build()}
-         */
         @Override
         protected VoteIssueCommand create() {
             return new VoteIssueCommand(

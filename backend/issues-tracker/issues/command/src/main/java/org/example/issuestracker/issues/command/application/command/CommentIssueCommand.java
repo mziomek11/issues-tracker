@@ -3,7 +3,6 @@ package org.example.issuestracker.issues.command.application.command;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.example.cqrs.command.CommandBuilder;
-import org.example.cqrs.command.CommandValidationException;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
@@ -63,9 +62,6 @@ public class CommentIssueCommand {
             return this;
         }
 
-        /**
-         * @throws CommandValidationException see {@linkplain CommandBuilder#build()}
-         */
         @Override
         protected CommentIssueCommand create() {
             return new CommentIssueCommand(

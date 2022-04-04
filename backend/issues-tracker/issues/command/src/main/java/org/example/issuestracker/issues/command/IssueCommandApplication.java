@@ -41,7 +41,7 @@ class IssueCommandApplication {
                 .builder()
                 .issueId(uuid)
                 .commentId(UUID.randomUUID())
-                .commentContent("")
+                .commentContent("1")
                 .build();
 
         commandGateway.dispatch(openCommand);

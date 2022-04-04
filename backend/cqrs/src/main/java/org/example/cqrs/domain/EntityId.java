@@ -10,6 +10,10 @@ public abstract class EntityId {
         this.id = Objects.requireNonNull(id);
     }
 
+    public UUID getValue() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return id.toString();

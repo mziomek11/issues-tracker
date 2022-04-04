@@ -2,7 +2,6 @@ package org.example.issuestracker.issues.command.application.command;
 
 import jakarta.validation.constraints.NotNull;
 import org.example.cqrs.command.CommandBuilder;
-import org.example.cqrs.command.CommandValidationException;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
@@ -47,9 +46,6 @@ public class HideIssueCommentCommand {
             return this;
         }
 
-        /**
-         * @throws CommandValidationException see {@linkplain CommandBuilder#build()}
-         */
         @Override
         protected HideIssueCommentCommand create() {
             return new HideIssueCommentCommand(
