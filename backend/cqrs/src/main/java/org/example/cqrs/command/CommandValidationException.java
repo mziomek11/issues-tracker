@@ -1,5 +1,5 @@
 package org.example.cqrs.command;
 
-import jakarta.validation.ValidationException;
+import javax.validation.ValidationException;
 
 public class CommandValidationException extends ValidationException { }

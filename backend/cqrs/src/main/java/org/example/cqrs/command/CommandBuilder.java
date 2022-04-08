@@ -1,7 +1,7 @@
 package org.example.cqrs.command;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 
 import java.util.Set;
 

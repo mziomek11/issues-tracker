@@ -1,6 +1,6 @@
 package org.example.cqrs.event;
 
-import jakarta.validation.ValidationException;
+import javax.validation.ValidationException;
 
 public class EventValidationException extends ValidationException {
 }
