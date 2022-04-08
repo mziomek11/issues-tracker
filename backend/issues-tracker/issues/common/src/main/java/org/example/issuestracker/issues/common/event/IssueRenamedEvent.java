@@ -2,12 +2,15 @@ package org.example.issuestracker.issues.common.event;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public class IssueRenamedEvent extends BaseEvent {
     private final String issueName;
 
@@ -19,10 +22,6 @@ public class IssueRenamedEvent extends BaseEvent {
         super(issueId);
 
         this.issueName = Objects.requireNonNull(issueName);
-    }
-
-    public String getIssueName() {
-        return issueName;
     }
 
     public static class IssueRenamedEventBuilder

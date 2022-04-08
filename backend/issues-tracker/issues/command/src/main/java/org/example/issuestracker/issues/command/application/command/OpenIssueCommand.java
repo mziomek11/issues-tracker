@@ -2,6 +2,9 @@ package org.example.issuestracker.issues.command.application.command;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
@@ -10,6 +13,8 @@ import org.example.issuestracker.issues.common.domain.issue.IssueType;
 
 import java.util.UUID;
 
+@RequiredArgsConstructor
+@Getter
 public class OpenIssueCommand {
     private final IssueId issueId;
     private final IssueType issueType;
@@ -18,29 +23,6 @@ public class OpenIssueCommand {
 
     public static OpenIssueCommandBuilder builder() {
         return new OpenIssueCommandBuilder();
-    }
-
-    private OpenIssueCommand(IssueId issueId, IssueType issueType, IssueContent issueContent, IssueName issueName) {
-        this.issueId = issueId;
-        this.issueType = issueType;
-        this.issueContent = issueContent;
-        this.issueName = issueName;
-    }
-
-    public IssueId getIssueId() {
-        return issueId;
-    }
-
-    public IssueType getIssueType() {
-        return issueType;
-    }
-
-    public IssueContent getIssueContent() {
-        return issueContent;
-    }
-
-    public IssueName getIssueName() {
-        return issueName;
     }
 
     public static class OpenIssueCommandBuilder extends CommandBuilder<OpenIssueCommandBuilder, OpenIssueCommand> {

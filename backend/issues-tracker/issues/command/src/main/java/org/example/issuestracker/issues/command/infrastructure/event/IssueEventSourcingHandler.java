@@ -1,5 +1,6 @@
 package org.example.issuestracker.issues.command.infrastructure.event;
 
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.domain.AggregateId;
 import org.example.cqrs.domain.AggregateRoot;
 import org.example.cqrs.event.BaseEvent;
@@ -10,12 +11,9 @@ import org.example.issuestracker.issues.command.domain.issue.Issue;
 import java.util.Comparator;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class IssueEventSourcingHandler implements EventSourcingHandler<Issue> {
     private final EventStore eventStore;
-
-    public IssueEventSourcingHandler(EventStore eventStore) {
-        this.eventStore = eventStore;
-    }
 
     @Override
     public void save(AggregateRoot aggregateRoot) {
@@ -39,7 +37,7 @@ public class IssueEventSourcingHandler implements EventSourcingHandler<Issue> {
                 .map(BaseEvent::getVersion)
                 .max(Comparator.naturalOrder());
 
-        if (!latestVersion.isPresent()) {
+        if (latestVersion.isEmpty()) {
             throw new IllegalStateException("Latest version could not be found");
         }
 

@@ -1,5 +1,6 @@
 package org.example.issuestracker.issues.command.domain.vote;
 
+import lombok.RequiredArgsConstructor;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 
 import java.util.HashSet;
@@ -7,15 +8,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class Votes {
     private final Set<Vote> voteSet;
 
     public Votes() {
         this.voteSet = new HashSet<>();
-    }
-
-    public Votes(Set<Vote> voteSet) {
-        this.voteSet = voteSet;
     }
 
     /**

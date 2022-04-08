@@ -1,5 +1,6 @@
 package org.example.issuestracker.issues.command.domain.comment;
 
+import lombok.RequiredArgsConstructor;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
@@ -11,15 +12,12 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class Comments {
     private final List<Comment> commentList;
 
     public Comments() {
         this.commentList = new ArrayList<>();
-    }
-
-    public Comments(List<Comment> commentList) {
-        this.commentList = commentList;
     }
 
     /**

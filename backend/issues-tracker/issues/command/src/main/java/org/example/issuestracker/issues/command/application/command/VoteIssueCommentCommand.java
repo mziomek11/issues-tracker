@@ -1,6 +1,9 @@
 package org.example.issuestracker.issues.command.application.command;
 
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
@@ -9,6 +12,8 @@ import org.example.issuestracker.issues.common.domain.vote.VoteType;
 
 import java.util.UUID;
 
+@RequiredArgsConstructor
+@Getter
 public class VoteIssueCommentCommand {
     private final IssueId issueId;
     private final CommentId commentId;
@@ -17,29 +22,6 @@ public class VoteIssueCommentCommand {
 
     public static VoteIssueCommentCommandBuilder builder() {
         return new VoteIssueCommentCommandBuilder();
-    }
-
-    private VoteIssueCommentCommand(IssueId issueId, CommentId commentId, VoterId voterId, VoteType voteType) {
-        this.issueId = issueId;
-        this.commentId = commentId;
-        this.voterId = voterId;
-        this.voteType = voteType;
-    }
-
-    public IssueId getIssueId() {
-        return issueId;
-    }
-
-    public CommentId getCommentId() {
-        return commentId;
-    }
-
-    public VoterId getVoterId() {
-        return voterId;
-    }
-
-    public VoteType getVoteType() {
-        return voteType;
     }
 
     public static class VoteIssueCommentCommandBuilder

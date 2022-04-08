@@ -1,31 +1,23 @@
 package org.example.issuestracker.issues.command.application.command;
 
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
 import java.util.UUID;
 
+@RequiredArgsConstructor
+@Getter
 public class HideIssueCommentCommand {
     private final IssueId issueId;
     private final CommentId commentId;
 
     public static HideIssueCommentCommandBuilder builder() {
         return new HideIssueCommentCommandBuilder();
-    }
-
-    private HideIssueCommentCommand(IssueId issueId, CommentId commentId) {
-        this.issueId = issueId;
-        this.commentId = commentId;
-    }
-
-    public IssueId getIssueId() {
-        return issueId;
-    }
-
-    public CommentId getCommentId() {
-        return commentId;
     }
 
     public static class HideIssueCommentCommandBuilder

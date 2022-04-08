@@ -1,5 +1,6 @@
 package org.example.issuestracker.issues.command.infrastructure.event;
 
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.domain.AggregateId;
 import org.example.cqrs.event.*;
 import org.example.cqrs.domain.AggregateConcurrencyException;
@@ -9,14 +10,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 public class IssueEventStore implements EventStore {
     private final EventStoreRepository eventStoreRepository;
     private final EventProducer eventProducer;
-
-    public IssueEventStore(EventStoreRepository eventStoreRepository, EventProducer eventProducer) {
-        this.eventStoreRepository = eventStoreRepository;
-        this.eventProducer = eventProducer;
-    }
 
     @Override
     public void saveEvents(AggregateId aggregateId, Iterable<BaseEvent> events, int exceptedVersion) {

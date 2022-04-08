@@ -1,5 +1,6 @@
 package org.example.issuestracker.issues.command.application.command.handler;
 
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandHandler;
 import org.example.cqrs.event.EventSourcingHandler;
 import org.example.issuestracker.issues.command.application.command.ChangeIssueCommentContentCommand;
@@ -11,12 +12,9 @@ import org.example.issuestracker.issues.command.domain.issue.Issue;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 
+@RequiredArgsConstructor
 public class ChangeIssueCommentContentCommandHandler implements CommandHandler<ChangeIssueCommentContentCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;
-
-    public ChangeIssueCommentContentCommandHandler(EventSourcingHandler<Issue> eventSourcingHandler) {
-        this.eventSourcingHandler = eventSourcingHandler;
-    }
 
     /**
      * @throws IssueNotFoundException if issue with given id does not exist

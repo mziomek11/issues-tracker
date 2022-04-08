@@ -1,6 +1,8 @@
 package org.example.issuestracker.issues.common.event;
 
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
@@ -8,6 +10,7 @@ import org.example.issuestracker.issues.common.domain.vote.VoteType;
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public class IssueVotedEvent extends BaseEvent {
     private final String voterId;
     private final VoteType voteType;
@@ -21,14 +24,6 @@ public class IssueVotedEvent extends BaseEvent {
 
         this.voterId = Objects.requireNonNull(voterId);
         this.voteType = voteType;
-    }
-
-    public String getVoterId() {
-        return voterId;
-    }
-
-    public VoteType getVoteType() {
-        return voteType;
     }
 
     public static class IssueVotedEventBuilder

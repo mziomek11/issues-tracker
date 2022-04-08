@@ -1,5 +1,6 @@
 package org.example.issuestracker.issues.command.application.command.handler;
 
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandHandler;
 import org.example.cqrs.event.EventSourcingHandler;
 import org.example.issuestracker.issues.command.application.command.VoteIssueCommand;
@@ -9,12 +10,9 @@ import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotF
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 
+@RequiredArgsConstructor
 public class VoteIssueCommandHandler implements CommandHandler<VoteIssueCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;
-
-    public VoteIssueCommandHandler(EventSourcingHandler<Issue> eventSourcingHandler) {
-        this.eventSourcingHandler = eventSourcingHandler;
-    }
 
     /**
      * @throws IssueNotFoundException if issue with given id does not exist

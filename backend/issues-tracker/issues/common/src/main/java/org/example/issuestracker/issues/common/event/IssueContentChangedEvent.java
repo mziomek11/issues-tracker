@@ -2,12 +2,15 @@ package org.example.issuestracker.issues.common.event;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public class IssueContentChangedEvent extends BaseEvent {
     private final String issueContent;
 
@@ -19,10 +22,6 @@ public class IssueContentChangedEvent extends BaseEvent {
         super(issueId);
 
         this.issueContent = Objects.requireNonNull(issueContent);
-    }
-
-    public String getIssueContent() {
-        return issueContent;
     }
 
     public static class IssueCommentVotedEventBuilder

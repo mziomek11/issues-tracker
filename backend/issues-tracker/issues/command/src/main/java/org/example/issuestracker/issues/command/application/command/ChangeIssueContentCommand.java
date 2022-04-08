@@ -2,31 +2,23 @@ package org.example.issuestracker.issues.command.application.command;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 
 import java.util.UUID;
 
+@RequiredArgsConstructor
+@Getter
 public class ChangeIssueContentCommand {
     private final IssueId issueId;
     private final IssueContent issueContent;
 
     public static ChangeIssueContentCommandBuilder builder() {
         return new ChangeIssueContentCommandBuilder();
-    }
-
-    private ChangeIssueContentCommand(IssueId issueId, IssueContent issueContent) {
-        this.issueId = issueId;
-        this.issueContent = issueContent;
-    }
-
-    public IssueId getIssueId() {
-        return issueId;
-    }
-
-    public IssueContent getIssueContent() {
-        return issueContent;
     }
 
     public static class ChangeIssueContentCommandBuilder

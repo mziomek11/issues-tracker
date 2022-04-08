@@ -1,12 +1,15 @@
 package org.example.issuestracker.issues.common.event;
 
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public class IssueCommentHiddenEvent extends BaseEvent {
     private final String commentId;
 
@@ -18,10 +21,6 @@ public class IssueCommentHiddenEvent extends BaseEvent {
         super(issueId);
 
         this.commentId = Objects.requireNonNull(commentId);
-    }
-
-    public String getCommentId() {
-        return commentId;
     }
 
     public static class IssueCommentHiddenEventBuilder

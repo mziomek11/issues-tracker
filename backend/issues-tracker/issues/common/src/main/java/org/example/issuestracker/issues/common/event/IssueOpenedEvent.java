@@ -2,6 +2,8 @@ package org.example.issuestracker.issues.common.event;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
@@ -9,6 +11,7 @@ import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 public class IssueOpenedEvent extends BaseEvent {
     private final IssueType issueType;
     private final String issueContent;
@@ -24,18 +27,6 @@ public class IssueOpenedEvent extends BaseEvent {
         this.issueType = issueType;
         this.issueContent = Objects.requireNonNull(issueContent);
         this.issueName = Objects.requireNonNull(issueName);
-    }
-
-    public IssueType getIssueType() {
-        return issueType;
-    }
-
-    public String getIssueContent() {
-        return issueContent;
-    }
-
-    public String getIssueName() {
-        return issueName;
     }
 
     public static class IssueOpenedEventBuilder
