@@ -1,4 +1,4 @@
-package org.example.issuetracker.issues.domain.vote;
+package org.example.issuetracker.issues.command.domain.vote;
 
 import static org.assertj.core.api.Assertions.*;
 

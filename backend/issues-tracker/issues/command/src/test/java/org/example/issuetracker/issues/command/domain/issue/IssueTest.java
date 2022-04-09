@@ -1,4 +1,4 @@
-package org.example.issuetracker.issues.domain.issue;
+package org.example.issuetracker.issues.command.domain.issue;
 
 import static org.assertj.core.api.Assertions.*;
 

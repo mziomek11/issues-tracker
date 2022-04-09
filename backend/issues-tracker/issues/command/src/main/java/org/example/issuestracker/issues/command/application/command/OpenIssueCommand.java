@@ -26,6 +26,11 @@ public class OpenIssueCommand {
     }
 
     public static class OpenIssueCommandBuilder extends CommandBuilder<OpenIssueCommandBuilder, OpenIssueCommand> {
+        public static final String ISSUE_ID_FIELD_NAME = "issueId";
+        public static final String ISSUE_TYPE_FIELD_NAME = "issueType";
+        public static final String ISSUE_CONTENT_FIELD_NAME = "issueContent";
+        public static final String ISSUE_NAME_FIELD_NAME = "issueName";
+
         @NotNull
         private UUID issueId;
 
