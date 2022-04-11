@@ -9,6 +9,7 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
+import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.*;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
 import org.example.rest.v1.RestValidationException;
@@ -109,6 +110,26 @@ class IssueRestController {
         var changeIssueContentCommand = ChangeIssueContentDtoMapper.toCommand(issueId, changeIssueContentDto);
 
         commandGateway.dispatch(changeIssueContentCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    /**
+     * @throws IssueClosedException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws IssueNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws RestValidationException see {@link VoteIssueDtoMapper#toCommand(UUID, VoteIssueDto)}
+     * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     */
+    @PostMapping("/issues/{issueId}/votes")
+    public ResponseEntity voteIssue(
+            @PathVariable UUID issueId,
+            @RequestBody VoteIssueDto voteIssueDto
+    ) {
+        var voteIssueCommand = VoteIssueDtoMapper.toCommand(issueId, voteIssueDto);
+
+        commandGateway.dispatch(voteIssueCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
