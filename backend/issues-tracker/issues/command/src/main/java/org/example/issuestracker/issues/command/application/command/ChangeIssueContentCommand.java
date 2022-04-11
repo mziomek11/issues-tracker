@@ -23,6 +23,8 @@ public class ChangeIssueContentCommand {
 
     public static class ChangeIssueContentCommandBuilder
             extends CommandBuilder<ChangeIssueContentCommandBuilder, ChangeIssueContentCommand> {
+        public static final String ISSUE_CONTENT_FIELD_NAME = "issueContent";
+
         @NotNull
         private UUID issueId;
 

@@ -1,6 +1,7 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
+import org.example.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
 import org.example.rest.v1.RestErrorResponse;
@@ -42,6 +43,15 @@ public class IssueRestControllerAdvice {
     @ExceptionHandler(IssueTypeSetException.class)
     public ResponseEntity<RestErrorResponse> handleIssueTypeSetException(IssueTypeSetException ex) {
         var errorResponse = new RestErrorResponse("Issue type is already set");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(IssueContentSetException.class)
+    public ResponseEntity<RestErrorResponse> handleIssueContentSetException(IssueContentSetException ex) {
+        var errorResponse = new RestErrorResponse("Issue content is already set");
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
