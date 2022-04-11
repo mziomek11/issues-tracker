@@ -1,11 +1,13 @@
 package org.example.rest.v1;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
 import java.util.Map;
 import java.util.Set;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestErrorResponse {
     private String message;
     private Map<String, Set<String>> errors;
