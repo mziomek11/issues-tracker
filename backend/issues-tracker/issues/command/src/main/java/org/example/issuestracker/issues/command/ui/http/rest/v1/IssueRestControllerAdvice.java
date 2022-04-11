@@ -1,5 +1,7 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.rest.v1.RestErrorResponse;
@@ -68,6 +70,24 @@ public class IssueRestControllerAdvice {
     @ExceptionHandler(CommentWithIdExistsException.class)
     public ResponseEntity<RestErrorResponse> handleCommentWithIdExistsException(CommentWithIdExistsException ex) {
         var errorResponse = new RestErrorResponse("Comment with id already exist");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handleCommentNotFoundException(CommentNotFoundException ex) {
+        var errorResponse = new RestErrorResponse("Comment not found");
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(CommentHiddenException.class)
+    public ResponseEntity<RestErrorResponse> handleCommentHiddenException(CommentHiddenException ex) {
+        var errorResponse = new RestErrorResponse("Comment is hidden");
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)

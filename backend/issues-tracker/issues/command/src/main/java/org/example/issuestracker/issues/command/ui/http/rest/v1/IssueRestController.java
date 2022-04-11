@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandGateway;
 import org.example.issuestracker.issues.command.application.command.*;
 import org.example.issuestracker.issues.command.application.command.handler.*;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
-import org.example.issuestracker.issues.command.domain.issue.Issue;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.*;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
@@ -131,6 +132,27 @@ class IssueRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    /**
+     * @throws CommentHiddenException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws CommentNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws IssueClosedException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws IssueNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws RestValidationException see {@link HideIssueCommentDtoMapper#toCommand(UUID, UUID)}
+     */
+    @DeleteMapping("/issues/{issueId}/comments/${commentId}")
+    public ResponseEntity<UUID> hideIssueComment(
+            @PathVariable UUID issueId,
+            @PathVariable UUID commentId
+    ) {
+        var hideIssueCommentCommand = HideIssueCommentDtoMapper.toCommand(issueId, commentId);
+
+        commandGateway.dispatch(hideIssueCommentCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .build();
     }
 }
