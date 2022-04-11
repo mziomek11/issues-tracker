@@ -26,6 +26,9 @@ public class VoteIssueCommentCommand {
 
     public static class VoteIssueCommentCommandBuilder
             extends CommandBuilder<VoteIssueCommentCommandBuilder, VoteIssueCommentCommand> {
+        public static final String VOTER_ID_FIELD_NAME = "voterId";
+        public static final String VOTE_TYPE_FIELD_NAME = "voteType";
+
         @NotNull
         private UUID issueId;
 

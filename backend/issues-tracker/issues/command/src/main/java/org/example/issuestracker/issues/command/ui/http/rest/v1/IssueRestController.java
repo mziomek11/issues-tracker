@@ -203,4 +203,29 @@ class IssueRestController {
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    /**
+     * @throws IssueClosedException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws IssueNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws RestValidationException see {@link VoteIssueCommentDtoMapper#toCommand(UUID, UUID, VoteIssueCommentDto)}
+     * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     */
+    @PostMapping("/issues/{issueId}/comments/${commentId}/votes")
+    public ResponseEntity voteIssueComment(
+            @PathVariable UUID issueId,
+            @PathVariable UUID commentId,
+            @RequestBody VoteIssueCommentDto voteIssueCommentDto
+    ) {
+        var voteIssueCommentCommand = VoteIssueCommentDtoMapper.toCommand(
+                issueId,
+                commentId,
+                voteIssueCommentDto
+        );
+
+        commandGateway.dispatch(voteIssueCommentCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 }
