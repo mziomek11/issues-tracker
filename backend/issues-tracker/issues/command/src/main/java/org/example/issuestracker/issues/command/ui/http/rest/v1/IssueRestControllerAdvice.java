@@ -5,6 +5,7 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
+import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 import org.example.rest.v1.RestErrorResponse;
 import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
@@ -62,6 +63,15 @@ public class IssueRestControllerAdvice {
     @ExceptionHandler(IssueNameSetException.class)
     public ResponseEntity<RestErrorResponse> handleIssueNameSetException(IssueNameSetException ex) {
         var errorResponse = new RestErrorResponse("Issue name is already set");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(VoteAlreadyExistsException.class)
+    public ResponseEntity<RestErrorResponse> handleVoteAlreadyExistsException(VoteAlreadyExistsException ex) {
+        var errorResponse = new RestErrorResponse("Vote already exists");
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
