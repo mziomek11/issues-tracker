@@ -1,6 +1,7 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.ChangeIssueTypeCommand;
+import org.example.issuestracker.issues.command.application.command.ChangeIssueTypeCommand.ChangeIssueTypeCommandBuilder;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueTypeDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -32,12 +33,12 @@ public class ChangeIssueTypeDtoMapper {
     }
 
     public static Map<String, Set<String>> toDtoErrors(
-            Set<ConstraintViolation<ChangeIssueTypeCommand.ChangeIssueTypeCommandBuilder>> builderErrors
+            Set<ConstraintViolation<ChangeIssueTypeCommandBuilder>> builderErrors
     ) {
         var keyMap = new HashMap<String, String>();
 
         keyMap.put(
-                ChangeIssueTypeCommand.ChangeIssueTypeCommandBuilder.ISSUE_TYPE_FIELD_NAME,
+                ChangeIssueTypeCommandBuilder.ISSUE_TYPE_FIELD_NAME,
                 ChangeIssueTypeDto.ISSUE_TYPE_FIELD_NAME
         );
 

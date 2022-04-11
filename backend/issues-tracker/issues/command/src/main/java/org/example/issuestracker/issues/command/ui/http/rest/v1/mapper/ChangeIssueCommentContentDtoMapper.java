@@ -1,8 +1,8 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
-import org.example.issuestracker.issues.command.application.command.CommentIssueCommand;
-import org.example.issuestracker.issues.command.application.command.CommentIssueCommand.CommentIssueCommandBuilder;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.CommentIssueDto;
+import org.example.issuestracker.issues.command.application.command.ChangeIssueCommentContentCommand;
+import org.example.issuestracker.issues.command.application.command.ChangeIssueCommentContentCommand.ChangeIssueCommentContentCommandBuilder;
+import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueCommentContentDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
 
@@ -12,14 +12,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class CommentIssueDtoMapper {
-    private CommentIssueDtoMapper() {}
+public class ChangeIssueCommentContentDtoMapper {
+    private ChangeIssueCommentContentDtoMapper() {}
 
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static CommentIssueCommand toCommand(UUID issueId, UUID commentId, CommentIssueDto dto) {
-        var builder = CommentIssueCommand
+    public static ChangeIssueCommentContentCommand toCommand(
+            UUID issueId,
+            UUID commentId,
+            ChangeIssueCommentContentDto dto
+    ) {
+        var builder = ChangeIssueCommentContentCommand
                 .builder()
                 .issueId(issueId)
                 .commentId(commentId)
@@ -34,13 +38,13 @@ public class CommentIssueDtoMapper {
     }
 
     public static Map<String, Set<String>> toDtoErrors(
-            Set<ConstraintViolation<CommentIssueCommandBuilder>> builderErrors
+            Set<ConstraintViolation<ChangeIssueCommentContentCommandBuilder>> builderErrors
     ) {
         var keyMap = new HashMap<String, String>();
 
         keyMap.put(
-                CommentIssueCommandBuilder.COMMENT_CONTENT_FIELD_NAME,
-                CommentIssueDto.COMMENT_CONTENT_FIELD_NAME
+                ChangeIssueCommentContentCommandBuilder.COMMENT_CONTENT_FIELD_NAME,
+                ChangeIssueCommentContentDto.COMMENT_CONTENT_FIELD_NAME
         );
 
         return RestValidationErrorsMapper.toDtoErrors(builderErrors, keyMap);

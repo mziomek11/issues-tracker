@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandGateway;
 import org.example.issuestracker.issues.command.application.command.*;
 import org.example.issuestracker.issues.command.application.command.handler.*;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
@@ -132,7 +133,7 @@ class IssueRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(commentId);
     }
 
     /**
@@ -143,13 +144,39 @@ class IssueRestController {
      * @throws RestValidationException see {@link HideIssueCommentDtoMapper#toCommand(UUID, UUID)}
      */
     @DeleteMapping("/issues/{issueId}/comments/${commentId}")
-    public ResponseEntity<UUID> hideIssueComment(
+    public ResponseEntity hideIssueComment(
             @PathVariable UUID issueId,
             @PathVariable UUID commentId
     ) {
         var hideIssueCommentCommand = HideIssueCommentDtoMapper.toCommand(issueId, commentId);
 
         commandGateway.dispatch(hideIssueCommentCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    /**
+     * @throws CommentContentSetException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws CommentNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws IssueClosedException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws IssueNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws RestValidationException see {@link ChangeIssueCommentContentDtoMapper#toCommand(UUID, UUID, ChangeIssueCommentContentDto)}
+     */
+    @DeleteMapping("/issues/{issueId}/comments/${commentId}/content")
+    public ResponseEntity changeIssueCommentContent(
+            @PathVariable UUID issueId,
+            @PathVariable UUID commentId,
+            @RequestBody ChangeIssueCommentContentDto changeIssueCommentContentDto
+    ) {
+        var changeIssueCommentContentCommand = ChangeIssueCommentContentDtoMapper.toCommand(
+                issueId,
+                commentId,
+                changeIssueCommentContentDto
+        );
+
+        commandGateway.dispatch(changeIssueCommentContentCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

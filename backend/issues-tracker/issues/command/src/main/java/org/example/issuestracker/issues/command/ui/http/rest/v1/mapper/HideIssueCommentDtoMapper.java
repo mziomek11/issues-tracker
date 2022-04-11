@@ -1,6 +1,7 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.HideIssueCommentCommand;
+import org.example.issuestracker.issues.command.application.command.HideIssueCommentCommand.HideIssueCommentCommandBuilder;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
 
@@ -31,7 +32,7 @@ public class HideIssueCommentDtoMapper {
     }
 
     public static Map<String, Set<String>> toDtoErrors(
-            Set<ConstraintViolation<HideIssueCommentCommand.HideIssueCommentCommandBuilder>> builderErrors
+            Set<ConstraintViolation<HideIssueCommentCommandBuilder>> builderErrors
     ) {
         var keyMap = new HashMap<String, String>();
 
