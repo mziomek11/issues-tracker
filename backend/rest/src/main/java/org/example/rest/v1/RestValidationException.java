@@ -1,4 +1,4 @@
-package org.example.cqrs.rest.v1;
+package org.example.rest.v1;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

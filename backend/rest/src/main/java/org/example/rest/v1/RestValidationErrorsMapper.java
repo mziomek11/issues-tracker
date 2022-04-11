@@ -1,6 +1,4 @@
-package org.example.cqrs.rest.v1;
-
-import org.example.cqrs.command.CommandBuilder;
+package org.example.rest.v1;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
@@ -13,7 +11,7 @@ public class RestValidationErrorsMapper {
     private RestValidationErrorsMapper() {}
 
     public static Map<String, Set<String>> toDtoErrors(
-            Set<? extends ConstraintViolation<? extends CommandBuilder>> violations,
+            Set<? extends ConstraintViolation> violations,
             Map<String, String> keyMap
     ) {
         var dtoErrors = new HashMap<String, Set<String>>();

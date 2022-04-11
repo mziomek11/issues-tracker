@@ -2,9 +2,9 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandGateway;
-import org.example.cqrs.rest.v1.RestValidationException;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.OpenIssueDto;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.OpenIssueDtoMapper;
+import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

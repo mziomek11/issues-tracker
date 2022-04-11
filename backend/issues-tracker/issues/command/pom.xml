@@ -26,6 +26,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>rest</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.example.issuestracker</groupId>
             <artifactId>issues.common</artifactId>
             <version>1.0.0</version>

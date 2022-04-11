@@ -16,6 +16,7 @@
 
     <modules>
         <module>../cqrs</module>
+        <module>../rest</module>
         <module>issues/command</module>
         <module>issues/common</module>
     </modules>

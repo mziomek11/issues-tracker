@@ -1,10 +1,10 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
-import org.example.cqrs.rest.v1.RestValidationErrorsMapper;
-import org.example.cqrs.rest.v1.RestValidationException;
 import org.example.issuestracker.issues.command.application.command.OpenIssueCommand;
 import org.example.issuestracker.issues.command.application.command.OpenIssueCommand.OpenIssueCommandBuilder;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.OpenIssueDto;
+import org.example.rest.v1.RestValidationErrorsMapper;
+import org.example.rest.v1.RestValidationException;
 
 import javax.validation.ConstraintViolation;
 import java.util.*;
