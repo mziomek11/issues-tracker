@@ -15,8 +15,8 @@ public class VoteIssueCommandHandler implements CommandHandler<VoteIssueCommand>
     private final EventSourcingHandler<Issue> eventSourcingHandler;
 
     /**
-     * @throws IssueNotFoundException if issue with given id does not exist
      * @throws IssueClosedException see {@link Issue#vote(Vote)}
+     * @throws IssueNotFoundException if issue with given id does not exist
      * @throws VoteAlreadyExistsException see {@link Issue#vote(Vote)}
      */
     @Override

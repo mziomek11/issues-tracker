@@ -15,9 +15,9 @@ public class RenameIssueCommandHandler implements CommandHandler<RenameIssueComm
     private final EventSourcingHandler<Issue> eventSourcingHandler;
 
     /**
-     * @throws IssueNotFoundException if issue with given id does not exist
      * @throws IssueClosedException see {@link Issue#rename(IssueName)}
      * @throws IssueNameSetException see {@link Issue#rename(IssueName)}
+     * @throws IssueNotFoundException if issue with given id does not exist
      */
     @Override
     public void handle(RenameIssueCommand command) {

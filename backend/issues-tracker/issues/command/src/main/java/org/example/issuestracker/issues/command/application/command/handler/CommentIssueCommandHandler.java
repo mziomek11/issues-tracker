@@ -15,9 +15,9 @@ public class CommentIssueCommandHandler implements CommandHandler<CommentIssueCo
     private final EventSourcingHandler<Issue> eventSourcingHandler;
 
     /**
-     * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws IssueClosedException see {@link Issue#close()}
      * @throws CommentWithIdExistsException see {@link Issue#close()}
+     * @throws IssueClosedException see {@link Issue#close()}
+     * @throws IssueNotFoundException if issue with given id does not exist
      */
     @Override
     public void handle(CommentIssueCommand command) {

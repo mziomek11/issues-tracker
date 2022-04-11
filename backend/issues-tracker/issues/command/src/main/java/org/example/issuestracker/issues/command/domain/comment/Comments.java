@@ -54,8 +54,8 @@ public class Comments {
      *
      * @param id of comment that should be updated
      * @param content to be set
-     * @throws CommentNotFoundException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      * @throws CommentContentSetException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
+     * @throws CommentNotFoundException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      */
     public Comments changeContent(CommentId id, CommentContent content) {
         ensureCanChangeContent(id, content);
@@ -68,8 +68,8 @@ public class Comments {
      *
      * @param id of comment that should be updated
      * @param content to be set
-     * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
      * @throws CommentContentSetException see {@link Comment#ensureCanChangeContent(CommentContent)}
+     * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
      */
     public void ensureCanChangeContent(CommentId id, CommentContent content) {
         var comment = findCommentByIdOrThrow(id);
@@ -81,8 +81,8 @@ public class Comments {
      * Hides comment with given id
      *
      * @param id of comment that should be hidden
-     * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
      * @throws CommentHiddenException see {@link Comments#ensureCanHide(CommentId)}
+     * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
      */
     public Comments hide(CommentId id) {
         ensureCanHide(id);
@@ -94,8 +94,8 @@ public class Comments {
      * Ensures that comment can be hidden
      *
      * @param id of comment that should be hidden
-     * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
      * @throws CommentHiddenException see {@link Comment#ensureCanHide()}
+     * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
      */
     public void ensureCanHide(CommentId id) {
         var comment = findCommentByIdOrThrow(id);

@@ -17,10 +17,10 @@ public class ChangeIssueCommentContentCommandHandler implements CommandHandler<C
     private final EventSourcingHandler<Issue> eventSourcingHandler;
 
     /**
-     * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws IssueClosedException see {@link Issue#changeCommentContent(CommentId, CommentContent)}
-     * @throws CommentNotFoundException see {@link Issue#changeCommentContent(CommentId, CommentContent)}
      * @throws CommentContentSetException see {@link Issue#changeCommentContent(CommentId, CommentContent)}
+     * @throws CommentNotFoundException see {@link Issue#changeCommentContent(CommentId, CommentContent)}
+     * @throws IssueClosedException see {@link Issue#changeCommentContent(CommentId, CommentContent)}
+     * @throws IssueNotFoundException if issue with given id does not exist
      */
     @Override
     public void handle(ChangeIssueCommentContentCommand command) {

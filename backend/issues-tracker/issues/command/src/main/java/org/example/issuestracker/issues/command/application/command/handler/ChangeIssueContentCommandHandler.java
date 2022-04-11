@@ -15,9 +15,9 @@ public class ChangeIssueContentCommandHandler implements CommandHandler<ChangeIs
     private final EventSourcingHandler<Issue> eventSourcingHandler;
 
     /**
-     * @throws IssueNotFoundException if issue with given id does not exist
      * @throws IssueClosedException see {@link Issue#changeContent(IssueContent)}
      * @throws IssueContentSetException see {@link Issue#changeContent(IssueContent)}
+     * @throws IssueNotFoundException if issue with given id does not exist
      */
     @Override
     public void handle(ChangeIssueContentCommand command) {

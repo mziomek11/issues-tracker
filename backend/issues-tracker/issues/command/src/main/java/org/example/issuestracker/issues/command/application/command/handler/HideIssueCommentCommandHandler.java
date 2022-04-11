@@ -16,10 +16,10 @@ public class HideIssueCommentCommandHandler implements CommandHandler<HideIssueC
     private final EventSourcingHandler<Issue> eventSourcingHandler;
 
     /**
-     * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws IssueClosedException see {@link Issue#hideComment(CommentId)}
-     * @throws CommentNotFoundException see {@link Issue#hideComment(CommentId)}
      * @throws CommentHiddenException see {@link Issue#hideComment(CommentId)}
+     * @throws CommentNotFoundException see {@link Issue#hideComment(CommentId)}
+     * @throws IssueClosedException see {@link Issue#hideComment(CommentId)}
+     * @throws IssueNotFoundException if issue with given id does not exist
      */
     @Override
     public void handle(HideIssueCommentCommand command) {

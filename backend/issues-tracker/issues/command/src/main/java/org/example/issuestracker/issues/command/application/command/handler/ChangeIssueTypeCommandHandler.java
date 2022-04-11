@@ -15,8 +15,8 @@ public class ChangeIssueTypeCommandHandler implements CommandHandler<ChangeIssue
     private final EventSourcingHandler<Issue> eventSourcingHandler;
 
     /**
-     * @throws IssueNotFoundException if issue with given id does not exist
      * @throws IssueClosedException see {@link Issue#changeType(IssueType)}
+     * @throws IssueNotFoundException if issue with given id does not exist
      * @throws IssueTypeSetException see {@link Issue#changeType(IssueType)}
      */
     @Override
