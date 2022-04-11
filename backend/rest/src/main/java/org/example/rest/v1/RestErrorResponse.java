@@ -22,4 +22,8 @@ public class RestErrorResponse {
         this.message = message;
         this.errors = errors;
     }
+
+    public Map<String, Object> toAttributeMap() {
+        return Map.of("message", message);
+    }
 }
