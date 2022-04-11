@@ -1,9 +1,7 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
+import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.rest.v1.RestErrorResponse;
 import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
@@ -52,6 +50,24 @@ public class IssueRestControllerAdvice {
     @ExceptionHandler(IssueContentSetException.class)
     public ResponseEntity<RestErrorResponse> handleIssueContentSetException(IssueContentSetException ex) {
         var errorResponse = new RestErrorResponse("Issue content is already set");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(IssueNameSetException.class)
+    public ResponseEntity<RestErrorResponse> handleIssueNameSetException(IssueNameSetException ex) {
+        var errorResponse = new RestErrorResponse("Issue name is already set");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(CommentWithIdExistsException.class)
+    public ResponseEntity<RestErrorResponse> handleCommentWithIdExistsException(CommentWithIdExistsException ex) {
+        var errorResponse = new RestErrorResponse("Comment with id already exist");
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)

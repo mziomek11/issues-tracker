@@ -2,23 +2,13 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandGateway;
-import org.example.issuestracker.issues.command.application.command.ChangeIssueContentCommand;
-import org.example.issuestracker.issues.command.application.command.ChangeIssueTypeCommand;
-import org.example.issuestracker.issues.command.application.command.CloseIssueCommand;
-import org.example.issuestracker.issues.command.application.command.handler.ChangeIssueContentCommandHandler;
-import org.example.issuestracker.issues.command.application.command.handler.ChangeIssueTypeCommandHandler;
-import org.example.issuestracker.issues.command.application.command.handler.CloseIssueCommandHandler;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
-import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueContentDto;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueTypeDto;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.OpenIssueDto;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.ChangeIssueContentDtoMapper;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.ChangeIssueTypeDtoMapper;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.CloseIssueDtoMapper;
-import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.OpenIssueDtoMapper;
+import org.example.issuestracker.issues.command.application.command.*;
+import org.example.issuestracker.issues.command.application.command.handler.*;
+import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
+import org.example.issuestracker.issues.command.domain.issue.Issue;
+import org.example.issuestracker.issues.command.domain.issue.exception.*;
+import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.*;
+import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
 import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +54,26 @@ class IssueRestController {
     }
 
     /**
+     * @throws IssueClosedException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
+     * @throws IssueNameSetException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
+     * @throws IssueNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
+     * @throws RestValidationException see {@link RenameIssueDtoMapper#toCommand(UUID, RenameIssueDto)}
+     */
+    @PatchMapping("/issues/{issueId}/name")
+    public ResponseEntity renameIssue(
+            @PathVariable UUID issueId,
+            @RequestBody RenameIssueDto renameIssueDto
+    ) {
+        var renameIssueCommand = RenameIssueDtoMapper.toCommand(issueId, renameIssueDto);
+
+        commandGateway.dispatch(renameIssueCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    /**
      * @throws IssueClosedException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws IssueNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws IssueTypeSetException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
@@ -84,10 +94,10 @@ class IssueRestController {
     }
 
     /**
-     * @throws RestValidationException see {@link ChangeIssueContentDtoMapper#toCommand(UUID, ChangeIssueContentDto)}
      * @throws IssueClosedException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws IssueContentSetException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws IssueNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
+     * @throws RestValidationException see {@link ChangeIssueContentDtoMapper#toCommand(UUID, ChangeIssueContentDto)}
      */
     @PatchMapping("/issues/{issueId}/content")
     public ResponseEntity changeIssueContent(
@@ -100,6 +110,27 @@ class IssueRestController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
+                .build();
+    }
+
+    /**
+     * @throws CommentWithIdExistsException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
+     * @throws IssueClosedException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
+     * @throws IssueNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
+     * @throws RestValidationException see {@link CommentIssueDtoMapper#toCommand(UUID, UUID, CommentIssueDto)}
+     */
+    @PostMapping("/issues/{issueId}/comments")
+    public ResponseEntity<UUID> commentIssue(
+            @PathVariable UUID issueId,
+            @RequestBody CommentIssueDto commentIssueDto
+    ) {
+        var commentId = UUID.randomUUID();
+        var commentIssueCommand = CommentIssueDtoMapper.toCommand(issueId, commentId, commentIssueDto);
+
+        commandGateway.dispatch(commentIssueCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .build();
     }
 }

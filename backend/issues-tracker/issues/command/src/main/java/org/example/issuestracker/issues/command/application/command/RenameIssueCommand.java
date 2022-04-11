@@ -22,6 +22,8 @@ public class RenameIssueCommand {
     }
 
     public static class RenameIssueCommandBuilder extends CommandBuilder<RenameIssueCommandBuilder, RenameIssueCommand> {
+        public static final String ISSUE_NAME_FIELD_NAME = "issueName";
+
         @NotNull
         private UUID issueId;
 
