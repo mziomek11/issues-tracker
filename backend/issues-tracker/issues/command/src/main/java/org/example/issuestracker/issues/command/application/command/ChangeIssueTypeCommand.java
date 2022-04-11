@@ -22,6 +22,8 @@ public class ChangeIssueTypeCommand {
 
     public static class ChangeIssueTypeCommandBuilder
             extends CommandBuilder<ChangeIssueTypeCommandBuilder, ChangeIssueTypeCommand> {
+        public static final String ISSUE_TYPE_FIELD_NAME = "issueType";
+
         @NotNull
         private UUID issueId;
 

@@ -2,11 +2,16 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandGateway;
+import org.example.issuestracker.issues.command.application.command.ChangeIssueTypeCommand;
 import org.example.issuestracker.issues.command.application.command.CloseIssueCommand;
+import org.example.issuestracker.issues.command.application.command.handler.ChangeIssueTypeCommandHandler;
 import org.example.issuestracker.issues.command.application.command.handler.CloseIssueCommandHandler;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
+import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
+import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueTypeDto;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.OpenIssueDto;
+import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.ChangeIssueTypeDtoMapper;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.CloseIssueDtoMapper;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.mapper.OpenIssueDtoMapper;
 import org.example.rest.v1.RestValidationException;
@@ -47,6 +52,23 @@ class IssueRestController {
         var closeIssueCommand = CloseIssueDtoMapper.toCommand(issueId);
 
         commandGateway.dispatch(closeIssueCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    /**
+     * @throws RestValidationException see {@link ChangeIssueTypeDtoMapper#toCommand(UUID, ChangeIssueTypeDto)}
+     * @throws IssueNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
+     * @throws IssueClosedException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
+     * @throws IssueTypeSetException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
+     */
+    @PatchMapping("/issues/{issueId}/type")
+    public ResponseEntity changeIssueType(@PathVariable UUID issueId, @RequestBody ChangeIssueTypeDto changeIssueTypeDto) {
+        var changeIssueTypeCommand = ChangeIssueTypeDtoMapper.toCommand(issueId, changeIssueTypeDto);
+
+        commandGateway.dispatch(changeIssueTypeCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

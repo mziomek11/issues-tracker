@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
+import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
 import org.example.rest.v1.RestErrorResponse;
 import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,15 @@ public class IssueRestControllerAdvice {
     @ExceptionHandler(IssueClosedException.class)
     public ResponseEntity<RestErrorResponse> handleIssueClosedException(IssueClosedException ex) {
         var errorResponse = new RestErrorResponse("Issue is closed");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(IssueTypeSetException.class)
+    public ResponseEntity<RestErrorResponse> handleIssueTypeSetException(IssueTypeSetException ex) {
+        var errorResponse = new RestErrorResponse("Issue type is already set");
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
