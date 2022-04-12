@@ -9,7 +9,9 @@ import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotF
 import org.example.issuestracker.issues.command.domain.issue.Issue;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class ChangeIssueTypeCommandHandler implements CommandHandler<ChangeIssueTypeCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;

@@ -9,7 +9,9 @@ import org.example.issuestracker.issues.command.domain.issue.exception.IssueClos
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class ChangeIssueContentCommandHandler implements CommandHandler<ChangeIssueContentCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;

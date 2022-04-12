@@ -10,7 +10,9 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.issue.Issue;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class HideIssueCommentCommandHandler implements CommandHandler<HideIssueCommentCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;

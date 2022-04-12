@@ -5,14 +5,16 @@ import org.example.cqrs.domain.AggregateId;
 import org.example.cqrs.event.*;
 import org.example.cqrs.domain.AggregateConcurrencyException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 @RequiredArgsConstructor
 public class IssueEventStore implements EventStore {
-    private final EventStoreRepository eventStoreRepository;
+    private final IssueEventStoreRepository eventStoreRepository;
     private final EventProducer eventProducer;
 
     @Override

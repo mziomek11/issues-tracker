@@ -3,6 +3,7 @@ package org.example.issuestracker.issues.common.event;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
@@ -10,10 +11,11 @@ import org.example.issuestracker.issues.common.domain.vote.VoteType;
 import java.util.Objects;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 public class IssueVotedEvent extends BaseEvent {
-    private final String voterId;
-    private final VoteType voteType;
+    private String voterId;
+    private VoteType voteType;
 
     public static IssueVotedEventBuilder builder() {
         return new IssueVotedEventBuilder();

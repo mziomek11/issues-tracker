@@ -3,8 +3,10 @@ package org.example.cqrs.event;
 import java.util.Objects;
 
 public abstract class BaseEvent {
-    private final String id;
+    private String id;
     private int version;
+
+    protected BaseEvent() {}
 
     protected BaseEvent(String id) {
         this.id = Objects.requireNonNull(id);

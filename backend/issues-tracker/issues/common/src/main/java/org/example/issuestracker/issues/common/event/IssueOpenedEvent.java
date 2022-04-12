@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
@@ -11,11 +12,12 @@ import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import java.util.Objects;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 public class IssueOpenedEvent extends BaseEvent {
-    private final IssueType issueType;
-    private final String issueContent;
-    private final String issueName;
+    private IssueType issueType;
+    private String issueContent;
+    private String issueName;
 
     public static IssueOpenedEventBuilder builder() {
         return new IssueOpenedEventBuilder();

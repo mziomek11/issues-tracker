@@ -4,7 +4,9 @@ import org.example.cqrs.command.CommandDispatcher;
 import org.example.cqrs.command.CommandGateway;
 import org.example.issuestracker.issues.command.application.command.*;
 import org.example.issuestracker.issues.command.application.command.handler.*;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IssueCommandGateway implements CommandGateway {
     private final CommandDispatcher commandDispatcher;
 

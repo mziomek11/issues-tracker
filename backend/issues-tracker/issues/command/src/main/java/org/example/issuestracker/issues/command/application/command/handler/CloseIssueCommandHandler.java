@@ -7,7 +7,9 @@ import org.example.issuestracker.issues.command.application.command.CloseIssueCo
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class CloseIssueCommandHandler implements CommandHandler<CloseIssueCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;

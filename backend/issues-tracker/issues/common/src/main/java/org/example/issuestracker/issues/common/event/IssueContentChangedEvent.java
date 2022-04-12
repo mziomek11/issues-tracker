@@ -4,15 +4,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 public class IssueContentChangedEvent extends BaseEvent {
-    private final String issueContent;
+    private String issueContent;
 
     public static IssueCommentVotedEventBuilder builder() {
         return new IssueCommentVotedEventBuilder();

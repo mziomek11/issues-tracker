@@ -3,15 +3,17 @@ package org.example.issuestracker.issues.common.event;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 public class IssueCommentHiddenEvent extends BaseEvent {
-    private final String commentId;
+    private String commentId;
 
     public static IssueCommentHiddenEventBuilder builder() {
         return new IssueCommentHiddenEventBuilder();

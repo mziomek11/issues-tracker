@@ -11,7 +11,9 @@ import org.example.issuestracker.issues.command.domain.issue.exception.IssueClos
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class VoteIssueCommentCommandHandler implements CommandHandler<VoteIssueCommentCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;

@@ -9,7 +9,9 @@ import org.example.issuestracker.issues.command.domain.issue.exception.IssueClos
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNameSetException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class RenameIssueCommandHandler implements CommandHandler<RenameIssueCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;

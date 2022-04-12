@@ -7,10 +7,12 @@ import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventSourcingHandler;
 import org.example.cqrs.event.EventStore;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.Optional;
 
+@Component
 @RequiredArgsConstructor
 public class IssueEventSourcingHandler implements EventSourcingHandler<Issue> {
     private final EventStore eventStore;

@@ -164,7 +164,7 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
      * @throws RestValidationException see {@link HideIssueCommentDtoMapper#toCommand(UUID, UUID)}
      */
-    @DeleteMapping("/issues/{issueId}/comments/${commentId}")
+    @DeleteMapping("/issues/{issueId}/comments/{commentId}")
     public ResponseEntity hideIssueComment(
             @PathVariable UUID issueId,
             @PathVariable UUID commentId
@@ -185,7 +185,7 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws RestValidationException see {@link ChangeIssueCommentContentDtoMapper#toCommand(UUID, UUID, ChangeIssueCommentContentDto)}
      */
-    @DeleteMapping("/issues/{issueId}/comments/${commentId}/content")
+    @DeleteMapping("/issues/{issueId}/comments/{commentId}/content")
     public ResponseEntity changeIssueCommentContent(
             @PathVariable UUID issueId,
             @PathVariable UUID commentId,
@@ -210,7 +210,7 @@ class IssueRestController {
      * @throws RestValidationException see {@link VoteIssueCommentDtoMapper#toCommand(UUID, UUID, VoteIssueCommentDto)}
      * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      */
-    @PostMapping("/issues/{issueId}/comments/${commentId}/votes")
+    @PostMapping("/issues/{issueId}/comments/{commentId}/votes")
     public ResponseEntity voteIssueComment(
             @PathVariable UUID issueId,
             @PathVariable UUID commentId,

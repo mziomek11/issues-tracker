@@ -4,12 +4,14 @@ import org.example.cqrs.command.CommandHandler;
 import org.example.cqrs.command.CommandDispatcher;
 import org.example.cqrs.command.CommandHandlerNotFoundException;
 import org.example.cqrs.command.TooManyCommandHandlersException;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class IssueCommandDispatcher implements CommandDispatcher {
     private final Map<Class<Object>, List<CommandHandler<Object>>> registry = new HashMap<>();
 

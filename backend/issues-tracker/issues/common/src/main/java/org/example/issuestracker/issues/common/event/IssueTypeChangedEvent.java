@@ -3,15 +3,17 @@ package org.example.issuestracker.issues.common.event;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 public class IssueTypeChangedEvent extends BaseEvent {
-    private final IssueType issueType;
+    private IssueType issueType;
 
     public static IssueTypeChangedEventBuilder builder() {
         return new IssueTypeChangedEventBuilder();

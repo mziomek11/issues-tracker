@@ -2,11 +2,13 @@ package org.example.issuestracker.issues.common.event;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
 import java.util.UUID;
 
+@NoArgsConstructor
 public class IssueClosedEvent extends BaseEvent {
     public static IssueClosedEventBuilder builder() {
         return new IssueClosedEventBuilder();
