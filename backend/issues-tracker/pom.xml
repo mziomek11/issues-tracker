@@ -19,5 +19,6 @@
         <module>../rest</module>
         <module>issues/command</module>
         <module>issues/common</module>
+        <module>issues/query</module>
     </modules>
 </project>
