@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IssueCommandApplication {
+public class IssuesCommandApplication {
     public static void main(String[] args) {
-        SpringApplication.run(IssueCommandApplication.class, args);
+        SpringApplication.run(IssuesCommandApplication.class, args);
     }
 }

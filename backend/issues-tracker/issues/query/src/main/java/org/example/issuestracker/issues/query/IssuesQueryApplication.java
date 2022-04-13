@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IssueQueryApplication {
+public class IssuesQueryApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(IssueQueryApplication.class, args);
+		SpringApplication.run(IssuesQueryApplication.class, args);
 	}
 
 }
