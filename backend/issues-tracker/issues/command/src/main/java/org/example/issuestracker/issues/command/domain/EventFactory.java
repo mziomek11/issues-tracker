@@ -6,6 +6,7 @@ import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
+import org.example.issuestracker.issues.common.domain.event.*;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
 import org.example.issuestracker.issues.common.event.*;

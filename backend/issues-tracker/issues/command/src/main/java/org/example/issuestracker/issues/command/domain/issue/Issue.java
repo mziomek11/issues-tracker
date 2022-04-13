@@ -14,6 +14,7 @@ import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.command.domain.vote.Votes;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
+import org.example.issuestracker.issues.common.domain.event.*;
 import org.example.issuestracker.issues.common.domain.issue.IssueStatus;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import org.example.issuestracker.issues.common.event.*;

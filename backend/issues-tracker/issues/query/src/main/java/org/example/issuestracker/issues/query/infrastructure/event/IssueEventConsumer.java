@@ -1,6 +1,6 @@
 package org.example.issuestracker.issues.query.infrastructure.event;
 
-import org.example.issuestracker.issues.common.event.IssueOpenedEvent;
+import org.example.issuestracker.issues.common.domain.event.IssueOpenedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;

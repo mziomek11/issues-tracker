@@ -1,4 +1,4 @@
-package org.example.issuestracker.issues.common.event;
+package org.example.issuestracker.issues.common.domain.event;
 
 import javax.validation.constraints.NotNull;
 
