@@ -43,7 +43,7 @@ public class IssueEventStore implements EventStore {
             );
 
             eventStoreRepository.save(eventModel);
-            eventProducer.produce(event.getClass().getName(), event);
+            eventProducer.produce(event.getClass().getSimpleName(), event);
         }
     }
 
