@@ -9,7 +9,6 @@ import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.common.domain.event.*;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
-import org.example.issuestracker.issues.common.event.*;
 
 public class EventFactory {
     public static IssueOpenedEvent issueOpened(IssueId id, IssueType type, IssueContent content, IssueName name) {

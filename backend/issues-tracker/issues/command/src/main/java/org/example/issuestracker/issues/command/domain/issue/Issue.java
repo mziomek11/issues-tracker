@@ -17,7 +17,6 @@ import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlread
 import org.example.issuestracker.issues.common.domain.event.*;
 import org.example.issuestracker.issues.common.domain.issue.IssueStatus;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
-import org.example.issuestracker.issues.common.event.*;
 
 import static org.example.issuestracker.issues.command.domain.EventFactory.*;
 
