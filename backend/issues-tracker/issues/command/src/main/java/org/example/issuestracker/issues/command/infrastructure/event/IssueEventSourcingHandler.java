@@ -1,6 +1,7 @@
 package org.example.issuestracker.issues.command.infrastructure.event;
 
 import lombok.RequiredArgsConstructor;
+import org.example.cqrs.domain.AggregateConcurrencyException;
 import org.example.cqrs.domain.AggregateId;
 import org.example.cqrs.domain.AggregateRoot;
 import org.example.cqrs.event.BaseEvent;
@@ -17,6 +18,9 @@ import java.util.Optional;
 public class IssueEventSourcingHandler implements EventSourcingHandler<Issue> {
     private final EventStore eventStore;
 
+    /**
+     * @throws AggregateConcurrencyException see {@link EventSourcingHandler#save(AggregateRoot)}
+     */
     @Override
     public void save(AggregateRoot aggregateRoot) {
         eventStore.saveEvents(aggregateRoot.getId(), aggregateRoot.getUncommittedChanges(), aggregateRoot.getVersion());

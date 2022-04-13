@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.infrastructure.command;
 
 import org.example.cqrs.command.CommandDispatcher;
 import org.example.cqrs.command.CommandGateway;
+import org.example.cqrs.command.CommandHandlerNotFoundException;
 import org.example.issuestracker.issues.command.application.command.*;
 import org.example.issuestracker.issues.command.application.command.handler.*;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,9 @@ public class IssueCommandGateway implements CommandGateway {
         this.commandDispatcher.registerHandler(ChangeIssueContentCommand.class, changeIssueContentCommandHandler);
     }
 
+    /**
+     * @throws CommandHandlerNotFoundException see {@link CommandDispatcher#dispatch(Object)}
+     */
     @Override
     public void dispatch(Object command) {
         this.commandDispatcher.dispatch(command);

@@ -17,6 +17,9 @@ public class IssueEventStore implements EventStore {
     private final IssueEventStoreRepository eventStoreRepository;
     private final EventProducer eventProducer;
 
+    /**
+     * @throws AggregateConcurrencyException see {@link EventStore#saveEvents(AggregateId, Iterable, int)}
+     */
     @Override
     public void saveEvents(AggregateId aggregateId, Iterable<BaseEvent> events, int exceptedVersion) {
         var persistedEvents = eventStoreRepository.findByAggregateId(aggregateId);
