@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -22,7 +21,7 @@ public class IssueCommentHiddenEvent extends BaseEvent {
     private IssueCommentHiddenEvent(String issueId, String commentId) {
         super(issueId);
 
-        this.commentId = Objects.requireNonNull(commentId);
+        this.commentId = commentId;
     }
 
     public static class IssueCommentHiddenEventBuilder

@@ -8,7 +8,6 @@ import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 import org.example.issuestracker.issues.common.domain.vote.VoteType;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -25,8 +24,8 @@ public class IssueCommentVotedEvent extends BaseEvent {
     private IssueCommentVotedEvent(String issueId, String commentId, String voterId, VoteType voteType) {
         super(issueId);
 
-        this.commentId = Objects.requireNonNull(commentId);
-        this.voterId = Objects.requireNonNull(voterId);
+        this.commentId = commentId;
+        this.voterId = voterId;
         this.voteType = voteType;
     }
 

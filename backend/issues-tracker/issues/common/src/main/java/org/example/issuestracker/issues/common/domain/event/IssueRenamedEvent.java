@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -23,7 +22,7 @@ public class IssueRenamedEvent extends BaseEvent {
     private IssueRenamedEvent(String issueId, String issueName) {
         super(issueId);
 
-        this.issueName = Objects.requireNonNull(issueName);
+        this.issueName = issueName;
     }
 
     public static class IssueRenamedEventBuilder

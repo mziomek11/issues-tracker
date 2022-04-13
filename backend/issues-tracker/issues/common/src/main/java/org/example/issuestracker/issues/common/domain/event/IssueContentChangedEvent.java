@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -23,7 +22,7 @@ public class IssueContentChangedEvent extends BaseEvent {
     private IssueContentChangedEvent(String issueId, String issueContent) {
         super(issueId);
 
-        this.issueContent = Objects.requireNonNull(issueContent);
+        this.issueContent = issueContent;
     }
 
     public static class IssueCommentVotedEventBuilder

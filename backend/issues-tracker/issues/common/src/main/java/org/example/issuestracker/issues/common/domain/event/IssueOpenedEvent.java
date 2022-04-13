@@ -9,7 +9,6 @@ import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 import org.example.issuestracker.issues.common.domain.issue.IssueType;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -27,8 +26,8 @@ public class IssueOpenedEvent extends BaseEvent {
         super(issueId);
 
         this.issueType = issueType;
-        this.issueContent = Objects.requireNonNull(issueContent);
-        this.issueName = Objects.requireNonNull(issueName);
+        this.issueContent = issueContent;
+        this.issueName = issueName;
     }
 
     public static class IssueOpenedEventBuilder

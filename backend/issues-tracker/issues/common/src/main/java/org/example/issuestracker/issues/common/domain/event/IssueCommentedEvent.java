@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
 import org.example.cqrs.event.EventBuilder;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -24,8 +23,8 @@ public class IssueCommentedEvent extends BaseEvent {
     private IssueCommentedEvent(String issueId, String commentId, String commentContent) {
         super(issueId);
 
-        this.commentId = Objects.requireNonNull(commentId);
-        this.commentContent = Objects.requireNonNull(commentContent);
+        this.commentId = commentId;
+        this.commentContent = commentContent;
     }
 
     public static class IssueCommentedEventBuilder
