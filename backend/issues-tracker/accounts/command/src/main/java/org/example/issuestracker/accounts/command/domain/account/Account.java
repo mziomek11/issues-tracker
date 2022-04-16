@@ -20,10 +20,16 @@ public class Account extends AggregateRoot {
     private AccountStatus status;
     private Optional<AccountActivationToken> activationToken;
 
-    public static Account create(AccountId accountId, AccountEmail email, AccountHashedPassword password) {
+    public static Account create(
+            AccountId accountId,
+            AccountEmail email,
+            AccountPlainPassword password,
+            AccountPasswordHashingAlgorithm passwordHashingAlgorithm
+    ) {
         var account = new Account();
+        var hashedPassword = passwordHashingAlgorithm.hash(password);
 
-        account.raiseEvent(accountOpened(accountId, email, password, AccountActivationToken.generate()));
+        account.raiseEvent(accountOpened(accountId, email, hashedPassword, AccountActivationToken.generate()));
 
         return account;
     }
