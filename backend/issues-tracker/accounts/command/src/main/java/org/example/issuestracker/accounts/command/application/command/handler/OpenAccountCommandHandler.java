@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandHandler;
 import org.example.cqrs.event.EventSourcingHandler;
 import org.example.issuestracker.accounts.command.application.command.OpenAccountCommand;
-import org.example.issuestracker.accounts.command.application.exception.AccountWithEmailAlreadyExistsException;
 import org.example.issuestracker.accounts.command.application.gateway.AccountGateway;
+import org.example.issuestracker.accounts.command.application.gateway.exception.AccountEmailAlreadyTakenException;
 import org.example.issuestracker.accounts.command.domain.account.Account;
+import org.example.issuestracker.accounts.command.domain.account.AccountEmail;
 import org.example.issuestracker.accounts.command.domain.account.AccountPasswordHashingAlgorithm;
 import org.springframework.stereotype.Component;
 
@@ -18,13 +19,11 @@ public class OpenAccountCommandHandler implements CommandHandler<OpenAccountComm
     private final AccountPasswordHashingAlgorithm accountPasswordHashingAlgorithm;
 
     /**
-     * @throws AccountWithEmailAlreadyExistsException if account with given email already exists
+     * @throws AccountEmailAlreadyTakenException see {@link AccountGateway#ensureAccountEmailIsNotTaken(AccountEmail)}
      */
     @Override
     public void handle(OpenAccountCommand command) {
-        if (accountGateway.accountWithEmailExists(command.getAccountEmail())) {
-            throw new AccountWithEmailAlreadyExistsException(command.getAccountEmail());
-        }
+        accountGateway.ensureAccountEmailIsNotTaken(command.getAccountEmail());
 
         var account = Account.open(
             command.getAccountId(),
