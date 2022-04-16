@@ -2,18 +2,22 @@ package org.example.issuestracker.accounts.command.ui.http.rest.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandGateway;
+import org.example.issuestracker.accounts.command.application.command.ActivateAccountCommand;
 import org.example.issuestracker.accounts.command.application.command.OpenAccountCommand;
+import org.example.issuestracker.accounts.command.application.command.handler.ActivateAccountCommandHandler;
 import org.example.issuestracker.accounts.command.application.command.handler.OpenAccountCommandHandler;
 import org.example.issuestracker.accounts.command.application.gateway.exception.AccountEmailAlreadyTakenException;
+import org.example.issuestracker.accounts.command.domain.account.exception.AccountActivationTokenMismatchException;
+import org.example.issuestracker.accounts.command.domain.account.exception.AccountAlreadyActivatedException;
+import org.example.issuestracker.accounts.command.domain.account.exception.AccountNotFoundException;
+import org.example.issuestracker.accounts.command.ui.http.rest.v1.dto.ActivateAccountDto;
 import org.example.issuestracker.accounts.command.ui.http.rest.v1.dto.OpenAccountDto;
+import org.example.issuestracker.accounts.command.ui.http.rest.v1.mapper.ActivateAccountDtoMapper;
 import org.example.issuestracker.accounts.command.ui.http.rest.v1.mapper.OpenAccountDtoMapper;
 import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -36,6 +40,29 @@ public class AccountRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .body(accountId);
+    }
+
+    /**
+     * @throws AccountActivationTokenMismatchException see {@link ActivateAccountCommandHandler#handle(ActivateAccountCommand)}
+     * @throws AccountAlreadyActivatedException see {@link ActivateAccountCommandHandler#handle(ActivateAccountCommand)}
+     * @throws AccountNotFoundException see {@link ActivateAccountCommandHandler#handle(ActivateAccountCommand)}
+     * @throws RestValidationException see {@link OpenAccountDtoMapper#toCommand(UUID, OpenAccountDto)}
+     */
+    @PostMapping("/accounts/{accountId}/activation-token")
+    public ResponseEntity<UUID> activateAccount(
+            @PathVariable UUID accountId,
+            @RequestBody ActivateAccountDto activateAccountDto
+    ) {
+        var activateAccountCommand = ActivateAccountDtoMapper.toCommand(
+                accountId,
+                activateAccountDto
+        );
+
+        commandGateway.dispatch(activateAccountCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(accountId);
     }
 }

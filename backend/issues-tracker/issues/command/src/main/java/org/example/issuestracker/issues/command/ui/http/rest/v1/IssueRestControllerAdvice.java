@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class IssueRestControllerAdvice {
     @ExceptionHandler(RestValidationException.class)
-    public ResponseEntity<RestErrorResponse> handleRestValidationException(RestValidationException ex) {
+    public ResponseEntity<RestErrorResponse> handle(RestValidationException ex) {
         var errorResponse = new RestErrorResponse("Validation failed", ex.getErrors());
 
         return ResponseEntity
@@ -25,7 +25,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(IssueNotFoundException.class)
-    public ResponseEntity<RestErrorResponse> handleIssueNotFoundException(IssueNotFoundException ex) {
+    public ResponseEntity<RestErrorResponse> handle(IssueNotFoundException ex) {
         var errorResponse = new RestErrorResponse("Issue not found");
 
         return ResponseEntity
@@ -34,7 +34,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(IssueClosedException.class)
-    public ResponseEntity<RestErrorResponse> handleIssueClosedException(IssueClosedException ex) {
+    public ResponseEntity<RestErrorResponse> handle(IssueClosedException ex) {
         var errorResponse = new RestErrorResponse("Issue is closed");
 
         return ResponseEntity
@@ -43,7 +43,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(IssueTypeSetException.class)
-    public ResponseEntity<RestErrorResponse> handleIssueTypeSetException(IssueTypeSetException ex) {
+    public ResponseEntity<RestErrorResponse> handle(IssueTypeSetException ex) {
         var errorResponse = new RestErrorResponse("Issue type is already set");
 
         return ResponseEntity
@@ -52,7 +52,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(IssueContentSetException.class)
-    public ResponseEntity<RestErrorResponse> handleIssueContentSetException(IssueContentSetException ex) {
+    public ResponseEntity<RestErrorResponse> handle(IssueContentSetException ex) {
         var errorResponse = new RestErrorResponse("Issue content is already set");
 
         return ResponseEntity
@@ -61,7 +61,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(IssueNameSetException.class)
-    public ResponseEntity<RestErrorResponse> handleIssueNameSetException(IssueNameSetException ex) {
+    public ResponseEntity<RestErrorResponse> handle(IssueNameSetException ex) {
         var errorResponse = new RestErrorResponse("Issue name is already set");
 
         return ResponseEntity
@@ -70,7 +70,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(VoteAlreadyExistsException.class)
-    public ResponseEntity<RestErrorResponse> handleVoteAlreadyExistsException(VoteAlreadyExistsException ex) {
+    public ResponseEntity<RestErrorResponse> handle(VoteAlreadyExistsException ex) {
         var errorResponse = new RestErrorResponse("Vote already exists");
 
         return ResponseEntity
@@ -79,7 +79,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(CommentWithIdExistsException.class)
-    public ResponseEntity<RestErrorResponse> handleCommentWithIdExistsException(CommentWithIdExistsException ex) {
+    public ResponseEntity<RestErrorResponse> handle(CommentWithIdExistsException ex) {
         var errorResponse = new RestErrorResponse("Comment with id already exist");
 
         return ResponseEntity
@@ -88,7 +88,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(CommentNotFoundException.class)
-    public ResponseEntity<RestErrorResponse> handleCommentNotFoundException(CommentNotFoundException ex) {
+    public ResponseEntity<RestErrorResponse> handle(CommentNotFoundException ex) {
         var errorResponse = new RestErrorResponse("Comment not found");
 
         return ResponseEntity
@@ -97,7 +97,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(CommentHiddenException.class)
-    public ResponseEntity<RestErrorResponse> handleCommentHiddenException(CommentHiddenException ex) {
+    public ResponseEntity<RestErrorResponse> handle(CommentHiddenException ex) {
         var errorResponse = new RestErrorResponse("Comment is hidden");
 
         return ResponseEntity
@@ -106,7 +106,7 @@ public class IssueRestControllerAdvice {
     }
 
     @ExceptionHandler(CommentContentSetException.class)
-    public ResponseEntity<RestErrorResponse> handleCommentContentSetException(CommentContentSetException ex) {
+    public ResponseEntity<RestErrorResponse> handle(CommentContentSetException ex) {
         var errorResponse = new RestErrorResponse("Comment content is already set");
 
         return ResponseEntity
