@@ -5,7 +5,7 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.Votes;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
-import org.example.issuestracker.issues.common.domain.comment.CommentStatus;
+import org.example.issuestracker.shared.domain.valueobject.CommentStatus;
 
 public record Comment(CommentId id, CommentContent content, CommentStatus status, Votes votes) {
     public Comment(CommentId id, CommentContent content) {

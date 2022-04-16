@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
-import org.example.issuestracker.issues.common.domain.vote.VoteType;
+import org.example.issuestracker.shared.domain.valueobject.VoteType;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

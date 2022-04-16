@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
-import org.example.issuestracker.issues.common.domain.issue.IssueType;
+import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
 import java.util.UUID;
 

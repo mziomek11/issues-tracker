@@ -9,7 +9,7 @@ import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
-import org.example.issuestracker.issues.common.domain.issue.IssueType;
+import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
 import java.util.UUID;
 

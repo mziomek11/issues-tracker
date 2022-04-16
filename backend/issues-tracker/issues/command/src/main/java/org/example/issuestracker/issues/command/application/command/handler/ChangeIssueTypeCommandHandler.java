@@ -8,7 +8,7 @@ import org.example.issuestracker.issues.command.domain.issue.exception.IssueClos
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
-import org.example.issuestracker.issues.common.domain.issue.IssueType;
+import org.example.issuestracker.shared.domain.valueobject.IssueType;
 import org.springframework.stereotype.Component;
 
 @Component

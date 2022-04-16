@@ -1,5 +1,6 @@
 package org.example.issuestracker.issues.command.domain.issue;
 
+import lombok.NoArgsConstructor;
 import org.example.cqrs.domain.AggregateRoot;
 import org.example.issuestracker.issues.command.domain.comment.Comment;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
@@ -14,12 +15,13 @@ import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.command.domain.vote.Votes;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
-import org.example.issuestracker.issues.common.domain.event.*;
-import org.example.issuestracker.issues.common.domain.issue.IssueStatus;
-import org.example.issuestracker.issues.common.domain.issue.IssueType;
+import org.example.issuestracker.shared.domain.event.*;
+import org.example.issuestracker.shared.domain.valueobject.IssueStatus;
+import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
 import static org.example.issuestracker.issues.command.domain.EventFactory.*;
 
+@NoArgsConstructor
 public class Issue extends AggregateRoot {
     private IssueId id;
     private IssueType type;
@@ -35,10 +37,6 @@ public class Issue extends AggregateRoot {
         issue.raiseEvent(issueOpened(id, type, content, name));
 
         return issue;
-    }
-
-    public Issue() {
-        // Required to apply events
     }
 
     @Override

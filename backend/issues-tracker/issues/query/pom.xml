@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.example.issuestracker</groupId>
-			<artifactId>issues.common</artifactId>
+			<artifactId>shared</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>

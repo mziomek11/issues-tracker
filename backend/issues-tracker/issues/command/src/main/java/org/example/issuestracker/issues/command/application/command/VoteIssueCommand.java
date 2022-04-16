@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
-import org.example.issuestracker.issues.common.domain.vote.VoteType;
+import org.example.issuestracker.shared.domain.valueobject.VoteType;
 
 import java.util.UUID;
 
