@@ -20,7 +20,7 @@ public class Account extends AggregateRoot {
     private AccountStatus status;
     private Optional<AccountActivationToken> activationToken;
 
-    public static Account create(
+    public static Account open(
             AccountId accountId,
             AccountEmail email,
             AccountPlainPassword password,
