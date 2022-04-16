@@ -44,7 +44,7 @@ public class AccountOpenedEvent extends BaseEvent {
         @NotBlank
         private String accountHashedPassword;
 
-        @NotBlank
+        @NotNull
         private UUID accountActivationToken;
 
         public AccountOpenedEvent.AccountOpenedEventBuilder accountId(UUID accountId) {
