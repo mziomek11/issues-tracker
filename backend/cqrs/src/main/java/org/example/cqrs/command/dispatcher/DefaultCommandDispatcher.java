@@ -1,24 +1,21 @@
-package org.example.issuestracker.issues.command.infrastructure.command;
+package org.example.cqrs.command.dispatcher;
 
 import org.example.cqrs.command.CommandHandler;
-import org.example.cqrs.command.CommandDispatcher;
 import org.example.cqrs.command.CommandHandlerNotFoundException;
 import org.example.cqrs.command.TooManyCommandHandlersException;
 import org.example.cqrs.domain.AggregateConcurrencyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
-public class IssueCommandDispatcher implements CommandDispatcher {
+public class DefaultCommandDispatcher implements CommandDispatcher {
     private final Map<Class<Object>, List<CommandHandler<Object>>> registry = new HashMap<>();
 
-    Logger logger = LoggerFactory.getLogger(IssueCommandDispatcher.class);
+    Logger logger = LoggerFactory.getLogger(DefaultCommandDispatcher.class);
 
     /**
      * @throws TooManyCommandHandlersException see {@link CommandDispatcher#registerHandler(Class, CommandHandler)}

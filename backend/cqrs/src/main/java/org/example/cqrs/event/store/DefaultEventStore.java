@@ -1,21 +1,22 @@
-package org.example.issuestracker.issues.command.infrastructure.event;
+package org.example.cqrs.event.store;
 
 import lombok.RequiredArgsConstructor;
-import org.example.cqrs.domain.AggregateId;
-import org.example.cqrs.event.*;
 import org.example.cqrs.domain.AggregateConcurrencyException;
-import org.example.issuestracker.issues.command.domain.issue.Issue;
-import org.springframework.stereotype.Component;
+import org.example.cqrs.domain.AggregateId;
+import org.example.cqrs.domain.AggregateRoot;
+import org.example.cqrs.event.BaseEvent;
+import org.example.cqrs.event.EventModel;
+import org.example.cqrs.event.producer.EventProducer;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Component
 @RequiredArgsConstructor
-public class IssueEventStore implements EventStore {
-    private final IssueEventStoreRepository eventStoreRepository;
+public class DefaultEventStore<T extends AggregateRoot> implements EventStore {
+    private final EventStoreRepository eventStoreRepository;
     private final EventProducer eventProducer;
+    private final Class<T> clazz;
 
     /**
      * @throws AggregateConcurrencyException see {@link EventStore#saveEvents(AggregateId, Iterable, int)}
@@ -36,7 +37,7 @@ public class IssueEventStore implements EventStore {
                     UUID.randomUUID(),
                     new Date(),
                     aggregateId,
-                    Issue.class.getTypeName(),
+                    clazz.getTypeName(),
                     version,
                     event.getClass().getTypeName(),
                     event

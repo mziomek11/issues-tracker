@@ -2,7 +2,7 @@ package org.example.issuestracker.accounts.command.application.command.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandHandler;
-import org.example.cqrs.event.EventSourcingHandler;
+import org.example.cqrs.event.sourcinghandler.EventSourcingHandler;
 import org.example.issuestracker.accounts.command.application.command.OpenAccountCommand;
 import org.example.issuestracker.accounts.command.application.gateway.AccountGateway;
 import org.example.issuestracker.accounts.command.application.gateway.exception.AccountEmailAlreadyTakenException;

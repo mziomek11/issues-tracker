@@ -1,14 +1,11 @@
-package org.example.issuestracker.issues.command.infrastructure.event;
+package org.example.cqrs.event.producer;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.event.BaseEvent;
-import org.example.cqrs.event.EventProducer;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
-public class IssueEventProducer implements EventProducer {
+public class KafkaEventProducer implements EventProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override

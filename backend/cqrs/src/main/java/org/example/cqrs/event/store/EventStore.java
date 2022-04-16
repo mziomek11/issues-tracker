@@ -1,7 +1,8 @@
-package org.example.cqrs.event;
+package org.example.cqrs.event.store;
 
 import org.example.cqrs.domain.AggregateConcurrencyException;
 import org.example.cqrs.domain.AggregateId;
+import org.example.cqrs.event.BaseEvent;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package org.example.issuestracker.issues.command.application.command.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandHandler;
-import org.example.cqrs.event.EventSourcingHandler;
+import org.example.cqrs.event.sourcinghandler.EventSourcingHandler;
 import org.example.issuestracker.issues.command.application.command.VoteIssueCommentCommand;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;

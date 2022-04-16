@@ -1,22 +1,20 @@
-package org.example.issuestracker.issues.command.infrastructure.event;
+package org.example.cqrs.event.sourcinghandler;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.domain.AggregateConcurrencyException;
 import org.example.cqrs.domain.AggregateId;
 import org.example.cqrs.domain.AggregateRoot;
 import org.example.cqrs.event.BaseEvent;
-import org.example.cqrs.event.EventSourcingHandler;
-import org.example.cqrs.event.EventStore;
-import org.example.issuestracker.issues.command.domain.issue.Issue;
-import org.springframework.stereotype.Component;
+import org.example.cqrs.event.store.EventStore;
 
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.function.Supplier;
 
-@Component
 @RequiredArgsConstructor
-public class IssueEventSourcingHandler implements EventSourcingHandler<Issue> {
+public class DefaultEventSourcingHandler<T extends AggregateRoot> implements EventSourcingHandler<T> {
     private final EventStore eventStore;
+    private final Supplier<T> supplier;
 
     /**
      * @throws AggregateConcurrencyException see {@link EventSourcingHandler#save(AggregateRoot)}
@@ -28,8 +26,8 @@ public class IssueEventSourcingHandler implements EventSourcingHandler<Issue> {
     }
 
     @Override
-    public Optional<Issue> getById(AggregateId aggregateId) {
-        var aggregate = new Issue();
+    public Optional<T> getById(AggregateId aggregateId) {
+        var aggregate = supplier.get();
         var events = eventStore.getEvents(aggregateId);
 
         if (events.isEmpty()) {

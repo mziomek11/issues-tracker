@@ -1,7 +1,7 @@
 package org.example.issuestracker.accounts.command.ui.http.rest.v1;
 
 import lombok.RequiredArgsConstructor;
-import org.example.cqrs.command.CommandGateway;
+import org.example.cqrs.command.dispatcher.CommandDispatcher;
 import org.example.issuestracker.accounts.command.application.command.ActivateAccountCommand;
 import org.example.issuestracker.accounts.command.application.command.OpenAccountCommand;
 import org.example.issuestracker.accounts.command.application.command.handler.ActivateAccountCommandHandler;
@@ -25,7 +25,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/account-management")
 @RequiredArgsConstructor
 public class AccountRestController {
-    private final CommandGateway commandGateway;
+    private final CommandDispatcher commandDispatcher;
 
     /**
      * @throws AccountEmailAlreadyTakenException see {@link OpenAccountCommandHandler#handle(OpenAccountCommand)}
@@ -36,7 +36,7 @@ public class AccountRestController {
         var accountId = UUID.randomUUID();
         var openAccountCommand = OpenAccountDtoMapper.toCommand(accountId, openAccountDto);
 
-        commandGateway.dispatch(openAccountCommand);
+        commandDispatcher.dispatch(openAccountCommand);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -59,7 +59,7 @@ public class AccountRestController {
                 activateAccountDto
         );
 
-        commandGateway.dispatch(activateAccountCommand);
+        commandDispatcher.dispatch(activateAccountCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

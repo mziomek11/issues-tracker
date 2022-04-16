@@ -1,7 +1,7 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
 import lombok.RequiredArgsConstructor;
-import org.example.cqrs.command.CommandGateway;
+import org.example.cqrs.command.dispatcher.CommandDispatcher;
 import org.example.issuestracker.issues.command.application.command.*;
 import org.example.issuestracker.issues.command.application.command.handler.*;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/issue-management")
 @RequiredArgsConstructor
 class IssueRestController {
-    private final CommandGateway commandGateway;
+    private final CommandDispatcher commandDispatcher;
 
     /**
      * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, OpenIssueDto)}
@@ -33,7 +33,7 @@ class IssueRestController {
         var issueId = UUID.randomUUID();
         var openIssueCommand = OpenIssueDtoMapper.toCommand(issueId, openIssueDto);
 
-        commandGateway.dispatch(openIssueCommand);
+        commandDispatcher.dispatch(openIssueCommand);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -49,7 +49,7 @@ class IssueRestController {
     public ResponseEntity closeIssue(@PathVariable UUID issueId) {
         var closeIssueCommand = CloseIssueDtoMapper.toCommand(issueId);
 
-        commandGateway.dispatch(closeIssueCommand);
+        commandDispatcher.dispatch(closeIssueCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -69,7 +69,7 @@ class IssueRestController {
     ) {
         var renameIssueCommand = RenameIssueDtoMapper.toCommand(issueId, renameIssueDto);
 
-        commandGateway.dispatch(renameIssueCommand);
+        commandDispatcher.dispatch(renameIssueCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -89,7 +89,7 @@ class IssueRestController {
     ) {
         var changeIssueTypeCommand = ChangeIssueTypeDtoMapper.toCommand(issueId, changeIssueTypeDto);
 
-        commandGateway.dispatch(changeIssueTypeCommand);
+        commandDispatcher.dispatch(changeIssueTypeCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -109,7 +109,7 @@ class IssueRestController {
     ) {
         var changeIssueContentCommand = ChangeIssueContentDtoMapper.toCommand(issueId, changeIssueContentDto);
 
-        commandGateway.dispatch(changeIssueContentCommand);
+        commandDispatcher.dispatch(changeIssueContentCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -129,7 +129,7 @@ class IssueRestController {
     ) {
         var voteIssueCommand = VoteIssueDtoMapper.toCommand(issueId, voteIssueDto);
 
-        commandGateway.dispatch(voteIssueCommand);
+        commandDispatcher.dispatch(voteIssueCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -150,7 +150,7 @@ class IssueRestController {
         var commentId = UUID.randomUUID();
         var commentIssueCommand = CommentIssueDtoMapper.toCommand(issueId, commentId, commentIssueDto);
 
-        commandGateway.dispatch(commentIssueCommand);
+        commandDispatcher.dispatch(commentIssueCommand);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -171,7 +171,7 @@ class IssueRestController {
     ) {
         var hideIssueCommentCommand = HideIssueCommentDtoMapper.toCommand(issueId, commentId);
 
-        commandGateway.dispatch(hideIssueCommentCommand);
+        commandDispatcher.dispatch(hideIssueCommentCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -197,7 +197,7 @@ class IssueRestController {
                 changeIssueCommentContentDto
         );
 
-        commandGateway.dispatch(changeIssueCommentContentCommand);
+        commandDispatcher.dispatch(changeIssueCommentContentCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -222,7 +222,7 @@ class IssueRestController {
                 voteIssueCommentDto
         );
 
-        commandGateway.dispatch(voteIssueCommentCommand);
+        commandDispatcher.dispatch(voteIssueCommentCommand);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
