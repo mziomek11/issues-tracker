@@ -15,6 +15,10 @@ public class ActivateAccountCommand {
     private final AccountId accountId;
     private final AccountActivationToken accountActivationToken;
 
+    public static ActivateAccountCommandBuilder builder() {
+        return new ActivateAccountCommandBuilder();
+    }
+
     public static class ActivateAccountCommandBuilder
             extends CommandBuilder<ActivateAccountCommandBuilder, ActivateAccountCommand> {
         public static final String ACCOUNT_ACTIVATION_TOKEN_FIELD_NAME = "accountActivationToken";

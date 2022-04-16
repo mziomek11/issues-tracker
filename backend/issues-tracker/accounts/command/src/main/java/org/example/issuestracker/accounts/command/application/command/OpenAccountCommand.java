@@ -19,6 +19,10 @@ public class OpenAccountCommand {
     private final AccountEmail accountEmail;
     private final AccountPlainPassword accountPlainPassword;
 
+    public static OpenAccountCommandBuilder builder() {
+        return new OpenAccountCommandBuilder();
+    }
+
     public static class OpenAccountCommandBuilder extends CommandBuilder<OpenAccountCommandBuilder, OpenAccountCommand> {
         public static final String ACCOUNT_EMAIL_FIELD_NAME = "accountEmail";
         public static final String ACCOUNT_PLAIN_PASSWORD_FIELD_NAME = "accountPlainPassword";
