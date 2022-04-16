@@ -7,5 +7,5 @@ public interface AccountGateway {
     /**
      * @throws AccountEmailAlreadyTakenException if account with given email is already taken
      */
-    boolean ensureAccountEmailIsNotTaken(AccountEmail accountEmail);
+    void ensureAccountEmailIsNotTaken(AccountEmail accountEmail);
 }
