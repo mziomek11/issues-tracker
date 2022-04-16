@@ -6,6 +6,6 @@ import org.example.issuestracker.accounts.command.domain.account.AccountEmail;
 
 @RequiredArgsConstructor
 @Getter
-public class AccountEmailAlreadyTakenException extends RuntimeException {
+public class AccountEmailAlreadyTakenException extends IllegalStateException {
     private final transient AccountEmail accountEmail;
 }

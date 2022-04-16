@@ -1,8 +1,6 @@
 package org.example.cqrs.command.dispatcher;
 
 import org.example.cqrs.command.CommandHandler;
-import org.example.cqrs.command.CommandHandlerNotFoundException;
-import org.example.cqrs.command.TooManyCommandHandlersException;
 
 public interface CommandDispatcher {
     /**

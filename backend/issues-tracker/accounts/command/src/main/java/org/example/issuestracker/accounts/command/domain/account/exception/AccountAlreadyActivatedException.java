@@ -6,6 +6,6 @@ import org.example.issuestracker.accounts.command.domain.account.AccountId;
 
 @RequiredArgsConstructor
 @Getter
-public class AccountAlreadyActivatedException extends RuntimeException {
+public class AccountAlreadyActivatedException extends IllegalStateException {
     private final transient AccountId accountId;
 }
