@@ -14,16 +14,23 @@ import java.util.UUID;
 public class AccountOpenedEvent extends BaseEvent {
     private String accountEmail;
     private String accountHashedPassword;
+    private String accountActivationToken;
 
     public static AccountOpenedEvent.AccountOpenedEventBuilder builder() {
         return new AccountOpenedEvent.AccountOpenedEventBuilder();
     }
 
-    private AccountOpenedEvent(String accountId, String accountEmail, String accountHashedPassword) {
+    private AccountOpenedEvent(
+            String accountId,
+            String accountEmail,
+            String accountHashedPassword,
+            String accountActivationToken
+    ) {
         super(accountId);
 
         this.accountEmail = accountEmail;
         this.accountHashedPassword = accountHashedPassword;
+        this.accountActivationToken = accountActivationToken;
     }
 
     public static class AccountOpenedEventBuilder
@@ -36,6 +43,9 @@ public class AccountOpenedEvent extends BaseEvent {
 
         @NotBlank
         private String accountHashedPassword;
+
+        @NotBlank
+        private UUID accountActivationToken;
 
         public AccountOpenedEvent.AccountOpenedEventBuilder accountId(UUID accountId) {
             this.accountId = accountId;
@@ -51,12 +61,19 @@ public class AccountOpenedEvent extends BaseEvent {
             this.accountHashedPassword = accountHashedPassword;
             return this;
         }
+
+        public AccountOpenedEvent.AccountOpenedEventBuilder accountActivationToken(UUID accountActivationToken) {
+            this.accountActivationToken = accountActivationToken;
+            return this;
+        }
+
         @Override
         protected AccountOpenedEvent create() {
             return new AccountOpenedEvent(
                     accountId.toString(),
                     accountEmail,
-                    accountHashedPassword
+                    accountHashedPassword,
+                    accountActivationToken.toString()
             );
         }
     }
