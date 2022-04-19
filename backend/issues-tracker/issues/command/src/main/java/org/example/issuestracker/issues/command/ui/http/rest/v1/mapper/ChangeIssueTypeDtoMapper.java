@@ -22,7 +22,7 @@ public class ChangeIssueTypeDtoMapper {
         var builder = ChangeIssueTypeCommand
                 .builder()
                 .issueId(issueId)
-                .issueType(dto.issueType());
+                .issueType(dto.type());
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {

@@ -19,9 +19,9 @@ public class OpenIssueDtoMapper {
         var builder = OpenIssueCommand
                 .builder()
                 .issueId(issueId)
-                .issueContent(dto.issueContent())
-                .issueName(dto.issueName())
-                .issueType(dto.issueType());
+                .issueContent(dto.content())
+                .issueName(dto.name())
+                .issueType(dto.type());
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {

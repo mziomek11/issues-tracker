@@ -22,8 +22,8 @@ public class RegisterUserDtoMapper {
         var builder = RegisterUserCommand
                 .builder()
                 .userId(userId)
-                .userEmail(dto.userEmail())
-                .userPlainPassword(dto.userPlainPassword());
+                .userEmail(dto.email())
+                .userPlainPassword(dto.password());
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {

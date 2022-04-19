@@ -22,7 +22,7 @@ public class RenameIssueDtoMapper {
         var builder = RenameIssueCommand
                 .builder()
                 .issueId(issueId)
-                .issueName(dto.issueName());
+                .issueName(dto.name());
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {

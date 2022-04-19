@@ -22,7 +22,7 @@ public class ActivateUserDtoMapper {
         var builder = ActivateUserCommand
                 .builder()
                 .userId(accountId)
-                .userActivationToken(dto.userActivationToken());
+                .userActivationToken(dto.activationToken());
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {

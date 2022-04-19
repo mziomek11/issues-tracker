@@ -22,7 +22,7 @@ public class ChangeIssueContentDtoMapper {
         var builder = ChangeIssueContentCommand
                 .builder()
                 .issueId(issueId)
-                .issueContent(dto.issueContent());
+                .issueContent(dto.content());
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {

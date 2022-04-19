@@ -27,7 +27,7 @@ public class ChangeIssueCommentContentDtoMapper {
                 .builder()
                 .issueId(issueId)
                 .commentId(commentId)
-                .commentContent(dto.commentContent());
+                .commentContent(dto.content());
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {
