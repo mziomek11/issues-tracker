@@ -13,6 +13,6 @@ public class IsUserEmailAvailableQueryHandler implements QueryHandler<IsUserEmai
 
     @Override
     public Boolean handle(IsUserEmailAvailableQuery query) {
-        return userRepository.findByEmail(query.getUserEmail()).isPresent();
+        return userRepository.findByEmail(query.getUserEmail()).isEmpty();
     }
 }
