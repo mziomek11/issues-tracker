@@ -50,7 +50,7 @@ public class UserRestController {
      * @throws RestValidationException see {@link RegisterUserDtoMapper#toCommand(UUID, RegisterUserDto)}
      */
     @PostMapping("/users/{userId}/activation-token")
-    public ResponseEntity<UUID> activateUser(
+    public ResponseEntity activateUser(
             @PathVariable UUID userId,
             @RequestBody ActivateUserDto activateUserDto
     ) {
@@ -63,6 +63,6 @@ public class UserRestController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userId);
+                .build();
     }
 }

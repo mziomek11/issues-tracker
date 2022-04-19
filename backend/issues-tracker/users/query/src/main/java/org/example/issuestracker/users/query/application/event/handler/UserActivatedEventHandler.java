@@ -2,26 +2,26 @@ package org.example.issuestracker.users.query.application.event.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.event.EventHandler;
-import org.example.issuestracker.users.query.domain.User;
+import org.example.issuestracker.shared.domain.event.UserActivatedEvent;
 import org.example.issuestracker.users.query.domain.UserRepository;
-import org.example.issuestracker.shared.domain.event.UserRegisteredEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
-public class UserRegisteredEventHandler implements EventHandler<UserRegisteredEvent> {
+public class UserActivatedEventHandler implements EventHandler<UserActivatedEvent> {
     private final UserRepository userRepository;
 
     @Override
     @Transactional
-    public void handle(UserRegisteredEvent event) {
-        if (userRepository.findByEmail(event.getUserEmail()).isPresent()) {
+    public void handle(UserActivatedEvent event) {
+        var optionalUser = userRepository.findById(UUID.fromString(event.getId()));
+        if (optionalUser.isEmpty()) {
             return;
         }
 
-        var user = User.register(event);
-
-        userRepository.save(user);
+        optionalUser.get().activate();
     }
 }
