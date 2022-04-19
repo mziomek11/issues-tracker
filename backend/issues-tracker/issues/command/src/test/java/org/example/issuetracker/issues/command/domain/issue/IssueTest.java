@@ -29,14 +29,12 @@ import java.util.UUID;
 
 class IssueTest {
     private final UUID ISSUE_UUID = UUID.randomUUID();
-    private final String ISSUE_ID_PLAIN = ISSUE_UUID.toString();
     private final String ISSUE_NAME_PLAIN = "Example name";
     private final String ISSUE_CONTENT_PLAIN = "Example content";
     private final IssueType ISSUE_TYPE = IssueType.BUG;
 
     private final UUID FIRST_COMMENT_UUID = UUID.randomUUID();
     private final CommentId FIRST_COMMENT_ID = new CommentId(FIRST_COMMENT_UUID);
-    private final String FIRST_COMMENT_ID_PLAIN = FIRST_COMMENT_UUID.toString();
     private final String FIRST_COMMENT_CONTENT_PLAIN = "Example first comment content";
     private final UUID SECOND_COMMENT_UUID = UUID.randomUUID();
     private final CommentId SECOND_COMMENT_ID = new CommentId(SECOND_COMMENT_UUID);
@@ -44,7 +42,6 @@ class IssueTest {
 
     private final UUID FIRST_VOTER_UUID = UUID.randomUUID();
     private final VoterId FIRST_VOTER_ID = new VoterId(FIRST_VOTER_UUID);
-    private final String FIRST_VOTER_ID_PLAIN = FIRST_VOTER_UUID.toString();
     private final VoterId SECOND_VOTER_ID = new VoterId(UUID.randomUUID());
 
     @Test
@@ -64,7 +61,7 @@ class IssueTest {
         var issueOpenedEvent = (IssueOpenedEvent) sut.getUncommittedChanges().get(0);
         assertThat(issueOpenedEvent.getIssueContent()).isEqualTo("Example content");
         assertThat(issueOpenedEvent.getIssueType()).isEqualTo(IssueType.BUG);
-        assertThat(issueOpenedEvent.getId()).isEqualTo(randomUUID.toString());
+        assertThat(issueOpenedEvent.getId()).isEqualTo(randomUUID);
         assertThat(issueOpenedEvent.getIssueName()).isEqualTo("Example name");
     }
 
@@ -80,7 +77,7 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueClosedEvent.class);
 
         var issueCloseEvent = (IssueClosedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueCloseEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueCloseEvent.getId()).isEqualTo(ISSUE_UUID);
     }
 
     @Test
@@ -106,7 +103,7 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueRenamedEvent.class);
 
         var issueRenamedEvent = (IssueRenamedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueRenamedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueRenamedEvent.getId()).isEqualTo(ISSUE_UUID);
         assertThat(issueRenamedEvent.getIssueName()).isEqualTo("Another name");
     }
 
@@ -144,7 +141,7 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueTypeChangedEvent.class);
 
         var issueTypeChangedEvent = (IssueTypeChangedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueTypeChangedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueTypeChangedEvent.getId()).isEqualTo(ISSUE_UUID);
         assertThat(issueTypeChangedEvent.getIssueType()).isEqualTo(IssueType.ENHANCEMENT);
     }
 
@@ -181,7 +178,7 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueContentChangedEvent.class);
 
         var issueContentChangedEvent = (IssueContentChangedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueContentChangedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueContentChangedEvent.getId()).isEqualTo(ISSUE_UUID);
         assertThat(issueContentChangedEvent.getIssueContent()).isEqualTo("Another content");
     }
 
@@ -220,9 +217,9 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueCommentedEvent.class);
 
         var issueCommentedEvent = (IssueCommentedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueCommentedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
+        assertThat(issueCommentedEvent.getId()).isEqualTo(ISSUE_UUID);
         assertThat(issueCommentedEvent.getCommentContent()).isEqualTo(FIRST_COMMENT_CONTENT_PLAIN);
-        assertThat(issueCommentedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
+        assertThat(issueCommentedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_UUID);
     }
 
     @Test
@@ -275,8 +272,8 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueCommentContentChangedEvent.class);
 
         var issueCommentContentChangedEvent = (IssueCommentContentChangedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueCommentContentChangedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
-        assertThat(issueCommentContentChangedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
+        assertThat(issueCommentContentChangedEvent.getId()).isEqualTo(ISSUE_UUID);
+        assertThat(issueCommentContentChangedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_UUID);
         assertThat(issueCommentContentChangedEvent.getCommentContent()).isEqualTo("Another content");
     }
 
@@ -326,8 +323,8 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueCommentHiddenEvent.class);
 
         var issueCommentHiddenEvent = (IssueCommentHiddenEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueCommentHiddenEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
-        assertThat(issueCommentHiddenEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
+        assertThat(issueCommentHiddenEvent.getId()).isEqualTo(ISSUE_UUID);
+        assertThat(issueCommentHiddenEvent.getCommentId()).isEqualTo(FIRST_COMMENT_UUID);
     }
 
     @Test
@@ -377,9 +374,9 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueCommentVotedEvent.class);
 
         var issueCommentVotedEvent = (IssueCommentVotedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueCommentVotedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
-        assertThat(issueCommentVotedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_ID_PLAIN);
-        assertThat(issueCommentVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_ID_PLAIN);
+        assertThat(issueCommentVotedEvent.getId()).isEqualTo(ISSUE_UUID);
+        assertThat(issueCommentVotedEvent.getCommentId()).isEqualTo(FIRST_COMMENT_UUID);
+        assertThat(issueCommentVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_UUID);
         assertThat(issueCommentVotedEvent.getVoteType()).isEqualTo(voteType);
     }
 
@@ -462,8 +459,8 @@ class IssueTest {
         assertThatTheOnlyRaisedEventIs(sut, IssueVotedEvent.class);
 
         var issueVotedEvent = (IssueVotedEvent) sut.getUncommittedChanges().get(0);
-        assertThat(issueVotedEvent.getId()).isEqualTo(ISSUE_ID_PLAIN);
-        assertThat(issueVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_ID_PLAIN);
+        assertThat(issueVotedEvent.getId()).isEqualTo(ISSUE_UUID);
+        assertThat(issueVotedEvent.getVoterId()).isEqualTo(FIRST_VOTER_UUID);
         assertThat(issueVotedEvent.getVoteType()).isEqualTo(VoteType.UP);
     }
 

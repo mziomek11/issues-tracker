@@ -1,18 +1,19 @@
 package org.example.cqrs.event;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class BaseEvent {
-    private String id;
+    private UUID id;
     private int version;
 
     protected BaseEvent() {}
 
-    protected BaseEvent(String id) {
+    protected BaseEvent(UUID id) {
         this.id = Objects.requireNonNull(id);
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

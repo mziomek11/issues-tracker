@@ -16,7 +16,7 @@ public class User {
     public static User register(UserRegisteredEvent userRegisteredEvent) {
         var user = new User();
 
-        user.id = UUID.fromString(userRegisteredEvent.getId());
+        user.id = userRegisteredEvent.getId();
         user.email = userRegisteredEvent.getUserEmail();
         user.password = userRegisteredEvent.getUserHashedPassword();
         user.status = UserStatus.UNVERIFIED;

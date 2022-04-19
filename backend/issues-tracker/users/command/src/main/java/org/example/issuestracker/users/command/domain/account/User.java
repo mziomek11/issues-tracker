@@ -61,7 +61,7 @@ public class User extends AggregateRoot {
     }
 
     public void on(UserRegisteredEvent userRegisteredEvent) {
-        id = UserId.fromString(userRegisteredEvent.getId());
+        id = new UserId(userRegisteredEvent.getId());
         email = new UserEmail(userRegisteredEvent.getUserEmail());
         password = new UserHashedPassword(userRegisteredEvent.getUserHashedPassword());
         status = UserStatus.UNVERIFIED;

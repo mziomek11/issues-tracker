@@ -12,15 +12,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueCommentVotedEvent extends BaseEvent {
-    private String commentId;
-    private String voterId;
+    private UUID commentId;
+    private UUID voterId;
     private VoteType voteType;
 
     public static IssueCommentVotedEventBuilder builder() {
         return new IssueCommentVotedEventBuilder();
     }
 
-    private IssueCommentVotedEvent(String issueId, String commentId, String voterId, VoteType voteType) {
+    private IssueCommentVotedEvent(UUID issueId, UUID commentId, UUID voterId, VoteType voteType) {
         super(issueId);
 
         this.commentId = commentId;
@@ -65,9 +65,9 @@ public class IssueCommentVotedEvent extends BaseEvent {
         @Override
         protected IssueCommentVotedEvent create() {
             return new IssueCommentVotedEvent(
-                    issueId.toString(),
-                    commentId.toString(),
-                    voterId.toString(),
+                    issueId,
+                    commentId,
+                    voterId,
                     voteType
             );
         }

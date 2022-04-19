@@ -22,7 +22,7 @@ public class UserRegisteredEvent extends BaseEvent {
     }
 
     private UserRegisteredEvent(
-            String userId,
+            UUID userId,
             String userEmail,
             String userHashedPassword,
             String userActivationToken
@@ -71,7 +71,7 @@ public class UserRegisteredEvent extends BaseEvent {
         @Override
         protected UserRegisteredEvent create() {
             return new UserRegisteredEvent(
-                    userId.toString(),
+                    userId,
                     userEmail,
                     userHashedPassword,
                     userActivationToken.toString()

@@ -18,7 +18,7 @@ public class IssueRenamedEvent extends BaseEvent {
         return new IssueRenamedEventBuilder();
     }
 
-    private IssueRenamedEvent(String issueId, String issueName) {
+    private IssueRenamedEvent(UUID issueId, String issueName) {
         super(issueId);
 
         this.issueName = issueName;
@@ -45,7 +45,7 @@ public class IssueRenamedEvent extends BaseEvent {
         @Override
         protected IssueRenamedEvent create() {
             return new IssueRenamedEvent(
-                    issueId.toString(),
+                    issueId,
                     issueName
             );
         }

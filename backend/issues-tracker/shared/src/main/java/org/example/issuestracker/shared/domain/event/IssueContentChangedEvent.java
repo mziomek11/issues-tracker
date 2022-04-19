@@ -18,7 +18,7 @@ public class IssueContentChangedEvent extends BaseEvent {
         return new IssueCommentVotedEventBuilder();
     }
 
-    private IssueContentChangedEvent(String issueId, String issueContent) {
+    private IssueContentChangedEvent(UUID issueId, String issueContent) {
         super(issueId);
 
         this.issueContent = issueContent;
@@ -45,7 +45,7 @@ public class IssueContentChangedEvent extends BaseEvent {
         @Override
         protected IssueContentChangedEvent create() {
             return new IssueContentChangedEvent(
-                    issueId.toString(),
+                    issueId,
                     issueContent
             );
         }

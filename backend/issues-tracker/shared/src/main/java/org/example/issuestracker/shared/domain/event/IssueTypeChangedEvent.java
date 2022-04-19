@@ -18,7 +18,7 @@ public class IssueTypeChangedEvent extends BaseEvent {
         return new IssueTypeChangedEventBuilder();
     }
 
-    private IssueTypeChangedEvent(String issueId, IssueType issueType) {
+    private IssueTypeChangedEvent(UUID issueId, IssueType issueType) {
         super(issueId);
 
         this.issueType = issueType;
@@ -45,7 +45,7 @@ public class IssueTypeChangedEvent extends BaseEvent {
         @Override
         protected IssueTypeChangedEvent create() {
             return new IssueTypeChangedEvent(
-                    issueId.toString(),
+                    issueId,
                     issueType
             );
         }

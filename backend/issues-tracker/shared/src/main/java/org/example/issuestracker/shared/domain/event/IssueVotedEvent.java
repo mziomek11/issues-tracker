@@ -12,14 +12,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueVotedEvent extends BaseEvent {
-    private String voterId;
+    private UUID voterId;
     private VoteType voteType;
 
     public static IssueVotedEventBuilder builder() {
         return new IssueVotedEventBuilder();
     }
 
-    private IssueVotedEvent(String issueId, String voterId, VoteType voteType) {
+    private IssueVotedEvent(UUID issueId, UUID voterId, VoteType voteType) {
         super(issueId);
 
         this.voterId = voterId;
@@ -55,8 +55,8 @@ public class IssueVotedEvent extends BaseEvent {
         @Override
         protected IssueVotedEvent create() {
             return new IssueVotedEvent(
-                    issueId.toString(),
-                    voterId.toString(),
+                    issueId,
+                    voterId,
                     voteType
             );
         }

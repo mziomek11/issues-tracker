@@ -13,7 +13,7 @@ public class IssueClosedEvent extends BaseEvent {
         return new IssueClosedEventBuilder();
     }
 
-    private IssueClosedEvent(String issueId) {
+    private IssueClosedEvent(UUID issueId) {
         super(issueId);
     }
 
@@ -29,7 +29,7 @@ public class IssueClosedEvent extends BaseEvent {
         @Override
         protected IssueClosedEvent create() {
             return new IssueClosedEvent(
-                    issueId.toString()
+                    issueId
             );
         }
     }

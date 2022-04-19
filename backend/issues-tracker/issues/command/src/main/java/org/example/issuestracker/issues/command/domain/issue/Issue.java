@@ -196,7 +196,7 @@ public class Issue extends AggregateRoot {
     }
 
     public void on(IssueOpenedEvent issueOpenedEvent) {
-        id = IssueId.fromString(issueOpenedEvent.getId());
+        id = new IssueId(issueOpenedEvent.getId());
         type = issueOpenedEvent.getIssueType();
         status = IssueStatus.OPENED;
         content = new IssueContent(issueOpenedEvent.getIssueContent());
@@ -220,7 +220,7 @@ public class Issue extends AggregateRoot {
     }
 
     public void on(IssueCommentedEvent issueCommentedEvent) {
-        var commentId = CommentId.fromString(issueCommentedEvent.getCommentId());
+        var commentId = new CommentId(issueCommentedEvent.getCommentId());
         var commentContent = new CommentContent(issueCommentedEvent.getCommentContent());
         var comment = new Comment(commentId, commentContent);
 
@@ -228,28 +228,28 @@ public class Issue extends AggregateRoot {
     }
 
     public void on(IssueCommentContentChangedEvent issueCommentContentChangedEvent) {
-        var commentId = CommentId.fromString(issueCommentContentChangedEvent.getCommentId());
+        var commentId = new CommentId(issueCommentContentChangedEvent.getCommentId());
         var commentContent = new CommentContent(issueCommentContentChangedEvent.getCommentContent());
 
         comments = comments.changeContent(commentId, commentContent);
     }
 
     public void on(IssueCommentHiddenEvent issueCommentHiddenEvent) {
-        var commentId = CommentId.fromString(issueCommentHiddenEvent.getCommentId());
+        var commentId = new CommentId(issueCommentHiddenEvent.getCommentId());
 
         comments = comments.hide(commentId);
     }
 
     public void on(IssueCommentVotedEvent issueCommentVotedEvent) {
-        var commentId = CommentId.fromString(issueCommentVotedEvent.getCommentId());
-        var voterId = VoterId.fromString(issueCommentVotedEvent.getVoterId());
+        var commentId = new CommentId(issueCommentVotedEvent.getCommentId());
+        var voterId = new VoterId(issueCommentVotedEvent.getVoterId());
         var vote = new Vote(voterId, issueCommentVotedEvent.getVoteType());
 
         comments = comments.vote(commentId, vote);
     }
 
     public void on(IssueVotedEvent issueVotedEvent) {
-        var voterId = VoterId.fromString(issueVotedEvent.getVoterId());
+        var voterId = new VoterId(issueVotedEvent.getVoterId());
         var newVote = new Vote(voterId, issueVotedEvent.getVoteType());
 
         votes = votes.add(newVote);

@@ -11,13 +11,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueCommentHiddenEvent extends BaseEvent {
-    private String commentId;
+    private UUID commentId;
 
     public static IssueCommentHiddenEventBuilder builder() {
         return new IssueCommentHiddenEventBuilder();
     }
 
-    private IssueCommentHiddenEvent(String issueId, String commentId) {
+    private IssueCommentHiddenEvent(UUID issueId, UUID commentId) {
         super(issueId);
 
         this.commentId = commentId;
@@ -44,8 +44,8 @@ public class IssueCommentHiddenEvent extends BaseEvent {
         @Override
         protected IssueCommentHiddenEvent create() {
             return new IssueCommentHiddenEvent(
-                    issueId.toString(),
-                    commentId.toString()
+                    issueId,
+                    commentId
             );
         }
     }

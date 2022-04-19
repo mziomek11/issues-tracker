@@ -12,14 +12,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueCommentContentChangedEvent extends BaseEvent {
-    private String commentId;
+    private UUID commentId;
     private String commentContent;
 
     public static IssueCommentContentChangedEventBuilder builder() {
         return new IssueCommentContentChangedEventBuilder();
     }
 
-    private IssueCommentContentChangedEvent(String issueId, String commentId, String commentContent) {
+    private IssueCommentContentChangedEvent(UUID issueId, UUID commentId, String commentContent) {
         super(issueId);
 
         this.commentId = commentId;
@@ -55,8 +55,8 @@ public class IssueCommentContentChangedEvent extends BaseEvent {
         @Override
         protected IssueCommentContentChangedEvent create() {
             return new IssueCommentContentChangedEvent(
-                    issueId.toString(),
-                    commentId.toString(),
+                    issueId,
+                    commentId,
                     commentContent
             );
         }

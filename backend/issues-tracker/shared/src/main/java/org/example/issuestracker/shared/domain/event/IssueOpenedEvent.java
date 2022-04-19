@@ -21,7 +21,7 @@ public class IssueOpenedEvent extends BaseEvent {
         return new IssueOpenedEventBuilder();
     }
 
-    private IssueOpenedEvent(String issueId, IssueType issueType, String issueContent, String issueName) {
+    private IssueOpenedEvent(UUID issueId, IssueType issueType, String issueContent, String issueName) {
         super(issueId);
 
         this.issueType = issueType;
@@ -66,7 +66,7 @@ public class IssueOpenedEvent extends BaseEvent {
         @Override
         protected IssueOpenedEvent create() {
             return new IssueOpenedEvent(
-                    issueId.toString(),
+                    issueId,
                     issueType,
                     issueContent,
                     issueName

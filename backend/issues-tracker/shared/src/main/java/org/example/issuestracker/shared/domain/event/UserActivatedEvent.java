@@ -15,8 +15,8 @@ public class UserActivatedEvent extends BaseEvent {
         return new UserActivatedEventBuilder();
     }
 
-    private UserActivatedEvent(String accountId) {
-        super(accountId);
+    private UserActivatedEvent(UUID userId) {
+        super(userId);
     }
 
     public static class UserActivatedEventBuilder extends EventBuilder<UserActivatedEventBuilder, UserActivatedEvent> {
@@ -30,7 +30,7 @@ public class UserActivatedEvent extends BaseEvent {
 
         @Override
         protected UserActivatedEvent create() {
-            return new UserActivatedEvent(userId.toString());
+            return new UserActivatedEvent(userId);
         }
     }
 }

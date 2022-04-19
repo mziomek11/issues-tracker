@@ -14,7 +14,7 @@ public class IssueEventConsumer {
     @KafkaListener(topics = "IssueOpenedEvent", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(IssueOpenedEvent event, Acknowledgment ack) {
         logger.info("Received issue opened event");
-        logger.info(event.getId());
+        logger.info(event.getId().toString());
         ack.acknowledge();
     }
 }
