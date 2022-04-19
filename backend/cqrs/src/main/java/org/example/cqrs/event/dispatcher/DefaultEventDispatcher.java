@@ -18,7 +18,7 @@ public class DefaultEventDispatcher implements EventDispatcher {
     public <T extends BaseEvent> void registerHandler(Class<T> type, EventHandler<T> handler) {
         var handlers = registry.computeIfAbsent(type, c -> new ArrayList<>());
 
-        if (handlers.size() > 1) {
+        if (!handlers.isEmpty()) {
             throw new TooManyEventHandlersException();
         }
 

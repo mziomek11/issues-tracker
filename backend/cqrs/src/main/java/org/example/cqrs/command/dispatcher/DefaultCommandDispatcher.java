@@ -22,7 +22,7 @@ public class DefaultCommandDispatcher implements CommandDispatcher {
     public <T> void registerHandler(Class<T> type, CommandHandler<T> handler) {
         var handlers = registry.computeIfAbsent((Class<Object>) type, c -> new ArrayList<>());
 
-        if (handlers.size() > 1) {
+        if (!handlers.isEmpty()) {
             throw new TooManyCommandHandlersException();
         }
 

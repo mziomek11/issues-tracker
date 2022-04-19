@@ -17,10 +17,10 @@
     <modules>
         <module>../cqrs</module>
         <module>../rest</module>
-        <module>accounts/command</module>
-        <module>accounts/query</module>
         <module>issues/command</module>
         <module>issues/query</module>
         <module>shared</module>
+        <module>users/command</module>
+        <module>users/query</module>
     </modules>
 </project>
