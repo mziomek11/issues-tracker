@@ -5,6 +5,7 @@ import org.example.cqrs.domain.AggregateRoot;
 import org.example.issuestracker.organizations.command.domain.invitation.Invitation;
 import org.example.issuestracker.organizations.command.domain.invitation.Invitations;
 import org.example.issuestracker.organizations.command.domain.invitation.exception.InvitationAlreadyPresentException;
+import org.example.issuestracker.organizations.command.domain.invitation.exception.InvitationNotFoundException;
 import org.example.issuestracker.organizations.command.domain.member.Member;
 import org.example.issuestracker.organizations.command.domain.member.MemberId;
 import org.example.issuestracker.organizations.command.domain.member.Members;
@@ -12,6 +13,7 @@ import org.example.issuestracker.organizations.command.domain.member.exception.M
 import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationActionCalledNotByOwnerException;
 import org.example.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import org.example.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
+import org.example.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
 
 import static org.example.issuestracker.organizations.command.domain.EventFactory.*;
 
@@ -54,6 +56,19 @@ public class Organization extends AggregateRoot {
         raiseEvent(organizationMemberInvited(id, memberId));
     }
 
+    /**
+     * Joins member to organization
+     *
+     * @param memberId to be joined
+     * @throws InvitationNotFoundException see {@link Invitations#ensureCanRemove(Invitation)}
+     */
+    public void join(MemberId memberId) {
+        var invitation = new Invitation(new Member(memberId));
+        invitations.ensureCanRemove(invitation);
+
+        raiseEvent(organizationMemberJoined(id, memberId));
+    }
+
     @Override
     public OrganizationId getId() {
         return id;
@@ -70,5 +85,13 @@ public class Organization extends AggregateRoot {
     public void on(OrganizationMemberInvitedEvent organizationMemberInvitedEvent) {
         var member = new Member(new MemberId(organizationMemberInvitedEvent.getMemberId()));
         invitations = invitations.add(new Invitation(member));
+    }
+
+    public void on(OrganizationMemberJoinedEvent organizationMemberJoinedEvent) {
+        var member = new Member(new MemberId(organizationMemberJoinedEvent.getMemberId()));
+        var invitation = new Invitation(member);
+
+        members = members.add(member);
+        invitations = invitations.remove(invitation);
     }
 }

@@ -5,6 +5,7 @@ import org.example.issuestracker.organizations.command.domain.organization.Organ
 import org.example.issuestracker.organizations.command.domain.organization.OrganizationName;
 import org.example.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import org.example.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
+import org.example.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
 
 public class EventFactory {
     public static OrganizationCreatedEvent organizationCreated(
@@ -25,6 +26,17 @@ public class EventFactory {
             MemberId memberId
     ) {
         return OrganizationMemberInvitedEvent
+                .builder()
+                .organizationId(id.getValue())
+                .memberId(memberId.getValue())
+                .build();
+    }
+
+    public static OrganizationMemberJoinedEvent organizationMemberJoined(
+            OrganizationId id,
+            MemberId memberId
+    ) {
+        return OrganizationMemberJoinedEvent
                 .builder()
                 .organizationId(id.getValue())
                 .memberId(memberId.getValue())
