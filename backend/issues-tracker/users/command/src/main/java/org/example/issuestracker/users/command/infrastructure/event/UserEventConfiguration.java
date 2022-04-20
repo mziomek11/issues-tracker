@@ -6,7 +6,7 @@ import org.example.cqrs.event.sourcinghandler.DefaultEventSourcingHandler;
 import org.example.cqrs.event.sourcinghandler.EventSourcingHandler;
 import org.example.cqrs.event.store.DefaultEventStore;
 import org.example.cqrs.event.store.EventStore;
-import org.example.issuestracker.users.command.domain.account.User;
+import org.example.issuestracker.users.command.domain.user.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;

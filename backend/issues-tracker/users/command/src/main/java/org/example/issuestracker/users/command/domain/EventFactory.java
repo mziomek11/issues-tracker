@@ -1,9 +1,9 @@
 package org.example.issuestracker.users.command.domain;
 
-import org.example.issuestracker.users.command.domain.account.UserActivationToken;
-import org.example.issuestracker.users.command.domain.account.UserEmail;
-import org.example.issuestracker.users.command.domain.account.UserHashedPassword;
-import org.example.issuestracker.users.command.domain.account.UserId;
+import org.example.issuestracker.users.command.domain.user.UserActivationToken;
+import org.example.issuestracker.users.command.domain.user.UserEmail;
+import org.example.issuestracker.users.command.domain.user.UserHashedPassword;
+import org.example.issuestracker.users.command.domain.user.UserId;
 import org.example.issuestracker.shared.domain.event.UserActivatedEvent;
 import org.example.issuestracker.shared.domain.event.UserRegisteredEvent;
 

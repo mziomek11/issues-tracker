@@ -7,9 +7,9 @@ import org.example.issuestracker.users.command.application.command.RegisterUserC
 import org.example.issuestracker.users.command.application.command.handler.ActivateUserCommandHandler;
 import org.example.issuestracker.users.command.application.command.handler.RegisterUserCommandHandler;
 import org.example.issuestracker.users.command.application.gateway.exception.UserEmailNotAvailableException;
-import org.example.issuestracker.users.command.domain.account.exception.UserActivationTokenMismatchException;
-import org.example.issuestracker.users.command.domain.account.exception.UserAlreadyActivatedException;
-import org.example.issuestracker.users.command.domain.account.exception.UserNotFoundException;
+import org.example.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
+import org.example.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
+import org.example.issuestracker.users.command.domain.user.exception.UserNotFoundException;
 import org.example.issuestracker.users.command.ui.http.rest.v1.dto.ActivateUserDto;
 import org.example.issuestracker.users.command.ui.http.rest.v1.dto.RegisterUserDto;
 import org.example.issuestracker.users.command.ui.http.rest.v1.mapper.ActivateUserDtoMapper;

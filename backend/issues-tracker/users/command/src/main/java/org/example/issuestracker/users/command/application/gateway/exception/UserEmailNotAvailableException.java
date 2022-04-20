@@ -2,7 +2,7 @@ package org.example.issuestracker.users.command.application.gateway.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.issuestracker.users.command.domain.account.UserEmail;
+import org.example.issuestracker.users.command.domain.user.UserEmail;
 
 @RequiredArgsConstructor
 @Getter

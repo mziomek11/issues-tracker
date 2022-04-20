@@ -1,9 +1,9 @@
 package org.example.issuestracker.users.command.ui.http.rest.v1;
 
 import org.example.issuestracker.users.command.application.gateway.exception.UserEmailNotAvailableException;
-import org.example.issuestracker.users.command.domain.account.exception.UserActivationTokenMismatchException;
-import org.example.issuestracker.users.command.domain.account.exception.UserAlreadyActivatedException;
-import org.example.issuestracker.users.command.domain.account.exception.UserNotFoundException;
+import org.example.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
+import org.example.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
+import org.example.issuestracker.users.command.domain.user.exception.UserNotFoundException;
 import org.example.rest.v1.RestErrorResponse;
 import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,9 @@
-package org.example.issuestracker.users.command.domain.account;
+package org.example.issuestracker.users.command.domain.user;
 
 import lombok.NoArgsConstructor;
 import org.example.cqrs.domain.AggregateRoot;
-import org.example.issuestracker.users.command.domain.account.exception.UserActivationTokenMismatchException;
-import org.example.issuestracker.users.command.domain.account.exception.UserAlreadyActivatedException;
+import org.example.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
+import org.example.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import org.example.issuestracker.shared.domain.event.UserActivatedEvent;
 import org.example.issuestracker.shared.domain.event.UserRegisteredEvent;
 import org.example.issuestracker.shared.domain.valueobject.UserStatus;

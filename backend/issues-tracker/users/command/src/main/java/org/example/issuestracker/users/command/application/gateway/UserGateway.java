@@ -1,7 +1,7 @@
 package org.example.issuestracker.users.command.application.gateway;
 
 import org.example.issuestracker.users.command.application.gateway.exception.UserEmailNotAvailableException;
-import org.example.issuestracker.users.command.domain.account.UserEmail;
+import org.example.issuestracker.users.command.domain.user.UserEmail;
 
 public interface UserGateway {
     /**

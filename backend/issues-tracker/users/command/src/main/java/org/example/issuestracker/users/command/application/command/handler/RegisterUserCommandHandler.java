@@ -6,9 +6,9 @@ import org.example.cqrs.event.sourcinghandler.EventSourcingHandler;
 import org.example.issuestracker.users.command.application.command.RegisterUserCommand;
 import org.example.issuestracker.users.command.application.gateway.UserGateway;
 import org.example.issuestracker.users.command.application.gateway.exception.UserEmailNotAvailableException;
-import org.example.issuestracker.users.command.domain.account.User;
-import org.example.issuestracker.users.command.domain.account.UserEmail;
-import org.example.issuestracker.users.command.domain.account.UserPasswordHashingAlgorithm;
+import org.example.issuestracker.users.command.domain.user.User;
+import org.example.issuestracker.users.command.domain.user.UserEmail;
+import org.example.issuestracker.users.command.domain.user.UserPasswordHashingAlgorithm;
 import org.springframework.stereotype.Component;
 
 @Component

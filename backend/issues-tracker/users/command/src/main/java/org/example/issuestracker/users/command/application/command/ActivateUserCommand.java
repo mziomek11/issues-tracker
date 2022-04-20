@@ -3,8 +3,8 @@ package org.example.issuestracker.users.command.application.command;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
-import org.example.issuestracker.users.command.domain.account.UserActivationToken;
-import org.example.issuestracker.users.command.domain.account.UserId;
+import org.example.issuestracker.users.command.domain.user.UserActivationToken;
+import org.example.issuestracker.users.command.domain.user.UserId;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;

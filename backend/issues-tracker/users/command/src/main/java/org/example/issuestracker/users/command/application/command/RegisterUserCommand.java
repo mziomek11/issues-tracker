@@ -3,9 +3,9 @@ package org.example.issuestracker.users.command.application.command;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
-import org.example.issuestracker.users.command.domain.account.UserEmail;
-import org.example.issuestracker.users.command.domain.account.UserId;
-import org.example.issuestracker.users.command.domain.account.UserPlainPassword;
+import org.example.issuestracker.users.command.domain.user.UserEmail;
+import org.example.issuestracker.users.command.domain.user.UserId;
+import org.example.issuestracker.users.command.domain.user.UserPlainPassword;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

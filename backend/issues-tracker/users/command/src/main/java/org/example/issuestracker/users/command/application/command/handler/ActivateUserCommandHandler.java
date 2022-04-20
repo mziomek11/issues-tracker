@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandHandler;
 import org.example.cqrs.event.sourcinghandler.EventSourcingHandler;
 import org.example.issuestracker.users.command.application.command.ActivateUserCommand;
-import org.example.issuestracker.users.command.domain.account.User;
-import org.example.issuestracker.users.command.domain.account.UserActivationToken;
-import org.example.issuestracker.users.command.domain.account.exception.UserActivationTokenMismatchException;
-import org.example.issuestracker.users.command.domain.account.exception.UserAlreadyActivatedException;
-import org.example.issuestracker.users.command.domain.account.exception.UserNotFoundException;
+import org.example.issuestracker.users.command.domain.user.User;
+import org.example.issuestracker.users.command.domain.user.UserActivationToken;
+import org.example.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
+import org.example.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
+import org.example.issuestracker.users.command.domain.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component

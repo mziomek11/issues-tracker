@@ -2,9 +2,9 @@ package org.example.issuestracker.users.command.infrastructure.domain;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
-import org.example.issuestracker.users.command.domain.account.UserHashedPassword;
-import org.example.issuestracker.users.command.domain.account.UserPasswordHashingAlgorithm;
-import org.example.issuestracker.users.command.domain.account.UserPlainPassword;
+import org.example.issuestracker.users.command.domain.user.UserHashedPassword;
+import org.example.issuestracker.users.command.domain.user.UserPasswordHashingAlgorithm;
+import org.example.issuestracker.users.command.domain.user.UserPlainPassword;
 import org.springframework.stereotype.Service;
 
 @Service

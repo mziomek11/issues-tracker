@@ -1,9 +1,9 @@
-package org.example.issuestracker.users.command.domain.account.exception;
+package org.example.issuestracker.users.command.domain.user.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.issuestracker.users.command.domain.account.UserActivationToken;
-import org.example.issuestracker.users.command.domain.account.UserId;
+import org.example.issuestracker.users.command.domain.user.UserActivationToken;
+import org.example.issuestracker.users.command.domain.user.UserId;
 
 @RequiredArgsConstructor
 @Getter

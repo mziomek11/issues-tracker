@@ -1,4 +1,4 @@
-package org.example.issuestracker.users.command.domain.account;
+package org.example.issuestracker.users.command.domain.user;
 
 import java.util.Objects;
 
