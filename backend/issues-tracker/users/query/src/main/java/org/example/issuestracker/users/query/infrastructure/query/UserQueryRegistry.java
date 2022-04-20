@@ -2,8 +2,8 @@ package org.example.issuestracker.users.query.infrastructure.query;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.query.dispatcher.QueryDispatcher;
-import org.example.issuestracker.users.query.application.query.IsUserEmailAvailableQuery;
-import org.example.issuestracker.users.query.application.query.handler.IsUserEmailAvailableQueryHandler;
+import org.example.issuestracker.users.query.application.query.GetListUsersQuery;
+import org.example.issuestracker.users.query.application.query.handler.GetListUsersQueryHandler;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -12,10 +12,10 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class UserQueryRegistry {
     private final QueryDispatcher queryDispatcher;
-    private final IsUserEmailAvailableQueryHandler isUserEmailAvailableQueryHandler;
+    private final GetListUsersQueryHandler getListUsersQueryHandler;
 
     @PostConstruct
     public void registerHandlers() {
-        queryDispatcher.registerHandler(IsUserEmailAvailableQuery.class, isUserEmailAvailableQueryHandler);
+        queryDispatcher.registerHandler(GetListUsersQuery.class, getListUsersQueryHandler);
     }
 }
