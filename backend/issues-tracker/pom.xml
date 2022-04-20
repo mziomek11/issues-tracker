@@ -19,6 +19,7 @@
         <module>../rest</module>
         <module>issues/command</module>
         <module>issues/query</module>
+        <module>organizations/command</module>
         <module>shared</module>
         <module>users/command</module>
         <module>users/query</module>
