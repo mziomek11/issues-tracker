@@ -9,6 +9,7 @@ import org.example.issuestracker.organizations.command.domain.member.Member;
 import org.example.issuestracker.organizations.command.domain.member.MemberId;
 import org.example.issuestracker.organizations.command.domain.member.Members;
 import org.example.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
+import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationActionCalledNotByOwnerException;
 import org.example.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import org.example.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
 
@@ -33,11 +34,17 @@ public class Organization extends AggregateRoot {
     /**
      * Invites member to organization
      *
+     * @param ownerId of organization
      * @param memberId to be invited
      * @throws InvitationAlreadyPresentException see {@link Invitations#ensureCanAdd(Invitation)}
      * @throws MemberAlreadyPresentException see {@link Members#ensureCanAdd(Member)}
+     * @throws OrganizationActionCalledNotByOwnerException if action is called not by owner of the organization
      */
-    public void invite(MemberId memberId) {
+    public void invite(MemberId ownerId, MemberId memberId) {
+        if (!owner.equals(new OrganizationOwner(ownerId))) {
+            throw new OrganizationActionCalledNotByOwnerException(ownerId);
+        }
+
         var member = new Member(memberId);
         var invitation = new Invitation(member);
 
