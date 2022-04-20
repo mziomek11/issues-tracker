@@ -6,23 +6,33 @@ import org.example.issuestracker.users.command.domain.account.UserEmail;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.UUID;
+
 @Service
 public class UserGatewayImpl implements UserGateway {
-    private final WebClient client = WebClient.create("http://localhost:8085/api/v1/user-management");
+    private final WebClient userClient = WebClient.create("http://localhost:8085/api/v1/user-management");
     /**
      * @throws UserEmailNotAvailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
      */
     @Override
     public void ensureUserEmailIsAvailable(UserEmail userEmail) {
-        var isUserEmailAvailable = client
+        var listUsers = userClient
                 .get()
-                .uri("/users-by-email/{email}", userEmail.text())
+                .uri(uriBuilder ->
+                    uriBuilder
+                        .path("/users")
+                        .queryParam("email", userEmail.text())
+                        .build()
+                )
                 .retrieve()
-                .bodyToMono(Boolean.class)
+                .bodyToFlux(ListUser.class)
+                .collectList()
                 .block();
 
-        if (Boolean.FALSE.equals(isUserEmailAvailable)) {
+        if (listUsers != null && !listUsers.isEmpty()) {
             throw new UserEmailNotAvailableException(userEmail);
         }
     }
+
+    private record ListUser(UUID id, String email) {}
 }
