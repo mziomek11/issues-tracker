@@ -1,4 +1,4 @@
-package org.example.issuestracker.users.command.application.gateway.exception;
+package org.example.issuestracker.users.command.application.gateway.user.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

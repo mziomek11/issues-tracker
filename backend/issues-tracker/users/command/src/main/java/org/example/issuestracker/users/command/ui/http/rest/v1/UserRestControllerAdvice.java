@@ -1,6 +1,6 @@
 package org.example.issuestracker.users.command.ui.http.rest.v1;
 
-import org.example.issuestracker.users.command.application.gateway.exception.UserEmailNotAvailableException;
+import org.example.issuestracker.users.command.application.gateway.user.exception.UserEmailNotAvailableException;
 import org.example.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
 import org.example.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import org.example.issuestracker.users.command.domain.user.exception.UserNotFoundException;

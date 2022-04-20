@@ -1,7 +1,7 @@
 package org.example.issuestracker.users.command.infrastructure.gateway;
 
-import org.example.issuestracker.users.command.application.gateway.UserGateway;
-import org.example.issuestracker.users.command.application.gateway.exception.UserEmailNotAvailableException;
+import org.example.issuestracker.users.command.application.gateway.user.UserGateway;
+import org.example.issuestracker.users.command.application.gateway.user.exception.UserEmailNotAvailableException;
 import org.example.issuestracker.users.command.domain.user.UserEmail;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
