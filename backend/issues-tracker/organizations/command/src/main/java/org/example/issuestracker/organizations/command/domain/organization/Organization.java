@@ -10,10 +10,15 @@ import org.example.issuestracker.organizations.command.domain.member.Member;
 import org.example.issuestracker.organizations.command.domain.member.MemberId;
 import org.example.issuestracker.organizations.command.domain.member.Members;
 import org.example.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
-import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationActionCalledNotByOwnerException;
+import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationOwnerNotValidException;
+import org.example.issuestracker.organizations.command.domain.project.Project;
+import org.example.issuestracker.organizations.command.domain.project.ProjectId;
+import org.example.issuestracker.organizations.command.domain.project.ProjectName;
+import org.example.issuestracker.organizations.command.domain.project.Projects;
 import org.example.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import org.example.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
 import org.example.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
+import org.example.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
 
 import static org.example.issuestracker.organizations.command.domain.EventFactory.*;
 
@@ -24,11 +29,12 @@ public class Organization extends AggregateRoot {
     private OrganizationName name;
     private Members members;
     private Invitations invitations;
+    private Projects projects;
 
     public static Organization create(OrganizationId id, OrganizationOwner owner, OrganizationName name) {
         var organization = new Organization();
 
-        organization.raiseEvent(organizationCreated(id, owner.getMemberId(), name));
+        organization.raiseEvent(organizationCreated(id, owner.getId(), name));
 
         return organization;
     }
@@ -36,37 +42,55 @@ public class Organization extends AggregateRoot {
     /**
      * Invites member to organization
      *
-     * @param ownerId of organization
-     * @param memberId to be invited
+     * @param owner of current organization
+     * @param invitation to be saved
      * @throws InvitationAlreadyPresentException see {@link Invitations#ensureCanAdd(Invitation)}
      * @throws MemberAlreadyPresentException see {@link Members#ensureCanAdd(Member)}
-     * @throws OrganizationActionCalledNotByOwnerException if action is called not by owner of the organization
+     * @throws OrganizationOwnerNotValidException see {@link #ensureOrganizationOwnerIsValid(OrganizationOwner)}
      */
-    public void invite(MemberId ownerId, MemberId memberId) {
-        if (!owner.equals(new OrganizationOwner(ownerId))) {
-            throw new OrganizationActionCalledNotByOwnerException(ownerId);
-        }
-
-        var member = new Member(memberId);
-        var invitation = new Invitation(member);
-
-        members.ensureCanAdd(member);
+    public void invite(OrganizationOwner owner, Invitation invitation) {
+        ensureOrganizationOwnerIsValid(owner);
+        members.ensureCanAdd(invitation.getMember());
         invitations.ensureCanAdd(invitation);
 
-        raiseEvent(organizationMemberInvited(id, memberId));
+        raiseEvent(organizationMemberInvited(id, invitation.getMember().getId()));
     }
 
     /**
-     * Joins member to organization
+     * Accepts invitation
      *
-     * @param memberId to be joined
+     * @param invitation to be accepted
      * @throws InvitationNotFoundException see {@link Invitations#ensureCanRemove(Invitation)}
      */
-    public void join(MemberId memberId) {
-        var invitation = new Invitation(new Member(memberId));
+    public void acceptInvitation(Invitation invitation) {
         invitations.ensureCanRemove(invitation);
 
-        raiseEvent(organizationMemberJoined(id, memberId));
+        raiseEvent(organizationMemberJoined(id, invitation.getMember().getId()));
+    }
+
+    /**
+     * Adds project to organization
+     *
+     * @param owner of current organization
+     * @param project to be added
+     * @throws OrganizationOwnerNotValidException see {@link #ensureOrganizationOwnerIsValid(OrganizationOwner)}
+     */
+    public void addProject(OrganizationOwner owner, Project project) {
+        ensureOrganizationOwnerIsValid(owner);
+
+        raiseEvent(organizationProjectCreated(id, project.id(), project.name()));
+    }
+
+    /**
+     * Ensures that given member is organization owner
+     *
+     * @param owner to be checked
+     * @throws OrganizationOwnerNotValidException if owner is not owning current organization
+     */
+    private void ensureOrganizationOwnerIsValid(OrganizationOwner owner) {
+        if(!this.owner.equals(owner)) {
+            throw new OrganizationOwnerNotValidException(owner.getId());
+        }
     }
 
     @Override
@@ -80,6 +104,7 @@ public class Organization extends AggregateRoot {
         name = new OrganizationName(organizationCreatedEvent.getOrganizationName());
         members = new Members(owner);
         invitations = new Invitations();
+        projects = new Projects();
     }
 
     public void on(OrganizationMemberInvitedEvent organizationMemberInvitedEvent) {
@@ -93,5 +118,13 @@ public class Organization extends AggregateRoot {
 
         members = members.add(member);
         invitations = invitations.remove(invitation);
+    }
+
+    public void on(OrganizationProjectCreatedEvent organizationProjectCreatedEvent) {
+        var projectId = new ProjectId(organizationProjectCreatedEvent.getProjectId());
+        var projectName = new ProjectName(organizationProjectCreatedEvent.getProjectName());
+        var project = new Project(projectId, projectName);
+
+        projects = projects.add(project);
     }
 }

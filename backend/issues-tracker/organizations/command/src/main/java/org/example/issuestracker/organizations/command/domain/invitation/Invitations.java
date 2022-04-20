@@ -38,7 +38,7 @@ public class Invitations {
      */
     public void ensureCanAdd(Invitation invitation) {
         if (invitationSet.contains(invitation)) {
-            throw new InvitationAlreadyPresentException(invitation.getMember().getMemberId());
+            throw new InvitationAlreadyPresentException(invitation.getMember().getId());
         }
     }
 
@@ -65,7 +65,7 @@ public class Invitations {
      */
     public void ensureCanRemove(Invitation invitation) {
         if (!invitationSet.contains(invitation)) {
-            throw new InvitationNotFoundException(invitation.getMember().getMemberId());
+            throw new InvitationNotFoundException(invitation.getMember().getId());
         }
     }
 }

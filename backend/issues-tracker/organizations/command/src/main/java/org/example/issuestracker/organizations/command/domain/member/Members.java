@@ -39,7 +39,7 @@ public class Members {
      */
     public void ensureCanAdd(Member member) {
         if (memberSet.contains(member)) {
-            throw new MemberAlreadyPresentException(member.getMemberId());
+            throw new MemberAlreadyPresentException(member.getId());
         }
     }
 }

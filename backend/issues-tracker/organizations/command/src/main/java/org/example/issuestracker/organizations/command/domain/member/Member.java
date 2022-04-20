@@ -8,9 +8,9 @@ import java.util.Objects;
 @Getter
 @EqualsAndHashCode
 public class Member {
-    private final MemberId memberId;
+    private final MemberId id;
 
     public Member(MemberId memberId) {
-        this.memberId = Objects.requireNonNull(memberId);
+        this.id = Objects.requireNonNull(memberId);
     }
 }

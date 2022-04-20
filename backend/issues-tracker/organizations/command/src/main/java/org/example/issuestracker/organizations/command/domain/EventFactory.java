@@ -3,9 +3,12 @@ package org.example.issuestracker.organizations.command.domain;
 import org.example.issuestracker.organizations.command.domain.member.MemberId;
 import org.example.issuestracker.organizations.command.domain.organization.OrganizationId;
 import org.example.issuestracker.organizations.command.domain.organization.OrganizationName;
+import org.example.issuestracker.organizations.command.domain.project.ProjectId;
+import org.example.issuestracker.organizations.command.domain.project.ProjectName;
 import org.example.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import org.example.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
 import org.example.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
+import org.example.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
 
 public class EventFactory {
     public static OrganizationCreatedEvent organizationCreated(
@@ -40,6 +43,19 @@ public class EventFactory {
                 .builder()
                 .organizationId(id.getValue())
                 .memberId(memberId.getValue())
+                .build();
+    }
+
+    public static OrganizationProjectCreatedEvent organizationProjectCreated(
+            OrganizationId organizationId,
+            ProjectId projectId,
+            ProjectName projectName
+    ) {
+        return OrganizationProjectCreatedEvent
+                .builder()
+                .organizationId(organizationId.getValue())
+                .projectId(projectId.getValue())
+                .projectName(projectName.text())
                 .build();
     }
 
