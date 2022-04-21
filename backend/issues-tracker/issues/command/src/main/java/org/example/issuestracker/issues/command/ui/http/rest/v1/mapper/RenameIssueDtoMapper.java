@@ -18,10 +18,19 @@ public class RenameIssueDtoMapper {
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static RenameIssueCommand toCommand(UUID issueId, RenameIssueDto dto) {
+    public static RenameIssueCommand toCommand(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID memberId,
+            RenameIssueDto dto
+    ) {
         var builder = RenameIssueCommand
                 .builder()
                 .issueId(issueId)
+                .organizationId(organizationId)
+                .organizationProjectId(projectId)
+                .organizationMemberId(memberId)
                 .issueName(dto.name());
 
         var validationErrors = builder.validate();

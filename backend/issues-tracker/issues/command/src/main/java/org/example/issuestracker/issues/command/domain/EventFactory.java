@@ -7,6 +7,7 @@ import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.shared.domain.event.*;
@@ -42,10 +43,19 @@ public class EventFactory {
                 .build();
     }
 
-    public static IssueRenamedEvent issueRenamed(IssueId id, IssueName name) {
+    public static IssueRenamedEvent issueRenamed(
+            IssueId id,
+            OrganizationId organizationId,
+            OrganizationProjectId organizationProjectId,
+            OrganizationMemberId organizationMemberId,
+            IssueName name
+    ) {
         return IssueRenamedEvent
                 .builder()
                 .issueId(id.getValue())
+                .organizationId(organizationId.getValue())
+                .projectId(organizationProjectId.getValue())
+                .memberId(organizationMemberId.getValue())
                 .issueName(name.text())
                 .build();
     }

@@ -81,7 +81,10 @@ class IssueRestController {
      * @throws IssueClosedException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws IssueNameSetException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws IssueNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
-     * @throws RestValidationException see {@link RenameIssueDtoMapper#toCommand(UUID, RenameIssueDto)}
+     * @throws OrganizationMemberNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
+     * @throws OrganizationNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
+     * @throws RestValidationException see {@link RenameIssueDtoMapper#toCommand(UUID, UUID, UUID, UUID, RenameIssueDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/name")
     public ResponseEntity renameIssue(
@@ -90,7 +93,14 @@ class IssueRestController {
             @PathVariable UUID issueId,
             @RequestBody RenameIssueDto renameIssueDto
     ) {
-        var renameIssueCommand = RenameIssueDtoMapper.toCommand(issueId, renameIssueDto);
+        // @TODO pass user id from header
+        var renameIssueCommand = RenameIssueDtoMapper.toCommand(
+                issueId,
+                organizationId,
+                projectId,
+                UUID.randomUUID(),
+                renameIssueDto
+        );
 
         commandDispatcher.dispatch(renameIssueCommand);
 

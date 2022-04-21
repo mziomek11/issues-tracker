@@ -12,6 +12,7 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
@@ -71,14 +72,19 @@ public class Issue extends AggregateRoot {
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueNameSetException if given name is the same as current name
      */
-    public void rename(IssueName newName) {
+    public void rename(
+            OrganizationId organizationId,
+            OrganizationProjectId organizationProjectId,
+            OrganizationMemberId organizationMemberId,
+            IssueName newName
+    ) {
         ensureIsOpen();
 
         if (name.equals(newName)) {
             throw new IssueNameSetException(id, name);
         }
 
-        raiseEvent(issueRenamed(id, newName));
+        raiseEvent(issueRenamed(id, organizationId, organizationProjectId, organizationMemberId, newName));
     }
 
     /**
