@@ -2,7 +2,7 @@ package org.example.issuestracker.users.query.ui.http.rest.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.query.dispatcher.QueryDispatcher;
-import org.example.issuestracker.users.query.readmodel.listuser.ListUser;
+import org.example.issuestracker.shared.readmodel.ListUser;
 import org.example.issuestracker.users.query.ui.http.rest.v1.mapper.GetListUsersParamMapper;
 import org.example.issuestracker.users.query.ui.http.rest.v1.param.GetListUsersParam;
 import org.springframework.http.HttpStatus;

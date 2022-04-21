@@ -5,6 +5,7 @@ import org.example.issuestracker.organizations.command.application.gateway.membe
 import org.example.issuestracker.organizations.command.domain.member.MemberEmail;
 import org.example.issuestracker.organizations.command.domain.member.MemberId;
 import org.example.issuestracker.shared.domain.valueobject.UserStatus;
+import org.example.issuestracker.shared.readmodel.ListUser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -37,8 +38,6 @@ public class MemberGatewayImpl implements MemberGateway {
             throw new MemberNotFoundException(memberEmail);
         }
 
-        return new MemberId(listUsers.get(0).id());
+        return new MemberId(listUsers.get(0).getId());
     }
-
-    private record ListUser(UUID id, String email) {}
 }

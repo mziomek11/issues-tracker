@@ -3,7 +3,7 @@ package org.example.issuestracker.users.query.infrastructure.readmodel.listuser;
 import lombok.RequiredArgsConstructor;
 import org.example.issuestracker.shared.domain.valueobject.UserStatus;
 import org.example.issuestracker.users.query.domain.User;
-import org.example.issuestracker.users.query.readmodel.listuser.ListUser;
+import org.example.issuestracker.shared.readmodel.ListUser;
 import org.example.issuestracker.users.query.readmodel.listuser.ListUserFilterQueryBuilder;
 import org.example.issuestracker.users.query.readmodel.listuser.ListUserMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;

@@ -1,5 +1,6 @@
 package org.example.issuestracker.users.command.infrastructure.gateway;
 
+import org.example.issuestracker.shared.readmodel.ListUser;
 import org.example.issuestracker.users.command.application.gateway.user.UserGateway;
 import org.example.issuestracker.users.command.application.gateway.user.exception.UserEmailNotAvailableException;
 import org.example.issuestracker.users.command.domain.user.UserEmail;
@@ -33,6 +34,4 @@ public class UserGatewayImpl implements UserGateway {
             throw new UserEmailNotAvailableException(userEmail);
         }
     }
-
-    private record ListUser(UUID id, String email) {}
 }

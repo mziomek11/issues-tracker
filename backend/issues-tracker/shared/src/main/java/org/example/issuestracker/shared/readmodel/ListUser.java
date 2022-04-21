@@ -1,4 +1,4 @@
-package org.example.issuestracker.users.query.readmodel.listuser;
+package org.example.issuestracker.shared.readmodel;
 
 import lombok.Builder;
 import lombok.Getter;

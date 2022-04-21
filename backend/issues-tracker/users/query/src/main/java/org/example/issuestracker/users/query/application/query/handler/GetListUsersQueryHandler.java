@@ -3,7 +3,7 @@ package org.example.issuestracker.users.query.application.query.handler;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.query.QueryHandler;
 import org.example.issuestracker.users.query.application.query.GetListUsersQuery;
-import org.example.issuestracker.users.query.readmodel.listuser.ListUser;
+import org.example.issuestracker.shared.readmodel.ListUser;
 import org.example.issuestracker.users.query.readmodel.listuser.ListUserFilter;
 import org.example.issuestracker.users.query.readmodel.listuser.ListUserFinder;
 import org.springframework.stereotype.Component;
