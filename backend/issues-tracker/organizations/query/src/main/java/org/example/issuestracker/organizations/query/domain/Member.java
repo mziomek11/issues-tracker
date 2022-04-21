@@ -7,7 +7,6 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-public class Project {
+public class Member {
     private UUID id;
-    private String name;
 }
