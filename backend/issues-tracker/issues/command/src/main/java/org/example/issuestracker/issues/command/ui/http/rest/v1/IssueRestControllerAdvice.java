@@ -1,8 +1,8 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.OrganizationNotFoundException;
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.ProjectNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.ProjectNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;

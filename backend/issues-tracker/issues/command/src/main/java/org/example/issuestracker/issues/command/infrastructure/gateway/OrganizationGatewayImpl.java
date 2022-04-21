@@ -1,9 +1,9 @@
 package org.example.issuestracker.issues.command.infrastructure.gateway;
 
-import org.example.issuestracker.issues.command.application.command.gateway.organization.OrganizationGateway;
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.OrganizationNotFoundException;
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.ProjectNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.ProjectNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
 import org.example.issuestracker.issues.command.domain.project.ProjectId;
@@ -11,7 +11,6 @@ import org.example.issuestracker.shared.readmodel.DetailsOrganization;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Component
 public class OrganizationGatewayImpl implements OrganizationGateway {

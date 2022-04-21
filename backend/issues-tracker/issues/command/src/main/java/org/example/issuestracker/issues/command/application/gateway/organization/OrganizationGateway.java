@@ -1,8 +1,8 @@
-package org.example.issuestracker.issues.command.application.command.gateway.organization;
+package org.example.issuestracker.issues.command.application.gateway.organization;
 
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.OrganizationNotFoundException;
-import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.ProjectNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.ProjectNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
 import org.example.issuestracker.issues.command.domain.project.ProjectId;
