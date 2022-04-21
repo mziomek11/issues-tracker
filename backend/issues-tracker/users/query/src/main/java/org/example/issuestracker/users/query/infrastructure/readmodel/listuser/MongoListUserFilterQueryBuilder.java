@@ -1,6 +1,7 @@
-package org.example.issuestracker.users.query.readmodel.listuser.impl.mongo;
+package org.example.issuestracker.users.query.infrastructure.readmodel.listuser;
 
 import lombok.RequiredArgsConstructor;
+import org.example.issuestracker.shared.domain.valueobject.UserStatus;
 import org.example.issuestracker.users.query.domain.User;
 import org.example.issuestracker.users.query.readmodel.listuser.ListUser;
 import org.example.issuestracker.users.query.readmodel.listuser.ListUserFilterQueryBuilder;
@@ -19,6 +20,12 @@ public class MongoListUserFilterQueryBuilder implements ListUserFilterQueryBuild
     @Override
     public ListUserFilterQueryBuilder emailEquals(String email) {
         query.addCriteria(Criteria.where("email").is(email));
+        return this;
+    }
+
+    @Override
+    public ListUserFilterQueryBuilder statusEquals(UserStatus status) {
+        query.addCriteria(Criteria.where("status").is(status));
         return this;
     }
 

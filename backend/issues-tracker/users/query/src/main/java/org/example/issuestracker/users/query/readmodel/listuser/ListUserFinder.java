@@ -17,6 +17,10 @@ public class ListUserFinder {
             qb.emailEquals(filter.getEmail());
         }
 
+        if (filter.getStatus() != null) {
+            qb.statusEquals(filter.getStatus());
+        }
+
         return qb.execute();
     }
 }

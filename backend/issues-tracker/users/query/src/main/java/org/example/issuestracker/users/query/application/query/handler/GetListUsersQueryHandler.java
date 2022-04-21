@@ -20,6 +20,7 @@ public class GetListUsersQueryHandler implements QueryHandler<GetListUsersQuery,
         var filter = ListUserFilter
                 .builder()
                 .email(query.getEmail())
+                .status(query.getStatus())
                 .build();
 
         return listUserFinder.findByFilter(filter);

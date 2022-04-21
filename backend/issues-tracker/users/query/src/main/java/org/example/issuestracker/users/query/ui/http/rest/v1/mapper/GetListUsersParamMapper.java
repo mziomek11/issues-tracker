@@ -10,6 +10,7 @@ public class GetListUsersParamMapper {
         return GetListUsersQuery
                 .builder()
                 .email(param.email())
+                .status(param.status())
                 .build();
     }
 }

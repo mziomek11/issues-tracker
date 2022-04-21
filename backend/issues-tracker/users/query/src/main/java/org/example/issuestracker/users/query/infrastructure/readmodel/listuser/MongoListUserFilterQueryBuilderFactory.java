@@ -1,4 +1,4 @@
-package org.example.issuestracker.users.query.readmodel.listuser.impl.mongo;
+package org.example.issuestracker.users.query.infrastructure.readmodel.listuser;
 
 import lombok.RequiredArgsConstructor;
 import org.example.issuestracker.users.query.readmodel.listuser.ListUserFilterQueryBuilder;
