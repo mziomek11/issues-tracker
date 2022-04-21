@@ -27,6 +27,7 @@ public class InviteOrganizationMemberCommandHandler implements CommandHandler<In
      * @throws InvitationAlreadyPresentException see {@link Organization#invite(OrganizationOwner, Invitation)}
      * @throws MemberAlreadyPresentException see {@link Organization#invite(OrganizationOwner, Invitation)}
      * @throws MemberNotFoundException see {@link MemberGateway#getMemberId(MemberEmail)}
+     * @throws OrganizationNotFoundException if organization with given id does not exist
      * @throws OrganizationOwnerNotValidException see {@link Organization#invite(OrganizationOwner, Invitation)}
      */
     @Override
@@ -36,7 +37,6 @@ public class InviteOrganizationMemberCommandHandler implements CommandHandler<In
                 .orElseThrow(() -> new OrganizationNotFoundException(command.getOrganizationId()));
 
         var memberId = memberGateway.getMemberId(command.getMemberEmail());
-
         var organizationOwner = new OrganizationOwner(command.getOrganizationOwnerId());
         var invitation = new Invitation(new Member((memberId)));
 
