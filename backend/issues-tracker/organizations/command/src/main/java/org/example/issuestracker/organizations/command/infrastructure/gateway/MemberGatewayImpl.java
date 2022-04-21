@@ -9,8 +9,6 @@ import org.example.issuestracker.shared.readmodel.ListUser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.UUID;
-
 @Component
 public class MemberGatewayImpl implements MemberGateway {
     private final WebClient userClient = WebClient.create("http://localhost:8085/api/v1/user-management");
