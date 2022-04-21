@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
-import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
@@ -21,8 +21,8 @@ import java.util.UUID;
 public class OpenIssueCommand {
     private final IssueId issueId;
     private final OrganizationId organizationId;
-    private final OrganizationProjectId organizationProjectId;
-    private final IssueCreatorId issueCreatorId;
+    private final OrganizationProjectId projectId;
+    private final OrganizationMemberId memberId;
     private final IssueType issueType;
     private final IssueContent issueContent;
     private final IssueName issueName;
@@ -46,7 +46,7 @@ public class OpenIssueCommand {
         private UUID projectId;
 
         @NotNull
-        private UUID issueCreatorId;
+        private UUID memberId;
 
         @NotNull
         private IssueType issueType;
@@ -72,8 +72,8 @@ public class OpenIssueCommand {
             return this;
         }
 
-        public OpenIssueCommandBuilder issueCreatorId(UUID issueCreatorId) {
-            this.issueCreatorId = issueCreatorId;
+        public OpenIssueCommandBuilder memberId(UUID memberId) {
+            this.memberId = memberId;
             return this;
         }
 
@@ -98,7 +98,7 @@ public class OpenIssueCommand {
                     new IssueId(issueId),
                     new OrganizationId(organizationId),
                     new OrganizationProjectId(projectId),
-                    new IssueCreatorId(issueCreatorId),
+                    new OrganizationMemberId(memberId),
                     issueType,
                     new IssueContent(issueContent),
                     new IssueName(issueName)

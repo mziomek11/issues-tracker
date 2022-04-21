@@ -19,8 +19,8 @@ import java.util.UUID;
 public class RenameIssueCommand {
     private final IssueId issueId;
     private final OrganizationId organizationId;
-    private final OrganizationProjectId organizationProjectId;
-    private final OrganizationMemberId organizationMemberId;
+    private final OrganizationProjectId projectId;
+    private final OrganizationMemberId memberId;
     private final IssueName issueName;
 
     public static RenameIssueCommandBuilder builder() {
@@ -37,10 +37,10 @@ public class RenameIssueCommand {
         private UUID organizationId;
 
         @NotNull
-        private UUID organizationProjectId;
+        private UUID projectId;
 
         @NotNull
-        private UUID organizationMemberId;
+        private UUID memberId;
 
         @NotBlank
         private String issueName;
@@ -55,13 +55,13 @@ public class RenameIssueCommand {
             return this;
         }
 
-        public RenameIssueCommandBuilder organizationProjectId(UUID organizationProjectId) {
-            this.organizationProjectId = organizationProjectId;
+        public RenameIssueCommandBuilder projectId(UUID projectId) {
+            this.projectId = projectId;
             return this;
         }
 
-        public RenameIssueCommandBuilder organizationMemberId(UUID organizationMemberId) {
-            this.organizationMemberId = organizationMemberId;
+        public RenameIssueCommandBuilder memberId(UUID memberId) {
+            this.memberId = memberId;
             return this;
         }
 
@@ -75,8 +75,8 @@ public class RenameIssueCommand {
             return new RenameIssueCommand(
                     new IssueId(issueId),
                     new OrganizationId(organizationId),
-                    new OrganizationProjectId(organizationProjectId),
-                    new OrganizationMemberId(organizationMemberId),
+                    new OrganizationProjectId(projectId),
+                    new OrganizationMemberId(memberId),
                     new IssueName(issueName)
             );
         }

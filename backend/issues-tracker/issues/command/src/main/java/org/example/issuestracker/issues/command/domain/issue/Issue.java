@@ -37,15 +37,15 @@ public class Issue extends AggregateRoot {
     public static Issue open(
             IssueId id,
             OrganizationId organizationId,
-            OrganizationProjectId organizationProjectId,
-            IssueCreatorId creatorId,
+            OrganizationProjectId projectId,
+            OrganizationMemberId memberId,
             IssueType type,
             IssueContent content,
             IssueName name
     ) {
         var issue = new Issue();
 
-        issue.raiseEvent(issueOpened(id, organizationId, organizationProjectId, creatorId, type, content, name));
+        issue.raiseEvent(issueOpened(id, organizationId, projectId, memberId, type, content, name));
 
         return issue;
     }
@@ -74,8 +74,8 @@ public class Issue extends AggregateRoot {
      */
     public void rename(
             OrganizationId organizationId,
-            OrganizationProjectId organizationProjectId,
-            OrganizationMemberId organizationMemberId,
+            OrganizationProjectId projectId,
+            OrganizationMemberId memberId,
             IssueName newName
     ) {
         ensureIsOpen();
@@ -84,7 +84,7 @@ public class Issue extends AggregateRoot {
             throw new IssueNameSetException(id, name);
         }
 
-        raiseEvent(issueRenamed(id, organizationId, organizationProjectId, organizationMemberId, newName));
+        raiseEvent(issueRenamed(id, organizationId, projectId, memberId, newName));
     }
 
     /**

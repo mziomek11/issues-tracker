@@ -15,7 +15,7 @@ import java.util.UUID;
 public class IssueOpenedEvent extends BaseEvent {
     private UUID organizationId;
     private UUID projectId;
-    private UUID creatorId;
+    private UUID memberId;
     private IssueType issueType;
     private String issueContent;
     private String issueName;
@@ -28,7 +28,7 @@ public class IssueOpenedEvent extends BaseEvent {
             UUID issueId,
             UUID organizationId,
             UUID projectId,
-            UUID creatorId,
+            UUID memberId,
             IssueType issueType,
             String issueContent,
             String issueName
@@ -40,7 +40,7 @@ public class IssueOpenedEvent extends BaseEvent {
         this.issueName = issueName;
         this.organizationId = organizationId;
         this.projectId =projectId;
-        this.creatorId = creatorId;
+        this.memberId = memberId;
     }
 
     public static class IssueOpenedEventBuilder
@@ -55,7 +55,7 @@ public class IssueOpenedEvent extends BaseEvent {
         private UUID projectId;
 
         @NotNull
-        private UUID creatorId;
+        private UUID memberId;
 
         @NotNull
         private IssueType issueType;
@@ -81,8 +81,8 @@ public class IssueOpenedEvent extends BaseEvent {
             return this;
         }
 
-        public IssueOpenedEventBuilder creatorId(UUID creatorId) {
-            this.creatorId = creatorId;
+        public IssueOpenedEventBuilder memberId(UUID memberId) {
+            this.memberId = memberId;
             return this;
         }
 
@@ -107,7 +107,7 @@ public class IssueOpenedEvent extends BaseEvent {
                     issueId,
                     organizationId,
                     projectId,
-                    creatorId,
+                    memberId,
                     issueType,
                     issueContent,
                     issueName

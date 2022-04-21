@@ -36,8 +36,8 @@ public class RenameIssueCommandHandler implements CommandHandler<RenameIssueComm
     public void handle(RenameIssueCommand command) {
         organizationGateway.ensureOrganizationHasProjectAndMember(
                 command.getOrganizationId(),
-                command.getOrganizationProjectId(),
-                command.getOrganizationMemberId()
+                command.getProjectId(),
+                command.getMemberId()
         );
 
         var issue = eventSourcingHandler
@@ -46,8 +46,8 @@ public class RenameIssueCommandHandler implements CommandHandler<RenameIssueComm
 
         issue.rename(
                 command.getOrganizationId(),
-                command.getOrganizationProjectId(),
-                command.getOrganizationMemberId(),
+                command.getProjectId(),
+                command.getMemberId(),
                 command.getIssueName()
         );
 

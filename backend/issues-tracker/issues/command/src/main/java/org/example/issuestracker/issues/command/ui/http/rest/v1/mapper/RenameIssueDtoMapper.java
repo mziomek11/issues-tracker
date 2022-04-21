@@ -29,8 +29,8 @@ public class RenameIssueDtoMapper {
                 .builder()
                 .issueId(issueId)
                 .organizationId(organizationId)
-                .organizationProjectId(projectId)
-                .organizationMemberId(memberId)
+                .projectId(projectId)
+                .memberId(memberId)
                 .issueName(dto.name());
 
         var validationErrors = builder.validate();

@@ -29,15 +29,15 @@ public class OpenIssueCommandHandler implements CommandHandler<OpenIssueCommand>
     public void handle(OpenIssueCommand command) {
         organizationGateway.ensureOrganizationHasProjectAndMember(
                 command.getOrganizationId(),
-                command.getOrganizationProjectId(),
-                command.getIssueCreatorId()
+                command.getProjectId(),
+                command.getMemberId()
         );
 
         var issue = Issue.open(
                 command.getIssueId(),
                 command.getOrganizationId(),
-                command.getOrganizationProjectId(),
-                command.getIssueCreatorId(),
+                command.getProjectId(),
+                command.getMemberId(),
                 command.getIssueType(),
                 command.getIssueContent(),
                 command.getIssueName()

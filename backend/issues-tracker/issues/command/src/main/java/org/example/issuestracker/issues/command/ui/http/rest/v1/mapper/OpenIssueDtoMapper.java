@@ -19,7 +19,7 @@ public class OpenIssueDtoMapper {
             UUID issueId,
             UUID organizationId,
             UUID projectId,
-            UUID issueCreatorId,
+            UUID memberId,
             OpenIssueDto dto
     ) {
         var builder = OpenIssueCommand
@@ -27,7 +27,7 @@ public class OpenIssueDtoMapper {
                 .issueId(issueId)
                 .organizationId(organizationId)
                 .projectId(projectId)
-                .issueCreatorId(issueCreatorId)
+                .memberId(memberId)
                 .issueContent(dto.content())
                 .issueName(dto.name())
                 .issueType(dto.type());

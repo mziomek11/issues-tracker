@@ -19,7 +19,7 @@ public class EventFactory {
             IssueId id,
             OrganizationId organizationId,
             OrganizationProjectId organizationProjectId,
-            IssueCreatorId issueCreatorId,
+            OrganizationMemberId memberId,
             IssueType type,
             IssueContent content,
             IssueName name
@@ -29,7 +29,7 @@ public class EventFactory {
                 .issueId(id.getValue())
                 .organizationId(organizationId.getValue())
                 .projectId(organizationProjectId.getValue())
-                .creatorId(issueCreatorId.getValue())
+                .memberId(memberId.getValue())
                 .issueType(type)
                 .issueName(name.text())
                 .issueContent(content.text())
