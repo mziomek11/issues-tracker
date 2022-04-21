@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.dispatcher.CommandDispatcher;
 import org.example.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
 import org.example.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand;
+import org.example.issuestracker.organizations.command.application.command.JoinOrganizationMemberCommand;
 import org.example.issuestracker.organizations.command.application.command.handler.CreateOrganizationProjectCommandHandler;
 import org.example.issuestracker.organizations.command.application.command.handler.InviteOrganizationMemberCommandHandler;
+import org.example.issuestracker.organizations.command.application.command.handler.JoinOrganizationMemberCommandHandler;
 import org.example.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
 import org.example.issuestracker.organizations.command.domain.invitation.exception.InvitationAlreadyPresentException;
+import org.example.issuestracker.organizations.command.domain.invitation.exception.InvitationNotFoundException;
 import org.example.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationNotFoundException;
 import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationOwnerNotValidException;
@@ -74,6 +77,26 @@ public class OrganizationRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    /**
+     * @throws InvitationNotFoundException see {@link JoinOrganizationMemberCommandHandler#handle(JoinOrganizationMemberCommand)}
+     * @throws OrganizationNotFoundException see {@link JoinOrganizationMemberCommandHandler#handle(JoinOrganizationMemberCommand)}
+     */
+    @PostMapping("/organizations/{organizationId}/members")
+    public ResponseEntity joinOrganizationMember(@PathVariable UUID organizationId) {
+        // @TODO pass user id from header
+        var inviteOrganizationMemberCommand = JoinOrganizationMemberCommand
+                .builder()
+                .organizationId(organizationId)
+                .memberId(UUID.randomUUID())
+                .build();
+
+        commandDispatcher.dispatch(inviteOrganizationMemberCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .build();
     }
 
