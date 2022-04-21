@@ -6,6 +6,7 @@ import org.example.issuestracker.organizations.query.domain.Organization;
 import org.example.issuestracker.organizations.query.domain.OrganizationRepository;
 import org.example.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ public class OrganizationCreatedEventHandler implements EventHandler<Organizatio
     private final OrganizationRepository organizationRepository;
 
     @Override
+    @Transactional
     public void handle(OrganizationCreatedEvent event) {
         var organization = Organization.create(event);
 
