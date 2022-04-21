@@ -15,10 +15,19 @@ public class OpenIssueDtoMapper {
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static OpenIssueCommand toCommand(UUID issueId, OpenIssueDto dto) {
+    public static OpenIssueCommand toCommand(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID issueCreatorId,
+            OpenIssueDto dto
+    ) {
         var builder = OpenIssueCommand
                 .builder()
                 .issueId(issueId)
+                .organizationId(organizationId)
+                .projectId(projectId)
+                .issueCreatorId(issueCreatorId)
                 .issueContent(dto.content())
                 .issueName(dto.name())
                 .issueType(dto.type());

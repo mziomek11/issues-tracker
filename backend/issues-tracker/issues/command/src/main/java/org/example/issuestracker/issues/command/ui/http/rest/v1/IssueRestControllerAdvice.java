@@ -1,5 +1,8 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
+import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.OrganizationNotFoundException;
+import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.ProjectNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
@@ -111,6 +114,33 @@ public class IssueRestControllerAdvice {
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(OrganizationNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handle(OrganizationNotFoundException ex) {
+        var errorResponse = new RestErrorResponse("Organization not found");
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handle(ProjectNotFoundException ex) {
+        var errorResponse = new RestErrorResponse("Project not found");
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(IssueCreatorIsNotMemberOfProjectException.class)
+    public ResponseEntity<RestErrorResponse> handle(IssueCreatorIsNotMemberOfProjectException ex) {
+        var errorResponse = new RestErrorResponse("Issue creator is not member of project");
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
                 .body(errorResponse);
     }
 }

@@ -11,6 +11,8 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
+import org.example.issuestracker.issues.command.domain.project.ProjectId;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.command.domain.vote.Votes;
@@ -31,10 +33,18 @@ public class Issue extends AggregateRoot {
     private Comments comments = new Comments();
     private Votes votes = new Votes();
 
-    public static Issue open(IssueId id, IssueType type, IssueContent content, IssueName name) {
+    public static Issue open(
+            IssueId id,
+            OrganizationId organizationId,
+            ProjectId projectId,
+            IssueCreatorId creatorId,
+            IssueType type,
+            IssueContent content,
+            IssueName name
+    ) {
         var issue = new Issue();
 
-        issue.raiseEvent(issueOpened(id, type, content, name));
+        issue.raiseEvent(issueOpened(id, organizationId, projectId, creatorId, type, content, name));
 
         return issue;
     }

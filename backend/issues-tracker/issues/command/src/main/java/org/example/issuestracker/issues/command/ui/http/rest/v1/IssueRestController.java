@@ -3,6 +3,9 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.dispatcher.CommandDispatcher;
 import org.example.issuestracker.issues.command.application.command.*;
+import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.OrganizationNotFoundException;
+import org.example.issuestracker.issues.command.application.command.gateway.organization.exception.ProjectNotFoundException;
 import org.example.issuestracker.issues.command.application.command.handler.*;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
@@ -26,7 +29,10 @@ class IssueRestController {
     private final CommandDispatcher commandDispatcher;
 
     /**
-     * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, OpenIssueDto)}
+     * @throws IssueCreatorIsNotMemberOfProjectException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
+     * @throws OrganizationNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
+     * @throws ProjectNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
+     * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, UUID, UUID, UUID, OpenIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues")
     public ResponseEntity<UUID> openIssue(
@@ -35,7 +41,14 @@ class IssueRestController {
             @RequestBody OpenIssueDto openIssueDto
     ) {
         var issueId = UUID.randomUUID();
-        var openIssueCommand = OpenIssueDtoMapper.toCommand(issueId, openIssueDto);
+        // @TODO pass user id from header
+        var openIssueCommand = OpenIssueDtoMapper.toCommand(
+                issueId,
+                organizationId,
+                projectId,
+                UUID.randomUUID(),
+                openIssueDto
+        );
 
         commandDispatcher.dispatch(openIssueCommand);
 

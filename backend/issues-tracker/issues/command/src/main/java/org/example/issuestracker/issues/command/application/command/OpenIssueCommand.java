@@ -7,8 +7,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
+import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
+import org.example.issuestracker.issues.command.domain.project.ProjectId;
 import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
 import java.util.UUID;
@@ -17,6 +20,9 @@ import java.util.UUID;
 @Getter
 public class OpenIssueCommand {
     private final IssueId issueId;
+    private final OrganizationId organizationId;
+    private final ProjectId projectId;
+    private final IssueCreatorId issueCreatorId;
     private final IssueType issueType;
     private final IssueContent issueContent;
     private final IssueName issueName;
@@ -34,6 +40,15 @@ public class OpenIssueCommand {
         private UUID issueId;
 
         @NotNull
+        private UUID organizationId;
+
+        @NotNull
+        private UUID projectId;
+
+        @NotNull
+        private UUID issueCreatorId;
+
+        @NotNull
         private IssueType issueType;
 
         @NotBlank
@@ -44,6 +59,21 @@ public class OpenIssueCommand {
 
         public OpenIssueCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
+            return this;
+        }
+
+        public OpenIssueCommandBuilder organizationId(UUID organizationId) {
+            this.organizationId = organizationId;
+            return this;
+        }
+
+        public OpenIssueCommandBuilder projectId(UUID projectId) {
+            this.projectId = projectId;
+            return this;
+        }
+
+        public OpenIssueCommandBuilder issueCreatorId(UUID issueCreatorId) {
+            this.issueCreatorId = issueCreatorId;
             return this;
         }
 
@@ -66,6 +96,9 @@ public class OpenIssueCommand {
         protected OpenIssueCommand create() {
             return new OpenIssueCommand(
                     new IssueId(issueId),
+                    new OrganizationId(organizationId),
+                    new ProjectId(projectId),
+                    new IssueCreatorId(issueCreatorId),
                     issueType,
                     new IssueContent(issueContent),
                     new IssueName(issueName)

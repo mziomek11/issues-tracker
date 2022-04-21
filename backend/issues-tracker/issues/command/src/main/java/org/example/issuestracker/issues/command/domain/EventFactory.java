@@ -3,18 +3,32 @@ package org.example.issuestracker.issues.command.domain;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
+import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
+import org.example.issuestracker.issues.command.domain.project.ProjectId;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.shared.domain.event.*;
 import org.example.issuestracker.shared.domain.valueobject.IssueType;
 import org.example.issuestracker.shared.domain.valueobject.VoteType;
 
 public class EventFactory {
-    public static IssueOpenedEvent issueOpened(IssueId id, IssueType type, IssueContent content, IssueName name) {
+    public static IssueOpenedEvent issueOpened(
+            IssueId id,
+            OrganizationId organizationId,
+            ProjectId projectId,
+            IssueCreatorId issueCreatorId,
+            IssueType type,
+            IssueContent content,
+            IssueName name
+    ) {
         return IssueOpenedEvent
                 .builder()
                 .issueId(id.getValue())
+                .organizationId(organizationId.getValue())
+                .projectId(projectId.getValue())
+                .creatorId(issueCreatorId.getValue())
                 .issueType(type)
                 .issueName(name.text())
                 .issueContent(content.text())

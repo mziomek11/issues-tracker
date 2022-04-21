@@ -13,6 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueOpenedEvent extends BaseEvent {
+    private UUID organizationId;
+    private UUID projectId;
+    private UUID creatorId;
     private IssueType issueType;
     private String issueContent;
     private String issueName;
@@ -21,18 +24,38 @@ public class IssueOpenedEvent extends BaseEvent {
         return new IssueOpenedEventBuilder();
     }
 
-    private IssueOpenedEvent(UUID issueId, IssueType issueType, String issueContent, String issueName) {
+    private IssueOpenedEvent(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID creatorId,
+            IssueType issueType,
+            String issueContent,
+            String issueName
+    ) {
         super(issueId);
 
         this.issueType = issueType;
         this.issueContent = issueContent;
         this.issueName = issueName;
+        this.organizationId = organizationId;
+        this.projectId =projectId;
+        this.creatorId = creatorId;
     }
 
     public static class IssueOpenedEventBuilder
             extends EventBuilder<IssueOpenedEventBuilder, IssueOpenedEvent> {
         @NotNull
         private UUID issueId;
+
+        @NotNull
+        private UUID organizationId;
+
+        @NotNull
+        private UUID projectId;
+
+        @NotNull
+        private UUID creatorId;
 
         @NotNull
         private IssueType issueType;
@@ -45,6 +68,21 @@ public class IssueOpenedEvent extends BaseEvent {
 
         public IssueOpenedEventBuilder issueId(UUID issueId) {
             this.issueId = issueId;
+            return this;
+        }
+
+        public IssueOpenedEventBuilder organizationId(UUID organizationId) {
+            this.organizationId = organizationId;
+            return this;
+        }
+
+        public IssueOpenedEventBuilder projectId(UUID projectId) {
+            this.projectId = projectId;
+            return this;
+        }
+
+        public IssueOpenedEventBuilder creatorId(UUID creatorId) {
+            this.creatorId = creatorId;
             return this;
         }
 
@@ -67,6 +105,9 @@ public class IssueOpenedEvent extends BaseEvent {
         protected IssueOpenedEvent create() {
             return new IssueOpenedEvent(
                     issueId,
+                    organizationId,
+                    projectId,
+                    creatorId,
                     issueType,
                     issueContent,
                     issueName
