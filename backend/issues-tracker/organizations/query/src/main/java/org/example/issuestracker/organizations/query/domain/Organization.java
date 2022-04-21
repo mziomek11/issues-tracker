@@ -25,6 +25,7 @@ public class Organization {
         organization.name = organizationCreatedEvent.getOrganizationName();
         organization.projects = new ArrayList<>();
         organization.members = new ArrayList<>();
+        organization.members.add(new Member(organization.getOwnerId()));
 
         return organization;
     }
