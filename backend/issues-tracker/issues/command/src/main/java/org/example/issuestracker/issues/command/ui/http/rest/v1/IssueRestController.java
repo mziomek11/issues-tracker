@@ -28,8 +28,12 @@ class IssueRestController {
     /**
      * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, OpenIssueDto)}
      */
-    @PostMapping("/issues")
-    public ResponseEntity<UUID> openIssue(@RequestBody OpenIssueDto openIssueDto) {
+    @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues")
+    public ResponseEntity<UUID> openIssue(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
+            @RequestBody OpenIssueDto openIssueDto
+    ) {
         var issueId = UUID.randomUUID();
         var openIssueCommand = OpenIssueDtoMapper.toCommand(issueId, openIssueDto);
 
@@ -45,8 +49,12 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
      * @throws RestValidationException see {@link CloseIssueDtoMapper#toCommand(UUID)}
      */
-    @DeleteMapping("/issues/{issueId}")
-    public ResponseEntity closeIssue(@PathVariable UUID issueId) {
+    @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}")
+    public ResponseEntity closeIssue(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
+            @PathVariable UUID issueId
+    ) {
         var closeIssueCommand = CloseIssueDtoMapper.toCommand(issueId);
 
         commandDispatcher.dispatch(closeIssueCommand);
@@ -62,8 +70,10 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws RestValidationException see {@link RenameIssueDtoMapper#toCommand(UUID, RenameIssueDto)}
      */
-    @PatchMapping("/issues/{issueId}/name")
+    @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/name")
     public ResponseEntity renameIssue(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody RenameIssueDto renameIssueDto
     ) {
@@ -82,8 +92,10 @@ class IssueRestController {
      * @throws IssueTypeSetException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws RestValidationException see {@link ChangeIssueTypeDtoMapper#toCommand(UUID, ChangeIssueTypeDto)}
      */
-    @PatchMapping("/issues/{issueId}/type")
+    @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/type")
     public ResponseEntity changeIssueType(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody ChangeIssueTypeDto changeIssueTypeDto
     ) {
@@ -102,8 +114,10 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws RestValidationException see {@link ChangeIssueContentDtoMapper#toCommand(UUID, ChangeIssueContentDto)}
      */
-    @PatchMapping("/issues/{issueId}/content")
+    @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/content")
     public ResponseEntity changeIssueContent(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody ChangeIssueContentDto changeIssueContentDto
     ) {
@@ -122,8 +136,10 @@ class IssueRestController {
      * @throws RestValidationException see {@link VoteIssueDtoMapper#toCommand(UUID, VoteIssueDto)}
      * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      */
-    @PostMapping("/issues/{issueId}/votes")
+    @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/votes")
     public ResponseEntity voteIssue(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody VoteIssueDto voteIssueDto
     ) {
@@ -142,8 +158,10 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws RestValidationException see {@link CommentIssueDtoMapper#toCommand(UUID, UUID, CommentIssueDto)}
      */
-    @PostMapping("/issues/{issueId}/comments")
+    @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments")
     public ResponseEntity<UUID> commentIssue(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody CommentIssueDto commentIssueDto
     ) {
@@ -164,8 +182,10 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
      * @throws RestValidationException see {@link HideIssueCommentDtoMapper#toCommand(UUID, UUID)}
      */
-    @DeleteMapping("/issues/{issueId}/comments/{commentId}")
+    @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}")
     public ResponseEntity hideIssueComment(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @PathVariable UUID commentId
     ) {
@@ -185,8 +205,10 @@ class IssueRestController {
      * @throws IssueNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws RestValidationException see {@link ChangeIssueCommentContentDtoMapper#toCommand(UUID, UUID, ChangeIssueCommentContentDto)}
      */
-    @DeleteMapping("/issues/{issueId}/comments/{commentId}/content")
+    @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content")
     public ResponseEntity changeIssueCommentContent(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @PathVariable UUID commentId,
             @RequestBody ChangeIssueCommentContentDto changeIssueCommentContentDto
@@ -210,8 +232,10 @@ class IssueRestController {
      * @throws RestValidationException see {@link VoteIssueCommentDtoMapper#toCommand(UUID, UUID, VoteIssueCommentDto)}
      * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      */
-    @PostMapping("/issues/{issueId}/comments/{commentId}/votes")
+    @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/votes")
     public ResponseEntity voteIssueComment(
+            @PathVariable UUID organizationId,
+            @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @PathVariable UUID commentId,
             @RequestBody VoteIssueCommentDto voteIssueCommentDto
