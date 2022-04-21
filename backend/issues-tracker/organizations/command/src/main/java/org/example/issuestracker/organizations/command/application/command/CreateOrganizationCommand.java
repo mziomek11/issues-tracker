@@ -25,7 +25,6 @@ public class CreateOrganizationCommand {
     public static class CreateOrganizationCommandBuilder
             extends CommandBuilder<CreateOrganizationCommandBuilder, CreateOrganizationCommand> {
         public static final String ORGANIZATION_NAME_FIELD_NAME = "organizationName";
-        public static final String ORGANIZATION_OWNER_ID_FIELD_NAME = "organizationOwnerId";
 
         @NotNull
         private UUID organizationId;
