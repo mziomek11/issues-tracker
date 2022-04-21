@@ -3,13 +3,20 @@ package org.example.issuestracker.organizations.command.ui.http.rest.v1;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.dispatcher.CommandDispatcher;
 import org.example.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
+import org.example.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand;
 import org.example.issuestracker.organizations.command.application.command.handler.CreateOrganizationProjectCommandHandler;
+import org.example.issuestracker.organizations.command.application.command.handler.InviteOrganizationMemberCommandHandler;
+import org.example.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
+import org.example.issuestracker.organizations.command.domain.invitation.exception.InvitationAlreadyPresentException;
+import org.example.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationNotFoundException;
 import org.example.issuestracker.organizations.command.domain.organization.exception.OrganizationOwnerNotValidException;
 import org.example.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationDto;
 import org.example.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationProjectDto;
+import org.example.issuestracker.organizations.command.ui.http.rest.v1.dto.InviteOrganizationMemberDto;
 import org.example.issuestracker.organizations.command.ui.http.rest.v1.mapper.CreateOrganizationDtoMapper;
 import org.example.issuestracker.organizations.command.ui.http.rest.v1.mapper.CreateOrganizationProjectDtoMapper;
+import org.example.issuestracker.organizations.command.ui.http.rest.v1.mapper.InviteOrganizationMemberDtoMapper;
 import org.example.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +48,33 @@ public class OrganizationRestController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(organizationId);
+    }
+
+    /**
+     * @throws InvitationAlreadyPresentException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
+     * @throws MemberAlreadyPresentException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
+     * @throws MemberNotFoundException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
+     * @throws OrganizationNotFoundException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
+     * @throws OrganizationOwnerNotValidException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
+     * @throws RestValidationException see {@link InviteOrganizationMemberDtoMapper#toCommand(UUID, UUID, InviteOrganizationMemberDto)}
+     */
+    @PostMapping("/organizations/{organizationId}/invitations")
+    public ResponseEntity inviteOrganizationMember(
+            @PathVariable UUID organizationId,
+            @RequestBody InviteOrganizationMemberDto inviteOrganizationMemberDto
+    ) {
+        // @TODO pass user id from header
+        var inviteOrganizationMemberCommand = InviteOrganizationMemberDtoMapper.toCommand(
+                organizationId,
+                UUID.randomUUID(),
+                inviteOrganizationMemberDto
+        );
+
+        commandDispatcher.dispatch(inviteOrganizationMemberCommand);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
     /**

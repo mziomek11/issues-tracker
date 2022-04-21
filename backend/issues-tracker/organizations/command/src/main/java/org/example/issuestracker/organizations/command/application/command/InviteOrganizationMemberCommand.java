@@ -25,7 +25,6 @@ public class InviteOrganizationMemberCommand {
 
     public static class InviteOrganizationMemberCommandBuilder
             extends CommandBuilder<InviteOrganizationMemberCommandBuilder, InviteOrganizationMemberCommand> {
-        public static final String ORGANIZATION_OWNER_ID_FIELD_NAME = "organizationOwnerId";
         public static final String MEMBER_EMAIL_FIELD_NAME = "memberEmail";
 
         @NotNull
