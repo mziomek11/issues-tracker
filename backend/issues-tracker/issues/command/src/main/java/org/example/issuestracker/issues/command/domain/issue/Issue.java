@@ -12,7 +12,7 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.project.ProjectId;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.command.domain.vote.Votes;
@@ -36,7 +36,7 @@ public class Issue extends AggregateRoot {
     public static Issue open(
             IssueId id,
             OrganizationId organizationId,
-            ProjectId projectId,
+            OrganizationProjectId organizationProjectId,
             IssueCreatorId creatorId,
             IssueType type,
             IssueContent content,
@@ -44,7 +44,7 @@ public class Issue extends AggregateRoot {
     ) {
         var issue = new Issue();
 
-        issue.raiseEvent(issueOpened(id, organizationId, projectId, creatorId, type, content, name));
+        issue.raiseEvent(issueOpened(id, organizationId, organizationProjectId, creatorId, type, content, name));
 
         return issue;
     }

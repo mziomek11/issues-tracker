@@ -1,12 +1,12 @@
 package org.example.issuestracker.issues.command.infrastructure.gateway;
 
 import org.example.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
-import org.example.issuestracker.issues.command.application.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
-import org.example.issuestracker.issues.command.application.gateway.organization.exception.ProjectNotFoundException;
-import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.project.ProjectId;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.shared.readmodel.DetailsOrganization;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -17,26 +17,23 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
     private final WebClient organizationClient = WebClient.create("http://localhost:8099/api/v1/organization-management");
 
     /**
-     * @throws IssueCreatorIsNotMemberOfProjectException see {@link OrganizationGateway#ensureIssueCreatorIsMemberOfProject(OrganizationId, ProjectId, IssueCreatorId)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureIssueCreatorIsMemberOfProject(OrganizationId, ProjectId, IssueCreatorId)}
-     * @throws ProjectNotFoundException see {@link OrganizationGateway#ensureIssueCreatorIsMemberOfProject(OrganizationId, ProjectId, IssueCreatorId)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationProjectNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
      */
     @Override
-    public void ensureIssueCreatorIsMemberOfProject(
+    public void ensureOrganizationHasProjectAndMember(
             OrganizationId organizationId,
-            ProjectId projectId,
-            IssueCreatorId issueCreatorId
+            OrganizationProjectId organizationProjectId,
+            OrganizationMemberId organizationMemberId
     ) {
         var organization = findOrganizationByIdOrThrow(organizationId);
-        ensureOrganizationHasProject(organization, projectId);
-
-        if (!organization.getOwnerId().equals(issueCreatorId.getValue())) {
-            throw new IssueCreatorIsNotMemberOfProjectException(projectId, issueCreatorId);
-        }
+        ensureOrganizationHasProject(organization, organizationProjectId);
+        ensureOrganizationHasMember(organization, organizationMemberId);
     }
 
     /**
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureIssueCreatorIsMemberOfProject(OrganizationId, ProjectId, IssueCreatorId)}
+     * @throws OrganizationNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
      */
     private DetailsOrganization findOrganizationByIdOrThrow(OrganizationId organizationId) {
         var organization = organizationClient
@@ -57,15 +54,28 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
     }
 
     /**
-     * @throws ProjectNotFoundException see {@link OrganizationGateway#ensureIssueCreatorIsMemberOfProject(OrganizationId, ProjectId, IssueCreatorId)}
+     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
      */
-    private void ensureOrganizationHasProject(DetailsOrganization organization, ProjectId projectId) {
+    private void ensureOrganizationHasProject(DetailsOrganization organization, OrganizationProjectId organizationProjectId) {
         organization
                 .getProjects()
                 .stream()
                 .map(DetailsOrganization.Project::getId)
-                .filter(projectId.getValue()::equals)
+                .filter(organizationProjectId.getValue()::equals)
                 .findAny()
-                .orElseThrow(() -> new ProjectNotFoundException(projectId));
+                .orElseThrow(() -> new OrganizationProjectNotFoundException(organizationProjectId));
+    }
+
+    /**
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     */
+    private void ensureOrganizationHasMember(DetailsOrganization organization, OrganizationMemberId organizationMemberId) {
+        organization
+                .getMembers()
+                .stream()
+                .map(DetailsOrganization.Member::getId)
+                .filter(organizationMemberId::equals)
+                .findAny()
+                .orElseThrow(() -> new OrganizationMemberNotFoundException(organizationMemberId));
     }
 }

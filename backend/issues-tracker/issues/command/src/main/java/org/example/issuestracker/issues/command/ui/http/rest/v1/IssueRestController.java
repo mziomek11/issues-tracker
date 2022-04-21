@@ -3,9 +3,9 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.dispatcher.CommandDispatcher;
 import org.example.issuestracker.issues.command.application.command.*;
-import org.example.issuestracker.issues.command.application.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
-import org.example.issuestracker.issues.command.application.gateway.organization.exception.ProjectNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import org.example.issuestracker.issues.command.application.command.handler.*;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
@@ -29,9 +29,9 @@ class IssueRestController {
     private final CommandDispatcher commandDispatcher;
 
     /**
-     * @throws IssueCreatorIsNotMemberOfProjectException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
+     * @throws OrganizationMemberNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
      * @throws OrganizationNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
-     * @throws ProjectNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
      * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, UUID, UUID, UUID, OpenIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues")

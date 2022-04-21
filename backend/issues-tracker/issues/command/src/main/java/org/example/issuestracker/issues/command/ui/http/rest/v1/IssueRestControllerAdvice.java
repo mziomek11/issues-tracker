@@ -1,8 +1,8 @@
 package org.example.issuestracker.issues.command.ui.http.rest.v1;
 
-import org.example.issuestracker.issues.command.application.gateway.organization.exception.IssueCreatorIsNotMemberOfProjectException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
-import org.example.issuestracker.issues.command.application.gateway.organization.exception.ProjectNotFoundException;
+import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
@@ -126,8 +126,8 @@ public class IssueRestControllerAdvice {
                 .body(errorResponse);
     }
 
-    @ExceptionHandler(ProjectNotFoundException.class)
-    public ResponseEntity<RestErrorResponse> handle(ProjectNotFoundException ex) {
+    @ExceptionHandler(OrganizationProjectNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handle(OrganizationProjectNotFoundException ex) {
         var errorResponse = new RestErrorResponse("Project not found");
 
         return ResponseEntity
@@ -135,9 +135,9 @@ public class IssueRestControllerAdvice {
                 .body(errorResponse);
     }
 
-    @ExceptionHandler(IssueCreatorIsNotMemberOfProjectException.class)
-    public ResponseEntity<RestErrorResponse> handle(IssueCreatorIsNotMemberOfProjectException ex) {
-        var errorResponse = new RestErrorResponse("Issue creator is not member of project");
+    @ExceptionHandler(OrganizationMemberNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handle(OrganizationMemberNotFoundException ex) {
+        var errorResponse = new RestErrorResponse("User is not member of organization");
 
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)

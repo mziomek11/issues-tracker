@@ -11,7 +11,7 @@ import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.project.ProjectId;
+import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
 import java.util.UUID;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class OpenIssueCommand {
     private final IssueId issueId;
     private final OrganizationId organizationId;
-    private final ProjectId projectId;
+    private final OrganizationProjectId organizationProjectId;
     private final IssueCreatorId issueCreatorId;
     private final IssueType issueType;
     private final IssueContent issueContent;
@@ -97,7 +97,7 @@ public class OpenIssueCommand {
             return new OpenIssueCommand(
                     new IssueId(issueId),
                     new OrganizationId(organizationId),
-                    new ProjectId(projectId),
+                    new OrganizationProjectId(projectId),
                     new IssueCreatorId(issueCreatorId),
                     issueType,
                     new IssueContent(issueContent),
