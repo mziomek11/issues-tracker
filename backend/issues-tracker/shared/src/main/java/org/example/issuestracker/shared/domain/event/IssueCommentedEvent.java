@@ -12,6 +12,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueCommentedEvent extends BaseEvent {
+    private UUID organizationId;
+    private UUID projectId;
+    private UUID memberId;
     private UUID commentId;
     private String commentContent;
 
@@ -19,9 +22,19 @@ public class IssueCommentedEvent extends BaseEvent {
         return new IssueCommentedEventBuilder();
     }
 
-    private IssueCommentedEvent(UUID issueId, UUID commentId, String commentContent) {
+    private IssueCommentedEvent(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID memberId,
+            UUID commentId,
+            String commentContent
+    ) {
         super(issueId);
 
+        this.organizationId = organizationId;
+        this.projectId = projectId;
+        this.memberId = memberId;
         this.commentId = commentId;
         this.commentContent = commentContent;
     }
@@ -32,6 +45,15 @@ public class IssueCommentedEvent extends BaseEvent {
         private UUID issueId;
 
         @NotNull
+        private UUID organizationId;
+
+        @NotNull
+        private UUID projectId;
+
+        @NotNull
+        private UUID memberId;
+
+        @NotNull
         private UUID commentId;
 
         @NotBlank
@@ -39,6 +61,21 @@ public class IssueCommentedEvent extends BaseEvent {
 
         public IssueCommentedEventBuilder issueId(UUID issueId) {
             this.issueId = issueId;
+            return this;
+        }
+
+        public IssueCommentedEventBuilder organizationId(UUID organizationId) {
+            this.organizationId = organizationId;
+            return this;
+        }
+
+        public IssueCommentedEventBuilder projectId(UUID projectId) {
+            this.projectId = projectId;
+            return this;
+        }
+
+        public IssueCommentedEventBuilder memberId(UUID memberId) {
+            this.memberId = memberId;
             return this;
         }
 
@@ -56,6 +93,9 @@ public class IssueCommentedEvent extends BaseEvent {
         protected IssueCommentedEvent create() {
             return new IssueCommentedEvent(
                     issueId,
+                    organizationId,
+                    projectId,
+                    memberId,
                     commentId,
                     commentContent
             );

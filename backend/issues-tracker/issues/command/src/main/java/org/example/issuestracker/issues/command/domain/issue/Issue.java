@@ -11,9 +11,6 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.issues.command.domain.vote.Vote;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.issues.command.domain.vote.Votes;
@@ -99,25 +96,25 @@ public class Issue extends AggregateRoot {
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueContentSetException if given content is the same as current content
      */
-    public void changeContent(IssueContent newContent) {
+    public void changeContent(IssueContent newContent, IssueOrganizationDetails organizationDetails) {
         ensureIsOpen();
 
         if (content.equals(newContent)) {
             throw new IssueContentSetException(id, content);
         }
 
-        raiseEvent(issueContentChanged(id, newContent));
+        raiseEvent(issueContentChanged(id, newContent, organizationDetails));
     }
 
     /**
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
      */
-    public void comment(Comment comment) {
+    public void comment(Comment comment, IssueOrganizationDetails organizationDetails) {
         ensureIsOpen();
         comments.ensureCanAdd(comment);
 
-        raiseEvent(issueCommented(id, comment.id(), comment.content()));
+        raiseEvent(issueCommented(id, comment.id(), comment.content(), organizationDetails));
     }
 
     /**
@@ -125,11 +122,15 @@ public class Issue extends AggregateRoot {
      * @throws CommentNotFoundException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      * @throws CommentContentSetException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      */
-    public void changeCommentContent(CommentId commentId, CommentContent commentContent) {
+    public void changeCommentContent(
+            CommentId commentId,
+            CommentContent commentContent,
+            IssueOrganizationDetails organizationDetails
+    ) {
         ensureIsOpen();
         comments.ensureCanChangeContent(commentId, commentContent);
 
-        raiseEvent(issueCommentContentChanged(id, commentId, commentContent));
+        raiseEvent(issueCommentContentChanged(id, commentId, commentContent, organizationDetails));
     }
 
     /**
@@ -137,11 +138,11 @@ public class Issue extends AggregateRoot {
      * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
      * @throws CommentHiddenException see {@link Comments#ensureCanHide(CommentId)}
      */
-    public void hideComment(CommentId commentId) {
+    public void hideComment(CommentId commentId, IssueOrganizationDetails organizationDetails) {
         ensureIsOpen();
         comments.ensureCanHide(commentId);
 
-        raiseEvent(issueCommentHidden(id, commentId));
+        raiseEvent(issueCommentHidden(id, commentId, organizationDetails));
     }
 
     /**
@@ -149,11 +150,11 @@ public class Issue extends AggregateRoot {
      * @throws CommentNotFoundException see {@link Comments#ensureCanVote(CommentId, Vote)}
      * @throws VoteAlreadyExistsException see {@link Comments#ensureCanVote(CommentId, Vote)}
      */
-    public void voteComment(CommentId commentId, Vote vote) {
+    public void voteComment(CommentId commentId, Vote vote, IssueOrganizationDetails organizationDetails) {
         ensureIsOpen();
         comments.ensureCanVote(commentId, vote);
 
-        raiseEvent(issueCommentVoted(id, commentId, vote.voterId(), vote.type()));
+        raiseEvent(issueCommentVoted(id, commentId, vote.type(), organizationDetails));
     }
 
     /**
@@ -161,11 +162,11 @@ public class Issue extends AggregateRoot {
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws VoteAlreadyExistsException see {@link Votes#ensureCanAdd(Vote)}
      */
-    public void vote(Vote vote) {
+    public void vote(Vote vote, IssueOrganizationDetails organizationDetails) {
         ensureIsOpen();
         votes.ensureCanAdd(vote);
 
-        raiseEvent(issueVoted(id, vote.voterId(), vote.type()));
+        raiseEvent(issueVoted(id, vote.type(), organizationDetails));
     }
 
     /**
@@ -228,14 +229,14 @@ public class Issue extends AggregateRoot {
 
     public void on(IssueCommentVotedEvent issueCommentVotedEvent) {
         var commentId = new CommentId(issueCommentVotedEvent.getCommentId());
-        var voterId = new VoterId(issueCommentVotedEvent.getVoterId());
+        var voterId = new VoterId(issueCommentVotedEvent.getMemberId());
         var vote = new Vote(voterId, issueCommentVotedEvent.getVoteType());
 
         comments = comments.vote(commentId, vote);
     }
 
     public void on(IssueVotedEvent issueVotedEvent) {
-        var voterId = new VoterId(issueVotedEvent.getVoterId());
+        var voterId = new VoterId(issueVotedEvent.getMemberId());
         var newVote = new Vote(voterId, issueVotedEvent.getVoteType());
 
         votes = votes.add(newVote);

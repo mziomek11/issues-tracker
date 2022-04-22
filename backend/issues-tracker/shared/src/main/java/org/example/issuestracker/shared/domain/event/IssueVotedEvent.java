@@ -12,17 +12,27 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueVotedEvent extends BaseEvent {
-    private UUID voterId;
+    private UUID organizationId;
+    private UUID projectId;
+    private UUID memberId;
     private VoteType voteType;
 
     public static IssueVotedEventBuilder builder() {
         return new IssueVotedEventBuilder();
     }
 
-    private IssueVotedEvent(UUID issueId, UUID voterId, VoteType voteType) {
+    private IssueVotedEvent(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID memberId,
+            VoteType voteType
+    ) {
         super(issueId);
 
-        this.voterId = voterId;
+        this.organizationId = organizationId;
+        this.projectId = projectId;
+        this.memberId = memberId;
         this.voteType = voteType;
     }
 
@@ -32,7 +42,13 @@ public class IssueVotedEvent extends BaseEvent {
         private UUID issueId;
 
         @NotNull
-        private UUID voterId;
+        private UUID organizationId;
+
+        @NotNull
+        private UUID projectId;
+
+        @NotNull
+        private UUID memberId;
 
         @NotNull
         private VoteType voteType;
@@ -42,8 +58,18 @@ public class IssueVotedEvent extends BaseEvent {
             return this;
         }
 
-        public IssueVotedEventBuilder voterId(UUID voterId) {
-            this.voterId = voterId;
+        public IssueVotedEventBuilder organizationId(UUID organizationId) {
+            this.organizationId = organizationId;
+            return this;
+        }
+
+        public IssueVotedEventBuilder projectId(UUID projectId) {
+            this.projectId = projectId;
+            return this;
+        }
+
+        public IssueVotedEventBuilder memberId(UUID memberId) {
+            this.memberId = memberId;
             return this;
         }
 
@@ -56,7 +82,9 @@ public class IssueVotedEvent extends BaseEvent {
         protected IssueVotedEvent create() {
             return new IssueVotedEvent(
                     issueId,
-                    voterId,
+                    organizationId,
+                    projectId,
+                    memberId,
                     voteType
             );
         }

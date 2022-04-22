@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
-import org.example.issuestracker.issues.command.domain.vote.VoterId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.shared.domain.valueobject.VoteType;
 
 import java.util.UUID;
@@ -15,33 +15,28 @@ import java.util.UUID;
 @Getter
 public class VoteIssueCommand {
     private final IssueId issueId;
-    private final VoterId voterId;
     private final VoteType voteType;
+    private final IssueOrganizationDetails organizationDetails;
+
 
     public static VoteIssueCommandBuilder builder() {
         return new VoteIssueCommandBuilder();
     }
 
     public static class VoteIssueCommandBuilder extends CommandBuilder<VoteIssueCommandBuilder, VoteIssueCommand> {
-        public static final String VOTER_ID_FIELD_NAME = "voterId";
         public static final String VOTE_TYPE_FIELD_NAME = "voteType";
 
         @NotNull
         private UUID issueId;
 
         @NotNull
-        private UUID voterId;
+        private VoteType voteType;
 
         @NotNull
-        private VoteType voteType;
+        private IssueOrganizationDetails organizationDetails;
 
         public VoteIssueCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
-            return this;
-        }
-
-        public VoteIssueCommandBuilder voterId(UUID voterId) {
-            this.voterId = voterId;
             return this;
         }
 
@@ -50,12 +45,17 @@ public class VoteIssueCommand {
             return this;
         }
 
+        public VoteIssueCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
+            return this;
+        }
+
         @Override
         protected VoteIssueCommand create() {
             return new VoteIssueCommand(
                     new IssueId(issueId),
-                    new VoterId(voterId),
-                    voteType
+                    voteType,
+                    organizationDetails
             );
         }
     }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class HideIssueCommentCommand {
     private final IssueId issueId;
     private final CommentId commentId;
+    private final IssueOrganizationDetails organizationDetails;
 
     public static HideIssueCommentCommandBuilder builder() {
         return new HideIssueCommentCommandBuilder();
@@ -28,6 +30,9 @@ public class HideIssueCommentCommand {
         @NotNull
         private UUID commentId;
 
+        @NotNull
+        private IssueOrganizationDetails organizationDetails;
+
         public HideIssueCommentCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
             return this;
@@ -38,11 +43,17 @@ public class HideIssueCommentCommand {
             return this;
         }
 
+        public HideIssueCommentCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
+            return this;
+        }
+
         @Override
         protected HideIssueCommentCommand create() {
             return new HideIssueCommentCommand(
                     new IssueId(issueId),
-                    new CommentId(commentId)
+                    new CommentId(commentId),
+                    organizationDetails
             );
         }
     }

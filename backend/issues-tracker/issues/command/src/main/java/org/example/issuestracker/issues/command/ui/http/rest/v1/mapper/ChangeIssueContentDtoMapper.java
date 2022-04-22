@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.ChangeIssueContentCommand;
 import org.example.issuestracker.issues.command.application.command.ChangeIssueContentCommand.ChangeIssueContentCommandBuilder;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueContentDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -18,10 +19,15 @@ public class ChangeIssueContentDtoMapper {
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static ChangeIssueContentCommand toCommand(UUID issueId, ChangeIssueContentDto dto) {
+    public static ChangeIssueContentCommand toCommand(
+            UUID issueId,
+            IssueOrganizationDetails organizationDetails,
+            ChangeIssueContentDto dto
+    ) {
         var builder = ChangeIssueContentCommand
                 .builder()
                 .issueId(issueId)
+                .organizationDetails(organizationDetails)
                 .issueContent(dto.content());
 
         var validationErrors = builder.validate();

@@ -9,6 +9,7 @@ import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public class ChangeIssueCommentContentCommand {
     private final IssueId issueId;
     private final CommentId commentId;
     private final CommentContent commentContent;
+    private final IssueOrganizationDetails organizationDetails;
 
     public static ChangeIssueCommentContentCommandBuilder builder() {
         return new ChangeIssueCommentContentCommandBuilder();
@@ -36,6 +38,9 @@ public class ChangeIssueCommentContentCommand {
         @NotBlank
         private String commentContent;
 
+        @NotNull
+        private IssueOrganizationDetails organizationDetails;
+
         public ChangeIssueCommentContentCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
             return this;
@@ -51,12 +56,18 @@ public class ChangeIssueCommentContentCommand {
             return this;
         }
 
+        public ChangeIssueCommentContentCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
+            return this;
+        }
+
         @Override
         protected ChangeIssueCommentContentCommand create() {
             return new ChangeIssueCommentContentCommand(
                     new IssueId(issueId),
                     new CommentId(commentId),
-                    new CommentContent(commentContent)
+                    new CommentContent(commentContent),
+                    organizationDetails
             );
         }
     }

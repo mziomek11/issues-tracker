@@ -147,7 +147,10 @@ class IssueRestController {
      * @throws IssueClosedException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws IssueContentSetException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws IssueNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
-     * @throws RestValidationException see {@link ChangeIssueContentDtoMapper#toCommand(UUID, ChangeIssueContentDto)}
+     * @throws OrganizationMemberNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
+     * @throws OrganizationNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
+     * @throws RestValidationException see {@link ChangeIssueContentDtoMapper#toCommand(UUID, IssueOrganizationDetails, ChangeIssueContentDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/content")
     public ResponseEntity changeIssueContent(
@@ -156,7 +159,12 @@ class IssueRestController {
             @PathVariable UUID issueId,
             @RequestBody ChangeIssueContentDto changeIssueContentDto
     ) {
-        var changeIssueContentCommand = ChangeIssueContentDtoMapper.toCommand(issueId, changeIssueContentDto);
+        // @TODO pass user id from header
+        var changeIssueContentCommand = ChangeIssueContentDtoMapper.toCommand(
+                issueId,
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                changeIssueContentDto
+        );
 
         commandDispatcher.dispatch(changeIssueContentCommand);
 
@@ -168,7 +176,10 @@ class IssueRestController {
     /**
      * @throws IssueClosedException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws IssueNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
-     * @throws RestValidationException see {@link VoteIssueDtoMapper#toCommand(UUID, VoteIssueDto)}
+     * @throws OrganizationMemberNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws OrganizationNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws RestValidationException see {@link VoteIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails, VoteIssueDto)}
      * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/votes")
@@ -178,7 +189,12 @@ class IssueRestController {
             @PathVariable UUID issueId,
             @RequestBody VoteIssueDto voteIssueDto
     ) {
-        var voteIssueCommand = VoteIssueDtoMapper.toCommand(issueId, voteIssueDto);
+        // @TODO pass user id from header
+        var voteIssueCommand = VoteIssueDtoMapper.toCommand(
+                issueId,
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                voteIssueDto
+        );
 
         commandDispatcher.dispatch(voteIssueCommand);
 
@@ -191,7 +207,10 @@ class IssueRestController {
      * @throws CommentWithIdExistsException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws IssueClosedException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws IssueNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
-     * @throws RestValidationException see {@link CommentIssueDtoMapper#toCommand(UUID, UUID, CommentIssueDto)}
+     * @throws OrganizationMemberNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
+     * @throws OrganizationNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
+     * @throws RestValidationException see {@link CommentIssueDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, CommentIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments")
     public ResponseEntity<UUID> commentIssue(
@@ -201,7 +220,13 @@ class IssueRestController {
             @RequestBody CommentIssueDto commentIssueDto
     ) {
         var commentId = UUID.randomUUID();
-        var commentIssueCommand = CommentIssueDtoMapper.toCommand(issueId, commentId, commentIssueDto);
+        // @TODO pass user id from header
+        var commentIssueCommand = CommentIssueDtoMapper.toCommand(
+                issueId,
+                commentId,
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                commentIssueDto
+        );
 
         commandDispatcher.dispatch(commentIssueCommand);
 
@@ -215,7 +240,10 @@ class IssueRestController {
      * @throws CommentNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
      * @throws IssueClosedException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
      * @throws IssueNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
-     * @throws RestValidationException see {@link HideIssueCommentDtoMapper#toCommand(UUID, UUID)}
+     * @throws OrganizationMemberNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws OrganizationNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws RestValidationException see {@link HideIssueCommentDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails)}
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}")
     public ResponseEntity hideIssueComment(
@@ -224,7 +252,12 @@ class IssueRestController {
             @PathVariable UUID issueId,
             @PathVariable UUID commentId
     ) {
-        var hideIssueCommentCommand = HideIssueCommentDtoMapper.toCommand(issueId, commentId);
+        // @TODO pass user id from header
+        var hideIssueCommentCommand = HideIssueCommentDtoMapper.toCommand(
+                issueId,
+                commentId,
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID())
+        );
 
         commandDispatcher.dispatch(hideIssueCommentCommand);
 
@@ -238,7 +271,10 @@ class IssueRestController {
      * @throws CommentNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws IssueClosedException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws IssueNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
-     * @throws RestValidationException see {@link ChangeIssueCommentContentDtoMapper#toCommand(UUID, UUID, ChangeIssueCommentContentDto)}
+     * @throws OrganizationMemberNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws OrganizationNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws RestValidationException see {@link ChangeIssueCommentContentDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, ChangeIssueCommentContentDto)}
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content")
     public ResponseEntity changeIssueCommentContent(
@@ -248,9 +284,11 @@ class IssueRestController {
             @PathVariable UUID commentId,
             @RequestBody ChangeIssueCommentContentDto changeIssueCommentContentDto
     ) {
+        // @TODO pass user id from header
         var changeIssueCommentContentCommand = ChangeIssueCommentContentDtoMapper.toCommand(
                 issueId,
                 commentId,
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
                 changeIssueCommentContentDto
         );
 
@@ -264,7 +302,10 @@ class IssueRestController {
     /**
      * @throws IssueClosedException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws IssueNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
-     * @throws RestValidationException see {@link VoteIssueCommentDtoMapper#toCommand(UUID, UUID, VoteIssueCommentDto)}
+     * @throws OrganizationMemberNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws OrganizationNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws RestValidationException see {@link VoteIssueCommentDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, VoteIssueCommentDto)}
      * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/votes")
@@ -275,9 +316,11 @@ class IssueRestController {
             @PathVariable UUID commentId,
             @RequestBody VoteIssueCommentDto voteIssueCommentDto
     ) {
+        // @TODO pass user id from header
         var voteIssueCommentCommand = VoteIssueCommentDtoMapper.toCommand(
                 issueId,
                 commentId,
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
                 voteIssueCommentDto
         );
 

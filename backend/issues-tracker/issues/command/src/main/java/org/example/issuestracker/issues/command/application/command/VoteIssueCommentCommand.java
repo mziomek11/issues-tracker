@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
-import org.example.issuestracker.issues.command.domain.vote.VoterId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.shared.domain.valueobject.VoteType;
 
 import java.util.UUID;
@@ -17,8 +17,9 @@ import java.util.UUID;
 public class VoteIssueCommentCommand {
     private final IssueId issueId;
     private final CommentId commentId;
-    private final VoterId voterId;
     private final VoteType voteType;
+    private final IssueOrganizationDetails organizationDetails;
+
 
     public static VoteIssueCommentCommandBuilder builder() {
         return new VoteIssueCommentCommandBuilder();
@@ -26,7 +27,6 @@ public class VoteIssueCommentCommand {
 
     public static class VoteIssueCommentCommandBuilder
             extends CommandBuilder<VoteIssueCommentCommandBuilder, VoteIssueCommentCommand> {
-        public static final String VOTER_ID_FIELD_NAME = "voterId";
         public static final String VOTE_TYPE_FIELD_NAME = "voteType";
 
         @NotNull
@@ -36,10 +36,10 @@ public class VoteIssueCommentCommand {
         private UUID commentId;
 
         @NotNull
-        private UUID voterId;
+        private VoteType voteType;
 
         @NotNull
-        private VoteType voteType;
+        private IssueOrganizationDetails organizationDetails;
 
         public VoteIssueCommentCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
@@ -51,13 +51,13 @@ public class VoteIssueCommentCommand {
             return this;
         }
 
-        public VoteIssueCommentCommandBuilder voterId(UUID voterId) {
-            this.voterId = voterId;
+        public VoteIssueCommentCommandBuilder voteType(VoteType voteType) {
+            this.voteType = voteType;
             return this;
         }
 
-        public VoteIssueCommentCommandBuilder voteType(VoteType voteType) {
-            this.voteType = voteType;
+        public VoteIssueCommentCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
             return this;
         }
 
@@ -66,8 +66,8 @@ public class VoteIssueCommentCommand {
             return new VoteIssueCommentCommand(
                     new IssueId(issueId),
                     new CommentId(commentId),
-                    new VoterId(voterId),
-                    voteType
+                    voteType,
+                    organizationDetails
             );
         }
     }

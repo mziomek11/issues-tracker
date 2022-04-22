@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.VoteIssueCommentCommand;
 import org.example.issuestracker.issues.command.application.command.VoteIssueCommentCommand.VoteIssueCommentCommandBuilder;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.VoteIssueCommentDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -18,12 +19,17 @@ public class VoteIssueCommentDtoMapper {
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static VoteIssueCommentCommand toCommand(UUID issueId, UUID commentId, VoteIssueCommentDto dto) {
+    public static VoteIssueCommentCommand toCommand(
+            UUID issueId,
+            UUID commentId,
+            IssueOrganizationDetails organizationDetails,
+            VoteIssueCommentDto dto
+    ) {
         var builder = VoteIssueCommentCommand
                 .builder()
                 .issueId(issueId)
                 .commentId(commentId)
-                .voterId(dto.voterId())
+                .organizationDetails(organizationDetails)
                 .voteType(dto.voteType());
 
         var validationErrors = builder.validate();
@@ -42,11 +48,6 @@ public class VoteIssueCommentDtoMapper {
         keyMap.put(
                 VoteIssueCommentCommandBuilder.VOTE_TYPE_FIELD_NAME,
                 VoteIssueCommentDto.VOTE_TYPE_FIELD_NAME
-        );
-
-        keyMap.put(
-                VoteIssueCommentCommandBuilder.VOTER_ID_FIELD_NAME,
-                VoteIssueCommentDto.VOTER_ID_FIELD_NAME
         );
 
         return RestValidationErrorsMapper.toDtoErrors(builderErrors, keyMap);

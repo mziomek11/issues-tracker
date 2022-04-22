@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 public class ChangeIssueContentCommand {
     private final IssueId issueId;
     private final IssueContent issueContent;
+    private final IssueOrganizationDetails organizationDetails;
 
     public static ChangeIssueContentCommandBuilder builder() {
         return new ChangeIssueContentCommandBuilder();
@@ -31,6 +33,9 @@ public class ChangeIssueContentCommand {
         @NotBlank
         private String issueContent;
 
+        @NotNull
+        private IssueOrganizationDetails organizationDetails;
+
         public ChangeIssueContentCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
             return this;
@@ -41,11 +46,17 @@ public class ChangeIssueContentCommand {
             return this;
         }
 
+        public ChangeIssueContentCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
+            return this;
+        }
+
         @Override
         protected ChangeIssueContentCommand create() {
             return new ChangeIssueContentCommand(
                     new IssueId(issueId),
-                    new IssueContent(issueContent)
+                    new IssueContent(issueContent),
+                    organizationDetails
             );
         }
     }

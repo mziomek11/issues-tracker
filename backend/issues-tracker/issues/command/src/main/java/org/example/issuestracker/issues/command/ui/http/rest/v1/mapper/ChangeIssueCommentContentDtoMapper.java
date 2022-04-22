@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.ChangeIssueCommentContentCommand;
 import org.example.issuestracker.issues.command.application.command.ChangeIssueCommentContentCommand.ChangeIssueCommentContentCommandBuilder;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueCommentContentDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -21,12 +22,14 @@ public class ChangeIssueCommentContentDtoMapper {
     public static ChangeIssueCommentContentCommand toCommand(
             UUID issueId,
             UUID commentId,
+            IssueOrganizationDetails organizationDetails,
             ChangeIssueCommentContentDto dto
     ) {
         var builder = ChangeIssueCommentContentCommand
                 .builder()
                 .issueId(issueId)
                 .commentId(commentId)
+                .organizationDetails(organizationDetails)
                 .commentContent(dto.content());
 
         var validationErrors = builder.validate();

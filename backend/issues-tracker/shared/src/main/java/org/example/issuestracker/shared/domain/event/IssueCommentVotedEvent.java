@@ -12,19 +12,30 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueCommentVotedEvent extends BaseEvent {
+    private UUID organizationId;
+    private UUID projectId;
+    private UUID memberId;
     private UUID commentId;
-    private UUID voterId;
     private VoteType voteType;
 
     public static IssueCommentVotedEventBuilder builder() {
         return new IssueCommentVotedEventBuilder();
     }
 
-    private IssueCommentVotedEvent(UUID issueId, UUID commentId, UUID voterId, VoteType voteType) {
+    private IssueCommentVotedEvent(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID memberId,
+            UUID commentId,
+            VoteType voteType
+    ) {
         super(issueId);
 
+        this.organizationId = organizationId;
+        this.projectId = projectId;
+        this.memberId = memberId;
         this.commentId = commentId;
-        this.voterId = voterId;
         this.voteType = voteType;
     }
 
@@ -34,10 +45,16 @@ public class IssueCommentVotedEvent extends BaseEvent {
         private UUID issueId;
 
         @NotNull
-        private UUID commentId;
+        private UUID organizationId;
 
         @NotNull
-        private UUID voterId;
+        private UUID projectId;
+
+        @NotNull
+        private UUID memberId;
+
+        @NotNull
+        private UUID commentId;
 
         @NotNull
         private VoteType voteType;
@@ -47,13 +64,24 @@ public class IssueCommentVotedEvent extends BaseEvent {
             return this;
         }
 
-        public IssueCommentVotedEventBuilder commentId(UUID commentId) {
-            this.commentId = commentId;
+        public IssueCommentVotedEventBuilder organizationId(UUID organizationId) {
+            this.organizationId = organizationId;
             return this;
         }
 
-        public IssueCommentVotedEventBuilder voterId(UUID voterId) {
-            this.voterId = voterId;
+        public IssueCommentVotedEventBuilder projectId(UUID projectId) {
+            this.projectId = projectId;
+            return this;
+        }
+
+        public IssueCommentVotedEventBuilder memberId(UUID memberId) {
+            this.memberId = memberId;
+            return this;
+        }
+
+
+        public IssueCommentVotedEventBuilder commentId(UUID commentId) {
+            this.commentId = commentId;
             return this;
         }
 
@@ -66,8 +94,10 @@ public class IssueCommentVotedEvent extends BaseEvent {
         protected IssueCommentVotedEvent create() {
             return new IssueCommentVotedEvent(
                     issueId,
+                    organizationId,
+                    projectId,
+                    memberId,
                     commentId,
-                    voterId,
                     voteType
             );
         }

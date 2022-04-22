@@ -6,9 +6,6 @@ import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
 import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import org.example.issuestracker.issues.command.domain.vote.VoterId;
 import org.example.issuestracker.shared.domain.event.*;
 import org.example.issuestracker.shared.domain.valueobject.IssueType;
@@ -78,10 +75,17 @@ public class EventFactory {
                 .build();
     }
 
-    public static IssueContentChangedEvent issueContentChanged(IssueId id, IssueContent content) {
+    public static IssueContentChangedEvent issueContentChanged(
+            IssueId id,
+            IssueContent content,
+            IssueOrganizationDetails organizationDetails
+    ) {
         return IssueContentChangedEvent
                 .builder()
                 .issueId(id.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .issueContent(content.text())
                 .build();
     }
@@ -89,11 +93,16 @@ public class EventFactory {
     public static IssueCommentedEvent issueCommented(
             IssueId issueId,
             CommentId commentId,
-            CommentContent commentContent
+            CommentContent commentContent,
+            IssueOrganizationDetails organizationDetails
+
     ) {
         return IssueCommentedEvent
                 .builder()
                 .issueId(issueId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .commentId(commentId.getValue())
                 .commentContent(commentContent.text())
                 .build();
@@ -102,29 +111,47 @@ public class EventFactory {
     public static IssueCommentContentChangedEvent issueCommentContentChanged(
             IssueId issueId,
             CommentId commentId,
-            CommentContent commentContent
+            CommentContent commentContent,
+            IssueOrganizationDetails organizationDetails
     ) {
         return IssueCommentContentChangedEvent
                 .builder()
                 .issueId(issueId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .commentId(commentId.getValue())
                 .commentContent(commentContent.text())
                 .build();
     }
 
-    public static IssueCommentHiddenEvent issueCommentHidden(IssueId issueId, CommentId commentId) {
+    public static IssueCommentHiddenEvent issueCommentHidden(
+            IssueId issueId,
+            CommentId commentId,
+            IssueOrganizationDetails organizationDetails
+
+    ) {
         return IssueCommentHiddenEvent
                 .builder()
                 .issueId(issueId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .commentId(commentId.getValue())
                 .build();
     }
 
-    public static IssueVotedEvent issueVoted(IssueId issueId, VoterId voterId, VoteType voteType) {
+    public static IssueVotedEvent issueVoted(
+            IssueId issueId,
+            VoteType voteType,
+            IssueOrganizationDetails organizationDetails
+    ) {
         return IssueVotedEvent
                 .builder()
                 .issueId(issueId.getValue())
-                .voterId(voterId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .voteType(voteType)
                 .build();
     }
@@ -132,14 +159,16 @@ public class EventFactory {
     public static IssueCommentVotedEvent issueCommentVoted(
             IssueId issueId,
             CommentId commentId,
-            VoterId voterId,
-            VoteType voteType
+            VoteType voteType,
+            IssueOrganizationDetails organizationDetails
     ) {
         return IssueCommentVotedEvent
                 .builder()
                 .issueId(issueId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .commentId(commentId.getValue())
-                .voterId(voterId.getValue())
                 .voteType(voteType)
                 .build();
     }

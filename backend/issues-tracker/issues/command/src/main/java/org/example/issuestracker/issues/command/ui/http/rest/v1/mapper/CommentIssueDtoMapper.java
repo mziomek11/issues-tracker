@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.CommentIssueCommand;
 import org.example.issuestracker.issues.command.application.command.CommentIssueCommand.CommentIssueCommandBuilder;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.CommentIssueDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -18,11 +19,17 @@ public class CommentIssueDtoMapper {
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static CommentIssueCommand toCommand(UUID issueId, UUID commentId, CommentIssueDto dto) {
+    public static CommentIssueCommand toCommand(
+            UUID issueId,
+            UUID commentId,
+            IssueOrganizationDetails organizationDetails,
+            CommentIssueDto dto
+    ) {
         var builder = CommentIssueCommand
                 .builder()
                 .issueId(issueId)
                 .commentId(commentId)
+                .organizationDetails(organizationDetails)
                 .commentContent(dto.content());
 
         var validationErrors = builder.validate();
