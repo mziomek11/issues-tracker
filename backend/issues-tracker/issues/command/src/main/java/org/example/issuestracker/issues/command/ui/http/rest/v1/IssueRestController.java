@@ -11,6 +11,7 @@ import org.example.issuestracker.issues.command.domain.comment.exception.Comment
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import org.example.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.domain.issue.exception.*;
 import org.example.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.*;
@@ -32,7 +33,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
      * @throws OrganizationNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
-     * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, UUID, UUID, UUID, OpenIssueDto)}
+     * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails, OpenIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues")
     public ResponseEntity<UUID> openIssue(
@@ -44,9 +45,7 @@ class IssueRestController {
         // @TODO pass user id from header
         var openIssueCommand = OpenIssueDtoMapper.toCommand(
                 issueId,
-                organizationId,
-                projectId,
-                UUID.randomUUID(),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
                 openIssueDto
         );
 
@@ -63,7 +62,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
      * @throws OrganizationNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
-     * @throws RestValidationException see {@link CloseIssueDtoMapper#toCommand(UUID, UUID, UUID, UUID)}
+     * @throws RestValidationException see {@link CloseIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails)}
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}")
     public ResponseEntity closeIssue(
@@ -74,9 +73,7 @@ class IssueRestController {
         // @TODO pass user id from header
         var closeIssueCommand = CloseIssueDtoMapper.toCommand(
                 issueId,
-                organizationId,
-                projectId,
-                UUID.randomUUID()
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID())
         );
 
         commandDispatcher.dispatch(closeIssueCommand);
@@ -93,7 +90,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws OrganizationNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
-     * @throws RestValidationException see {@link RenameIssueDtoMapper#toCommand(UUID, UUID, UUID, UUID, RenameIssueDto)}
+     * @throws RestValidationException see {@link RenameIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails, RenameIssueDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/name")
     public ResponseEntity renameIssue(
@@ -105,9 +102,7 @@ class IssueRestController {
         // @TODO pass user id from header
         var renameIssueCommand = RenameIssueDtoMapper.toCommand(
                 issueId,
-                organizationId,
-                projectId,
-                UUID.randomUUID(),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
                 renameIssueDto
         );
 
@@ -125,7 +120,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws OrganizationNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws OrganizationProjectNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
-     * @throws RestValidationException see {@link ChangeIssueTypeDtoMapper#toCommand(UUID, UUID, UUID, UUID, ChangeIssueTypeDto)}
+     * @throws RestValidationException see {@link ChangeIssueTypeDtoMapper#toCommand(UUID, IssueOrganizationDetails, ChangeIssueTypeDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/type")
     public ResponseEntity changeIssueType(
@@ -137,9 +132,7 @@ class IssueRestController {
         // @TODO pass user id from header
         var changeIssueTypeCommand = ChangeIssueTypeDtoMapper.toCommand(
                 issueId,
-                organizationId,
-                projectId,
-                UUID.randomUUID(),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
                 changeIssueTypeDto
         );
 

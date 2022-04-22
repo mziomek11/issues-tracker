@@ -8,6 +8,7 @@ import org.example.issuestracker.issues.command.application.gateway.organization
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
@@ -23,25 +24,21 @@ public class CloseIssueCommandHandler implements CommandHandler<CloseIssueComman
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws IssueClosedException see {@link Issue#close(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws IssueClosedException see {@link Issue#close(IssueOrganizationDetails)}
      * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
     public void handle(CloseIssueCommand command) {
-        organizationGateway.ensureOrganizationHasProjectAndMember(
-                command.getOrganizationId(),
-                command.getProjectId(),
-                command.getMemberId()
-        );
+        organizationGateway.ensureOrganizationHasProjectAndMember(command.getOrganizationDetails());
 
         var issue = eventSourcingHandler
                 .getById(command.getIssueId())
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.close(command.getOrganizationId(), command.getProjectId(), command.getMemberId());
+        issue.close(command.getOrganizationDetails());
 
         eventSourcingHandler.save(issue);
     }

@@ -8,6 +8,7 @@ import org.example.issuestracker.issues.command.application.gateway.organization
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import org.example.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
@@ -25,31 +26,22 @@ public class ChangeIssueTypeCommandHandler implements CommandHandler<ChangeIssue
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws IssueClosedException see {@link Issue#changeType(OrganizationId, OrganizationProjectId, OrganizationMemberId, IssueType)}
+     * @throws IssueClosedException see {@link Issue#changeType(IssueType, IssueOrganizationDetails)}
      * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws IssueTypeSetException see {@link Issue#changeType(OrganizationId, OrganizationProjectId, OrganizationMemberId, IssueType)}
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws IssueTypeSetException see {@link Issue#changeType(IssueType, IssueOrganizationDetails)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationProjectNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
     public void handle(ChangeIssueTypeCommand command) {
-        organizationGateway.ensureOrganizationHasProjectAndMember(
-                command.getOrganizationId(),
-                command.getProjectId(),
-                command.getMemberId()
-        );
+        organizationGateway.ensureOrganizationHasProjectAndMember(command.getOrganizationDetails());
 
         var issue = eventSourcingHandler
                 .getById(command.getIssueId())
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.changeType(
-                command.getOrganizationId(),
-                command.getProjectId(),
-                command.getMemberId(),
-                command.getIssueType()
-        );
+        issue.changeType(command.getIssueType(), command.getOrganizationDetails());
 
         eventSourcingHandler.save(issue);
     }

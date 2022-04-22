@@ -9,6 +9,7 @@ import org.example.issuestracker.issues.command.application.gateway.organization
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import org.example.issuestracker.issues.command.domain.issue.Issue;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
@@ -21,26 +22,20 @@ public class OpenIssueCommandHandler implements CommandHandler<OpenIssueCommand>
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
     public void handle(OpenIssueCommand command) {
-        organizationGateway.ensureOrganizationHasProjectAndMember(
-                command.getOrganizationId(),
-                command.getProjectId(),
-                command.getMemberId()
-        );
+        organizationGateway.ensureOrganizationHasProjectAndMember(command.getOrganizationDetails());
 
         var issue = Issue.open(
                 command.getIssueId(),
-                command.getOrganizationId(),
-                command.getProjectId(),
-                command.getMemberId(),
                 command.getIssueType(),
                 command.getIssueContent(),
-                command.getIssueName()
+                command.getIssueName(),
+                command.getOrganizationDetails()
         );
 
         eventSourcingHandler.save(issue);

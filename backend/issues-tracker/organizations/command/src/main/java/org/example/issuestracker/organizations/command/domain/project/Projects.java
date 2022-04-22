@@ -13,11 +13,6 @@ public class Projects {
         this.projectSet = new HashSet<>();
     }
 
-    /**
-     * Adds project to projects
-     *
-     * @param project to be added
-     */
     public Projects add(Project project) {
         var newProjectSet = new HashSet<>(projectSet);
         newProjectSet.add(project);

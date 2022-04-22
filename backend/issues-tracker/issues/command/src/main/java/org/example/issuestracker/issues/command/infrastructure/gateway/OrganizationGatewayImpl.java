@@ -4,6 +4,7 @@ import org.example.issuestracker.issues.command.application.gateway.organization
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import org.example.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
@@ -17,23 +18,19 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
     private final WebClient organizationClient = WebClient.create("http://localhost:8099/api/v1/organization-management");
 
     /**
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
-     * @throws OrganizationProjectNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationProjectNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
-    public void ensureOrganizationHasProjectAndMember(
-            OrganizationId organizationId,
-            OrganizationProjectId organizationProjectId,
-            OrganizationMemberId organizationMemberId
-    ) {
-        var organization = findOrganizationByIdOrThrow(organizationId);
-        ensureOrganizationHasProject(organization, organizationProjectId);
-        ensureOrganizationHasMember(organization, organizationMemberId);
+    public void ensureOrganizationHasProjectAndMember(IssueOrganizationDetails organizationDetails) {
+        var organization = findOrganizationByIdOrThrow(organizationDetails.organizationId());
+        ensureOrganizationHasProject(organization, organizationDetails.projectId());
+        ensureOrganizationHasMember(organization, organizationDetails.memberId());
     }
 
     /**
-     * @throws OrganizationNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     private DetailsOrganization findOrganizationByIdOrThrow(OrganizationId organizationId) {
         var organization = organizationClient
@@ -54,7 +51,7 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
     }
 
     /**
-     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     private void ensureOrganizationHasProject(DetailsOrganization organization, OrganizationProjectId organizationProjectId) {
         organization
@@ -67,7 +64,7 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
     }
 
     /**
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(OrganizationId, OrganizationProjectId, OrganizationMemberId)}
+     * @throws OrganizationMemberNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     private void ensureOrganizationHasMember(DetailsOrganization organization, OrganizationMemberId organizationMemberId) {
         organization

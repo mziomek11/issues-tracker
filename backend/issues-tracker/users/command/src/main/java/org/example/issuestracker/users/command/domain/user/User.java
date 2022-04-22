@@ -35,7 +35,6 @@ public class User extends AggregateRoot {
     }
 
     /**
-     * @param token that activates user
      * @throws UserActivationTokenMismatchException if user can't be activated with given token
      * @throws UserAlreadyActivatedException if can is already activated
      */

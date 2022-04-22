@@ -36,16 +36,14 @@ public class Issue extends AggregateRoot {
 
     public static Issue open(
             IssueId id,
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId,
             IssueType type,
             IssueContent content,
-            IssueName name
+            IssueName name,
+            IssueOrganizationDetails organizationDetails
     ) {
         var issue = new Issue();
 
-        issue.raiseEvent(issueOpened(id, organizationId, projectId, memberId, type, content, name));
+        issue.raiseEvent(issueOpened(id, type, content, name, organizationDetails));
 
         return issue;
     }
@@ -56,31 +54,20 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Closes issue
-     *
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      */
-    public void close(
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId
-    ) {
+    public void close(IssueOrganizationDetails organizationDetails) {
         ensureIsOpen();
-        raiseEvent(issueClosed(id, organizationId, projectId, memberId));
+        raiseEvent(issueClosed(id, organizationDetails));
     }
 
     /**
-     * Renames issue
-     *
-     * @param newName to be set
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueNameSetException if given name is the same as current name
      */
     public void rename(
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId,
-            IssueName newName
+            IssueName newName,
+            IssueOrganizationDetails organizationDetails
     ) {
         ensureIsOpen();
 
@@ -88,21 +75,16 @@ public class Issue extends AggregateRoot {
             throw new IssueNameSetException(id, name);
         }
 
-        raiseEvent(issueRenamed(id, organizationId, projectId, memberId, newName));
+        raiseEvent(issueRenamed(id, newName, organizationDetails));
     }
 
     /**
-     * Changes issue type
-     *
-     * @param newType to be set
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueTypeSetException if given type is the same as current type
      */
     public void changeType(
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId,
-            IssueType newType
+            IssueType newType,
+            IssueOrganizationDetails organizationDetails
     ) {
         ensureIsOpen();
 
@@ -110,13 +92,10 @@ public class Issue extends AggregateRoot {
             throw new IssueTypeSetException(id, type);
         }
 
-        raiseEvent(issueTypeChanged(id, organizationId, projectId, memberId, newType));
+        raiseEvent(issueTypeChanged(id, newType, organizationDetails));
     }
 
     /**
-     * Changes issue content
-     *
-     * @param newContent to be set
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueContentSetException if given content is the same as current content
      */
@@ -131,9 +110,6 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Adds comment to issue
-     *
-     * @param comment to be added
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
      */
@@ -145,10 +121,6 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Changes content of issues comment
-     *
-     * @param commentId of comment to be changed
-     * @param commentContent to be set
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws CommentNotFoundException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      * @throws CommentContentSetException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
@@ -161,9 +133,6 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Hides issue comment
-     *
-     * @param commentId of comment to be hidden
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
      * @throws CommentHiddenException see {@link Comments#ensureCanHide(CommentId)}
@@ -176,10 +145,6 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Adds vote to the comment
-     *
-     * @param commentId of comment to be hidden
-     * @param vote to be added
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws CommentNotFoundException see {@link Comments#ensureCanVote(CommentId, Vote)}
      * @throws VoteAlreadyExistsException see {@link Comments#ensureCanVote(CommentId, Vote)}
@@ -192,8 +157,6 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Adds vote to the issue
-     *
      * @param vote to be added
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws VoteAlreadyExistsException see {@link Votes#ensureCanAdd(Vote)}
@@ -206,8 +169,6 @@ public class Issue extends AggregateRoot {
     }
 
     /**
-     * Ensures that issue status is {@linkplain IssueStatus#OPENED OPENED}
-     *
      * @throws IssueClosedException if issue status is not {@linkplain IssueStatus#OPENED}
      */
     private void ensureIsOpen() {

@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 
 import java.util.UUID;
 
@@ -18,10 +16,8 @@ import java.util.UUID;
 @Getter
 public class RenameIssueCommand {
     private final IssueId issueId;
-    private final OrganizationId organizationId;
-    private final OrganizationProjectId projectId;
-    private final OrganizationMemberId memberId;
     private final IssueName issueName;
+    private final IssueOrganizationDetails organizationDetails;
 
     public static RenameIssueCommandBuilder builder() {
         return new RenameIssueCommandBuilder();
@@ -33,35 +29,14 @@ public class RenameIssueCommand {
         @NotNull
         private UUID issueId;
 
-        @NotNull
-        private UUID organizationId;
-
-        @NotNull
-        private UUID projectId;
-
-        @NotNull
-        private UUID memberId;
-
         @NotBlank
         private String issueName;
 
+        @NotNull
+        private IssueOrganizationDetails organizationDetails;
+
         public RenameIssueCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
-            return this;
-        }
-
-        public RenameIssueCommandBuilder organizationId(UUID organizationId) {
-            this.organizationId = organizationId;
-            return this;
-        }
-
-        public RenameIssueCommandBuilder projectId(UUID projectId) {
-            this.projectId = projectId;
-            return this;
-        }
-
-        public RenameIssueCommandBuilder memberId(UUID memberId) {
-            this.memberId = memberId;
             return this;
         }
 
@@ -70,14 +45,17 @@ public class RenameIssueCommand {
             return this;
         }
 
+        public RenameIssueCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
+            return this;
+        }
+
         @Override
         protected RenameIssueCommand create() {
             return new RenameIssueCommand(
                     new IssueId(issueId),
-                    new OrganizationId(organizationId),
-                    new OrganizationProjectId(projectId),
-                    new OrganizationMemberId(memberId),
-                    new IssueName(issueName)
+                    new IssueName(issueName),
+                    organizationDetails
             );
         }
     }

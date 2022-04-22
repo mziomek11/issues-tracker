@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.ChangeIssueTypeCommand;
 import org.example.issuestracker.issues.command.application.command.ChangeIssueTypeCommand.ChangeIssueTypeCommandBuilder;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueTypeDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -20,17 +21,13 @@ public class ChangeIssueTypeDtoMapper {
      */
     public static ChangeIssueTypeCommand toCommand(
             UUID issueId,
-            UUID organizationId,
-            UUID projectId,
-            UUID memberId,
+            IssueOrganizationDetails organizationDetails,
             ChangeIssueTypeDto dto
     ) {
         var builder = ChangeIssueTypeCommand
                 .builder()
                 .issueId(issueId)
-                .organizationId(organizationId)
-                .projectId(projectId)
-                .memberId(memberId)
+                .organizationDetails(organizationDetails)
                 .issueType(dto.type());
 
         var validationErrors = builder.validate();

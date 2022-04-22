@@ -9,9 +9,7 @@ import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
 import java.util.UUID;
@@ -20,12 +18,10 @@ import java.util.UUID;
 @Getter
 public class OpenIssueCommand {
     private final IssueId issueId;
-    private final OrganizationId organizationId;
-    private final OrganizationProjectId projectId;
-    private final OrganizationMemberId memberId;
     private final IssueType issueType;
     private final IssueContent issueContent;
     private final IssueName issueName;
+    private final IssueOrganizationDetails organizationDetails;
 
     public static OpenIssueCommandBuilder builder() {
         return new OpenIssueCommandBuilder();
@@ -40,15 +36,6 @@ public class OpenIssueCommand {
         private UUID issueId;
 
         @NotNull
-        private UUID organizationId;
-
-        @NotNull
-        private UUID projectId;
-
-        @NotNull
-        private UUID memberId;
-
-        @NotNull
         private IssueType issueType;
 
         @NotBlank
@@ -57,23 +44,11 @@ public class OpenIssueCommand {
         @NotBlank
         private String issueName;
 
+        @NotNull
+        private IssueOrganizationDetails organizationDetails;
+
         public OpenIssueCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
-            return this;
-        }
-
-        public OpenIssueCommandBuilder organizationId(UUID organizationId) {
-            this.organizationId = organizationId;
-            return this;
-        }
-
-        public OpenIssueCommandBuilder projectId(UUID projectId) {
-            this.projectId = projectId;
-            return this;
-        }
-
-        public OpenIssueCommandBuilder memberId(UUID memberId) {
-            this.memberId = memberId;
             return this;
         }
 
@@ -92,16 +67,19 @@ public class OpenIssueCommand {
             return this;
         }
 
+        public OpenIssueCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
+            return this;
+        }
+
         @Override
         protected OpenIssueCommand create() {
             return new OpenIssueCommand(
                     new IssueId(issueId),
-                    new OrganizationId(organizationId),
-                    new OrganizationProjectId(projectId),
-                    new OrganizationMemberId(memberId),
                     issueType,
                     new IssueContent(issueContent),
-                    new IssueName(issueName)
+                    new IssueName(issueName),
+                    organizationDetails
             );
         }
     }

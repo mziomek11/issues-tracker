@@ -17,10 +17,6 @@ public class Votes {
     }
 
     /**
-     * Adds vote to votes if vote with given voter id does not exist. Otherwise replaces
-     * existing vote with given.
-     *
-     * @param vote to be added
      * @throws VoteAlreadyExistsException see {@link Votes#ensureCanAdd(Vote)}
      */
     public Votes add(Vote vote) {
@@ -37,9 +33,6 @@ public class Votes {
     }
 
     /**
-     * Ensures that vote can be added to the votes
-     *
-     * @param vote to be added
      * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
      */
     public void ensureCanAdd(Vote vote) {
@@ -48,11 +41,6 @@ public class Votes {
         }
     }
 
-    /**
-     * Checks if vote with given voter id and type already exists
-     *
-     * @param vote to be checked
-     */
     private boolean contains(Vote vote) {
         var optionalExistingVote = findVoteByVoterId(vote.voterId());
 

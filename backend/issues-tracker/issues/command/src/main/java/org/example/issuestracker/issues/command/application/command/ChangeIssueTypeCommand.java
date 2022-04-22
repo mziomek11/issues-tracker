@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.cqrs.command.CommandBuilder;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
-import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.shared.domain.valueobject.IssueType;
 
 import java.util.UUID;
@@ -17,10 +15,8 @@ import java.util.UUID;
 @Getter
 public class ChangeIssueTypeCommand {
     private final IssueId issueId;
-    private final OrganizationId organizationId;
-    private final OrganizationProjectId projectId;
-    private final OrganizationMemberId memberId;
     private final IssueType issueType;
+    private final IssueOrganizationDetails organizationDetails;
 
     public static ChangeIssueTypeCommandBuilder builder() {
         return new ChangeIssueTypeCommandBuilder();
@@ -34,34 +30,13 @@ public class ChangeIssueTypeCommand {
         private UUID issueId;
 
         @NotNull
-        private UUID organizationId;
-
-        @NotNull
-        private UUID projectId;
-
-        @NotNull
-        private UUID memberId;
-
-        @NotNull
         private IssueType issueType;
+
+        @NotNull
+        private IssueOrganizationDetails organizationDetails;
 
         public ChangeIssueTypeCommandBuilder issueId(UUID issueId) {
             this.issueId = issueId;
-            return this;
-        }
-
-        public ChangeIssueTypeCommandBuilder organizationId(UUID organizationId) {
-            this.organizationId = organizationId;
-            return this;
-        }
-
-        public ChangeIssueTypeCommandBuilder projectId(UUID projectId) {
-            this.projectId = projectId;
-            return this;
-        }
-
-        public ChangeIssueTypeCommandBuilder memberId(UUID memberId) {
-            this.memberId = memberId;
             return this;
         }
 
@@ -70,14 +45,17 @@ public class ChangeIssueTypeCommand {
             return this;
         }
 
+        public ChangeIssueTypeCommandBuilder organizationDetails(IssueOrganizationDetails organizationDetails) {
+            this.organizationDetails = organizationDetails;
+            return this;
+        }
+
         @Override
         protected ChangeIssueTypeCommand create() {
             return new ChangeIssueTypeCommand(
                     new IssueId(issueId),
-                    new OrganizationId(organizationId),
-                    new OrganizationProjectId(projectId),
-                    new OrganizationMemberId(memberId),
-                    issueType
+                    issueType,
+                    organizationDetails
             );
         }
     }

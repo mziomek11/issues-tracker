@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.OpenIssueCommand;
 import org.example.issuestracker.issues.command.application.command.OpenIssueCommand.OpenIssueCommandBuilder;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.OpenIssueDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -17,17 +18,13 @@ public class OpenIssueDtoMapper {
      */
     public static OpenIssueCommand toCommand(
             UUID issueId,
-            UUID organizationId,
-            UUID projectId,
-            UUID memberId,
+            IssueOrganizationDetails organizationDetails,
             OpenIssueDto dto
     ) {
         var builder = OpenIssueCommand
                 .builder()
                 .issueId(issueId)
-                .organizationId(organizationId)
-                .projectId(projectId)
-                .memberId(memberId)
+                .organizationDetails(organizationDetails)
                 .issueContent(dto.content())
                 .issueName(dto.name())
                 .issueType(dto.type());

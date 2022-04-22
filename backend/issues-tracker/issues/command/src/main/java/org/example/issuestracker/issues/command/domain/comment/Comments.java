@@ -21,9 +21,6 @@ public class Comments {
     }
 
     /**
-     * Adds comment to comments
-     *
-     * @param comment to be added
      * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
      */
     public Comments add(Comment comment) {
@@ -36,9 +33,6 @@ public class Comments {
     }
 
     /**
-     * Ensures that comment can be added to comments
-     *
-     * @param comment to be added
      * @throws CommentWithIdExistsException if comment with given id exists
      */
     public void ensureCanAdd(Comment comment) {
@@ -50,10 +44,6 @@ public class Comments {
     }
 
     /**
-     * Changes content of comment with id to the given one
-     *
-     * @param id of comment that should be updated
-     * @param content to be set
      * @throws CommentContentSetException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      * @throws CommentNotFoundException see {@link Comments#ensureCanChangeContent(CommentId, CommentContent)}
      */
@@ -64,10 +54,6 @@ public class Comments {
     }
 
     /**
-     * Ensures that comment content be changed to the given one
-     *
-     * @param id of comment that should be updated
-     * @param content to be set
      * @throws CommentContentSetException see {@link Comment#ensureCanChangeContent(CommentContent)}
      * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
      */
@@ -78,9 +64,6 @@ public class Comments {
     }
 
     /**
-     * Hides comment with given id
-     *
-     * @param id of comment that should be hidden
      * @throws CommentHiddenException see {@link Comments#ensureCanHide(CommentId)}
      * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
      */
@@ -91,9 +74,6 @@ public class Comments {
     }
 
     /**
-     * Ensures that comment can be hidden
-     *
-     * @param id of comment that should be hidden
      * @throws CommentHiddenException see {@link Comment#ensureCanHide()}
      * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
      */
@@ -104,10 +84,6 @@ public class Comments {
     }
 
     /**
-     * Adds vote to the comment with given id
-     *
-     * @param id of the comment
-     * @param vote to be added
      * @throws CommentNotFoundException see {@link Comments#ensureCanVote(CommentId, Vote)}
      * @throws VoteAlreadyExistsException see {@link Comments#ensureCanVote(CommentId, Vote)}
      */
@@ -118,10 +94,6 @@ public class Comments {
     }
 
     /**
-     * Ensures that vote can be added to the comment with given id
-     *
-     * @param id of the comment
-     * @param vote to be added
      * @throws CommentNotFoundException see {@link Comments#findCommentByIdOrThrow(CommentId)}
      * @throws VoteAlreadyExistsException see {@link Comment#ensureCanVote(Vote)}
      */
@@ -131,13 +103,6 @@ public class Comments {
         comment.ensureCanVote(vote);
     }
 
-    /**
-     * Returns new {@linkplain Comments Comments} with applied mapper function to the
-     * comment with given id
-     *
-     * @param id of the comment
-     * @param mapper to be applied
-     */
     private Comments updateComment(CommentId id, UnaryOperator<Comment> mapper) {
         var oldComment = findCommentByIdOrThrow(id);
         var newComment = mapper.apply(oldComment);
@@ -153,9 +118,6 @@ public class Comments {
     }
 
     /**
-     * Returns comment with given id
-     *
-     * @param id of the comment
      * @throws CommentNotFoundException if comment with given id does not exist
      */
     private Comment findCommentByIdOrThrow(CommentId id) {

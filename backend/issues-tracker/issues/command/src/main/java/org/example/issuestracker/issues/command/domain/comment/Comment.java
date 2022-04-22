@@ -13,8 +13,6 @@ public record Comment(CommentId id, CommentContent content, CommentStatus status
     }
 
     /**
-     * Changes comment status to {@linkplain CommentStatus#HIDDEN HIDDEN}
-     *
      * @throws CommentHiddenException if comment is already hidden
      */
     public Comment hide() {
@@ -24,8 +22,6 @@ public record Comment(CommentId id, CommentContent content, CommentStatus status
     }
 
     /**
-     * Ensures that vote can be hidden
-     *
      * @throws CommentHiddenException if comment is already hidden
      */
     public void ensureCanHide() {
@@ -35,9 +31,6 @@ public record Comment(CommentId id, CommentContent content, CommentStatus status
     }
 
     /**
-     * Changes comment content
-     *
-     * @param newContent to be set
      * @throws CommentContentSetException if comment already has given content
      */
     public Comment changeContent(CommentContent newContent) {
@@ -47,9 +40,6 @@ public record Comment(CommentId id, CommentContent content, CommentStatus status
     }
 
     /**
-     * Ensures that comment content can be changed to the given one
-     *
-     * @param newContent to be set
      * @throws CommentContentSetException if comment already has given content
      */
     public void ensureCanChangeContent(CommentContent newContent) {
@@ -59,9 +49,6 @@ public record Comment(CommentId id, CommentContent content, CommentStatus status
     }
 
     /**
-     * Adds vote to the comment
-     *
-     * @param vote to be added
      * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
      */
     public Comment vote(Vote vote) {
@@ -73,9 +60,6 @@ public record Comment(CommentId id, CommentContent content, CommentStatus status
     }
 
     /**
-     * Ensures that vote can be added to comment
-     *
-     * @param vote to be added
      * @throws VoteAlreadyExistsException if vote with given voter id and type already exists
      */
     public void ensureCanVote(Vote vote) {

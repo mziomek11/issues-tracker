@@ -16,9 +16,6 @@ public class Invitations {
     }
 
     /**
-     * Adds invitation to invitations
-     *
-     * @param invitation to be added
      * @throws InvitationAlreadyPresentException see {@link #ensureCanAdd(Invitation)}
      */
     public Invitations add(Invitation invitation) {
@@ -31,9 +28,6 @@ public class Invitations {
     }
 
     /**
-     * Ensures invitation can be added to invitations
-     *
-     * @param invitation to be added
      * @throws InvitationAlreadyPresentException if invitation is already present
      */
     public void ensureCanAdd(Invitation invitation) {
@@ -43,9 +37,6 @@ public class Invitations {
     }
 
     /**
-     * Removes invitation from invitations
-     *
-     * @param invitation to be removed
      * @throws InvitationNotFoundException see {@link #ensureCanRemove(Invitation)}
      */
     public Invitations remove(Invitation invitation) {
@@ -58,9 +49,6 @@ public class Invitations {
     }
 
     /**
-     * Ensures invitation can be removed from invitations
-     *
-     * @param invitation to be removed
      * @throws InvitationNotFoundException if invitation is not present in invitations
      */
     public void ensureCanRemove(Invitation invitation) {

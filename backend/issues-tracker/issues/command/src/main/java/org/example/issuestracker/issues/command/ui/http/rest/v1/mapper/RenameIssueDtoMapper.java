@@ -2,6 +2,7 @@ package org.example.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import org.example.issuestracker.issues.command.application.command.RenameIssueCommand;
 import org.example.issuestracker.issues.command.application.command.RenameIssueCommand.RenameIssueCommandBuilder;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.ui.http.rest.v1.dto.RenameIssueDto;
 import org.example.rest.v1.RestValidationErrorsMapper;
 import org.example.rest.v1.RestValidationException;
@@ -20,17 +21,13 @@ public class RenameIssueDtoMapper {
      */
     public static RenameIssueCommand toCommand(
             UUID issueId,
-            UUID organizationId,
-            UUID projectId,
-            UUID memberId,
+            IssueOrganizationDetails organizationDetails,
             RenameIssueDto dto
     ) {
         var builder = RenameIssueCommand
                 .builder()
                 .issueId(issueId)
-                .organizationId(organizationId)
-                .projectId(projectId)
-                .memberId(memberId)
+                .organizationDetails(organizationDetails)
                 .issueName(dto.name());
 
         var validationErrors = builder.validate();

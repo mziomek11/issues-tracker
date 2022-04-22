@@ -40,10 +40,6 @@ public class Organization extends AggregateRoot {
     }
 
     /**
-     * Invites member to organization
-     *
-     * @param owner of current organization
-     * @param invitation to be saved
      * @throws InvitationAlreadyPresentException see {@link Invitations#ensureCanAdd(Invitation)}
      * @throws MemberAlreadyPresentException see {@link Members#ensureCanAdd(Member)}
      * @throws OrganizationOwnerNotValidException see {@link #ensureOrganizationOwnerIsValid(OrganizationOwner)}
@@ -57,9 +53,6 @@ public class Organization extends AggregateRoot {
     }
 
     /**
-     * Accepts invitation
-     *
-     * @param invitation to be accepted
      * @throws InvitationNotFoundException see {@link Invitations#ensureCanRemove(Invitation)}
      */
     public void acceptInvitation(Invitation invitation) {
@@ -69,10 +62,6 @@ public class Organization extends AggregateRoot {
     }
 
     /**
-     * Adds project to organization
-     *
-     * @param owner of current organization
-     * @param project to be added
      * @throws OrganizationOwnerNotValidException see {@link #ensureOrganizationOwnerIsValid(OrganizationOwner)}
      */
     public void addProject(OrganizationOwner owner, Project project) {
@@ -82,9 +71,6 @@ public class Organization extends AggregateRoot {
     }
 
     /**
-     * Ensures that given member is organization owner
-     *
-     * @param owner to be checked
      * @throws OrganizationOwnerNotValidException if owner is not owning current organization
      */
     private void ensureOrganizationOwnerIsValid(OrganizationOwner owner) {

@@ -5,6 +5,7 @@ import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
+import org.example.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationProjectId;
@@ -16,19 +17,17 @@ import org.example.issuestracker.shared.domain.valueobject.VoteType;
 public class EventFactory {
     public static IssueOpenedEvent issueOpened(
             IssueId id,
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId,
             IssueType type,
             IssueContent content,
-            IssueName name
+            IssueName name,
+            IssueOrganizationDetails organizationDetails
     ) {
         return IssueOpenedEvent
                 .builder()
                 .issueId(id.getValue())
-                .organizationId(organizationId.getValue())
-                .projectId(projectId.getValue())
-                .memberId(memberId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .issueType(type)
                 .issueName(name.text())
                 .issueContent(content.text())
@@ -37,49 +36,44 @@ public class EventFactory {
 
     public static IssueClosedEvent issueClosed(
             IssueId id,
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId
+            IssueOrganizationDetails organizationDetails
     ) {
         return IssueClosedEvent
                 .builder()
                 .issueId(id.getValue())
-                .organizationId(organizationId.getValue())
-                .projectId(projectId.getValue())
-                .memberId(memberId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .build();
     }
 
     public static IssueRenamedEvent issueRenamed(
             IssueId id,
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId,
-            IssueName name
+            IssueName name,
+            IssueOrganizationDetails organizationDetails
     ) {
         return IssueRenamedEvent
                 .builder()
                 .issueId(id.getValue())
-                .organizationId(organizationId.getValue())
-                .projectId(projectId.getValue())
-                .memberId(memberId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .issueName(name.text())
                 .build();
     }
 
     public static IssueTypeChangedEvent issueTypeChanged(
             IssueId id,
-            OrganizationId organizationId,
-            OrganizationProjectId projectId,
-            OrganizationMemberId memberId,
-            IssueType type
+            IssueType type,
+            IssueOrganizationDetails organizationDetails
+
     ) {
         return IssueTypeChangedEvent
                 .builder()
                 .issueId(id.getValue())
-                .organizationId(organizationId.getValue())
-                .projectId(projectId.getValue())
-                .memberId(memberId.getValue())
+                .organizationId(organizationDetails.organizationId().getValue())
+                .projectId(organizationDetails.projectId().getValue())
+                .memberId(organizationDetails.memberId().getValue())
                 .issueType(type)
                 .build();
     }
