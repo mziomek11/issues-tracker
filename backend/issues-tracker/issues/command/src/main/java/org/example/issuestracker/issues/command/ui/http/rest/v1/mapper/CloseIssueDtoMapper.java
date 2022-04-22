@@ -17,10 +17,18 @@ public class CloseIssueDtoMapper {
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static CloseIssueCommand toCommand(UUID issueId) {
+    public static CloseIssueCommand toCommand(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID memberId
+    ) {
         var builder = CloseIssueCommand
                 .builder()
-                .issueId(issueId);
+                .issueId(issueId)
+                .organizationId(organizationId)
+                .projectId(projectId)
+                .memberId(memberId);
 
         var validationErrors = builder.validate();
         if (!validationErrors.isEmpty()) {

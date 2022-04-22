@@ -3,7 +3,6 @@ package org.example.issuestracker.issues.command.domain;
 import org.example.issuestracker.issues.command.domain.comment.CommentContent;
 import org.example.issuestracker.issues.command.domain.comment.CommentId;
 import org.example.issuestracker.issues.command.domain.issue.IssueContent;
-import org.example.issuestracker.issues.command.domain.issue.IssueCreatorId;
 import org.example.issuestracker.issues.command.domain.issue.IssueId;
 import org.example.issuestracker.issues.command.domain.issue.IssueName;
 import org.example.issuestracker.issues.command.domain.organization.OrganizationId;
@@ -18,7 +17,7 @@ public class EventFactory {
     public static IssueOpenedEvent issueOpened(
             IssueId id,
             OrganizationId organizationId,
-            OrganizationProjectId organizationProjectId,
+            OrganizationProjectId projectId,
             OrganizationMemberId memberId,
             IssueType type,
             IssueContent content,
@@ -28,7 +27,7 @@ public class EventFactory {
                 .builder()
                 .issueId(id.getValue())
                 .organizationId(organizationId.getValue())
-                .projectId(organizationProjectId.getValue())
+                .projectId(projectId.getValue())
                 .memberId(memberId.getValue())
                 .issueType(type)
                 .issueName(name.text())
@@ -36,10 +35,18 @@ public class EventFactory {
                 .build();
     }
 
-    public static IssueClosedEvent issueClosed(IssueId id) {
+    public static IssueClosedEvent issueClosed(
+            IssueId id,
+            OrganizationId organizationId,
+            OrganizationProjectId projectId,
+            OrganizationMemberId memberId
+    ) {
         return IssueClosedEvent
                 .builder()
                 .issueId(id.getValue())
+                .organizationId(organizationId.getValue())
+                .projectId(projectId.getValue())
+                .memberId(memberId.getValue())
                 .build();
     }
 

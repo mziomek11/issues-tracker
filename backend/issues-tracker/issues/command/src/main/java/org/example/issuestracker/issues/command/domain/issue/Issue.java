@@ -60,9 +60,13 @@ public class Issue extends AggregateRoot {
      *
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      */
-    public void close() {
+    public void close(
+            OrganizationId organizationId,
+            OrganizationProjectId projectId,
+            OrganizationMemberId memberId
+    ) {
         ensureIsOpen();
-        raiseEvent(issueClosed(id));
+        raiseEvent(issueClosed(id, organizationId, projectId, memberId));
     }
 
     /**

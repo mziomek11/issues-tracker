@@ -60,7 +60,10 @@ class IssueRestController {
     /**
      * @throws IssueClosedException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
      * @throws IssueNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
-     * @throws RestValidationException see {@link CloseIssueDtoMapper#toCommand(UUID)}
+     * @throws OrganizationMemberNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
+     * @throws OrganizationNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
+     * @throws RestValidationException see {@link CloseIssueDtoMapper#toCommand(UUID, UUID, UUID, UUID)}
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}")
     public ResponseEntity closeIssue(
@@ -68,7 +71,13 @@ class IssueRestController {
             @PathVariable UUID projectId,
             @PathVariable UUID issueId
     ) {
-        var closeIssueCommand = CloseIssueDtoMapper.toCommand(issueId);
+        // @TODO pass user id from header
+        var closeIssueCommand = CloseIssueDtoMapper.toCommand(
+                issueId,
+                organizationId,
+                projectId,
+                UUID.randomUUID()
+        );
 
         commandDispatcher.dispatch(closeIssueCommand);
 
