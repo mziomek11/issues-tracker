@@ -18,10 +18,19 @@ public class ChangeIssueTypeDtoMapper {
     /**
      * @throws RestValidationException if dto is not valid
      */
-    public static ChangeIssueTypeCommand toCommand(UUID issueId, ChangeIssueTypeDto dto) {
+    public static ChangeIssueTypeCommand toCommand(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID memberId,
+            ChangeIssueTypeDto dto
+    ) {
         var builder = ChangeIssueTypeCommand
                 .builder()
                 .issueId(issueId)
+                .organizationId(organizationId)
+                .projectId(projectId)
+                .memberId(memberId)
                 .issueType(dto.type());
 
         var validationErrors = builder.validate();

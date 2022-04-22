@@ -98,14 +98,19 @@ public class Issue extends AggregateRoot {
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueTypeSetException if given type is the same as current type
      */
-    public void changeType(IssueType newType) {
+    public void changeType(
+            OrganizationId organizationId,
+            OrganizationProjectId projectId,
+            OrganizationMemberId memberId,
+            IssueType newType
+    ) {
         ensureIsOpen();
 
         if (type.equals(newType)) {
             throw new IssueTypeSetException(id, type);
         }
 
-        raiseEvent(issueTypeChanged(id, newType));
+        raiseEvent(issueTypeChanged(id, organizationId, projectId, memberId, newType));
     }
 
     /**

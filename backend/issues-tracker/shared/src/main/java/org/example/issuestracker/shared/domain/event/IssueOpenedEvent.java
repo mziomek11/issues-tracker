@@ -35,12 +35,12 @@ public class IssueOpenedEvent extends BaseEvent {
     ) {
         super(issueId);
 
-        this.issueType = issueType;
-        this.issueContent = issueContent;
-        this.issueName = issueName;
         this.organizationId = organizationId;
         this.projectId =projectId;
         this.memberId = memberId;
+        this.issueType = issueType;
+        this.issueContent = issueContent;
+        this.issueName = issueName;
     }
 
     public static class IssueOpenedEventBuilder

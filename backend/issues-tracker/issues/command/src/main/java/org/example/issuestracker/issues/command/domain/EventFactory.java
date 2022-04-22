@@ -53,24 +53,33 @@ public class EventFactory {
     public static IssueRenamedEvent issueRenamed(
             IssueId id,
             OrganizationId organizationId,
-            OrganizationProjectId organizationProjectId,
-            OrganizationMemberId organizationMemberId,
+            OrganizationProjectId projectId,
+            OrganizationMemberId memberId,
             IssueName name
     ) {
         return IssueRenamedEvent
                 .builder()
                 .issueId(id.getValue())
                 .organizationId(organizationId.getValue())
-                .projectId(organizationProjectId.getValue())
-                .memberId(organizationMemberId.getValue())
+                .projectId(projectId.getValue())
+                .memberId(memberId.getValue())
                 .issueName(name.text())
                 .build();
     }
 
-    public static IssueTypeChangedEvent issueTypeChanged(IssueId id, IssueType type) {
+    public static IssueTypeChangedEvent issueTypeChanged(
+            IssueId id,
+            OrganizationId organizationId,
+            OrganizationProjectId projectId,
+            OrganizationMemberId memberId,
+            IssueType type
+    ) {
         return IssueTypeChangedEvent
                 .builder()
                 .issueId(id.getValue())
+                .organizationId(organizationId.getValue())
+                .projectId(projectId.getValue())
+                .memberId(memberId.getValue())
                 .issueType(type)
                 .build();
     }

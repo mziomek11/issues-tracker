@@ -12,15 +12,27 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 public class IssueTypeChangedEvent extends BaseEvent {
+    private UUID organizationId;
+    private UUID projectId;
+    private UUID memberId;
     private IssueType issueType;
 
     public static IssueTypeChangedEventBuilder builder() {
         return new IssueTypeChangedEventBuilder();
     }
 
-    private IssueTypeChangedEvent(UUID issueId, IssueType issueType) {
+    private IssueTypeChangedEvent(
+            UUID issueId,
+            UUID organizationId,
+            UUID projectId,
+            UUID memberId,
+            IssueType issueType
+    ) {
         super(issueId);
 
+        this.organizationId = organizationId;
+        this.projectId =projectId;
+        this.memberId = memberId;
         this.issueType = issueType;
     }
 
@@ -30,10 +42,34 @@ public class IssueTypeChangedEvent extends BaseEvent {
         private UUID issueId;
 
         @NotNull
+        private UUID organizationId;
+
+        @NotNull
+        private UUID projectId;
+
+        @NotNull
+        private UUID memberId;
+
+        @NotNull
         private IssueType issueType;
 
         public IssueTypeChangedEventBuilder issueId(UUID issueId) {
             this.issueId = issueId;
+            return this;
+        }
+
+        public IssueTypeChangedEventBuilder organizationId(UUID organizationId) {
+            this.organizationId = organizationId;
+            return this;
+        }
+
+        public IssueTypeChangedEventBuilder projectId(UUID projectId) {
+            this.projectId = projectId;
+            return this;
+        }
+
+        public IssueTypeChangedEventBuilder memberId(UUID memberId) {
+            this.memberId = memberId;
             return this;
         }
 
@@ -46,6 +82,9 @@ public class IssueTypeChangedEvent extends BaseEvent {
         protected IssueTypeChangedEvent create() {
             return new IssueTypeChangedEvent(
                     issueId,
+                    organizationId,
+                    projectId,
+                    memberId,
                     issueType
             );
         }

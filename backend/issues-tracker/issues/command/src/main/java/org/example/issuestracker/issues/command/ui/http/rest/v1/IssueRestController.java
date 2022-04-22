@@ -122,7 +122,10 @@ class IssueRestController {
      * @throws IssueClosedException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws IssueNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws IssueTypeSetException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
-     * @throws RestValidationException see {@link ChangeIssueTypeDtoMapper#toCommand(UUID, ChangeIssueTypeDto)}
+     * @throws OrganizationMemberNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
+     * @throws OrganizationNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
+     * @throws OrganizationProjectNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
+     * @throws RestValidationException see {@link ChangeIssueTypeDtoMapper#toCommand(UUID, UUID, UUID, UUID, ChangeIssueTypeDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/type")
     public ResponseEntity changeIssueType(
@@ -131,7 +134,14 @@ class IssueRestController {
             @PathVariable UUID issueId,
             @RequestBody ChangeIssueTypeDto changeIssueTypeDto
     ) {
-        var changeIssueTypeCommand = ChangeIssueTypeDtoMapper.toCommand(issueId, changeIssueTypeDto);
+        // @TODO pass user id from header
+        var changeIssueTypeCommand = ChangeIssueTypeDtoMapper.toCommand(
+                issueId,
+                organizationId,
+                projectId,
+                UUID.randomUUID(),
+                changeIssueTypeDto
+        );
 
         commandDispatcher.dispatch(changeIssueTypeCommand);
 
