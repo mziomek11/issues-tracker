@@ -1,27 +1,83 @@
 version: "3.4"
 
 services:
+  api-gateway:
+    build: ./backend/issues-tracker/apigateway
+    command: sh entrypoint.sh
+    volumes:
+      - ./backend/issues-tracker/apigateway:/usr/src/app
+  discovery:
+    build: ./backend/issues-tracker/discovery
+    command: sh entrypoint.sh
+    volumes:
+      - ./backend/issues-tracker/discovery:/usr/src/app
+  issues-command:
+    build: ./backend/issues-tracker/issues/command
+    depends_on:
+      - issues-command-mongo
+      - kafka
+    restart: always
   issues-command-mongo:
-    image: mongo:latest
-    ports:
-      - 27017:27017
+    image: mongo:5.0.7
+    restart: always
+  issues-query:
+    build: ./backend/issues-tracker/issues/query
+    depends_on:
+      - issues-command-mongo
+      - kafka
+    restart: always
+  issues-query-mongo:
+    image: mongo:5.0.7
+    restart: always
+  kafka:
+    depends_on:
+      - zookeeper
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    image: bitnami/kafka
+    restart: always
+  organizations-command:
+    build: ./backend/issues-tracker/organizations/command
+    depends_on:
+      - organizations-command-mongo
+      - kafka
+    restart: always
+  organizations-command-mongo:
+    image: mongo:5.0.7
+    restart: always
+  organizations-query:
+    build: ./backend/issues-tracker/organizations/query
+    depends_on:
+      - organizations-command-mongo
+      - kafka
+    restart: always
+  organizations-query-mongo:
+    image: mongo:5.0.7
+    restart: always
+  users-command:
+    build: ./backend/issues-tracker/users/command
+    depends_on:
+      - users-command-mongo
+      - kafka
+    restart: always
+  users-command-mongo:
+    image: mongo:5.0.7
+    restart: always
+  users-query:
+    build: ./backend/issues-tracker/users/query
+    depends_on:
+      - users-command-mongo
+      - kafka
+    restart: always
+  users-query-mongo:
+    image: mongo:5.0.7
     restart: always
   zookeeper:
     image: bitnami/zookeeper
-    restart: always
-    ports:
-      - "2181:2181"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-  kafka:
-    image: bitnami/kafka
-    ports:
-      - "9092:9092"
     restart: always
-    environment:
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
-    depends_on:
-      - zookeeper
+
