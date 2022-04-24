@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>org.example.issuestracker</groupId>
+	<groupId>com.mateuszziomek.issuestracker</groupId>
 	<artifactId>apigateway</artifactId>
 	<version>1.0.0</version>
 

@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>org.example.issuestracker</groupId>
+	<groupId>com.mateuszziomek.issuestracker</groupId>
 	<artifactId>organizations.query</artifactId>
 	<version>1.0.0</version>
 
@@ -18,17 +18,17 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.example</groupId>
+			<groupId>com.mateuszziomek</groupId>
 			<artifactId>cqrs</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.example</groupId>
+			<groupId>com.mateuszziomek</groupId>
 			<artifactId>rest</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.example.issuestracker</groupId>
+			<groupId>com.mateuszziomek.issuestracker</groupId>
 			<artifactId>shared</artifactId>
 			<version>1.0.0</version>
 		</dependency>
