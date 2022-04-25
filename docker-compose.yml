@@ -19,6 +19,7 @@ services:
       - SERVICE_ORGANIZATIONS_COMMAND_NAME=organizations-command
       - SERVICE_ORGANIZATIONS_QUERY_NAME=organizations-query
       - SERVICE_USERS_COMMAND_NAME=users-command
+      - SERVICE_USERS_QUERY_NAME=users-query
     ports:
       - "80:80"
     volumes:
@@ -115,8 +116,8 @@ services:
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
-      - organizations-command-mongo
       - kafka
+      - organizations-command-mongo
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=organizations/command
@@ -144,8 +145,8 @@ services:
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
-      - organizations-query-mongo
       - kafka
+      - organizations-query-mongo
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=organizations/query
@@ -173,8 +174,8 @@ services:
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
-      - users-command-mongo
       - kafka
+      - users-command-mongo
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=users/command
@@ -190,6 +191,35 @@ services:
   users-command-mongo:
     environment:
       - MONGO_INITDB_DATABASE=users-command
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_ROOT_USERNAME=root
+    image: mongo:5.0.7
+  users-query:
+    build:
+      args:
+        - MODULE_NAME=users/query
+      context: ./backend
+      dockerfile: ./issues-tracker/users/query/Dockerfile
+      target: dev
+    command: sh issues-tracker/entrypoint.sh
+    depends_on:
+      - kafka
+      - users-query-mongo
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MODULE_NAME=users/query
+      - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
+      - SERVICE_USERS_QUERY_MONGO_DATABASE=users-query
+      - SERVICE_USERS_QUERY_MONGO_HOST=users-query-mongo
+      - SERVICE_USERS_QUERY_MONGO_PASSWORD=pass
+      - SERVICE_USERS_QUERY_MONGO_PORT=27017
+      - SERVICE_USERS_QUERY_MONGO_USERNAME=root
+      - SERVICE_USERS_QUERY_NAME=users-query
+    volumes:
+      - ./backend:/usr/src/app
+  users-query-mongo:
+    environment:
+      - MONGO_INITDB_DATABASE=users-query
       - MONGO_INITDB_ROOT_PASSWORD=pass
       - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7
