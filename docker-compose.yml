@@ -55,19 +55,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=issues/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_ISSUES_COMMAND_MONGO_DATABASE=issues-command
       - SERVICE_ISSUES_COMMAND_MONGO_HOST=issues-command-mongo
-      - SERVICE_ISSUES_COMMAND_MONGO_PASSWORD=pass
-      - SERVICE_ISSUES_COMMAND_MONGO_PORT=27017
-      - SERVICE_ISSUES_COMMAND_MONGO_USERNAME=root
       - SERVICE_ISSUES_COMMAND_NAME=issues-command
     volumes:
       - ./backend:/usr/src/app
   issues-command-mongo:
-    environment:
-      - MONGO_INITDB_DATABASE=issues-command
-      - MONGO_INITDB_ROOT_PASSWORD=pass
-      - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7
   issues-query:
     build:
@@ -84,19 +76,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=issues/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_ISSUES_QUERY_MONGO_DATABASE=issues-query
       - SERVICE_ISSUES_QUERY_MONGO_HOST=issues-query-mongo
-      - SERVICE_ISSUES_QUERY_MONGO_PASSWORD=pass
-      - SERVICE_ISSUES_QUERY_MONGO_PORT=27017
-      - SERVICE_ISSUES_QUERY_MONGO_USERNAME=root
       - SERVICE_ISSUES_QUERY_NAME=issues-query
     volumes:
       - ./backend:/usr/src/app
   issues-query-mongo:
-    environment:
-      - MONGO_INITDB_DATABASE=issues-query
-      - MONGO_INITDB_ROOT_PASSWORD=pass
-      - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7
   kafka:
     depends_on:
@@ -122,19 +106,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=organizations/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_ORGANIZATIONS_COMMAND_MONGO_DATABASE=organizations-command
       - SERVICE_ORGANIZATIONS_COMMAND_MONGO_HOST=organizations-command-mongo
-      - SERVICE_ORGANIZATIONS_COMMAND_MONGO_PASSWORD=pass
-      - SERVICE_ORGANIZATIONS_COMMAND_MONGO_PORT=27017
-      - SERVICE_ORGANIZATIONS_COMMAND_MONGO_USERNAME=root
       - SERVICE_ORGANIZATIONS_COMMAND_NAME=organizations-command
     volumes:
       - ./backend:/usr/src/app
   organizations-command-mongo:
-    environment:
-      - MONGO_INITDB_DATABASE=organizations-command
-      - MONGO_INITDB_ROOT_PASSWORD=pass
-      - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7
   organizations-query:
     build:
@@ -151,19 +127,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=organizations/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_ORGANIZATIONS_QUERY_MONGO_DATABASE=organizations-query
       - SERVICE_ORGANIZATIONS_QUERY_MONGO_HOST=organizations-query-mongo
-      - SERVICE_ORGANIZATIONS_QUERY_MONGO_PASSWORD=pass
-      - SERVICE_ORGANIZATIONS_QUERY_MONGO_PORT=27017
-      - SERVICE_ORGANIZATIONS_QUERY_MONGO_USERNAME=root
       - SERVICE_ORGANIZATIONS_QUERY_NAME=organizations-query
     volumes:
       - ./backend:/usr/src/app
   organizations-query-mongo:
-    environment:
-      - MONGO_INITDB_DATABASE=organizations-query
-      - MONGO_INITDB_ROOT_PASSWORD=pass
-      - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7
   users-command:
     build:
@@ -180,19 +148,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=users/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_USERS_COMMAND_MONGO_DATABASE=users-command
       - SERVICE_USERS_COMMAND_MONGO_HOST=users-command-mongo
-      - SERVICE_USERS_COMMAND_MONGO_PASSWORD=pass
-      - SERVICE_USERS_COMMAND_MONGO_PORT=27017
-      - SERVICE_USERS_COMMAND_MONGO_USERNAME=root
       - SERVICE_USERS_COMMAND_NAME=users-command
     volumes:
       - ./backend:/usr/src/app
   users-command-mongo:
-    environment:
-      - MONGO_INITDB_DATABASE=users-command
-      - MONGO_INITDB_ROOT_PASSWORD=pass
-      - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7
   users-query:
     build:
@@ -209,19 +169,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=users/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_USERS_QUERY_MONGO_DATABASE=users-query
       - SERVICE_USERS_QUERY_MONGO_HOST=users-query-mongo
-      - SERVICE_USERS_QUERY_MONGO_PASSWORD=pass
-      - SERVICE_USERS_QUERY_MONGO_PORT=27017
-      - SERVICE_USERS_QUERY_MONGO_USERNAME=root
       - SERVICE_USERS_QUERY_NAME=users-query
     volumes:
       - ./backend:/usr/src/app
   users-query-mongo:
-    environment:
-      - MONGO_INITDB_DATABASE=users-query
-      - MONGO_INITDB_ROOT_PASSWORD=pass
-      - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7
   zookeeper:
     environment:
