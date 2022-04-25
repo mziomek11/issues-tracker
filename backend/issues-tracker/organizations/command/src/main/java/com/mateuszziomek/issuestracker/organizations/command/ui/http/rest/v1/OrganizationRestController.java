@@ -105,7 +105,7 @@ public class OrganizationRestController {
      * @throws OrganizationOwnerNotValidException see {@link CreateOrganizationProjectCommandHandler#handle(CreateOrganizationProjectCommand)}
      * @throws RestValidationException see {@link CreateOrganizationProjectDtoMapper#toCommand(UUID, UUID, UUID, CreateOrganizationProjectDto)}
      */
-    @PostMapping("/organizations/{organizationId}/projects}")
+    @PostMapping("/organizations/{organizationId}/projects")
     public ResponseEntity<UUID> createOrganizationProject(
             @PathVariable UUID organizationId,
             @RequestBody CreateOrganizationProjectDto createOrganizationProjectDto
