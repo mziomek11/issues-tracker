@@ -17,6 +17,8 @@
     <modules>
         <module>../cqrs</module>
         <module>../rest</module>
+        <module>apigateway</module>
+        <module>discovery</module>
         <module>issues/command</module>
         <module>issues/query</module>
         <module>organizations/command</module>

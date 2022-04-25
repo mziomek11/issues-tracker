@@ -16,7 +16,7 @@ public class ApiGatewayRoutingConfiguration {
                         .and()
                         .method(HttpMethod.GET)
                         .negate()
-                        .uri("lb://ISSUES-COMMAND")
+                        .uri("lb://" + System.getenv("SERVICE_ISSUES_COMMAND_NAME").toUpperCase())
                 )
                 .build();
     }

@@ -1,27 +1,79 @@
 version: "3.4"
 
 services:
-  issues-command-mongo:
-    image: mongo:latest
-    ports:
-      - 27017:27017
-    restart: always
-  zookeeper:
-    image: bitnami/zookeeper
-    restart: always
-    ports:
-      - "2181:2181"
+  apigateway:
+    build:
+      args:
+        - MODULE_NAME=apigateway
+      context: ./backend
+      dockerfile: ./issues-tracker/apigateway/Dockerfile
+      target: dev
+    command: sh issues-tracker/entrypoint.sh
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-  kafka:
-    image: bitnami/kafka
+      - MODULE_NAME=apigateway
+      - SERVICE_APIGATEWAY_NAME=apigateway
+      - SERVICE_APIGATEWAY_PORT=80
+      - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
+      - SERVICE_ISSUES_COMMAND_NAME=issues-command
     ports:
-      - "9092:9092"
-    restart: always
+      - "80:80"
+    volumes:
+      - ./backend:/usr/src/app
+  discovery:
+    build:
+      args:
+        - MODULE_NAME=discovery
+      context: ./backend
+      dockerfile: ./issues-tracker/discovery/Dockerfile
+      target: dev
+    command: sh issues-tracker/entrypoint.sh
+    environment:
+      - MODULE_NAME=discovery
+      - SERVICE_DISCOVERY_PORT=8761
+      - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
+    ports:
+      - "8761:8761"
+    volumes:
+      - ./backend:/usr/src/app
+  issues-command:
+    build:
+      args:
+        - MODULE_NAME=issues/command
+      context: ./backend
+      dockerfile: ./issues-tracker/issues/command/Dockerfile
+      target: dev
+    command: sh issues-tracker/entrypoint.sh
+    depends_on:
+      - issues-command-mongo
+      - kafka
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MODULE_NAME=issues/command
+      - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
+      - SERVICE_ISSUES_COMMAND_MONGO_DATABASE=issues-command
+      - SERVICE_ISSUES_COMMAND_MONGO_HOST=issues-command-mongo
+      - SERVICE_ISSUES_COMMAND_MONGO_PASSWORD=pass
+      - SERVICE_ISSUES_COMMAND_MONGO_PORT=27017
+      - SERVICE_ISSUES_COMMAND_MONGO_USERNAME=root
+      - SERVICE_ISSUES_COMMAND_NAME=issues-command
+    volumes:
+      - ./backend:/usr/src/app
+  issues-command-mongo:
+    environment:
+      - MONGO_INITDB_DATABASE=issues-command
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_ROOT_USERNAME=root
+    image: mongo:latest
+  kafka:
+    depends_on:
+      - zookeeper
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
-    depends_on:
-      - zookeeper
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+    image: bitnami/kafka
+  zookeeper:
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    image: bitnami/zookeeper
