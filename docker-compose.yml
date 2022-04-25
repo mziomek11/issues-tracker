@@ -15,6 +15,7 @@ services:
       - SERVICE_APIGATEWAY_PORT=80
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ISSUES_COMMAND_NAME=issues-command
+      - SERVICE_ISSUES_QUERY_NAME=issues-query
     ports:
       - "80:80"
     volumes:
@@ -63,7 +64,36 @@ services:
       - MONGO_INITDB_DATABASE=issues-command
       - MONGO_INITDB_ROOT_PASSWORD=pass
       - MONGO_INITDB_ROOT_USERNAME=root
-    image: mongo:latest
+    image: mongo:5.0.7
+  issues-query:
+    build:
+      args:
+        - MODULE_NAME=issues/query
+      context: ./backend
+      dockerfile: ./issues-tracker/issues/query/Dockerfile
+      target: dev
+    command: sh issues-tracker/entrypoint.sh
+    depends_on:
+      - issues-query-mongo
+      - kafka
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MODULE_NAME=issues/query
+      - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
+      - SERVICE_ISSUES_QUERY_MONGO_DATABASE=issues-query
+      - SERVICE_ISSUES_QUERY_MONGO_HOST=issues-query-mongo
+      - SERVICE_ISSUES_QUERY_MONGO_PASSWORD=pass
+      - SERVICE_ISSUES_QUERY_MONGO_PORT=27017
+      - SERVICE_ISSUES_QUERY_MONGO_USERNAME=root
+      - SERVICE_ISSUES_QUERY_NAME=issues-query
+    volumes:
+      - ./backend:/usr/src/app
+  issues-query-mongo:
+    environment:
+      - MONGO_INITDB_DATABASE=issues-query
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_ROOT_USERNAME=root
+    image: mongo:5.0.7
   kafka:
     depends_on:
       - zookeeper

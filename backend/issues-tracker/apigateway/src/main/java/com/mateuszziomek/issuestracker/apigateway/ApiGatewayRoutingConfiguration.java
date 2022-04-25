@@ -12,11 +12,16 @@ public class ApiGatewayRoutingConfiguration {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder
                 .routes()
-                .route(r -> r.path("/api/v1/issues-management/**")
+                .route(r -> r.path("/api/v1/issue-management/**")
                         .and()
                         .method(HttpMethod.GET)
                         .negate()
                         .uri("lb://" + System.getenv("SERVICE_ISSUES_COMMAND_NAME").toUpperCase())
+                )
+                .route(r -> r.path("/api/v1/issue-management/**")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .uri("lb://" + System.getenv("SERVICE_ISSUES_QUERY_NAME").toUpperCase())
                 )
                 .build();
     }
