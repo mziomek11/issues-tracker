@@ -1,0 +1,8 @@
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+  instance:
+    prefer-ip-address: true
+server:
+  port: ${SERVICE_DISCOVERY_PORT}

@@ -1,0 +1,25 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: ${SERVICE_DISCOVERY_ZONE}
+  instance:
+    instance-id: ${spring.application.name}:${instanceId:${random.value}}
+server:
+  port: 0
+spring:
+  application:
+    name: ${SERVICE_USERS_QUERY_NAME}
+  data:
+    mongodb:
+      host: ${SERVICE_USERS_QUERY_MONGO_HOST}
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      group-id: users-query
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.mateuszziomek.issuestracker.*
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

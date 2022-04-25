@@ -1,0 +1,10 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: ${SERVICE_DISCOVERY_ZONE}
+server:
+  application:
+    name: ${SERVICE_APIGATEWAY_NAME}
+spring:
+  application:
+    name: ${SERVICE_APIGATEWAY_NAME}

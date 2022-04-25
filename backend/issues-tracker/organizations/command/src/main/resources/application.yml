@@ -1,0 +1,19 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: ${SERVICE_DISCOVERY_ZONE}
+  instance:
+    instance-id: ${spring.application.name}:${instanceId:${random.value}}
+server:
+  port: 0
+spring:
+  application:
+    name: ${SERVICE_ORGANIZATIONS_COMMAND_NAME}
+  data:
+    mongodb:
+      host: ${SERVICE_ORGANIZATIONS_COMMAND_MONGO_HOST}
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
