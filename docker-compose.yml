@@ -18,6 +18,7 @@ services:
       - SERVICE_ISSUES_QUERY_NAME=issues-query
       - SERVICE_ORGANIZATIONS_COMMAND_NAME=organizations-command
       - SERVICE_ORGANIZATIONS_QUERY_NAME=organizations-query
+      - SERVICE_USERS_COMMAND_NAME=users-command
     ports:
       - "80:80"
     volumes:
@@ -160,6 +161,35 @@ services:
   organizations-query-mongo:
     environment:
       - MONGO_INITDB_DATABASE=organizations-query
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_ROOT_USERNAME=root
+    image: mongo:5.0.7
+  users-command:
+    build:
+      args:
+        - MODULE_NAME=users/command
+      context: ./backend
+      dockerfile: ./issues-tracker/users/command/Dockerfile
+      target: dev
+    command: sh issues-tracker/entrypoint.sh
+    depends_on:
+      - users-command-mongo
+      - kafka
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MODULE_NAME=users/command
+      - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
+      - SERVICE_USERS_COMMAND_MONGO_DATABASE=users-command
+      - SERVICE_USERS_COMMAND_MONGO_HOST=users-command-mongo
+      - SERVICE_USERS_COMMAND_MONGO_PASSWORD=pass
+      - SERVICE_USERS_COMMAND_MONGO_PORT=27017
+      - SERVICE_USERS_COMMAND_MONGO_USERNAME=root
+      - SERVICE_USERS_COMMAND_NAME=users-command
+    volumes:
+      - ./backend:/usr/src/app
+  users-command-mongo:
+    environment:
+      - MONGO_INITDB_DATABASE=users-command
       - MONGO_INITDB_ROOT_PASSWORD=pass
       - MONGO_INITDB_ROOT_USERNAME=root
     image: mongo:5.0.7

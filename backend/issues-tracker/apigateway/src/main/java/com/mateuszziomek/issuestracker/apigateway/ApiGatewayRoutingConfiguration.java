@@ -32,6 +32,11 @@ public class ApiGatewayRoutingConfiguration {
                          .method(HttpMethod.GET)
                          .uri("lb://" + System.getenv("SERVICE_ORGANIZATIONS_QUERY_NAME").toUpperCase())
                 )
+                .route(r -> r.path("/api/v1/user-management/**")
+                        .and()
+                        .not(p -> p.method(HttpMethod.GET))
+                        .uri("lb://" + System.getenv("SERVICE_USERS_COMMAND_NAME").toUpperCase())
+                )
                 .build();
     }
 }
