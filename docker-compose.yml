@@ -11,15 +11,15 @@ services:
     command: sh issues-tracker/entrypoint.sh
     environment:
       - MODULE_NAME=apigateway
-      - SERVICE_APIGATEWAY_NAME=apigateway
+      - SERVICE_APIGATEWAY_NAME=APIGATEWAY
       - SERVICE_APIGATEWAY_PORT=80
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_ISSUES_COMMAND_NAME=issues-command
-      - SERVICE_ISSUES_QUERY_NAME=issues-query
-      - SERVICE_ORGANIZATIONS_COMMAND_NAME=organizations-command
-      - SERVICE_ORGANIZATIONS_QUERY_NAME=organizations-query
-      - SERVICE_USERS_COMMAND_NAME=users-command
-      - SERVICE_USERS_QUERY_NAME=users-query
+      - SERVICE_ISSUES_COMMAND_NAME=ISSUES-COMMAND
+      - SERVICE_ISSUES_QUERY_NAME=ISSUES-QUERY
+      - SERVICE_ORGANIZATIONS_COMMAND_NAME=ORGANIZATIONS-COMMAND
+      - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
+      - SERVICE_USERS_COMMAND_NAME=USERS-COMMAND
+      - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     ports:
       - "80:80"
     volumes:
@@ -56,7 +56,8 @@ services:
       - MODULE_NAME=issues/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ISSUES_COMMAND_MONGO_HOST=issues-command-mongo
-      - SERVICE_ISSUES_COMMAND_NAME=issues-command
+      - SERVICE_ISSUES_COMMAND_NAME=ISSUES-COMMAND
+      - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
   issues-command-mongo:
@@ -77,7 +78,7 @@ services:
       - MODULE_NAME=issues/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ISSUES_QUERY_MONGO_HOST=issues-query-mongo
-      - SERVICE_ISSUES_QUERY_NAME=issues-query
+      - SERVICE_ISSUES_QUERY_NAME=ISSUES-QUERY
     volumes:
       - ./backend:/usr/src/app
   issues-query-mongo:
@@ -107,7 +108,8 @@ services:
       - MODULE_NAME=organizations/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ORGANIZATIONS_COMMAND_MONGO_HOST=organizations-command-mongo
-      - SERVICE_ORGANIZATIONS_COMMAND_NAME=organizations-command
+      - SERVICE_ORGANIZATIONS_COMMAND_NAME=ORGANIZATIONS-COMMAND
+      - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
   organizations-command-mongo:
@@ -128,7 +130,7 @@ services:
       - MODULE_NAME=organizations/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ORGANIZATIONS_QUERY_MONGO_HOST=organizations-query-mongo
-      - SERVICE_ORGANIZATIONS_QUERY_NAME=organizations-query
+      - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
   organizations-query-mongo:
@@ -149,7 +151,8 @@ services:
       - MODULE_NAME=users/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_USERS_COMMAND_MONGO_HOST=users-command-mongo
-      - SERVICE_USERS_COMMAND_NAME=users-command
+      - SERVICE_USERS_COMMAND_NAME=USERS-COMMAND
+      - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
   users-command-mongo:
@@ -170,7 +173,7 @@ services:
       - MODULE_NAME=users/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_USERS_QUERY_MONGO_HOST=users-query-mongo
-      - SERVICE_USERS_QUERY_NAME=users-query
+      - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
   users-query-mongo:

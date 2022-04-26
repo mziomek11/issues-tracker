@@ -15,20 +15,17 @@ public class OrganizationEventConsumer {
     private final EventDispatcher eventDispatcher;
 
     @KafkaListener(topics = "OrganizationCreatedEvent", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(OrganizationCreatedEvent event, Acknowledgment ack) {
+    public void consume(OrganizationCreatedEvent event) {
         eventDispatcher.dispatch(event);
-        ack.acknowledge();
     }
 
     @KafkaListener(topics = "OrganizationMemberJoinedEvent", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(OrganizationMemberJoinedEvent event, Acknowledgment ack) {
+    public void consume(OrganizationMemberJoinedEvent event) {
         eventDispatcher.dispatch(event);
-        ack.acknowledge();
     }
 
     @KafkaListener(topics = "OrganizationProjectCreatedEvent", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(OrganizationProjectCreatedEvent event, Acknowledgment ack) {
+    public void consume(OrganizationProjectCreatedEvent event) {
         eventDispatcher.dispatch(event);
-        ack.acknowledge();
     }
 }

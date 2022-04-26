@@ -8,13 +8,4 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IssueEventConsumer {
-    Logger logger = LoggerFactory.getLogger(IssueEventConsumer.class);
-
-    @KafkaListener(topics = "IssueOpenedEvent", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(IssueOpenedEvent event, Acknowledgment ack) {
-        logger.info("Received issue opened event");
-        logger.info(event.getId().toString());
-        ack.acknowledge();
-    }
-}
+public class IssueEventConsumer {}

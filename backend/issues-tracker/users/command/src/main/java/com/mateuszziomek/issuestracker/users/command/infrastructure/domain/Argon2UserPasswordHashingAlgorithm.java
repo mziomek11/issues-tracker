@@ -1,18 +1,18 @@
 package com.mateuszziomek.issuestracker.users.command.infrastructure.domain;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserHashedPassword;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserPasswordHashingAlgorithm;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserPlainPassword;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Argon2UserPasswordHashingAlgorithm implements UserPasswordHashingAlgorithm {
-    private final Argon2 argon2 = Argon2Factory.create();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public UserHashedPassword hash(UserPlainPassword plainPassword) {
-        return new UserHashedPassword(argon2.hash(22, 65536, 1, plainPassword.text().toCharArray()));
+        return new UserHashedPassword(passwordEncoder.encode(plainPassword.text()));
     }
 }

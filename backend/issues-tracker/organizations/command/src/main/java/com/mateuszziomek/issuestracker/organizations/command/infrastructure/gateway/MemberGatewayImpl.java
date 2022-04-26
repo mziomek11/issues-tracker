@@ -6,19 +6,24 @@ import com.mateuszziomek.issuestracker.organizations.command.domain.member.Membe
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberId;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserStatus;
 import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 @Component
+@RequiredArgsConstructor
 public class MemberGatewayImpl implements MemberGateway {
-    private final WebClient userClient = WebClient.create("http://localhost:8085/api/v1/user-management");
+    private final DiscoveryClient discoveryClient;
 
     /**
      * @throws MemberNotFoundException see {@link MemberGateway#getMemberId(MemberEmail)}
      */
     @Override
     public MemberId getMemberId(MemberEmail memberEmail) {
-        var listUsers = userClient
+        var listUsers = userClient()
                 .get()
                 .uri(uriBuilder ->
                         uriBuilder
@@ -37,5 +42,19 @@ public class MemberGatewayImpl implements MemberGateway {
         }
 
         return new MemberId(listUsers.get(0).getId());
+    }
+
+    public WebClient userClient() {
+        var services = discoveryClient.getInstances(System.getenv("SERVICE_USERS_QUERY_NAME"));
+
+        if (services == null || services.isEmpty()) {
+            throw new RuntimeException("Users query service not available");
+        }
+
+        var serviceIndex = ThreadLocalRandom.current().nextInt(services.size()) % services.size();
+        var service = services.get(serviceIndex);
+        var url = service.getUri() + "/api/v1/user-management";
+
+        return WebClient.create(url);
     }
 }

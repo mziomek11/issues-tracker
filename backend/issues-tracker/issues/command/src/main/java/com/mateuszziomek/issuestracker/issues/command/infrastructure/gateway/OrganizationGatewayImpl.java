@@ -9,13 +9,18 @@ import com.mateuszziomek.issuestracker.issues.command.application.gateway.organi
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 @Component
+@RequiredArgsConstructor
 public class OrganizationGatewayImpl implements OrganizationGateway {
-    private final WebClient organizationClient = WebClient.create("http://localhost:8099/api/v1/organization-management");
+    private final DiscoveryClient discoveryClient;
 
     /**
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
@@ -33,7 +38,7 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
      * @throws OrganizationNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     private DetailsOrganization findOrganizationByIdOrThrow(OrganizationId organizationId) {
-        var organization = organizationClient
+        var organization = organizationClient()
                 .get()
                 .uri("/organizations/{organizationId}", organizationId.getValue())
                 .retrieve()
@@ -74,5 +79,19 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
                 .filter(organizationMemberId::equals)
                 .findAny()
                 .orElseThrow(() -> new OrganizationMemberNotFoundException(organizationMemberId));
+    }
+
+    public WebClient organizationClient() {
+        var services = discoveryClient.getInstances(System.getenv("SERVICE_ORGANIZATIONS_QUERY_NAME"));
+
+        if (services == null || services.isEmpty()) {
+            throw new RuntimeException("Organizations query service not available");
+        }
+
+        var serviceIndex = ThreadLocalRandom.current().nextInt(services.size()) % services.size();
+        var service = services.get(serviceIndex);
+        var url = service.getUri() + "/api/v1/organization-management";
+
+        return WebClient.create(url);
     }
 }

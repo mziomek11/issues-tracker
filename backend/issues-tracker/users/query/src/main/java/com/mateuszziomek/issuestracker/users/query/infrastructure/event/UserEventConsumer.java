@@ -14,14 +14,12 @@ public class UserEventConsumer {
     private final EventDispatcher eventDispatcher;
 
     @KafkaListener(topics = "UserRegisteredEvent", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(UserRegisteredEvent event, Acknowledgment ack) {
+    public void consume(UserRegisteredEvent event) {
         eventDispatcher.dispatch(event);
-        ack.acknowledge();
     }
 
     @KafkaListener(topics = "UserActivatedEvent", groupId = "${spring.kafka.consumer.group-id}")
-    public void consume(UserActivatedEvent event, Acknowledgment ack) {
+    public void consume(UserActivatedEvent event) {
         eventDispatcher.dispatch(event);
-        ack.acknowledge();
     }
 }
