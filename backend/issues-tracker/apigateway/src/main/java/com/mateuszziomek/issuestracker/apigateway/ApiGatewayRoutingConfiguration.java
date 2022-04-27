@@ -32,7 +32,7 @@ public class ApiGatewayRoutingConfiguration {
                         .method(HttpMethod.GET)
                         .uri("lb://" + System.getenv("SERVICE_ORGANIZATIONS_QUERY_NAME"))
                 )
-                .route(r -> r.path("/api/v1/user-management/users/login")
+                .route(r -> r.path("/api/v1/user-management/users/authentication")
                         .uri("lb://" + System.getenv("SERVICE_USERS_QUERY_NAME"))
                 )
                 .route(r -> r.path("/api/v1/user-management/**")

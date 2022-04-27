@@ -3,7 +3,7 @@ package com.mateuszziomek.issuestracker.users.query.application.query.handler;
 import com.mateuszziomek.cqrs.query.QueryHandler;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.exception.InvalidCredentialsException;
-import com.mateuszziomek.issuestracker.users.query.application.service.JWTService;
+import com.mateuszziomek.issuestracker.users.query.application.service.jwt.JWTService;
 import com.mateuszziomek.issuestracker.users.query.domain.PasswordVerifier;
 import com.mateuszziomek.issuestracker.users.query.domain.UserRepository;
 import lombok.RequiredArgsConstructor;

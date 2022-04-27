@@ -6,11 +6,11 @@ import com.mateuszziomek.issuestracker.users.query.application.query.GetListUser
 import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
 import com.mateuszziomek.issuestracker.users.query.readmodel.listuser.ListUserFilter;
 import com.mateuszziomek.issuestracker.users.query.readmodel.listuser.ListUserFinder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class GetListUsersQueryHandler implements QueryHandler<GetListUsersQuery, List<ListUser>> {
     private final ListUserFinder listUserFinder;
