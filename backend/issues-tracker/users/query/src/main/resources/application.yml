@@ -4,6 +4,8 @@ eureka:
       defaultZone: ${SERVICE_DISCOVERY_ZONE}
   instance:
     instance-id: ${spring.application.name}:${instanceId:${random.value}}
+jwt:
+  secret: ${JWT_SECRET}
 server:
   port: 0
 spring:

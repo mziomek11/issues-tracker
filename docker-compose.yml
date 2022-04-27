@@ -169,6 +169,7 @@ services:
       - kafka
       - users-query-mongo
     environment:
+      - JWT_SECRET=some-jwt-secret
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MODULE_NAME=users/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
