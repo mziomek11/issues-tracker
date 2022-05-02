@@ -36,7 +36,6 @@ public class Auth0JWTService implements JWTService {
     @Override
     public UUID getUserId(String jwt) {
         DecodedJWT decodedJWT;
-        System.out.println(jwt);
 
         try {
             decodedJWT = JWT.require(Algorithm.HMAC256(getSecret())).build().verify(jwt);
