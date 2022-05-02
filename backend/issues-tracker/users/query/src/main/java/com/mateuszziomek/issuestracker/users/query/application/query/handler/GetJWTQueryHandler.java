@@ -25,6 +25,10 @@ public class GetJWTQueryHandler implements QueryHandler<GetJWTQuery, String> {
                 .findByEmail(query.getEmail())
                 .orElseThrow(InvalidCredentialsException::new);
 
+        if (!user.isActivated()) {
+            throw new InvalidCredentialsException();
+        }
+
         if (!passwordVerifier.matches(query.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }

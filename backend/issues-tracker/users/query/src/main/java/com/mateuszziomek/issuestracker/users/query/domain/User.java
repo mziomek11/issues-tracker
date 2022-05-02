@@ -27,4 +27,8 @@ public class User {
     public void activate() {
         status = UserStatus.ACTIVATED;
     }
+
+    public boolean isActivated() {
+        return UserStatus.ACTIVATED.equals(status);
+    }
 }
