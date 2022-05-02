@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1;
 
+import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceNotAvailableException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationAlreadyPresentException;
@@ -75,6 +76,15 @@ public class OrganizationRestControllerAdvice {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(MemberServiceNotAvailableException.class)
+    public ResponseEntity<RestErrorResponse> handle(MemberServiceNotAvailableException ex) {
+        var errorResponse = new RestErrorResponse("Service unavailable");
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(errorResponse);
     }
 }
