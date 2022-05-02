@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 @Component
-public class JWTAuthenticationFilter implements GatewayFilter {
+public class JWTAuthenticationFilter implements GatewayFilter, Ordered {
     private final DiscoveryClient discoveryClient;
 
     @Override
@@ -63,5 +64,10 @@ public class JWTAuthenticationFilter implements GatewayFilter {
         response.setStatusCode(status);
 
         return response.setComplete();
+    }
+
+    @Override
+    public int getOrder() {
+        return 1;
     }
 }
