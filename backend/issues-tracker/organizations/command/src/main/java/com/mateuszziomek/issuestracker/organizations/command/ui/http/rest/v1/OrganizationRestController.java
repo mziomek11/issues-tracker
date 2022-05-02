@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1;
 
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceNotAvailableException;
+import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationDto;
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationProjectDto;
@@ -58,7 +58,7 @@ public class OrganizationRestController {
      * @throws InvitationAlreadyPresentException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws MemberAlreadyPresentException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws MemberNotFoundException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
-     * @throws MemberServiceNotAvailableException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
+     * @throws MemberServiceUnavailableException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws OrganizationNotFoundException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws OrganizationOwnerNotValidException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws RestValidationException see {@link InviteOrganizationMemberDtoMapper#toCommand(UUID, UUID, InviteOrganizationMemberDto)}

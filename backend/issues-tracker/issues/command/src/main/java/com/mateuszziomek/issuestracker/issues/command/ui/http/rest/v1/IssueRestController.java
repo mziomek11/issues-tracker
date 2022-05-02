@@ -2,6 +2,7 @@ package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1;
 
 import com.mateuszziomek.issuestracker.issues.command.application.command.*;
 import com.mateuszziomek.issuestracker.issues.command.application.command.handler.*;
+import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
@@ -38,6 +39,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
      * @throws OrganizationNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link OpenIssueCommandHandler#handle(OpenIssueCommand)}
      * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails, OpenIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues")
@@ -67,6 +69,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
      * @throws OrganizationNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link CloseIssueCommandHandler#handle(CloseIssueCommand)}
      * @throws RestValidationException see {@link CloseIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails)}
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}")
@@ -95,6 +98,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws OrganizationNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link RenameIssueCommandHandler#handle(RenameIssueCommand)}
      * @throws RestValidationException see {@link RenameIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails, RenameIssueDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/name")
@@ -125,6 +129,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws OrganizationNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws OrganizationProjectNotFoundException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link ChangeIssueTypeCommandHandler#handle(ChangeIssueTypeCommand)}
      * @throws RestValidationException see {@link ChangeIssueTypeDtoMapper#toCommand(UUID, IssueOrganizationDetails, ChangeIssueTypeDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/type")
@@ -155,6 +160,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws OrganizationNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws OrganizationProjectNotFoundException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link ChangeIssueContentCommandHandler#handle(ChangeIssueContentCommand)}
      * @throws RestValidationException see {@link ChangeIssueContentDtoMapper#toCommand(UUID, IssueOrganizationDetails, ChangeIssueContentDto)}
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/content")
@@ -184,6 +190,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws OrganizationNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws RestValidationException see {@link VoteIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails, VoteIssueDto)}
      * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      */
@@ -215,6 +222,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws OrganizationNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws RestValidationException see {@link CommentIssueDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, CommentIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments")
@@ -248,6 +256,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
      * @throws OrganizationNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
      * @throws OrganizationProjectNotFoundException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link HideIssueCommentCommandHandler#handle(HideIssueCommentCommand)}
      * @throws RestValidationException see {@link HideIssueCommentDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails)}
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}")
@@ -279,6 +288,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws OrganizationNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws OrganizationProjectNotFoundException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws RestValidationException see {@link ChangeIssueCommentContentDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, ChangeIssueCommentContentDto)}
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content")
@@ -310,6 +320,7 @@ class IssueRestController {
      * @throws OrganizationMemberNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws OrganizationNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws OrganizationProjectNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
+     * @throws OrganizationServiceUnavailableException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws RestValidationException see {@link VoteIssueCommentDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, VoteIssueCommentDto)}
      * @throws VoteAlreadyExistsException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      */

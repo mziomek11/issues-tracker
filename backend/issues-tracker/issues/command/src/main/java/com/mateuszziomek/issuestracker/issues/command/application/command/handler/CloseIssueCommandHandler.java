@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
+import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -26,6 +27,7 @@ public class CloseIssueCommandHandler implements CommandHandler<CloseIssueComman
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
     public void handle(CloseIssueCommand command) {

@@ -2,7 +2,7 @@ package com.mateuszziomek.issuestracker.organizations.command.application.comman
 
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.MemberGateway;
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceNotAvailableException;
+import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.OrganizationOwner;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class InviteOrganizationMemberCommandHandler implements CommandHandler<In
      * @throws InvitationAlreadyPresentException see {@link Organization#invite(OrganizationOwner, Invitation)}
      * @throws MemberAlreadyPresentException see {@link Organization#invite(OrganizationOwner, Invitation)}
      * @throws MemberNotFoundException see {@link MemberGateway#getMemberId(MemberEmail)}
-     * @throws MemberServiceNotAvailableException see {@link MemberGateway#getMemberId(MemberEmail)}
+     * @throws MemberServiceUnavailableException see {@link MemberGateway#getMemberId(MemberEmail)}
      * @throws OrganizationNotFoundException if organization with given id does not exist
      * @throws OrganizationOwnerNotValidException see {@link Organization#invite(OrganizationOwner, Invitation)}
      */

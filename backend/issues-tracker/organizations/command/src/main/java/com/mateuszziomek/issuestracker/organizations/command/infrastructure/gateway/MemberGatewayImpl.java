@@ -2,7 +2,7 @@ package com.mateuszziomek.issuestracker.organizations.command.infrastructure.gat
 
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.MemberGateway;
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceNotAvailableException;
+import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberEmail;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberId;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserStatus;
@@ -21,7 +21,7 @@ public class MemberGatewayImpl implements MemberGateway {
 
     /**
      * @throws MemberNotFoundException see {@link MemberGateway#getMemberId(MemberEmail)}
-     * @throws MemberServiceNotAvailableException see {@link MemberGateway#getMemberId(MemberEmail)}
+     * @throws MemberServiceUnavailableException see {@link MemberGateway#getMemberId(MemberEmail)}
      */
     @Override
     public MemberId getMemberId(MemberEmail memberEmail) {
@@ -47,13 +47,13 @@ public class MemberGatewayImpl implements MemberGateway {
     }
 
     /**
-     * @throws MemberServiceNotAvailableException {@link MemberGateway#getMemberId(MemberEmail)}
+     * @throws MemberServiceUnavailableException {@link MemberGateway#getMemberId(MemberEmail)}
      */
     public WebClient userClient() {
         var services = discoveryClient.getInstances(System.getenv("SERVICE_USERS_QUERY_NAME"));
 
         if (services == null || services.isEmpty()) {
-            throw new MemberServiceNotAvailableException();
+            throw new MemberServiceUnavailableException();
         }
 
         var serviceIndex = ThreadLocalRandom.current().nextInt(services.size()) % services.size();

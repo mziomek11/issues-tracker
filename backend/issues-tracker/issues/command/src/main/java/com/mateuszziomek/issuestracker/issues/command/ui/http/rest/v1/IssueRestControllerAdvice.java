@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1;
 
+import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
@@ -142,6 +143,15 @@ public class IssueRestControllerAdvice {
 
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(OrganizationServiceUnavailableException.class)
+    public ResponseEntity<RestErrorResponse> handle(OrganizationServiceUnavailableException ex) {
+        var errorResponse = new RestErrorResponse("Service unavailable");
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(errorResponse);
     }
 }

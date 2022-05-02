@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.infrastructure.gateway;
 
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
+import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationId;
 import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
@@ -26,6 +27,7 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationProjectNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
     public void ensureOrganizationHasProjectAndMember(IssueOrganizationDetails organizationDetails) {
@@ -81,11 +83,15 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
                 .orElseThrow(() -> new OrganizationMemberNotFoundException(organizationMemberId));
     }
 
+
+    /**
+     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     */
     public WebClient organizationClient() {
         var services = discoveryClient.getInstances(System.getenv("SERVICE_ORGANIZATIONS_QUERY_NAME"));
 
         if (services == null || services.isEmpty()) {
-            throw new RuntimeException("Organizations query service not available");
+            throw new OrganizationServiceUnavailableException();
         }
 
         var serviceIndex = ThreadLocalRandom.current().nextInt(services.size()) % services.size();
