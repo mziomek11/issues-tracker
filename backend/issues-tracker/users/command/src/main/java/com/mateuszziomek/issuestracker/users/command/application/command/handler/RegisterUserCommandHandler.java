@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.users.command.application.command.handler;
 
-import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailNotAvailableException;
+import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
+import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -19,7 +20,8 @@ public class RegisterUserCommandHandler implements CommandHandler<RegisterUserCo
     private final UserPasswordHashingAlgorithm userPasswordHashingAlgorithm;
 
     /**
-     * @throws UserEmailNotAvailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
+     * @throws UserEmailUnavailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
+     * @throws UserServiceUnavailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
      */
     @Override
     public void handle(RegisterUserCommand command) {

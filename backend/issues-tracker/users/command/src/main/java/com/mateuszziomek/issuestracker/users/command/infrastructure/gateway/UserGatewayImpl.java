@@ -2,7 +2,8 @@ package com.mateuszziomek.issuestracker.users.command.infrastructure.gateway;
 
 import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.UserGateway;
-import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailNotAvailableException;
+import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
+import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserEmail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -17,7 +18,8 @@ public class UserGatewayImpl implements UserGateway {
     private final DiscoveryClient discoveryClient;
 
     /**
-     * @throws UserEmailNotAvailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
+     * @throws UserEmailUnavailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
+     * @throws UserServiceUnavailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
      */
     @Override
     public void ensureUserEmailIsAvailable(UserEmail userEmail) {
@@ -35,15 +37,18 @@ public class UserGatewayImpl implements UserGateway {
                .block();
 
         if (listUsers != null && !listUsers.isEmpty()) {
-            throw new UserEmailNotAvailableException(userEmail);
+            throw new UserEmailUnavailableException(userEmail);
         }
     }
 
+    /**
+     * @throws UserServiceUnavailableException see {@link UserGateway#ensureUserEmailIsAvailable(UserEmail)}
+     */
     public WebClient userClient() {
         var services = discoveryClient.getInstances(System.getenv("SERVICE_USERS_QUERY_NAME"));
 
         if (services == null || services.isEmpty()) {
-            throw new RuntimeException("Users query service not available");
+            throw new UserServiceUnavailableException();
         }
 
         var serviceIndex = ThreadLocalRandom.current().nextInt(services.size()) % services.size();

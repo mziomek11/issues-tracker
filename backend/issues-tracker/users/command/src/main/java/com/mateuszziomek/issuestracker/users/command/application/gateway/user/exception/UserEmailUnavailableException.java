@@ -6,6 +6,6 @@ import com.mateuszziomek.issuestracker.users.command.domain.user.UserEmail;
 
 @RequiredArgsConstructor
 @Getter
-public class UserEmailNotAvailableException extends IllegalStateException {
+public class UserEmailUnavailableException extends IllegalStateException {
     private final transient UserEmail userEmail;
 }

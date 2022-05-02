@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1;
 
-import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailNotAvailableException;
+import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
+import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
@@ -22,8 +23,8 @@ public class UserRestControllerAdvice {
                 .body(errorResponse);
     }
 
-    @ExceptionHandler(UserEmailNotAvailableException.class)
-    public ResponseEntity<RestErrorResponse> handle(UserEmailNotAvailableException ex) {
+    @ExceptionHandler(UserEmailUnavailableException.class)
+    public ResponseEntity<RestErrorResponse> handle(UserEmailUnavailableException ex) {
         var errorResponse = new RestErrorResponse("User email already taken");
 
         return ResponseEntity
@@ -55,6 +56,15 @@ public class UserRestControllerAdvice {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(UserServiceUnavailableException.class)
+    public ResponseEntity<RestErrorResponse> handle(UserServiceUnavailableException ex) {
+        var errorResponse = new RestErrorResponse("Service unavailable");
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(errorResponse);
     }
 }
