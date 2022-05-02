@@ -30,8 +30,6 @@ public class User extends AggregateRoot {
         var hashedPassword = passwordHashingAlgorithm.hash(password);
         var activationToken = UserActivationToken.generate();
 
-        System.out.println(activationToken.value());
-
         user.raiseEvent(userRegistered(userId, email, hashedPassword, activationToken));
 
         return user;

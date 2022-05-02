@@ -112,6 +112,7 @@ services:
       - MAIL_HOST=mailhog
       - MAIL_PORT=1025
       - MODULE_NAME=notifications
+      - SERVICE_NOTIFICATIONS_MONGO_HOST=notifications-mongo
     volumes:
       - ./backend:/usr/src/app
   notifications-mongo:
