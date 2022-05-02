@@ -1,5 +1,8 @@
 package com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1;
 
+import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetUserIdFromJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.exception.InvalidCredentialsException;
@@ -27,8 +30,18 @@ import java.util.UUID;
 public class UserRestController {
     private final QueryDispatcher queryDispatcher;
 
+    /**
+     * @throws AccessDeniedException if user is not {@link UserRole#SYSTEM}
+     */
     @GetMapping("/users")
-    public ResponseEntity<List<ListUser>> getListUsers(GetListUsersParam param) {
+    public ResponseEntity<List<ListUser>> getListUsers(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
+            GetListUsersParam param
+    ) {
+        if (!UserRole.SYSTEM.equals(userRole)) {
+            throw new AccessDeniedException();
+        }
+
         var getListUsersQuery = GetListUsersParamMapper.toQuery(param);
 
         return ResponseEntity
@@ -49,10 +62,18 @@ public class UserRestController {
     }
 
     /**
+     * @throws AccessDeniedException if user is not {@link UserRole#SYSTEM}
      * @throws InvalidJWTException see {@link GetUserIdFromJWTQueryHandler#handle(GetUserIdFromJWTQuery)}
      */
     @GetMapping("/users/id")
-    public ResponseEntity<UUID> getUserIdFromJWT(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<UUID> getUserIdFromJWT(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
+    ) {
+        if (!UserRole.SYSTEM.equals(userRole)) {
+            throw new AccessDeniedException();
+        }
+
         var jwt = authHeader.replace("Bearer ", "");
         var getUserIdFromJWTQuery = new GetUserIdFromJWTQuery(jwt);
 

@@ -12,16 +12,12 @@ import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.*;
 import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
-import com.mateuszziomek.issuestracker.issues.command.application.command.*;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.application.command.handler.*;
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
-import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.*;
-import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
 import com.mateuszziomek.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,15 +40,15 @@ class IssueRestController {
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues")
     public ResponseEntity<UUID> openIssue(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @RequestBody OpenIssueDto openIssueDto
     ) {
         var issueId = UUID.randomUUID();
-        // @TODO pass user id from header
         var openIssueCommand = OpenIssueDtoMapper.toCommand(
                 issueId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 openIssueDto
         );
 
@@ -74,14 +70,14 @@ class IssueRestController {
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}")
     public ResponseEntity closeIssue(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId
     ) {
-        // @TODO pass user id from header
         var closeIssueCommand = CloseIssueDtoMapper.toCommand(
                 issueId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID())
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId)
         );
 
         commandDispatcher.dispatch(closeIssueCommand);
@@ -103,15 +99,15 @@ class IssueRestController {
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/name")
     public ResponseEntity renameIssue(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody RenameIssueDto renameIssueDto
     ) {
-        // @TODO pass user id from header
         var renameIssueCommand = RenameIssueDtoMapper.toCommand(
                 issueId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 renameIssueDto
         );
 
@@ -134,15 +130,15 @@ class IssueRestController {
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/type")
     public ResponseEntity changeIssueType(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody ChangeIssueTypeDto changeIssueTypeDto
     ) {
-        // @TODO pass user id from header
         var changeIssueTypeCommand = ChangeIssueTypeDtoMapper.toCommand(
                 issueId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 changeIssueTypeDto
         );
 
@@ -165,15 +161,15 @@ class IssueRestController {
      */
     @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/content")
     public ResponseEntity changeIssueContent(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody ChangeIssueContentDto changeIssueContentDto
     ) {
-        // @TODO pass user id from header
         var changeIssueContentCommand = ChangeIssueContentDtoMapper.toCommand(
                 issueId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 changeIssueContentDto
         );
 
@@ -196,15 +192,15 @@ class IssueRestController {
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/votes")
     public ResponseEntity voteIssue(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody VoteIssueDto voteIssueDto
     ) {
-        // @TODO pass user id from header
         var voteIssueCommand = VoteIssueDtoMapper.toCommand(
                 issueId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 voteIssueDto
         );
 
@@ -227,17 +223,17 @@ class IssueRestController {
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments")
     public ResponseEntity<UUID> commentIssue(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @RequestBody CommentIssueDto commentIssueDto
     ) {
         var commentId = UUID.randomUUID();
-        // @TODO pass user id from header
         var commentIssueCommand = CommentIssueDtoMapper.toCommand(
                 issueId,
                 commentId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 commentIssueDto
         );
 
@@ -261,16 +257,16 @@ class IssueRestController {
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}")
     public ResponseEntity hideIssueComment(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @PathVariable UUID commentId
     ) {
-        // @TODO pass user id from header
         var hideIssueCommentCommand = HideIssueCommentDtoMapper.toCommand(
                 issueId,
                 commentId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID())
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId)
         );
 
         commandDispatcher.dispatch(hideIssueCommentCommand);
@@ -293,17 +289,17 @@ class IssueRestController {
      */
     @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content")
     public ResponseEntity changeIssueCommentContent(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @PathVariable UUID commentId,
             @RequestBody ChangeIssueCommentContentDto changeIssueCommentContentDto
     ) {
-        // @TODO pass user id from header
         var changeIssueCommentContentCommand = ChangeIssueCommentContentDtoMapper.toCommand(
                 issueId,
                 commentId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 changeIssueCommentContentDto
         );
 
@@ -326,17 +322,17 @@ class IssueRestController {
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/votes")
     public ResponseEntity voteIssueComment(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
             @PathVariable UUID issueId,
             @PathVariable UUID commentId,
             @RequestBody VoteIssueCommentDto voteIssueCommentDto
     ) {
-        // @TODO pass user id from header
         var voteIssueCommentCommand = VoteIssueCommentDtoMapper.toCommand(
                 issueId,
                 commentId,
-                IssueOrganizationDetails.fromUUID(organizationId, projectId, UUID.randomUUID()),
+                IssueOrganizationDetails.fromUUID(organizationId, projectId, userId),
                 voteIssueCommentDto
         );
 

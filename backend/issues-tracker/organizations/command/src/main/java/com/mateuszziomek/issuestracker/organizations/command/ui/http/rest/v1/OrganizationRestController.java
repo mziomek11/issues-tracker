@@ -8,6 +8,7 @@ import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.mapper.CreateOrganizationDtoMapper;
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.mapper.CreateOrganizationProjectDtoMapper;
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.mapper.InviteOrganizationMemberDtoMapper;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
@@ -38,12 +39,14 @@ public class OrganizationRestController {
      * @throws RestValidationException see {@link CreateOrganizationDtoMapper#toCommand(UUID, UUID, CreateOrganizationDto)}
      */
     @PostMapping("/organizations")
-    public ResponseEntity<UUID> createOrganization(@RequestBody CreateOrganizationDto createOrganizationDto) {
+    public ResponseEntity<UUID> createOrganization(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
+            @RequestBody CreateOrganizationDto createOrganizationDto
+    ) {
         var organizationId = UUID.randomUUID();
-        // @TODO pass user id from header
         var registerUserCommand = CreateOrganizationDtoMapper.toCommand(
                 organizationId,
-                UUID.randomUUID(),
+                userId,
                 createOrganizationDto
         );
 
@@ -65,13 +68,13 @@ public class OrganizationRestController {
      */
     @PostMapping("/organizations/{organizationId}/invitations")
     public ResponseEntity inviteOrganizationMember(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @RequestBody InviteOrganizationMemberDto inviteOrganizationMemberDto
     ) {
-        // @TODO pass user id from header
         var inviteOrganizationMemberCommand = InviteOrganizationMemberDtoMapper.toCommand(
                 organizationId,
-                UUID.randomUUID(),
+                userId,
                 inviteOrganizationMemberDto
         );
 
@@ -87,12 +90,14 @@ public class OrganizationRestController {
      * @throws OrganizationNotFoundException see {@link JoinOrganizationMemberCommandHandler#handle(JoinOrganizationMemberCommand)}
      */
     @PostMapping("/organizations/{organizationId}/members")
-    public ResponseEntity joinOrganizationMember(@PathVariable UUID organizationId) {
-        // @TODO pass user id from header
+    public ResponseEntity joinOrganizationMember(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
+            @PathVariable UUID organizationId
+    ) {
         var inviteOrganizationMemberCommand = JoinOrganizationMemberCommand
                 .builder()
                 .organizationId(organizationId)
-                .memberId(UUID.randomUUID())
+                .memberId(userId)
                 .build();
 
         commandDispatcher.dispatch(inviteOrganizationMemberCommand);
@@ -109,15 +114,15 @@ public class OrganizationRestController {
      */
     @PostMapping("/organizations/{organizationId}/projects")
     public ResponseEntity<UUID> createOrganizationProject(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @RequestBody CreateOrganizationProjectDto createOrganizationProjectDto
     ) {
         var projectId = UUID.randomUUID();
-        // @TODO pass user id from header
         var registerUserCommand = CreateOrganizationProjectDtoMapper.toCommand(
                 organizationId,
                 projectId,
-                UUID.randomUUID(),
+                userId,
                 createOrganizationProjectDto
         );
 

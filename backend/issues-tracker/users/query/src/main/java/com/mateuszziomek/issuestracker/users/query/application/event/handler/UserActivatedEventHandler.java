@@ -15,11 +15,11 @@ public class UserActivatedEventHandler implements EventHandler<UserActivatedEven
     @Override
     @Transactional
     public void handle(UserActivatedEvent event) {
-        var optionalUser = userRepository.findById(event.getId());
-        if (optionalUser.isEmpty()) {
-            return;
-        }
-
-        optionalUser.get().activate();
+        userRepository
+                .findById(event.getId())
+                .ifPresent(user -> {
+                    user.activate();
+                    userRepository.save(user);
+                });
     }
 }

@@ -9,6 +9,8 @@ import com.mateuszziomek.issuestracker.issues.command.domain.organization.Organi
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
+import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -43,6 +45,7 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
         var organization = organizationClient()
                 .get()
                 .uri("/organizations/{organizationId}", organizationId.getValue())
+                .header(SecurityHeaders.ISSUES_TRACKER_USER_ROLE, UserRole.SYSTEM.toString())
                 .retrieve()
                 .onStatus(httpStatus -> httpStatus.equals(HttpStatus.NOT_FOUND), response -> {
                     throw new OrganizationNotFoundException(organizationId);

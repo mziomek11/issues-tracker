@@ -1,5 +1,7 @@
 package com.mateuszziomek.issuestracker.apigateway.filters;
 
+import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -45,6 +47,7 @@ public class JWTAuthenticationFilter implements GatewayFilter, Ordered {
                 .get()
                 .uri("/users/id")
                 .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
+                .header(SecurityHeaders.ISSUES_TRACKER_USER_ROLE, UserRole.SYSTEM.toString())
                 .exchangeToMono(response -> {
                     if (response.statusCode().isError()) {
                         return onError(exchange, response.statusCode());
@@ -52,7 +55,11 @@ public class JWTAuthenticationFilter implements GatewayFilter, Ordered {
 
                     return response.bodyToMono(String.class)
                             .flatMap(userId -> {
-                                request.mutate().header("Issues-Tracker-User-Id", userId).build();
+                                request
+                                        .mutate()
+                                        .header(SecurityHeaders.ISSUES_TRACKER_USER_ID, userId)
+                                        .header(SecurityHeaders.ISSUES_TRACKER_USER_ROLE, UserRole.USER.toString())
+                                        .build();
 
                                 return chain.filter(exchange);
                             });

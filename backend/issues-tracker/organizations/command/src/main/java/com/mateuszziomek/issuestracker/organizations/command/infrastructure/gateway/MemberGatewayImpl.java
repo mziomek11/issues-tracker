@@ -5,7 +5,9 @@ import com.mateuszziomek.issuestracker.organizations.command.application.gateway
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberEmail;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberId;
+import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserStatus;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -34,6 +36,7 @@ public class MemberGatewayImpl implements MemberGateway {
                                 .queryParam("status", UserStatus.ACTIVATED)
                                 .build()
                 )
+                .header(SecurityHeaders.ISSUES_TRACKER_USER_ROLE, UserRole.SYSTEM.toString())
                 .retrieve()
                 .bodyToFlux(ListUser.class)
                 .collectList()
