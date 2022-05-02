@@ -92,6 +92,30 @@ services:
       - KAFKA_LISTENERS=PLAINTEXT://:9092
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
     image: bitnami/kafka
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+  notifications:
+    build:
+      args:
+        - MODULE_NAME=notifications
+      context: ./backend
+      dockerfile: ./issues-tracker/notifications/Dockerfile
+      target: dev
+    command: sh issues-tracker/entrypoint.sh
+    depends_on:
+      - notifications-mongo
+      - kafka
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - MAIL_HOST=mailhog
+      - MAIL_PORT=1025
+      - MODULE_NAME=notifications
+    volumes:
+      - ./backend:/usr/src/app
+  notifications-mongo:
+    image: mongo:5.0.7
   organizations-command:
     build:
       args:

@@ -21,6 +21,7 @@
         <module>discovery</module>
         <module>issues/command</module>
         <module>issues/query</module>
+        <module>notifications</module>
         <module>organizations/command</module>
         <module>organizations/query</module>
         <module>shared</module>
