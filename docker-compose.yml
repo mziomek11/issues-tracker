@@ -20,8 +20,6 @@ services:
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
       - SERVICE_USERS_COMMAND_NAME=USERS-COMMAND
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
-    ports:
-      - "80:80"
     volumes:
       - ./backend:/usr/src/app
   discovery:
@@ -36,8 +34,6 @@ services:
       - MODULE_NAME=discovery
       - SERVICE_DISCOVERY_PORT=8761
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-    ports:
-      - "8761:8761"
     volumes:
       - ./backend:/usr/src/app
   issues-command:
@@ -83,6 +79,15 @@ services:
       - ./backend:/usr/src/app
   issues-query-mongo:
     image: mongo:5.0.7
+  frontend:
+    build:
+      context: frontend
+      target: dev
+    command: sh entrypoint.sh
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - 3000:3000
   kafka:
     depends_on:
       - zookeeper
@@ -93,9 +98,16 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
     image: bitnami/kafka
   mailhog:
+    environment:
+      MH_UI_WEB_PATH: mailhog
     image: mailhog/mailhog
+  nginx:
+    build:
+      context: nginx
+    depends_on:
+      - apigateway
     ports:
-      - "8025:8025"
+      - 80:80
   notifications:
     build:
       args:
