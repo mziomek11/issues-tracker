@@ -3,6 +3,7 @@ package com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
+import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetUserIdFromJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.exception.InvalidCredentialsException;
@@ -66,7 +67,7 @@ public class UserRestController {
      * @throws InvalidJWTException see {@link GetUserIdFromJWTQueryHandler#handle(GetUserIdFromJWTQuery)}
      */
     @GetMapping("/users/id")
-    public ResponseEntity<UUID> getUserIdFromJWT(
+    public ResponseEntity<ObjectId> getUserIdFromJWT(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
     ) {
