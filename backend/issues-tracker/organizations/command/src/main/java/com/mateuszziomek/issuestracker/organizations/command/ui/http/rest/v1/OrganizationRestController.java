@@ -9,6 +9,7 @@ import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.map
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.mapper.CreateOrganizationProjectDtoMapper;
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.mapper.InviteOrganizationMemberDtoMapper;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
+import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
@@ -39,7 +40,7 @@ public class OrganizationRestController {
      * @throws RestValidationException see {@link CreateOrganizationDtoMapper#toCommand(UUID, UUID, CreateOrganizationDto)}
      */
     @PostMapping("/organizations")
-    public ResponseEntity<UUID> createOrganization(
+    public ResponseEntity<ObjectId> createOrganization(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @RequestBody CreateOrganizationDto createOrganizationDto
     ) {
@@ -54,7 +55,7 @@ public class OrganizationRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(organizationId);
+                .body(new ObjectId(organizationId));
     }
 
     /**
@@ -113,7 +114,7 @@ public class OrganizationRestController {
      * @throws RestValidationException see {@link CreateOrganizationProjectDtoMapper#toCommand(UUID, UUID, UUID, CreateOrganizationProjectDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects")
-    public ResponseEntity<UUID> createOrganizationProject(
+    public ResponseEntity<ObjectId> createOrganizationProject(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @RequestBody CreateOrganizationProjectDto createOrganizationProjectDto
@@ -130,6 +131,6 @@ public class OrganizationRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(projectId);
+                .body(new ObjectId(projectId));
     }
 }

@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1;
 
+import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.dto.ActivateUserDto;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.mapper.ActivateUserDtoMapper;
@@ -34,7 +35,7 @@ public class UserRestController {
      * @throws RestValidationException see {@link RegisterUserDtoMapper#toCommand(UUID, RegisterUserDto)}
      */
     @PostMapping("/users")
-    public ResponseEntity<UUID> registerUser(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<ObjectId> registerUser(@RequestBody RegisterUserDto registerUserDto) {
         var accountId = UUID.randomUUID();
         var registerUserCommand = RegisterUserDtoMapper.toCommand(accountId, registerUserDto);
 
@@ -42,7 +43,7 @@ public class UserRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(accountId);
+                .body(new ObjectId(accountId));
     }
 
     /**

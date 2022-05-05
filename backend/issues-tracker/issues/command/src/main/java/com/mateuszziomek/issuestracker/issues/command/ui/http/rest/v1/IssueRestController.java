@@ -13,6 +13,7 @@ import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.Vote
 import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.*;
 import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
+import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
@@ -39,7 +40,7 @@ class IssueRestController {
      * @throws RestValidationException see {@link OpenIssueDtoMapper#toCommand(UUID, IssueOrganizationDetails, OpenIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues")
-    public ResponseEntity<UUID> openIssue(
+    public ResponseEntity<ObjectId> openIssue(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
@@ -56,7 +57,7 @@ class IssueRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(issueId);
+                .body(new ObjectId(issueId));
     }
 
     /**
@@ -222,7 +223,7 @@ class IssueRestController {
      * @throws RestValidationException see {@link CommentIssueDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, CommentIssueDto)}
      */
     @PostMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments")
-    public ResponseEntity<UUID> commentIssue(
+    public ResponseEntity<ObjectId> commentIssue(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,
             @PathVariable UUID projectId,
@@ -241,7 +242,7 @@ class IssueRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(commentId);
+                .body(new ObjectId(commentId));
     }
 
     /**
