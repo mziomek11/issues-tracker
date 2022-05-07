@@ -7,16 +7,15 @@ import com.mateuszziomek.issuestracker.organizations.query.readmodel.listorganiz
 import com.mateuszziomek.issuestracker.shared.readmodel.ListOrganization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
-public class GetListOrganizationsQueryHandler implements QueryHandler<GetListOrganizationsQuery, List<ListOrganization>> {
+public class GetListOrganizationsQueryHandler implements QueryHandler<GetListOrganizationsQuery, Flux<ListOrganization>> {
     private final ListOrganizationFinder listOrganizationFinder;
 
     @Override
-    public List<ListOrganization> handle(GetListOrganizationsQuery query) {
+    public Flux<ListOrganization> handle(GetListOrganizationsQuery query) {
         var filter = ListOrganizationFilter
                 .builder()
                 .memberId(query.getMemberId())

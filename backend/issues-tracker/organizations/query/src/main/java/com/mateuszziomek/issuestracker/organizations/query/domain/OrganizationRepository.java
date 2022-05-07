@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.organizations.query.domain;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 import java.util.UUID;
 
-public interface OrganizationRepository extends PagingAndSortingRepository<Organization, UUID> { }
+public interface OrganizationRepository extends ReactiveCrudRepository<Organization, UUID> { }

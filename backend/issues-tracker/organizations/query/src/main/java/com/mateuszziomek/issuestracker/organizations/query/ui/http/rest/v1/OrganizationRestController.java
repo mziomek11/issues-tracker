@@ -14,8 +14,8 @@ import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,14 +25,11 @@ public class OrganizationRestController {
     private final QueryDispatcher queryDispatcher;
 
     @GetMapping("/organizations")
-    public ResponseEntity<List<ListOrganization>> getListOrganizations(
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<ListOrganization> getListOrganizations(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId
     ) {
-        var getListOrganizationsQuery = new GetListOrganizationsQuery(userId);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(queryDispatcher.dispatch(getListOrganizationsQuery));
+        return queryDispatcher.dispatch(new GetListOrganizationsQuery(userId));
     }
 
     /**
@@ -40,6 +37,7 @@ public class OrganizationRestController {
      * @throws OrganizationNotFoundException see {@link GetDetailsOrganizationQueryHandler#handle(GetDetailsOrganizationQuery)}
      */
     @GetMapping("/organizations/{organizationId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<DetailsOrganization> getDetailsOrganization(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
             @PathVariable UUID organizationId
@@ -48,10 +46,6 @@ public class OrganizationRestController {
             throw new AccessDeniedException();
         }
 
-        var getDetailsOrganizationQuery = new GetDetailsOrganizationQuery(organizationId);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(queryDispatcher.dispatch(getDetailsOrganizationQuery));
+        return queryDispatcher.dispatch(new GetDetailsOrganizationQuery(organizationId));
     }
 }

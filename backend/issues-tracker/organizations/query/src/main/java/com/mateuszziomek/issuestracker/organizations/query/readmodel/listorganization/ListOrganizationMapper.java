@@ -3,8 +3,6 @@ package com.mateuszziomek.issuestracker.organizations.query.readmodel.listorgani
 import com.mateuszziomek.issuestracker.organizations.query.domain.Member;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Project;
-import com.mateuszziomek.issuestracker.organizations.query.readmodel.detailsorganization.DetailsOrganizationMapper;
-import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
 import com.mateuszziomek.issuestracker.shared.readmodel.ListOrganization;
 
 import java.util.List;
