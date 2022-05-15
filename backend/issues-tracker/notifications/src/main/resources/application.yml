@@ -23,6 +23,8 @@ spring:
                         trusted:
                             packages: com.mateuszziomek.issuestracker.*
             value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        listener:
+            ack-mode: MANUAL_IMMEDIATE
     mail:
         host: ${MAIL_HOST}
         port: ${MAIL_PORT}

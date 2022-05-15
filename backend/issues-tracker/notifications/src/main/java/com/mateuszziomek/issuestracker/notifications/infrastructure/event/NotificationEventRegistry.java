@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.notifications.infrastructure.event;
 
-import com.mateuszziomek.cqrs.event.dispatcher.EventDispatcher;
+import com.mateuszziomek.cqrs.event.dispatcher.ReactiveEventDispatcher;
 import com.mateuszziomek.issuestracker.notifications.application.handler.UserRegisteredEventHandler;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class NotificationEventRegistry {
 
-    private final EventDispatcher eventDispatcher;
+    private final ReactiveEventDispatcher eventDispatcher;
     private final UserRegisteredEventHandler userRegisteredEventHandler;
 
     @PostConstruct

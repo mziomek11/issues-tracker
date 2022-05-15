@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.notifications.infrastructure.event;
 
-import com.mateuszziomek.cqrs.event.dispatcher.DefaultEventDispatcher;
-import com.mateuszziomek.cqrs.event.dispatcher.EventDispatcher;
+import com.mateuszziomek.cqrs.event.dispatcher.DefaultReactiveEventDispatcher;
+import com.mateuszziomek.cqrs.event.dispatcher.ReactiveEventDispatcher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class NotificationEventConfiguration {
 
     @Bean
-    public EventDispatcher eventDispatcher() {
-        return new DefaultEventDispatcher();
+    public ReactiveEventDispatcher eventDispatcher() {
+        return new DefaultReactiveEventDispatcher();
     }
 }
