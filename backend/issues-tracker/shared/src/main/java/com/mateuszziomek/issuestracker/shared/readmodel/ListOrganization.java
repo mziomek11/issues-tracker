@@ -14,6 +14,7 @@ import java.util.UUID;
 @Builder
 public class ListOrganization {
     private UUID id;
+    private String name;
     private UUID ownerId;
     private List<ListOrganization.Member> members;
     private List<ListOrganization.Project> projects;

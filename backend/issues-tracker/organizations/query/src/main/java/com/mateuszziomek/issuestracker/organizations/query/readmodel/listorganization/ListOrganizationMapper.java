@@ -14,6 +14,7 @@ public class ListOrganizationMapper {
         return ListOrganization
                 .builder()
                 .id(organization.getId())
+                .name(organization.getName())
                 .ownerId(organization.getOwnerId())
                 .members(mapMembers(organization.getMembers()))
                 .projects(mapProjects(organization.getProjects()))
