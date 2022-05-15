@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 @RequiredArgsConstructor
 public class ApiGatewayRoutingConfiguration {
     private static final String ISSUES_BASE_URL = "/api/v1/issue-management";
+    private static final String NOTIFICATIONS_BASE_URL = "/api/v1/notification-management";
     private static final String ORGANIZATIONS_BASE_URL = "/api/v1/organization-management";
     private static final String USERS_BASE_URL = "/api/v1/user-management";
 
@@ -33,6 +34,13 @@ public class ApiGatewayRoutingConfiguration {
                         .method(HttpMethod.GET)
                         .filters(f -> f.filter(jwtAuthenticationFilter))
                         .uri(lb("SERVICE_ISSUES_QUERY_NAME"))
+                )
+                // NOTIFICATIONS
+                .route(r -> r.path(NOTIFICATIONS_BASE_URL + "/**")
+                        .and()
+                        .method(HttpMethod.GET)
+                        .filters(f -> f.filter(jwtAuthenticationFilter))
+                        .uri(lb("SERVICE_NOTIFICATIONS_NAME"))
                 )
                 // ORGANIZATIONS
                 .route(r -> r.path(ORGANIZATIONS_BASE_URL + "/**")

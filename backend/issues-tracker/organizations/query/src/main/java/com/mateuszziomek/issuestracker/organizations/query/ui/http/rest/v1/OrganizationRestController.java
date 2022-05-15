@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
@@ -32,13 +32,13 @@ public class OrganizationRestController {
         return queryDispatcher.dispatch(new GetListOrganizationsQuery(userId));
     }
 
-    /**
+     /**
      * @throws AccessDeniedException if user is not {@link UserRole#SYSTEM}
      * @throws OrganizationNotFoundException see {@link GetDetailsOrganizationQueryHandler#handle(GetDetailsOrganizationQuery)}
      */
     @GetMapping("/organizations/{organizationId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<DetailsOrganization> getDetailsOrganization(
+    public Mono<DetailsOrganization> getDetailsOrganization(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
             @PathVariable UUID organizationId
     ) {

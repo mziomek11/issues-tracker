@@ -11,7 +11,6 @@ import com.mateuszziomek.issuestracker.notifications.domain.user.UserRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +19,6 @@ public class UserRegisteredEventHandler implements EventHandler<UserRegisteredEv
     private final EmailSender emailSender;
 
     @Override
-    @Transactional
     public void handle(UserRegisteredEvent event) {
         if (userRepository.findById(event.getId()).isPresent()) {
             return;

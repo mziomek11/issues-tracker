@@ -8,7 +8,7 @@ import com.mateuszziomek.issuestracker.issues.command.application.gateway.organi
 
 public interface OrganizationGateway {
     /**
-     * @throws OrganizationMemberNotFoundException if organization with given id does not exist in organization
+     * @throws OrganizationMemberNotFoundException if member with given id does not exist in organization
      * @throws OrganizationNotFoundException if organization with given id does not exist
      * @throws OrganizationProjectNotFoundException if project with given id does not exist in organization
      * @throws OrganizationServiceUnavailableException if organization service is not available

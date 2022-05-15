@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 let jwt: string | null = null;
 
@@ -47,6 +48,8 @@ export const App: React.FC = () => {
   const [registerForm, setRegisterForm] = useState({ email: "", password: "" });
   const [organizationForm, setOrganizationForm] = useState({ name: "" });
   const [projectForm, setProjectForm] = useState({ name: "", id: "" });
+  const [organizationSubscriptionForm, setOrganizationSubscriptionForm] =
+    useState({ id: "" });
 
   const register = (e: FormEvent) => {
     e.preventDefault();
@@ -78,6 +81,31 @@ export const App: React.FC = () => {
     const orgs = await get("/api/v1/organization-management/organizations");
 
     console.log(orgs);
+  };
+
+  const subscribe = async (e: FormEvent) => {
+    e.preventDefault();
+    const abortController = new AbortController();
+
+    const x = fetchEventSource(
+      `/api/v1/notification-management/notifications/users`,
+      {
+        signal: abortController.signal,
+        headers: {
+          ...createBaseHeaders(),
+        },
+        onmessage: (message: any) => {
+          console.log(message);
+          console.log(JSON.parse(message.data));
+        },
+        openWhenHidden: true,
+      }
+    );
+
+    // setTimeout(() => {
+    //   abortController.abort();
+    //   console.log('abording')
+    // }, 5000);
   };
 
   return (
@@ -135,6 +163,22 @@ export const App: React.FC = () => {
         />
 
         <button>Create project</button>
+      </form>
+
+      <form onSubmit={subscribe}>
+        <h2>Organization subscription form</h2>
+        <label>Id</label>
+        <input
+          value={organizationSubscriptionForm.id}
+          onChange={(e) =>
+            setOrganizationSubscriptionForm({
+              ...organizationSubscriptionForm,
+              id: e.target.value,
+            })
+          }
+        />
+
+        <button>Subscribe organization</button>
       </form>
     </div>
   );

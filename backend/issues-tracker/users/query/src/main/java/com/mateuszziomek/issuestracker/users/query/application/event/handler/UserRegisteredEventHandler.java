@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.event.EventHandler;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -14,7 +13,6 @@ public class UserRegisteredEventHandler implements EventHandler<UserRegisteredEv
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
     public void handle(UserRegisteredEvent event) {
         if (userRepository.findByEmail(event.getUserEmail()).isPresent()) {
             return;

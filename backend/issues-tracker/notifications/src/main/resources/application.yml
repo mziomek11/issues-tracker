@@ -1,6 +1,14 @@
+eureka:
+    client:
+        service-url:
+            defaultZone: ${SERVICE_DISCOVERY_ZONE}
+    instance:
+        instance-id: ${spring.application.name}:${instanceId:${random.value}}
 server:
     port: 0
 spring:
+    application:
+        name: ${SERVICE_NOTIFICATIONS_NAME}
     data:
         mongodb:
             host: ${SERVICE_NOTIFICATIONS_MONGO_HOST}
