@@ -3,6 +3,7 @@ package com.mateuszziomek.issuestracker.organizations.query.infrastructure.gatew
 import com.mateuszziomek.issuestracker.organizations.query.application.gateway.notification.NotificationGateway;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Member;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
+import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
 import com.mateuszziomek.issuestracker.shared.ui.notification.UserNotification;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
@@ -12,14 +13,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Component
 public class NotificationGatewayImpl implements NotificationGateway {
     private static final String ORGANIZATION_CREATED = "OrganizationCreated";
+    private static final String ORGANIZATION_MEMBER_INVITED = "OrganizationMemberInvited";
     private static final String ORGANIZATION_MEMBER_JOINED = "OrganizationMemberJoined";
     private static final String ORGANIZATION_PROJECT_CREATED = "OrganizationProjectCreated";
 
@@ -31,6 +35,19 @@ public class NotificationGatewayImpl implements NotificationGateway {
                 ORGANIZATION_CREATED,
                 OrganizationNotification.created(event),
                 getOrganizationUsers(organization)
+        );
+
+        return notifyUsers(notification);
+    }
+
+    @Override
+    public Mono<Void> notify(OrganizationMemberInvitedEvent event, Organization organization) {
+        var notification = new UserNotification(
+                ORGANIZATION_MEMBER_JOINED,
+                OrganizationNotification.memberInvited(event),
+                Stream
+                        .concat(getOrganizationUsers(organization).stream(), List.of(event.getMemberId()).stream())
+                        .collect(Collectors.toSet())
         );
 
         return notifyUsers(notification);

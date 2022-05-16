@@ -1,6 +1,8 @@
 package com.mateuszziomek.issuestracker.organizations.query.infrastructure.query;
 
+import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListInvitationQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListOrganizationsQuery;
+import com.mateuszziomek.issuestracker.organizations.query.application.query.handler.GetListInvitationQueryHandler;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.handler.GetListOrganizationsQueryHandler;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
@@ -15,11 +17,13 @@ import javax.annotation.PostConstruct;
 public class OrganizationQueryRegistry {
     private final QueryDispatcher queryDispatcher;
     private final GetDetailsOrganizationQueryHandler getDetailsOrganizationQueryHandler;
+    private final GetListInvitationQueryHandler getListInvitationQueryHandler;
     private final GetListOrganizationsQueryHandler getListOrganizationsQueryHandler;
 
     @PostConstruct
     public void registerHandlers() {
         queryDispatcher.registerHandler(GetDetailsOrganizationQuery.class, getDetailsOrganizationQueryHandler);
+        queryDispatcher.registerHandler(GetListInvitationQuery.class, getListInvitationQueryHandler);
         queryDispatcher.registerHandler(GetListOrganizationsQuery.class, getListOrganizationsQueryHandler);
     }
 }

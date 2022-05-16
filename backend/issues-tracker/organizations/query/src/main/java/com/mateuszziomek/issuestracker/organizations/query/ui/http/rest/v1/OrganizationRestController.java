@@ -1,12 +1,14 @@
 package com.mateuszziomek.issuestracker.organizations.query.ui.http.rest.v1;
 
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetDetailsOrganizationQuery;
+import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListInvitationQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListOrganizationsQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.handler.GetDetailsOrganizationQueryHandler;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
+import com.mateuszziomek.issuestracker.shared.readmodel.ListInvitation;
 import com.mateuszziomek.issuestracker.shared.readmodel.ListOrganization;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
@@ -47,5 +49,18 @@ public class OrganizationRestController {
         }
 
         return queryDispatcher.dispatch(new GetDetailsOrganizationQuery(organizationId));
+    }
+
+    @GetMapping("/invitations")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<ListInvitation> getListInvitations(
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId
+    ) {
+        var getListInvitationQuery = GetListInvitationQuery
+                .builder()
+                .memberId(userId)
+                .build();
+
+        return queryDispatcher.dispatch(getListInvitationQuery);
     }
 }

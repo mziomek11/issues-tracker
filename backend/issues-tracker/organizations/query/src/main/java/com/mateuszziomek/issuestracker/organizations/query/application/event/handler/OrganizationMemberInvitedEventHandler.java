@@ -2,28 +2,35 @@ package com.mateuszziomek.issuestracker.organizations.query.application.event.ha
 
 import com.mateuszziomek.cqrs.event.ReactiveEventHandler;
 import com.mateuszziomek.issuestracker.organizations.query.application.gateway.notification.NotificationGateway;
+import com.mateuszziomek.issuestracker.organizations.query.domain.Invitation;
 import com.mateuszziomek.issuestracker.organizations.query.domain.InvitationRepository;
-import lombok.RequiredArgsConstructor;
+import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
 import com.mateuszziomek.issuestracker.organizations.query.domain.OrganizationRepository;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
+import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class OrganizationMemberJoinedEventHandler implements ReactiveEventHandler<OrganizationMemberJoinedEvent> {
+public class OrganizationMemberInvitedEventHandler implements ReactiveEventHandler<OrganizationMemberInvitedEvent> {
     private final OrganizationRepository organizationRepository;
     private final InvitationRepository invitationRepository;
     private final NotificationGateway notificationGateway;
 
     @Override
-    public Mono<Void> handle(OrganizationMemberJoinedEvent event) {
+    public Mono<Void> handle(OrganizationMemberInvitedEvent event) {
         return organizationRepository
                 .findById(event.getId())
-                .doOnNext(organization -> organization.joinMember(event))
-                .flatMap(organizationRepository::save)
+                .flatMap(organization -> invitationRepository
+                        .save(createInvitation(event, organization))
+                        .map(invitation -> organization)
+                )
                 .doOnNext(organization -> notificationGateway.notify(event, organization).subscribe())
-                .flatMap(organization -> invitationRepository.deleteById(organization.getId()))
                 .then();
+    }
+
+    private Invitation createInvitation(OrganizationMemberInvitedEvent event, Organization organization) {
+        return new Invitation(organization.getId(), organization.getName(), event.getMemberId());
     }
 }

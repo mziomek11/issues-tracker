@@ -48,19 +48,32 @@ export const App: React.FC = () => {
   const [registerForm, setRegisterForm] = useState({ email: "", password: "" });
   const [organizationForm, setOrganizationForm] = useState({ name: "" });
   const [projectForm, setProjectForm] = useState({ name: "", id: "" });
-  const [organizationSubscriptionForm, setOrganizationSubscriptionForm] =
-    useState({ id: "" });
+  const [invitationForm, setInvitationForm] = useState({
+    email: "",
+    organization: "",
+  });
+  const [joinOrganizationForm, setJoinOrganizationForm] = useState({
+    organization: "",
+  });
 
   const register = (e: FormEvent) => {
     e.preventDefault();
     post("/api/v1/user-management/users", registerForm);
   };
 
-  const login = async (e: FormEvent) => {
+  const login1 = async (e: FormEvent) => {
     e.preventDefault();
     jwt = await post("/api/v1/user-management/users/authentication", {
       email: "test@test.com",
       password: "test",
+    });
+  };
+
+  const login2 = async (e: FormEvent) => {
+    e.preventDefault();
+    jwt = await post("/api/v1/user-management/users/authentication", {
+      email: "admin17@admin.com",
+      password: "password",
     });
   };
 
@@ -77,8 +90,32 @@ export const App: React.FC = () => {
     );
   };
 
+  const inviteMember = (e: FormEvent) => {
+    e.preventDefault();
+    post(
+      `/api/v1/organization-management/organizations/${invitationForm.organization}/invitations`,
+      {
+        email: invitationForm.email,
+      }
+    );
+  };
+
+  const joinOrganization = (e: FormEvent) => {
+    e.preventDefault();
+    post(
+      `/api/v1/organization-management/organizations/${joinOrganizationForm.organization}/members`,
+      {}
+    );
+  };
+
   const getOrganizations = async () => {
     const orgs = await get("/api/v1/organization-management/organizations");
+
+    console.log(orgs);
+  };
+
+  const getInvitations = async () => {
+    const orgs = await get("/api/v1/organization-management/invitations");
 
     console.log(orgs);
   };
@@ -110,8 +147,10 @@ export const App: React.FC = () => {
 
   return (
     <div>
-      <button onClick={login}>Login</button>
+      <button onClick={login1}>Login1</button>
+      <button onClick={login2}>Login2</button>
       <button onClick={getOrganizations}>Fetch Orgs</button>
+      <button onClick={getInvitations}>Fetch Invitations</button>
       <form onSubmit={register}>
         <h2>Register form</h2>
         <label>Email</label>
@@ -165,20 +204,50 @@ export const App: React.FC = () => {
         <button>Create project</button>
       </form>
 
-      <form onSubmit={subscribe}>
-        <h2>Organization subscription form</h2>
-        <label>Id</label>
+      <form onSubmit={inviteMember}>
+        <h2>Invitation form</h2>
+
+        <label>Organization id</label>
         <input
-          value={organizationSubscriptionForm.id}
+          value={invitationForm.organization}
           onChange={(e) =>
-            setOrganizationSubscriptionForm({
-              ...organizationSubscriptionForm,
-              id: e.target.value,
+            setInvitationForm({
+              ...invitationForm,
+              organization: e.target.value,
             })
           }
         />
 
-        <button>Subscribe organization</button>
+        <label>Email</label>
+        <input
+          value={invitationForm.email}
+          onChange={(e) =>
+            setInvitationForm({ ...invitationForm, email: e.target.value })
+          }
+        />
+
+        <button>Invite member</button>
+      </form>
+
+      <form onSubmit={joinOrganization}>
+        <h2>Join organizations form</h2>
+
+        <label>Organization id</label>
+        <input
+          value={joinOrganizationForm.organization}
+          onChange={(e) =>
+            setJoinOrganizationForm({
+              ...joinOrganizationForm,
+              organization: e.target.value,
+            })
+          }
+        />
+
+        <button>Join organization</button>
+      </form>
+
+      <form onSubmit={subscribe}>
+        <button>Subscribe</button>
       </form>
     </div>
   );

@@ -2,6 +2,7 @@ package com.mateuszziomek.issuestracker.organizations.query.infrastructure.event
 
 import com.mateuszziomek.cqrs.event.dispatcher.ReactiveEventDispatcher;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
+import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,13 @@ public class OrganizationEventConsumer {
 
     @KafkaListener(topics = "OrganizationCreatedEvent", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(OrganizationCreatedEvent event, Acknowledgment acknowledgment) {
+        eventDispatcher
+                .dispatch(event)
+                .subscribe(unused -> acknowledgment.acknowledge());
+    }
+
+    @KafkaListener(topics = "OrganizationMemberInvitedEvent", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(OrganizationMemberInvitedEvent event, Acknowledgment acknowledgment) {
         eventDispatcher
                 .dispatch(event)
                 .subscribe(unused -> acknowledgment.acknowledge());
