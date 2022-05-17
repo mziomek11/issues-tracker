@@ -2,10 +2,12 @@ package com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organiz
 
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.AbstractRestClient;
+import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.exception.OrganizationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -19,6 +21,7 @@ public class ReactiveOrganizationRestClientV1 extends AbstractRestClient impleme
     }
 
     /**
+     * @throws OrganizationNotFoundException see {@link ReactiveOrganizationRestClient#getOrganizationById(UUID)}
      * @throws OrganizationServiceUnavailableException see {@link ReactiveOrganizationRestClient#getOrganizationById(UUID)}
      */
     @Override
@@ -28,6 +31,10 @@ public class ReactiveOrganizationRestClientV1 extends AbstractRestClient impleme
                 .uri(GET_ORGANIZATION_PATH, organizationId)
                 .header(SecurityHeaders.ISSUES_TRACKER_USER_ROLE, UserRole.SYSTEM.toString())
                 .retrieve()
+                .onStatus(
+                        httpStatus -> httpStatus.equals(HttpStatus.NOT_FOUND),
+                        (response) -> Mono.error(new OrganizationNotFoundException(organizationId))
+                )
                 .bodyToMono(DetailsOrganization.class);
     }
 

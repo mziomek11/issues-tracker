@@ -25,25 +25,32 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
      * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
      */
     @Override
-    public Mono<Void> ensureOrganizationHasProjectAndMember(UUID organizationId, UUID projectId, UUID memberId) {
-        try {
-            return organizationRestClient
-                    .getOrganizationById(organizationId)
-                    .flatMap((organization) -> {
-                        if (!isProjectInOrganization(organization, projectId)) {
-                            return Mono.error(new OrganizationProjectNotFoundException(projectId));
-                        }
+    public Mono<Boolean> ensureOrganizationHasProjectAndMember(UUID organizationId, UUID projectId, UUID memberId) {
+        return organizationRestClient
+                .getOrganizationById(organizationId)
+                .onErrorResume((throwable) -> {
+                    if (throwable instanceof com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.exception.OrganizationServiceUnavailableException) {
+                        return Mono.error(new OrganizationServiceUnavailableException());
+                    }
 
-                        if (!isMemberInOrganization(organization, memberId)) {
-                            return Mono.error(new OrganizationMemberNotFoundException(memberId));
-                        }
+                    if (throwable instanceof com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.exception.OrganizationNotFoundException) {
+                        return Mono.error(new OrganizationNotFoundException(organizationId));
+                    }
 
-                        return Mono.just(organization).then();
-                    })
-                    .switchIfEmpty(Mono.error(new OrganizationNotFoundException(organizationId)));
-        } catch (com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.exception.OrganizationServiceUnavailableException ex) {
-            throw new OrganizationServiceUnavailableException();
-        }
+                    return Mono.error(throwable);
+                })
+                .flatMap((organization) -> {
+                    if (!isProjectInOrganization(organization, projectId)) {
+                        return Mono.error(new OrganizationProjectNotFoundException(projectId));
+                    }
+
+                    if (!isMemberInOrganization(organization, memberId)) {
+                        return Mono.error(new OrganizationMemberNotFoundException(memberId));
+                    }
+
+                    return Mono.just(organization);
+                })
+                .map((organization) -> true);
     }
 
     private boolean isProjectInOrganization(DetailsOrganization organization, UUID projectId) {

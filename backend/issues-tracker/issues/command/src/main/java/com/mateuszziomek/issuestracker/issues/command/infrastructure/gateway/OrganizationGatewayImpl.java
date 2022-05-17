@@ -81,8 +81,8 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
                 .getMembers()
                 .stream()
                 .map(DetailsOrganization.Member::getId)
-                .filter(organizationMemberId::equals)
-                .findAny()
+                .filter(organizationMemberId.getValue()::equals)
+                .findFirst()
                 .orElseThrow(() -> new OrganizationMemberNotFoundException(organizationMemberId));
     }
 

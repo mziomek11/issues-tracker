@@ -18,6 +18,8 @@ public class ListIssueMapper {
                 .creator(mapCreator(issue.getCreator()))
                 .type(issue.getType())
                 .status(issue.getStatus())
+                .project(mapProject(issue))
+                .organization(mapOrganization(issue))
                 .votes(mapVotes(issue.getVotes()))
                 .build();
     }
@@ -27,6 +29,20 @@ public class ListIssueMapper {
                 .builder()
                 .id(member.getId())
                 .email(member.getEmail())
+                .build();
+    }
+
+    private static ListIssue.Project mapProject(Issue issue) {
+        return ListIssue.Project
+                .builder()
+                .id(issue.getProjectId())
+                .build();
+    }
+
+    private static ListIssue.Organization mapOrganization(Issue issue) {
+        return ListIssue.Organization
+                .builder()
+                .id(issue.getOrganizationId())
                 .build();
     }
 

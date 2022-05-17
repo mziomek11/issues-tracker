@@ -30,17 +30,20 @@ public class GetListIssuesQueryHandler implements QueryHandler<GetListIssuesQuer
      */
     @Override
     public Flux<ListIssue> handle(GetListIssuesQuery query) {
-        organizationGateway.ensureOrganizationHasProjectAndMember(
-                query.getOrganizationId(),
-                query.getProjectId(),
-                query.getMemberId()
-        );
+        return organizationGateway
+                .ensureOrganizationHasProjectAndMember(
+                    query.getOrganizationId(),
+                    query.getProjectId(),
+                    query.getMemberId()
+                )
+                .flux()
+                .flatMap((unused) -> listIssueFinder.findByFilter(createFilter(query)));
+    }
 
-        var filter = ListIssueFilter
+    private ListIssueFilter createFilter(GetListIssuesQuery query) {
+        return ListIssueFilter
                 .builder()
                 .projectId(query.getProjectId())
                 .build();
-
-        return listIssueFinder.findByFilter(filter);
     }
 }

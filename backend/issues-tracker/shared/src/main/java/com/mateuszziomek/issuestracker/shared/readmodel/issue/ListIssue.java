@@ -22,6 +22,8 @@ public class ListIssue {
     private IssueType type;
     private List<Vote> votes;
     private Creator creator;
+    private Project project;
+    private Organization organization;
 
     @Getter
     @NoArgsConstructor

@@ -43,7 +43,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
     @Override
     public Mono<Void> notify(OrganizationMemberInvitedEvent event, Organization organization) {
         var notification = new UserNotification(
-                ORGANIZATION_MEMBER_JOINED,
+                ORGANIZATION_MEMBER_INVITED,
                 OrganizationNotification.memberInvited(event),
                 Stream
                         .concat(getOrganizationUsers(organization).stream(), List.of(event.getMemberId()).stream())

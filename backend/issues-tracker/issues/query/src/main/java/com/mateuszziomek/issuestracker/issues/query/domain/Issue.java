@@ -52,14 +52,9 @@ public class Issue {
     }
 
     public void vote(IssueVotedEvent event) {
-        var newVotes = votes
-                .stream()
-                .filter(vote -> vote.getMemberId() != event.getMemberId())
-                .toList();
-
         var vote = new Vote(event.getMemberId(), event.getVoteType());
-        newVotes.add(vote);
 
-        votes = newVotes;
+        votes.removeIf((v) -> v.getMemberId().equals(event.getMemberId()));
+        votes.add(vote);
     }
 }

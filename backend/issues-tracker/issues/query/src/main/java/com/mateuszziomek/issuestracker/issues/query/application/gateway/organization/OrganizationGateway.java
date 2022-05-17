@@ -15,5 +15,5 @@ public interface OrganizationGateway {
      * @throws OrganizationProjectNotFoundException if project with given id does not exist in organization
      * @throws OrganizationServiceUnavailableException if organization service is not available
      */
-    Mono<Void> ensureOrganizationHasProjectAndMember(UUID organizationId, UUID projectId, UUID memberId);
+    Mono<Boolean> ensureOrganizationHasProjectAndMember(UUID organizationId, UUID projectId, UUID memberId);
 }
