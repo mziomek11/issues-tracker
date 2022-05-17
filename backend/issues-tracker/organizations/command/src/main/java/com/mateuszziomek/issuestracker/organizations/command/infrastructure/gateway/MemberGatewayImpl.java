@@ -8,7 +8,7 @@ import com.mateuszziomek.issuestracker.organizations.command.domain.member.Membe
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserStatus;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;

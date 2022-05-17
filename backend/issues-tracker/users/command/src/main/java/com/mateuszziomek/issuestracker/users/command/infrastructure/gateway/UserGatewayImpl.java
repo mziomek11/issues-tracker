@@ -2,7 +2,7 @@ package com.mateuszziomek.issuestracker.users.command.infrastructure.gateway;
 
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.UserGateway;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;

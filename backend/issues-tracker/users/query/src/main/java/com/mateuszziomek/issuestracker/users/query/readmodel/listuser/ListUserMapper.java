@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.users.query.readmodel.listuser;
 
-import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 import com.mateuszziomek.issuestracker.users.query.domain.User;
 
 public class ListUserMapper {

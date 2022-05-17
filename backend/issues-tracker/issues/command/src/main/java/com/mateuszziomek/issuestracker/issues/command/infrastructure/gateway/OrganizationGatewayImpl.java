@@ -11,7 +11,7 @@ import com.mateuszziomek.issuestracker.issues.command.application.gateway.organi
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
-import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
+import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpStatus;

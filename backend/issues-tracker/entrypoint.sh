@@ -1,5 +1,6 @@
 cd issues-tracker
-./mvnw spring-boot:run -pl $MODULE_NAME &
+./mvnw install -Dmaven.repo.local=/usr/mvn -pl $MODULE_NAME -am
+./mvnw spring-boot:run -Dmaven.repo.local=/usr/mvn -pl $MODULE_NAME &
 while true; do
-  inotifywait -e modify,create,delete,move -r ./$MODULE_NAME && ./mvnw compile -Dmaven.test.skip=true -pl $MODULE_NAME
+  inotifywait -e modify,create,delete,move -r ./$MODULE_NAME && ./mvnw compile -Dmaven.repo.local=/usr/mvn -Dmaven.test.skip=true -pl $MODULE_NAME
 done 

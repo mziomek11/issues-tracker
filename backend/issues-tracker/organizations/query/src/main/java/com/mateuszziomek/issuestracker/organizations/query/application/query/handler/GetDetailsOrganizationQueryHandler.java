@@ -4,8 +4,8 @@ import com.mateuszziomek.issuestracker.organizations.query.application.query.exc
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.QueryHandler;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetDetailsOrganizationQuery;
-import com.mateuszziomek.issuestracker.organizations.query.readmodel.detailsorganization.DetailsOrganizationFinder;
-import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
+import com.mateuszziomek.issuestracker.organizations.query.readmodel.organization.details.DetailsOrganizationFinder;
+import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 

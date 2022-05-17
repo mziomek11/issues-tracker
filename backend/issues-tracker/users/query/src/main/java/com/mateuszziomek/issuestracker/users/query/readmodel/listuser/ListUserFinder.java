@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.users.query.readmodel.listuser;
 
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

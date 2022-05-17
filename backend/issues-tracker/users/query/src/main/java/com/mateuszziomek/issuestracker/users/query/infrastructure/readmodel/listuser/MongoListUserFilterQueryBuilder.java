@@ -5,7 +5,7 @@ import com.mateuszziomek.issuestracker.users.query.readmodel.listuser.ListUserFi
 import com.mateuszziomek.issuestracker.users.query.readmodel.listuser.ListUserMapper;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserStatus;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

@@ -15,7 +15,7 @@ import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper.GetJWT
 import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper.GetListUsersParamMapper;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.param.GetListUsersParam;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user-management")

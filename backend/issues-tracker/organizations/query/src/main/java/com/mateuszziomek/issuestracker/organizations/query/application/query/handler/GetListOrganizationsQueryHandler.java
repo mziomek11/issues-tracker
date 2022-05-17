@@ -2,9 +2,9 @@ package com.mateuszziomek.issuestracker.organizations.query.application.query.ha
 
 import com.mateuszziomek.cqrs.query.QueryHandler;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListOrganizationsQuery;
-import com.mateuszziomek.issuestracker.organizations.query.readmodel.listorganization.ListOrganizationFilter;
-import com.mateuszziomek.issuestracker.organizations.query.readmodel.listorganization.ListOrganizationFinder;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListOrganization;
+import com.mateuszziomek.issuestracker.organizations.query.readmodel.organization.list.ListOrganizationFilter;
+import com.mateuszziomek.issuestracker.organizations.query.readmodel.organization.list.ListOrganizationFinder;
+import com.mateuszziomek.issuestracker.shared.readmodel.organization.ListOrganization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

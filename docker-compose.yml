@@ -1,12 +1,15 @@
 version: "3.4"
 
+volumes:
+  maven-repo:
+
 services:
   apigateway:
     build:
       args:
         - MODULE_NAME=apigateway
       context: ./backend
-      dockerfile: ./issues-tracker/apigateway/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     environment:
@@ -20,15 +23,16 @@ services:
       - SERVICE_ORGANIZATIONS_COMMAND_NAME=ORGANIZATIONS-COMMAND
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
       - SERVICE_USERS_COMMAND_NAME=USERS-COMMAND
-      - SERVICE_USERS_QUERY_NAME=USERS-QUERY
+      - SERVICE_USERS_QUERY_NAME=USERS-QUERY  
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   discovery:
     build:
       args:
         - MODULE_NAME=discovery
       context: ./backend
-      dockerfile: ./issues-tracker/discovery/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     environment:
@@ -37,12 +41,13 @@ services:
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   issues-command:
     build:
       args:
         - MODULE_NAME=issues/command
       context: ./backend
-      dockerfile: ./issues-tracker/issues/command/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
@@ -57,6 +62,7 @@ services:
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   issues-command-mongo:
     image: mongo:5.0.7
   issues-query:
@@ -64,7 +70,7 @@ services:
       args:
         - MODULE_NAME=issues/query
       context: ./backend
-      dockerfile: ./issues-tracker/issues/query/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
@@ -76,8 +82,10 @@ services:
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ISSUES_QUERY_MONGO_HOST=issues-query-mongo
       - SERVICE_ISSUES_QUERY_NAME=ISSUES-QUERY
+      - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   issues-query-mongo:
     image: mongo:5.0.7
   frontend:
@@ -114,7 +122,7 @@ services:
       args:
         - MODULE_NAME=notifications
       context: ./backend
-      dockerfile: ./issues-tracker/notifications/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
@@ -130,6 +138,7 @@ services:
       - SERVICE_NOTIFICATIONS_NAME=NOTIFICATIONS
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   notifications-mongo:
     image: mongo:5.0.7
   organizations-command:
@@ -137,7 +146,7 @@ services:
       args:
         - MODULE_NAME=organizations/command
       context: ./backend
-      dockerfile: ./issues-tracker/organizations/command/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
@@ -152,6 +161,7 @@ services:
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   organizations-command-mongo:
     image: mongo:5.0.7
   organizations-query:
@@ -159,7 +169,7 @@ services:
       args:
         - MODULE_NAME=organizations/query
       context: ./backend
-      dockerfile: ./issues-tracker/organizations/query/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
@@ -174,6 +184,7 @@ services:
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   organizations-query-mongo:
     image: mongo:5.0.7
   users-command:
@@ -181,7 +192,7 @@ services:
       args:
         - MODULE_NAME=users/command
       context: ./backend
-      dockerfile: ./issues-tracker/users/command/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
@@ -196,6 +207,7 @@ services:
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   users-command-mongo:
     image: mongo:5.0.7
   users-query:
@@ -203,7 +215,7 @@ services:
       args:
         - MODULE_NAME=users/query
       context: ./backend
-      dockerfile: ./issues-tracker/users/query/Dockerfile
+      dockerfile: ./issues-tracker/Dockerfile
       target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
@@ -218,6 +230,7 @@ services:
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
+      - maven-repo:/usr/mvn
   users-query-mongo:
     image: mongo:5.0.7
   zookeeper:

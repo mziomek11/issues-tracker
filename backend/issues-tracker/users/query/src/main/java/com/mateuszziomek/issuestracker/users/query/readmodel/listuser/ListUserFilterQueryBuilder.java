@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.users.query.readmodel.listuser;
 
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserStatus;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListUser;
+import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 
 import java.util.List;
 

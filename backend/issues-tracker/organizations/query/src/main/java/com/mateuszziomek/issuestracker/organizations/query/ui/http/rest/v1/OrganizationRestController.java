@@ -1,18 +1,18 @@
 package com.mateuszziomek.issuestracker.organizations.query.ui.http.rest.v1;
 
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetDetailsOrganizationQuery;
-import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListInvitationQuery;
+import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListInvitationsQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListOrganizationsQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.handler.GetDetailsOrganizationQueryHandler;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListInvitation;
-import com.mateuszziomek.issuestracker.shared.readmodel.ListOrganization;
+import com.mateuszziomek.issuestracker.shared.readmodel.invitation.ListInvitation;
+import com.mateuszziomek.issuestracker.shared.readmodel.organization.ListOrganization;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
-import com.mateuszziomek.issuestracker.shared.readmodel.DetailsOrganization;
+import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -56,7 +56,7 @@ public class OrganizationRestController {
     public Flux<ListInvitation> getListInvitations(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId
     ) {
-        var getListInvitationQuery = GetListInvitationQuery
+        var getListInvitationQuery = GetListInvitationsQuery
                 .builder()
                 .memberId(userId)
                 .build();

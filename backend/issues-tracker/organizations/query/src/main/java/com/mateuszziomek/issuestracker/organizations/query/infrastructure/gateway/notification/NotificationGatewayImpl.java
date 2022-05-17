@@ -8,7 +8,7 @@ import com.mateuszziomek.issuestracker.shared.ui.notification.UserNotification;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
-import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.notification.NotificationRestClient;
+import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.notification.ReactiveNotificationRestClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -27,7 +27,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
     private static final String ORGANIZATION_MEMBER_JOINED = "OrganizationMemberJoined";
     private static final String ORGANIZATION_PROJECT_CREATED = "OrganizationProjectCreated";
 
-    private final NotificationRestClient notificationRestClient;
+    private final ReactiveNotificationRestClient notificationRestClient;
 
     @Override
     public Mono<Void> notify(OrganizationCreatedEvent event, Organization organization) {
