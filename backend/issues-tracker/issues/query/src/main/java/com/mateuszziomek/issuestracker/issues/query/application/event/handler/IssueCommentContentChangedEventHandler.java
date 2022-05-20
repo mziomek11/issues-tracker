@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.query.application.event.handler;
 
 import com.mateuszziomek.cqrs.event.ReactiveEventHandler;
+import com.mateuszziomek.issuestracker.issues.query.application.gateway.notification.NotificationGateway;
 import com.mateuszziomek.issuestracker.issues.query.domain.issue.IssueRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.IssueCommentContentChangedEvent;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class IssueCommentContentChangedEventHandler implements ReactiveEventHandler<IssueCommentContentChangedEvent> {
     private final IssueRepository issueRepository;
+    private final NotificationGateway notificationGateway;
 
     @Override
     public Mono<Void> handle(IssueCommentContentChangedEvent event) {
@@ -18,6 +20,7 @@ public class IssueCommentContentChangedEventHandler implements ReactiveEventHand
                 .findById(event.getId())
                 .doOnNext(issue -> issue.changeCommentContent(event))
                 .flatMap(issueRepository::save)
+                .doOnNext(issue -> notificationGateway.notify(event, issue).subscribe())
                 .then();
     }
 }

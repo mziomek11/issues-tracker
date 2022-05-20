@@ -82,6 +82,7 @@ services:
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ISSUES_QUERY_MONGO_HOST=issues-query-mongo
       - SERVICE_ISSUES_QUERY_NAME=ISSUES-QUERY
+      - SERVICE_NOTIFICATIONS_NAME=NOTIFICATIONS
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
