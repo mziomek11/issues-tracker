@@ -17,6 +17,7 @@ public class NotificationEventConsumer {
     public void consume(UserRegisteredEvent event, Acknowledgment acknowledgment) {
         eventDispatcher
                 .dispatch(event)
-                .subscribe(unused -> acknowledgment.acknowledge());
+                .doOnSuccess(unused -> acknowledgment.acknowledge())
+                .subscribe();
     }
 }

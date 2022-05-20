@@ -39,6 +39,7 @@ public class OrganizationEventConsumer {
     private void consumeEvent(BaseEvent event, Acknowledgment acknowledgment) {
         eventDispatcher
                 .dispatch(event)
-                .subscribe(unused -> acknowledgment.acknowledge());
+                .doOnNext(unused -> acknowledgment.acknowledge())
+                .subscribe();
     }
 }

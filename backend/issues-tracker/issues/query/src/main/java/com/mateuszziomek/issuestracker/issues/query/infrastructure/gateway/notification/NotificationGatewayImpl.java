@@ -125,7 +125,6 @@ public class NotificationGatewayImpl implements NotificationGateway {
     private Mono<Set<UUID>> getOrganizationUserIds(Issue issue) {
         return organizationRestClient
                 .getOrganizationById(issue.getOrganizationId())
-                .log()
                 .map(organization -> organization
                         .getMembers()
                         .stream()
