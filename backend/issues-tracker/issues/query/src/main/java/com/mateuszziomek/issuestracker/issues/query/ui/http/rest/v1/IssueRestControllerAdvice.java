@@ -4,6 +4,7 @@ import com.mateuszziomek.issuestracker.issues.query.application.gateway.organiza
 import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.query.application.query.exception.IssueNotFoundException;
 import com.mateuszziomek.rest.v1.RestErrorResponse;
 import com.mateuszziomek.rest.v1.RestValidationException;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,15 @@ public class IssueRestControllerAdvice {
 
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(IssueNotFoundException.class)
+    public ResponseEntity<RestErrorResponse> handle(IssueNotFoundException ex) {
+        var errorResponse = new RestErrorResponse("Issue not found");
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
     }
 }

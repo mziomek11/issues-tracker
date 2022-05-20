@@ -2,6 +2,11 @@ import { FormEvent, useState } from "react";
 import { get, post, patch, deletee } from "./http";
 
 export const Issues = () => {
+  const [getIssueForm, setGetIssueForm] = useState({
+    organization: "",
+    project: "",
+    issue: "",
+  });
   const [issueForm, setIssueForm] = useState({
     name: "",
     content: "Some content",
@@ -111,6 +116,16 @@ export const Issues = () => {
     console.log(issues);
   };
 
+  const getIssue = async (e: FormEvent) => {
+    e.preventDefault();
+    const { organization, project, issue } = getIssueForm;
+    const issues = await get(
+      `/api/v1/issue-management/organizations/${organization}/projects/${project}/issues/${issue}`
+    );
+
+    console.log(issues);
+  };
+
   return (
     <div>
       <h1>Issues</h1>
@@ -133,6 +148,35 @@ export const Issues = () => {
         />
 
         <button>Get Issues</button>
+      </form>
+
+      <form onSubmit={getIssue}>
+        <h2>Get issue form</h2>
+        <label>Organization</label>
+        <input
+          value={getIssueForm.organization}
+          onChange={(e) =>
+            setGetIssueForm({ ...getIssueForm, organization: e.target.value })
+          }
+        />
+
+        <label>Project</label>
+        <input
+          value={getIssueForm.project}
+          onChange={(e) =>
+            setGetIssueForm({ ...getIssueForm, project: e.target.value })
+          }
+        />
+
+        <label>Issue</label>
+        <input
+          value={getIssueForm.issue}
+          onChange={(e) =>
+            setGetIssueForm({ ...getIssueForm, issue: e.target.value })
+          }
+        />
+
+        <button>Get Issue</button>
       </form>
 
       <form onSubmit={createIssues}>
