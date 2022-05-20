@@ -1,4 +1,4 @@
-package com.mateuszziomek.issuestracker.issues.query.domain;
+package com.mateuszziomek.issuestracker.issues.query.domain.member;
 
 import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
 import lombok.AllArgsConstructor;

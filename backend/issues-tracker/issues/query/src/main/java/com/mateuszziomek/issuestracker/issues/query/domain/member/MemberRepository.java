@@ -1,4 +1,4 @@
-package com.mateuszziomek.issuestracker.issues.query.domain;
+package com.mateuszziomek.issuestracker.issues.query.domain.member;
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 

@@ -1,9 +1,6 @@
 package com.mateuszziomek.issuestracker.shared.readmodel.issue;
 
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueStatus;
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueType;
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueUpdateType;
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.VoteType;
+import com.mateuszziomek.issuestracker.shared.domain.valueobject.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +21,7 @@ public class DetailsIssue {
     private IssueType type;
     private List<DetailsIssue.Vote> votes;
     private List<DetailsIssue.IssueUpdate> updates;
+    private List<DetailsIssue.Comment> comments;
     private DetailsIssue.Creator creator;
     private DetailsIssue.Project project;
     private DetailsIssue.Organization organization;
@@ -71,5 +69,29 @@ public class DetailsIssue {
     @Builder
     public static class Organization {
         private UUID id;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Comment {
+        private UUID id;
+        private String content;
+        private CommentStatus status;
+        private DetailsIssue.Creator creator;
+        private List<DetailsIssue.CommentUpdate> updates;
+        private List<DetailsIssue.Vote> votes;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentUpdate<T> {
+        private CommentUpdateType type;
+        private LocalDateTime updatedAt;
+        private T previousValues;
+        private T currentValue;
     }
 }

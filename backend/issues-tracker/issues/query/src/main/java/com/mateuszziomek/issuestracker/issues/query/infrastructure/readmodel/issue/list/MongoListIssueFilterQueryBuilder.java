@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.issues.query.infrastructure.readmodel.issue.list;
 
-import com.mateuszziomek.issuestracker.issues.query.domain.Issue;
+import com.mateuszziomek.issuestracker.issues.query.domain.issue.Issue;
 import com.mateuszziomek.issuestracker.issues.query.readmodel.issue.list.ListIssueFilterQueryBuilder;
 import com.mateuszziomek.issuestracker.issues.query.readmodel.issue.list.ListIssueMapper;
 import com.mateuszziomek.issuestracker.shared.readmodel.issue.ListIssue;

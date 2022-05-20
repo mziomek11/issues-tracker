@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.issues.query.readmodel.issue.details;
 
-import com.mateuszziomek.issuestracker.issues.query.domain.IssueRepository;
+import com.mateuszziomek.issuestracker.issues.query.domain.issue.IssueRepository;
 import com.mateuszziomek.issuestracker.shared.readmodel.issue.DetailsIssue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.mateuszziomek.issuestracker.issues.query.domain;
+package com.mateuszziomek.issuestracker.issues.query.domain.issue;
 
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueUpdateType;
 import lombok.AllArgsConstructor;
@@ -12,4 +12,5 @@ public class IssueUpdate<T> {
     private IssueUpdateType type;
     private LocalDateTime updatedAt;
     private T previousValues;
-    private T currentValue;}
+    private T currentValue;
+}

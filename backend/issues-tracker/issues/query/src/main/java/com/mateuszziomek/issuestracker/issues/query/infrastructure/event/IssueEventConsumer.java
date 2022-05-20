@@ -18,6 +18,26 @@ public class IssueEventConsumer {
         consumeEvent(event, acknowledgment);
     }
 
+    @KafkaListener(topics = "IssueCommentedEvent", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(IssueCommentedEvent event, Acknowledgment acknowledgment) {
+        consumeEvent(event, acknowledgment);
+    }
+
+    @KafkaListener(topics = "IssueCommentContentChangedEvent", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(IssueCommentContentChangedEvent event, Acknowledgment acknowledgment) {
+        consumeEvent(event, acknowledgment);
+    }
+
+    @KafkaListener(topics = "IssueCommentHiddenEvent", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(IssueCommentHiddenEvent event, Acknowledgment acknowledgment) {
+        consumeEvent(event, acknowledgment);
+    }
+
+    @KafkaListener(topics = "IssueCommentVotedEvent", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(IssueCommentVotedEvent event, Acknowledgment acknowledgment) {
+        consumeEvent(event, acknowledgment);
+    }
+
     @KafkaListener(topics = "IssueContentChangedEvent", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(IssueContentChangedEvent event, Acknowledgment acknowledgment) {
         consumeEvent(event, acknowledgment);

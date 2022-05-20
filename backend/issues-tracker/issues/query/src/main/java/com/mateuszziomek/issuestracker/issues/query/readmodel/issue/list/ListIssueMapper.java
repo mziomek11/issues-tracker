@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.query.readmodel.issue.list;
 
-import com.mateuszziomek.issuestracker.issues.query.domain.Issue;
-import com.mateuszziomek.issuestracker.issues.query.domain.Member;
+import com.mateuszziomek.issuestracker.issues.query.domain.issue.Issue;
+import com.mateuszziomek.issuestracker.issues.query.domain.member.Member;
 import com.mateuszziomek.issuestracker.issues.query.domain.Vote;
 import com.mateuszziomek.issuestracker.shared.readmodel.issue.ListIssue;
 

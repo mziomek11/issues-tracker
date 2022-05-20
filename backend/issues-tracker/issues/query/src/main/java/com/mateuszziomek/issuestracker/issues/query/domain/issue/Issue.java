@@ -1,5 +1,8 @@
-package com.mateuszziomek.issuestracker.issues.query.domain;
+package com.mateuszziomek.issuestracker.issues.query.domain.issue;
 
+import com.mateuszziomek.issuestracker.issues.query.domain.comment.Comment;
+import com.mateuszziomek.issuestracker.issues.query.domain.member.Member;
+import com.mateuszziomek.issuestracker.issues.query.domain.Vote;
 import com.mateuszziomek.issuestracker.shared.domain.event.*;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueStatus;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueType;
@@ -8,6 +11,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -21,6 +25,7 @@ public class Issue {
     private IssueType type;
     private List<Vote> votes;
     private List<IssueUpdate> updates;
+    private List<Comment> comments;
     private Member creator;
 
     public static Issue create(IssueOpenedEvent event, Member creator) {
@@ -34,6 +39,7 @@ public class Issue {
         issue.type = event.getIssueType();
         issue.votes = new ArrayList<>();
         issue.updates = new ArrayList<>();
+        issue.comments = new ArrayList<>();
         issue.creator = creator;
         return issue;
     }
@@ -60,7 +66,31 @@ public class Issue {
     public void vote(IssueVotedEvent event) {
         var vote = new Vote(event.getMemberId(), event.getVoteType());
 
-        votes.removeIf((v) -> v.getMemberId().equals(event.getMemberId()));
+        votes.removeIf(v -> v.getMemberId().equals(event.getMemberId()));
         votes.add(vote);
+    }
+
+    public void comment(Comment comment) {
+        comments.add(comment);
+    }
+
+    public void changeCommentContent(IssueCommentContentChangedEvent event) {
+        findCommentWithId(event.getCommentId()).ifPresent(comment -> comment.changeContent(event));
+    }
+
+    public void hideComment(IssueCommentHiddenEvent event) {
+        findCommentWithId(event.getCommentId()).ifPresent(Comment::hide);
+    }
+
+    public void voteComment(IssueCommentVotedEvent event) {
+        var vote = new Vote(event.getMemberId(), event.getVoteType());
+        findCommentWithId(event.getCommentId()).ifPresent(comment -> comment.vote(vote));
+    }
+
+    private Optional<Comment> findCommentWithId(UUID commentId) {
+        return comments
+                .stream()
+                .filter(comment -> comment.getId().equals(commentId))
+                .findFirst();
     }
 }

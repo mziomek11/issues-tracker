@@ -1,8 +1,10 @@
 package com.mateuszziomek.issuestracker.issues.query.readmodel.issue.details;
 
-import com.mateuszziomek.issuestracker.issues.query.domain.Issue;
-import com.mateuszziomek.issuestracker.issues.query.domain.IssueUpdate;
-import com.mateuszziomek.issuestracker.issues.query.domain.Member;
+import com.mateuszziomek.issuestracker.issues.query.domain.comment.Comment;
+import com.mateuszziomek.issuestracker.issues.query.domain.comment.CommentUpdate;
+import com.mateuszziomek.issuestracker.issues.query.domain.issue.Issue;
+import com.mateuszziomek.issuestracker.issues.query.domain.issue.IssueUpdate;
+import com.mateuszziomek.issuestracker.issues.query.domain.member.Member;
 import com.mateuszziomek.issuestracker.issues.query.domain.Vote;
 import com.mateuszziomek.issuestracker.shared.readmodel.issue.DetailsIssue;
 
@@ -24,6 +26,7 @@ public class DetailsIssueMapper {
                 .type(issue.getType())
                 .votes(mapVotes(issue.getVotes()))
                 .updates(mapUpdates(issue.getUpdates()))
+                .comments(mapComments(issue.getComments()))
                 .build();
     }
 
@@ -74,6 +77,42 @@ public class DetailsIssueMapper {
 
     private static DetailsIssue.IssueUpdate mapUpdate(IssueUpdate update) {
         return DetailsIssue.IssueUpdate
+                .builder()
+                .type(update.getType())
+                .updatedAt(update.getUpdatedAt())
+                .currentValue(update.getCurrentValue())
+                .previousValues(update.getPreviousValues())
+                .build();
+    }
+
+    private static List<DetailsIssue.Comment> mapComments(List<Comment> comments) {
+        return comments
+                .stream()
+                .map(DetailsIssueMapper::mapComment)
+                .toList();
+    }
+
+    private static DetailsIssue.Comment mapComment(Comment comment) {
+        return DetailsIssue.Comment
+                .builder()
+                .content(comment.getContent())
+                .id(comment.getId())
+                .status(comment.getStatus())
+                .creator(mapCreator(comment.getCreator()))
+                .votes(mapVotes(comment.getVotes()))
+                .updates(mapCommentUpdates(comment.getUpdates()))
+                .build();
+    }
+
+    private static List<DetailsIssue.CommentUpdate> mapCommentUpdates(List<CommentUpdate> updates) {
+        return updates
+                .stream()
+                .map(DetailsIssueMapper::mapCommentUpdate)
+                .toList();
+    }
+
+    private static DetailsIssue.CommentUpdate mapCommentUpdate(CommentUpdate update) {
+        return DetailsIssue.CommentUpdate
                 .builder()
                 .type(update.getType())
                 .updatedAt(update.getUpdatedAt())

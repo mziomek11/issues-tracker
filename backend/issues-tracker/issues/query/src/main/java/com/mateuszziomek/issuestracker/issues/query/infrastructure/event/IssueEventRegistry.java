@@ -3,6 +3,7 @@ package com.mateuszziomek.issuestracker.issues.query.infrastructure.event;
 import com.mateuszziomek.cqrs.event.dispatcher.ReactiveEventDispatcher;
 import com.mateuszziomek.issuestracker.issues.query.application.event.handler.*;
 import com.mateuszziomek.issuestracker.shared.domain.event.*;
+import com.mateuszziomek.issuestracker.shared.domain.event.IssueCommentContentChangedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +14,10 @@ import javax.annotation.PostConstruct;
 public class IssueEventRegistry {
     private final ReactiveEventDispatcher eventDispatcher;
     private final IssueClosedEventHandler issueClosedEventHandler;
+    private final IssueCommentedEventHandler issueCommentedEventHandler;
+    private final IssueCommentContentChangedEventHandler issueCommentContentChangedEventHandler;
+    private final IssueCommentHiddenEventHandler issueCommentHiddenEventHandler;
+    private final IssueCommentVotedEventHandler issueCommentVotedEventHandler;
     private final IssueContentChangedEventHandler issueContentChangedEventHandler;
     private final IssueOpenedEventHandler issueOpenedEventHandler;
     private final IssueRenamedEventHandler issueRenamedEventHandler;
@@ -23,7 +28,11 @@ public class IssueEventRegistry {
     @PostConstruct
     public void registerHandlers() {
         eventDispatcher.registerHandler(IssueClosedEvent.class, issueClosedEventHandler);
+        eventDispatcher.registerHandler(IssueCommentedEvent.class, issueCommentedEventHandler);
         eventDispatcher.registerHandler(IssueContentChangedEvent.class, issueContentChangedEventHandler);
+        eventDispatcher.registerHandler(IssueCommentContentChangedEvent.class, issueCommentContentChangedEventHandler);
+        eventDispatcher.registerHandler(IssueCommentVotedEvent.class, issueCommentVotedEventHandler);
+        eventDispatcher.registerHandler(IssueCommentHiddenEvent.class, issueCommentHiddenEventHandler);
         eventDispatcher.registerHandler(IssueOpenedEvent.class, issueOpenedEventHandler);
         eventDispatcher.registerHandler(IssueRenamedEvent.class, issueRenamedEventHandler);
         eventDispatcher.registerHandler(IssueTypeChangedEvent.class, issueTypeChangedEventHandler);

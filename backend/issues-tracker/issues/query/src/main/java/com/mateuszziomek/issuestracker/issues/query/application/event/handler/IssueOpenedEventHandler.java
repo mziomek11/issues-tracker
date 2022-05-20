@@ -1,9 +1,9 @@
 package com.mateuszziomek.issuestracker.issues.query.application.event.handler;
 
 import com.mateuszziomek.cqrs.event.ReactiveEventHandler;
-import com.mateuszziomek.issuestracker.issues.query.domain.Issue;
-import com.mateuszziomek.issuestracker.issues.query.domain.IssueRepository;
-import com.mateuszziomek.issuestracker.issues.query.domain.MemberRepository;
+import com.mateuszziomek.issuestracker.issues.query.domain.issue.Issue;
+import com.mateuszziomek.issuestracker.issues.query.domain.issue.IssueRepository;
+import com.mateuszziomek.issuestracker.issues.query.domain.member.MemberRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.IssueOpenedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
