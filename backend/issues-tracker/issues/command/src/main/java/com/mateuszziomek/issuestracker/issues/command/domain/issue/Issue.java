@@ -11,6 +11,9 @@ import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.Iss
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueNameSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueTypeSetException;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationId;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationProjectId;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.Vote;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.VoterId;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.Votes;
@@ -20,7 +23,6 @@ import lombok.NoArgsConstructor;
 import com.mateuszziomek.cqrs.domain.AggregateRoot;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.Comment;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.CommentId;
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueStatus;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueType;
 
@@ -33,6 +35,8 @@ public class Issue extends AggregateRoot {
     private IssueName name;
     private Comments comments = new Comments();
     private Votes votes = new Votes();
+    private IssueOrganizationDetails organizationDetails;
+    private EventFactory ef = new EventFactory(this);
 
     public static Issue open(
             IssueId id,
@@ -48,76 +52,65 @@ public class Issue extends AggregateRoot {
         return issue;
     }
 
-    @Override
-    public IssueId getId() {
-        return id;
-    }
-
     /**
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      */
-    public void close(IssueOrganizationDetails organizationDetails) {
+    public void close(OrganizationMemberId operatorId) {
         ensureIsOpen();
-        raiseEvent(EventFactory.issueClosed(id, organizationDetails));
+        raiseEvent(ef.issueClosed(operatorId));
     }
 
     /**
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueNameSetException if given name is the same as current name
      */
-    public void rename(
-            IssueName newName,
-            IssueOrganizationDetails organizationDetails
-    ) {
+    public void rename(IssueName newName, OrganizationMemberId operatorId) {
         ensureIsOpen();
 
         if (name.equals(newName)) {
             throw new IssueNameSetException(id, name);
         }
 
-        raiseEvent(EventFactory.issueRenamed(id, newName, organizationDetails));
+        raiseEvent(ef.issueRenamed(newName, operatorId));
     }
 
     /**
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueTypeSetException if given type is the same as current type
      */
-    public void changeType(
-            IssueType newType,
-            IssueOrganizationDetails organizationDetails
-    ) {
+    public void changeType(IssueType newType, OrganizationMemberId operatorId) {
         ensureIsOpen();
 
         if (type.equals(newType)) {
             throw new IssueTypeSetException(id, type);
         }
 
-        raiseEvent(EventFactory.issueTypeChanged(id, newType, organizationDetails));
+        raiseEvent(ef.issueTypeChanged(newType, operatorId));
     }
 
     /**
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws IssueContentSetException if given content is the same as current content
      */
-    public void changeContent(IssueContent newContent, IssueOrganizationDetails organizationDetails) {
+    public void changeContent(IssueContent newContent, OrganizationMemberId operatorId) {
         ensureIsOpen();
 
         if (content.equals(newContent)) {
             throw new IssueContentSetException(id, content);
         }
 
-        raiseEvent(EventFactory.issueContentChanged(id, newContent, organizationDetails));
+        raiseEvent(ef.issueContentChanged(newContent, operatorId));
     }
 
     /**
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
      */
-    public void comment(Comment comment, IssueOrganizationDetails organizationDetails) {
+    public void comment(Comment comment, OrganizationMemberId operatorId) {
         ensureIsOpen();
         comments.ensureCanAdd(comment);
 
-        raiseEvent(EventFactory.issueCommented(id, comment.id(), comment.content(), organizationDetails));
+        raiseEvent(ef.issueCommented(comment, operatorId));
     }
 
     /**
@@ -128,12 +121,12 @@ public class Issue extends AggregateRoot {
     public void changeCommentContent(
             CommentId commentId,
             CommentContent commentContent,
-            IssueOrganizationDetails organizationDetails
+            OrganizationMemberId operatorId
     ) {
         ensureIsOpen();
         comments.ensureCanChangeContent(commentId, commentContent);
 
-        raiseEvent(EventFactory.issueCommentContentChanged(id, commentId, commentContent, organizationDetails));
+        raiseEvent(ef.issueCommentContentChanged(commentId, commentContent, operatorId));
     }
 
     /**
@@ -141,11 +134,11 @@ public class Issue extends AggregateRoot {
      * @throws CommentNotFoundException see {@link Comments#ensureCanHide(CommentId)}
      * @throws CommentHiddenException see {@link Comments#ensureCanHide(CommentId)}
      */
-    public void hideComment(CommentId commentId, IssueOrganizationDetails organizationDetails) {
+    public void hideComment(CommentId commentId, OrganizationMemberId operatorId) {
         ensureIsOpen();
         comments.ensureCanHide(commentId);
 
-        raiseEvent(EventFactory.issueCommentHidden(id, commentId, organizationDetails));
+        raiseEvent(ef.issueCommentHidden(commentId, operatorId));
     }
 
     /**
@@ -153,23 +146,22 @@ public class Issue extends AggregateRoot {
      * @throws CommentNotFoundException see {@link Comments#ensureCanVote(CommentId, Vote)}
      * @throws VoteAlreadyExistsException see {@link Comments#ensureCanVote(CommentId, Vote)}
      */
-    public void voteComment(CommentId commentId, Vote vote, IssueOrganizationDetails organizationDetails) {
+    public void voteComment(CommentId commentId, Vote vote) {
         ensureIsOpen();
         comments.ensureCanVote(commentId, vote);
 
-        raiseEvent(EventFactory.issueCommentVoted(id, commentId, vote.type(), organizationDetails));
+        raiseEvent(ef.issueCommentVoted(commentId, vote));
     }
 
     /**
-     * @param vote to be added
      * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
      * @throws VoteAlreadyExistsException see {@link Votes#ensureCanAdd(Vote)}
      */
-    public void vote(Vote vote, IssueOrganizationDetails organizationDetails) {
+    public void vote(Vote vote) {
         ensureIsOpen();
         votes.ensureCanAdd(vote);
 
-        raiseEvent(EventFactory.issueVoted(id, vote.type(), organizationDetails));
+        raiseEvent(ef.issueVoted(vote));
     }
 
     /**
@@ -185,12 +177,26 @@ public class Issue extends AggregateRoot {
         return status.equals(IssueStatus.CLOSED);
     }
 
+    @Override
+    public IssueId getId() {
+        return id;
+    }
+
+    public IssueOrganizationDetails getOrganizationDetails() {
+        return organizationDetails;
+    }
+
     public void on(IssueOpenedEvent issueOpenedEvent) {
         id = new IssueId(issueOpenedEvent.getId());
         type = issueOpenedEvent.getIssueType();
         status = IssueStatus.OPENED;
         content = new IssueContent(issueOpenedEvent.getIssueContent());
         name = new IssueName(issueOpenedEvent.getIssueName());
+        organizationDetails = new IssueOrganizationDetails(
+                new OrganizationId(issueOpenedEvent.getOrganizationId()),
+                new OrganizationProjectId(issueOpenedEvent.getProjectId()),
+                new OrganizationMemberId(issueOpenedEvent.getMemberId())
+        );
     }
 
     public void on(IssueClosedEvent issueClosedEvent) {

@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -25,9 +26,9 @@ public class HideIssueCommentCommandHandler implements CommandHandler<HideIssueC
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws CommentHiddenException see {@link Issue#hideComment(CommentId, IssueOrganizationDetails)}
-     * @throws CommentNotFoundException see {@link Issue#hideComment(CommentId, IssueOrganizationDetails)}
-     * @throws IssueClosedException see {@link Issue#hideComment(CommentId, IssueOrganizationDetails)}
+     * @throws CommentHiddenException see {@link Issue#hideComment(CommentId, OrganizationMemberId)}
+     * @throws CommentNotFoundException see {@link Issue#hideComment(CommentId, OrganizationMemberId)}
+     * @throws IssueClosedException see {@link Issue#hideComment(CommentId, OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
@@ -42,7 +43,7 @@ public class HideIssueCommentCommandHandler implements CommandHandler<HideIssueC
                 .getById(command.getIssueId())
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.hideComment(command.getCommentId(), command.getOrganizationDetails());
+        issue.hideComment(command.getCommentId(), command.getOrganizationDetails().memberId());
 
         eventSourcingHandler.save(issue);
     }

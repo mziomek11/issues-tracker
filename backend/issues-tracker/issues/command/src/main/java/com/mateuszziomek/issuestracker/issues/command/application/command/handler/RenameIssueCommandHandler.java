@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -24,8 +25,8 @@ public class RenameIssueCommandHandler implements CommandHandler<RenameIssueComm
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws IssueClosedException see {@link Issue#rename(IssueName, IssueOrganizationDetails)}
-     * @throws IssueNameSetException see {@link Issue#rename(IssueName, IssueOrganizationDetails)}
+     * @throws IssueClosedException see {@link Issue#rename(IssueName, OrganizationMemberId)}
+     * @throws IssueNameSetException see {@link Issue#rename(IssueName, OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
@@ -42,7 +43,7 @@ public class RenameIssueCommandHandler implements CommandHandler<RenameIssueComm
 
         issue.rename(
                 command.getIssueName(),
-                command.getOrganizationDetails()
+                command.getOrganizationDetails().memberId()
         );
 
         eventSourcingHandler.save(issue);

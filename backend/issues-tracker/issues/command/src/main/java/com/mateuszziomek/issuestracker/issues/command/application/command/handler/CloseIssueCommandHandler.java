@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -22,7 +23,7 @@ public class CloseIssueCommandHandler implements CommandHandler<CloseIssueComman
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws IssueClosedException see {@link Issue#close(IssueOrganizationDetails)}
+     * @throws IssueClosedException see {@link Issue#close(OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
@@ -37,7 +38,7 @@ public class CloseIssueCommandHandler implements CommandHandler<CloseIssueComman
                 .getById(command.getIssueId())
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.close(command.getOrganizationDetails());
+        issue.close(command.getOrganizationDetails().memberId());
 
         eventSourcingHandler.save(issue);
     }

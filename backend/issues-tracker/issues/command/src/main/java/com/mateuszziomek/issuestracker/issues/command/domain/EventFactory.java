@@ -1,16 +1,19 @@
 package com.mateuszziomek.issuestracker.issues.command.domain;
 
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
+import com.mateuszziomek.issuestracker.issues.command.domain.comment.Comment;
+import com.mateuszziomek.issuestracker.issues.command.domain.issue.*;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.CommentContent;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.CommentId;
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueContent;
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueId;
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueName;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
+import com.mateuszziomek.issuestracker.issues.command.domain.vote.Vote;
 import com.mateuszziomek.issuestracker.shared.domain.event.*;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.IssueType;
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.VoteType;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class EventFactory {
+    private final Issue issue;
+
     public static IssueOpenedEvent issueOpened(
             IssueId id,
             IssueType type,
@@ -30,147 +33,114 @@ public class EventFactory {
                 .build();
     }
 
-    public static IssueClosedEvent issueClosed(
-            IssueId id,
-            IssueOrganizationDetails organizationDetails
-    ) {
+    public IssueClosedEvent issueClosed(OrganizationMemberId operatorId) {
         return IssueClosedEvent
                 .builder()
-                .issueId(id.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(operatorId.getValue())
                 .build();
     }
 
-    public static IssueRenamedEvent issueRenamed(
-            IssueId id,
-            IssueName name,
-            IssueOrganizationDetails organizationDetails
-    ) {
+    public IssueRenamedEvent issueRenamed(IssueName name, OrganizationMemberId operatorId) {
         return IssueRenamedEvent
                 .builder()
-                .issueId(id.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(operatorId.getValue())
                 .issueName(name.text())
                 .build();
     }
 
-    public static IssueTypeChangedEvent issueTypeChanged(
-            IssueId id,
-            IssueType type,
-            IssueOrganizationDetails organizationDetails
-
-    ) {
+    public IssueTypeChangedEvent issueTypeChanged(IssueType type, OrganizationMemberId operatorId) {
         return IssueTypeChangedEvent
                 .builder()
-                .issueId(id.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(operatorId.getValue())
                 .issueType(type)
                 .build();
     }
 
-    public static IssueContentChangedEvent issueContentChanged(
-            IssueId id,
-            IssueContent content,
-            IssueOrganizationDetails organizationDetails
-    ) {
+    public IssueContentChangedEvent issueContentChanged(IssueContent content, OrganizationMemberId operatorId) {
         return IssueContentChangedEvent
                 .builder()
-                .issueId(id.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(operatorId.getValue())
                 .issueContent(content.text())
                 .build();
     }
 
-    public static IssueCommentedEvent issueCommented(
-            IssueId issueId,
-            CommentId commentId,
-            CommentContent commentContent,
-            IssueOrganizationDetails organizationDetails
-
+    public IssueCommentedEvent issueCommented(
+            Comment comment,
+            OrganizationMemberId operatorId
     ) {
         return IssueCommentedEvent
                 .builder()
-                .issueId(issueId.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
-                .commentId(commentId.getValue())
-                .commentContent(commentContent.text())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(operatorId.getValue())
+                .commentId(comment.id().getValue())
+                .commentContent(comment.content().text())
                 .build();
     }
 
-    public static IssueCommentContentChangedEvent issueCommentContentChanged(
-            IssueId issueId,
+    public IssueCommentContentChangedEvent issueCommentContentChanged(
             CommentId commentId,
             CommentContent commentContent,
-            IssueOrganizationDetails organizationDetails
+            OrganizationMemberId operatorId
     ) {
         return IssueCommentContentChangedEvent
                 .builder()
-                .issueId(issueId.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(operatorId.getValue())
                 .commentId(commentId.getValue())
                 .commentContent(commentContent.text())
                 .build();
     }
 
-    public static IssueCommentHiddenEvent issueCommentHidden(
-            IssueId issueId,
-            CommentId commentId,
-            IssueOrganizationDetails organizationDetails
-
-    ) {
+    public IssueCommentHiddenEvent issueCommentHidden(CommentId commentId, OrganizationMemberId operatorId) {
         return IssueCommentHiddenEvent
                 .builder()
-                .issueId(issueId.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(operatorId.getValue())
                 .commentId(commentId.getValue())
                 .build();
     }
 
-    public static IssueVotedEvent issueVoted(
-            IssueId issueId,
-            VoteType voteType,
-            IssueOrganizationDetails organizationDetails
-    ) {
+    public IssueVotedEvent issueVoted(Vote vote) {
         return IssueVotedEvent
                 .builder()
-                .issueId(issueId.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
-                .voteType(voteType)
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(vote.voterId().getValue())
+                .voteType(vote.type())
                 .build();
     }
 
-    public static IssueCommentVotedEvent issueCommentVoted(
-            IssueId issueId,
+    public IssueCommentVotedEvent issueCommentVoted(
             CommentId commentId,
-            VoteType voteType,
-            IssueOrganizationDetails organizationDetails
+            Vote vote
     ) {
         return IssueCommentVotedEvent
                 .builder()
-                .issueId(issueId.getValue())
-                .organizationId(organizationDetails.organizationId().getValue())
-                .projectId(organizationDetails.projectId().getValue())
-                .memberId(organizationDetails.memberId().getValue())
+                .issueId(issue.getId().getValue())
+                .organizationId(issue.getOrganizationDetails().organizationId().getValue())
+                .projectId(issue.getOrganizationDetails().projectId().getValue())
+                .memberId(vote.voterId().getValue())
                 .commentId(commentId.getValue())
-                .voteType(voteType)
+                .voteType(vote.type())
                 .build();
     }
-
-    private EventFactory() {}
 }

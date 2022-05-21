@@ -27,14 +27,14 @@ public class VoteIssueCommentCommandHandler implements CommandHandler<VoteIssueC
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws CommentNotFoundException see {@link Issue#voteComment(CommentId, Vote, IssueOrganizationDetails)}
-     * @throws IssueClosedException see {@link Issue#voteComment(CommentId, Vote, IssueOrganizationDetails)}
+     * @throws CommentNotFoundException see {@link Issue#voteComment(CommentId, Vote)}
+     * @throws IssueClosedException see {@link Issue#voteComment(CommentId, Vote)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
-     * @throws VoteAlreadyExistsException see {@link Issue#voteComment(CommentId, Vote, IssueOrganizationDetails)}
+     * @throws VoteAlreadyExistsException see {@link Issue#voteComment(CommentId, Vote)}
      */
     @Override
     public void handle(VoteIssueCommentCommand command) {
@@ -45,7 +45,7 @@ public class VoteIssueCommentCommandHandler implements CommandHandler<VoteIssueC
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
         var vote = new Vote(VoterId.fromMemberId(command.getOrganizationDetails().memberId()), command.getVoteType());
-        issue.voteComment(command.getCommentId(), vote, command.getOrganizationDetails());
+        issue.voteComment(command.getCommentId(), vote);
 
         eventSourcingHandler.save(issue);
     }

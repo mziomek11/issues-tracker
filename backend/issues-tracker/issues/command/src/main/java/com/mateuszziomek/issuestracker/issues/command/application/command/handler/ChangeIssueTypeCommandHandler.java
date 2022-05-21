@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -24,9 +25,9 @@ public class ChangeIssueTypeCommandHandler implements CommandHandler<ChangeIssue
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws IssueClosedException see {@link Issue#changeType(IssueType, IssueOrganizationDetails)}
+     * @throws IssueClosedException see {@link Issue#changeType(IssueType, OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws IssueTypeSetException see {@link Issue#changeType(IssueType, IssueOrganizationDetails)}
+     * @throws IssueTypeSetException see {@link Issue#changeType(IssueType, OrganizationMemberId)}
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationProjectNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
@@ -40,7 +41,7 @@ public class ChangeIssueTypeCommandHandler implements CommandHandler<ChangeIssue
                 .getById(command.getIssueId())
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.changeType(command.getIssueType(), command.getOrganizationDetails());
+        issue.changeType(command.getIssueType(), command.getOrganizationDetails().memberId());
 
         eventSourcingHandler.save(issue);
     }

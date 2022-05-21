@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -27,9 +28,9 @@ public class ChangeIssueCommentContentCommandHandler implements CommandHandler<C
 
 
     /**
-     * @throws CommentContentSetException see {@link Issue#changeCommentContent(CommentId, CommentContent, IssueOrganizationDetails)}
-     * @throws CommentNotFoundException see {@link Issue#changeCommentContent(CommentId, CommentContent, IssueOrganizationDetails)}
-     * @throws IssueClosedException see {@link Issue#changeCommentContent(CommentId, CommentContent, IssueOrganizationDetails)}
+     * @throws CommentContentSetException see {@link Issue#changeCommentContent(CommentId, CommentContent, OrganizationMemberId)}
+     * @throws CommentNotFoundException see {@link Issue#changeCommentContent(CommentId, CommentContent, OrganizationMemberId)}
+     * @throws IssueClosedException see {@link Issue#changeCommentContent(CommentId, CommentContent, OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
@@ -46,7 +47,7 @@ public class ChangeIssueCommentContentCommandHandler implements CommandHandler<C
         issue.changeCommentContent(
                 command.getCommentId(),
                 command.getCommentContent(),
-                command.getOrganizationDetails()
+                command.getOrganizationDetails().memberId()
         );
 
         eventSourcingHandler.save(issue);

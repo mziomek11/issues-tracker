@@ -1,6 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -24,8 +25,8 @@ public class ChangeIssueContentCommandHandler implements CommandHandler<ChangeIs
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws IssueClosedException see {@link Issue#changeContent(IssueContent, IssueOrganizationDetails)}
-     * @throws IssueContentSetException see {@link Issue#changeContent(IssueContent, IssueOrganizationDetails)}
+     * @throws IssueClosedException see {@link Issue#changeContent(IssueContent, OrganizationMemberId)}
+     * @throws IssueContentSetException see {@link Issue#changeContent(IssueContent, OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
@@ -40,7 +41,7 @@ public class ChangeIssueContentCommandHandler implements CommandHandler<ChangeIs
                 .getById(command.getIssueId())
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
-        issue.changeContent(command.getIssueContent(), command.getOrganizationDetails());
+        issue.changeContent(command.getIssueContent(), command.getOrganizationDetails().memberId());
 
         eventSourcingHandler.save(issue);
     }

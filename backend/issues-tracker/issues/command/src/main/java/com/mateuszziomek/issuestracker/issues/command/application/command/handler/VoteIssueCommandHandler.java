@@ -25,13 +25,13 @@ public class VoteIssueCommandHandler implements CommandHandler<VoteIssueCommand>
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws IssueClosedException see {@link Issue#vote(Vote, IssueOrganizationDetails)}
+     * @throws IssueClosedException see {@link Issue#vote(Vote)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
-     * @throws VoteAlreadyExistsException see {@link Issue#vote(Vote, IssueOrganizationDetails)}
+     * @throws VoteAlreadyExistsException see {@link Issue#vote(Vote)}
      */
     @Override
     public void handle(VoteIssueCommand command) {
@@ -42,7 +42,7 @@ public class VoteIssueCommandHandler implements CommandHandler<VoteIssueCommand>
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
 
         var vote = new Vote(VoterId.fromMemberId(command.getOrganizationDetails().memberId()), command.getVoteType());
-        issue.vote(vote, command.getOrganizationDetails());
+        issue.vote(vote);
 
         eventSourcingHandler.save(issue);
     }
