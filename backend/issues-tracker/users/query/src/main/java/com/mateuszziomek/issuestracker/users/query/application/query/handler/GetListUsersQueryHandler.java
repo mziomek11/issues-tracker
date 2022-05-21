@@ -1,5 +1,7 @@
 package com.mateuszziomek.issuestracker.users.query.application.query.handler;
 
+import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
+import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.QueryHandler;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetListUsersQuery;
@@ -15,8 +17,15 @@ import java.util.List;
 public class GetListUsersQueryHandler implements QueryHandler<GetListUsersQuery, List<ListUser>> {
     private final ListUserFinder listUserFinder;
 
+    /**
+     * @throws AccessDeniedException if user role is not {@link UserRole#SYSTEM}
+     */
     @Override
     public List<ListUser> handle(GetListUsersQuery query) {
+        if (!UserRole.SYSTEM.equals(query.getUserRole())) {
+            throw new AccessDeniedException();
+        }
+
         var filter = ListUserFilter
                 .builder()
                 .email(query.getEmail())

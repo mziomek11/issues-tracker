@@ -6,9 +6,11 @@ import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import com.mateuszziomek.issuestracker.shared.ui.user.http.rest.v1.param.GetListUsersParam;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetJWTQuery;
+import com.mateuszziomek.issuestracker.users.query.application.query.GetListUsersQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetUserIdFromJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.exception.InvalidCredentialsException;
 import com.mateuszziomek.issuestracker.users.query.application.query.handler.GetJWTQueryHandler;
+import com.mateuszziomek.issuestracker.users.query.application.query.handler.GetListUsersQueryHandler;
 import com.mateuszziomek.issuestracker.users.query.application.query.handler.GetUserIdFromJWTQueryHandler;
 import com.mateuszziomek.issuestracker.users.query.application.service.jwt.exception.InvalidJWTException;
 import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.dto.GetJWTDto;
@@ -31,18 +33,14 @@ public class UserRestController {
     private final QueryDispatcher queryDispatcher;
 
     /**
-     * @throws AccessDeniedException if user is not {@link UserRole#SYSTEM}
+     * @throws AccessDeniedException see {@link GetListUsersQueryHandler#handle(GetListUsersQuery)}
      */
     @GetMapping("/users")
     public ResponseEntity<List<ListUser>> getListUsers(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
             GetListUsersParam param
     ) {
-        if (!UserRole.SYSTEM.equals(userRole)) {
-            throw new AccessDeniedException();
-        }
-
-        var getListUsersQuery = GetListUsersParamMapper.toQuery(param);
+        var getListUsersQuery = GetListUsersParamMapper.toQuery(param, userRole);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -62,7 +60,7 @@ public class UserRestController {
     }
 
     /**
-     * @throws AccessDeniedException if user is not {@link UserRole#SYSTEM}
+     * @throws AccessDeniedException see {@link GetUserIdFromJWTQueryHandler#handle(GetUserIdFromJWTQuery)}
      * @throws InvalidJWTException see {@link GetUserIdFromJWTQueryHandler#handle(GetUserIdFromJWTQuery)}
      */
     @GetMapping("/users/id")
@@ -70,12 +68,8 @@ public class UserRestController {
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
     ) {
-        if (!UserRole.SYSTEM.equals(userRole)) {
-            throw new AccessDeniedException();
-        }
-
         var jwt = authHeader.replace("Bearer ", "");
-        var getUserIdFromJWTQuery = new GetUserIdFromJWTQuery(jwt);
+        var getUserIdFromJWTQuery = new GetUserIdFromJWTQuery(jwt, userRole);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

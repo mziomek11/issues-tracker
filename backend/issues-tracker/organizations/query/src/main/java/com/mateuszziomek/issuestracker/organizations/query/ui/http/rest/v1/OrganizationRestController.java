@@ -35,7 +35,7 @@ public class OrganizationRestController {
     }
 
      /**
-     * @throws AccessDeniedException if user is not {@link UserRole#SYSTEM}
+     * @throws AccessDeniedException see {@link GetDetailsOrganizationQueryHandler#handle(GetDetailsOrganizationQuery)}
      * @throws OrganizationNotFoundException see {@link GetDetailsOrganizationQueryHandler#handle(GetDetailsOrganizationQuery)}
      */
     @GetMapping("/organizations/{organizationId}")
@@ -44,11 +44,7 @@ public class OrganizationRestController {
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
             @PathVariable UUID organizationId
     ) {
-        if (!UserRole.SYSTEM.equals(userRole)) {
-            throw new AccessDeniedException();
-        }
-
-        return queryDispatcher.dispatch(new GetDetailsOrganizationQuery(organizationId));
+        return queryDispatcher.dispatch(new GetDetailsOrganizationQuery(organizationId, userRole));
     }
 
     @GetMapping("/invitations")
