@@ -4,6 +4,10 @@ eureka:
       defaultZone: ${SERVICE_DISCOVERY_ZONE}
   instance:
     instance-id: ${spring.application.name}:${instanceId:${random.value}}
+rest:
+  client:
+    users-query:
+      name: ${SERVICE_USERS_QUERY_NAME}
 server:
   port: 0
 spring:

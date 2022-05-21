@@ -4,6 +4,7 @@ import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
+import com.mateuszziomek.issuestracker.shared.ui.user.http.rest.v1.param.GetListUsersParam;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetUserIdFromJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.exception.InvalidCredentialsException;
@@ -16,7 +17,6 @@ import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper.GetLis
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
-import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.param.GetListUsersParam;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

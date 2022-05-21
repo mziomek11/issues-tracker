@@ -9,26 +9,20 @@ import com.mateuszziomek.issuestracker.issues.command.domain.organization.Organi
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
-import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
+import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.ReactiveOrganizationRestClient;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
 public class OrganizationGatewayImpl implements OrganizationGateway {
-    private final DiscoveryClient discoveryClient;
+    private final ReactiveOrganizationRestClient organizationRestClient;
 
     /**
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
-     * @throws OrganizationProjectNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationProjectNotFoundException  see{@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
@@ -39,68 +33,52 @@ public class OrganizationGatewayImpl implements OrganizationGateway {
     }
 
     /**
-     * @throws OrganizationNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     private DetailsOrganization findOrganizationByIdOrThrow(OrganizationId organizationId) {
-        var organization = organizationClient()
-                .get()
-                .uri("/organizations/{organizationId}", organizationId.getValue())
-                .header(SecurityHeaders.ISSUES_TRACKER_USER_ROLE, UserRole.SYSTEM.toString())
-                .retrieve()
-                .onStatus(httpStatus -> httpStatus.equals(HttpStatus.NOT_FOUND), response -> {
-                    throw new OrganizationNotFoundException(organizationId);
-                })
-                .bodyToMono(DetailsOrganization.class)
-                .block();
+        try {
+            var organization = organizationRestClient
+                    .getOrganizationById(organizationId.getValue())
+                    .block();
 
-        if (organization == null) {
+            if (organization == null) {
+                throw new OrganizationNotFoundException(organizationId);
+            }
+
+            return organization;
+        } catch (com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.exception.OrganizationNotFoundException ex) {
             throw new OrganizationNotFoundException(organizationId);
+        } catch (com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.exception.OrganizationServiceUnavailableException ex) {
+            throw new OrganizationServiceUnavailableException();
         }
-
-        return organization;
     }
 
     /**
      * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     private void ensureOrganizationHasProject(DetailsOrganization organization, OrganizationProjectId organizationProjectId) {
-        organization
+        var hasOrganizationProject = organization
                 .getProjects()
                 .stream()
-                .map(DetailsOrganization.Project::getId)
-                .filter(organizationProjectId.getValue()::equals)
-                .findAny()
-                .orElseThrow(() -> new OrganizationProjectNotFoundException(organizationProjectId));
+                .anyMatch(project -> project.getId().equals(organizationProjectId.getValue()));
+
+        if (!hasOrganizationProject) {
+            throw new OrganizationProjectNotFoundException(organizationProjectId);
+        }
     }
 
     /**
-     * @throws OrganizationMemberNotFoundException {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     private void ensureOrganizationHasMember(DetailsOrganization organization, OrganizationMemberId organizationMemberId) {
-        organization
+        var hasOrganizationMember = organization
                 .getMembers()
                 .stream()
-                .map(DetailsOrganization.Member::getId)
-                .filter(organizationMemberId.getValue()::equals)
-                .findFirst()
-                .orElseThrow(() -> new OrganizationMemberNotFoundException(organizationMemberId));
-    }
+                .anyMatch(member -> member.getId().equals(organizationMemberId.getValue()));
 
-
-    /**
-     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
-     */
-    public WebClient organizationClient() {
-        var services = discoveryClient.getInstances(System.getenv("SERVICE_ORGANIZATIONS_QUERY_NAME"));
-
-        if (services == null || services.isEmpty()) {
-            throw new OrganizationServiceUnavailableException();
+        if (!hasOrganizationMember) {
+            throw new OrganizationMemberNotFoundException(organizationMemberId);
         }
-
-        var serviceIndex = ThreadLocalRandom.current().nextInt(services.size()) % services.size();
-        var service = services.get(serviceIndex);
-        var url = service.getUri() + "/api/v1/organization-management";
-
-        return WebClient.create(url);
     }
 }
