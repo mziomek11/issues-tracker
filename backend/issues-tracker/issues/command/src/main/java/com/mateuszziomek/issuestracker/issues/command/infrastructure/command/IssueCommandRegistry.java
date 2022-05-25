@@ -1,11 +1,9 @@
 package com.mateuszziomek.issuestracker.issues.command.infrastructure.command;
 
-import com.mateuszziomek.issuestracker.issues.command.application.command.*;
-import com.mateuszziomek.issuestracker.issues.command.application.command.handler.*;
-import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.issues.command.application.command.*;
 import com.mateuszziomek.issuestracker.issues.command.application.command.handler.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;

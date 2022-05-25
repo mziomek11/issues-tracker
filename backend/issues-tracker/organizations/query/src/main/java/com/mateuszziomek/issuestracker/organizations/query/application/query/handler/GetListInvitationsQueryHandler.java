@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
-public class GetListInvitationsQueryHandler implements QueryHandler<GetListInvitationsQuery, Flux<ListInvitation>> {
+public class GetListInvitationsQueryHandler implements QueryHandler<Flux<ListInvitation>, GetListInvitationsQuery> {
     private final ListInvitationFinder listInvitationFinder;
 
     @Override

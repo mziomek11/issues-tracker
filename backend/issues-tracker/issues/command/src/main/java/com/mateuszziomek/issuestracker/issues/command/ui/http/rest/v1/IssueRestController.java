@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1;
 
+import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.issues.command.application.command.*;
 import com.mateuszziomek.issuestracker.issues.command.application.command.handler.*;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
@@ -15,7 +16,6 @@ import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;

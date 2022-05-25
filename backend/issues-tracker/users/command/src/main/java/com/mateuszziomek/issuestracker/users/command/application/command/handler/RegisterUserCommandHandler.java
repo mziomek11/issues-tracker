@@ -1,10 +1,10 @@
 package com.mateuszziomek.issuestracker.users.command.application.command.handler;
 
+import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
-import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.users.command.application.command.RegisterUserCommand;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.UserGateway;
 import com.mateuszziomek.issuestracker.users.command.domain.user.User;

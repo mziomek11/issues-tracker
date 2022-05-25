@@ -1,10 +1,10 @@
 package com.mateuszziomek.issuestracker.organizations.command.application.command.handler;
 
+import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.JoinOrganizationMemberCommand;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
-import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.Invitation;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.Organization;

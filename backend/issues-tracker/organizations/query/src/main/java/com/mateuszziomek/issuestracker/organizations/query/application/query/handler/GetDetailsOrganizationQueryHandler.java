@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class GetDetailsOrganizationQueryHandler implements QueryHandler<GetDetailsOrganizationQuery, Mono<DetailsOrganization>> {
+public class GetDetailsOrganizationQueryHandler implements QueryHandler<Mono<DetailsOrganization>, GetDetailsOrganizationQuery> {
     private final DetailsOrganizationFinder detailsOrganizationFinder;
 
     /**

@@ -1,8 +1,7 @@
-package com.mateuszziomek.issuetracker.issues.command.domain.issue;
+package com.mateuszziomek.issuestracker.issues.command.domain.issue;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.*;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueNameSetException;

@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.query.ui.http.rest.v1;
 
+import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetDetailsOrganizationQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListInvitationsQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListOrganizationsQuery;
@@ -11,7 +12,6 @@ import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.
 import com.mateuszziomek.issuestracker.shared.readmodel.invitation.ListInvitation;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.ListOrganization;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

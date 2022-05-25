@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class GetJWTQuery extends Query {
+public class GetJWTQuery extends Query<String> {
     private final String email;
     private final String password;
 }

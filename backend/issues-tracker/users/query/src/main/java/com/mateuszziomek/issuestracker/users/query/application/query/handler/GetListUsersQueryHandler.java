@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GetListUsersQueryHandler implements QueryHandler<GetListUsersQuery, List<ListUser>> {
+public class GetListUsersQueryHandler implements QueryHandler<List<ListUser>, GetListUsersQuery> {
     private final ListUserFinder listUserFinder;
 
     /**

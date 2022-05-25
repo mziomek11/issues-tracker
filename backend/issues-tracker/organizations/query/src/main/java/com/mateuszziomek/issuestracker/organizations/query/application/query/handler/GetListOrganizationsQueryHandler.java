@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
-public class GetListOrganizationsQueryHandler implements QueryHandler<GetListOrganizationsQuery, Flux<ListOrganization>> {
+public class GetListOrganizationsQueryHandler implements QueryHandler<Flux<ListOrganization>, GetListOrganizationsQuery> {
     private final ListOrganizationFinder listOrganizationFinder;
 
     @Override

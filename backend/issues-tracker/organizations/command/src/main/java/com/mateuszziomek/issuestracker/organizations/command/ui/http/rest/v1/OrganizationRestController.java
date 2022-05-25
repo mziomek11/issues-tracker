@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1;
 
+import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationDto;
@@ -11,7 +12,6 @@ import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.map
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.JoinOrganizationMemberCommand;

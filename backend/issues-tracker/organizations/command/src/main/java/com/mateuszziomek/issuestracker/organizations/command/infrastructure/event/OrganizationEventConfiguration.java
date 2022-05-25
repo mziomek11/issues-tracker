@@ -2,9 +2,7 @@ package com.mateuszziomek.issuestracker.organizations.command.infrastructure.eve
 
 import com.mateuszziomek.cqrs.event.producer.EventProducer;
 import com.mateuszziomek.cqrs.event.producer.KafkaEventProducer;
-import com.mateuszziomek.cqrs.event.sourcinghandler.DefaultEventSourcingHandler;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
-import com.mateuszziomek.cqrs.event.store.DefaultEventStore;
 import com.mateuszziomek.cqrs.event.store.EventStore;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.Organization;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +18,7 @@ public class OrganizationEventConfiguration {
 
     @Bean
     public EventSourcingHandler<Organization> eventSourcingHandler(EventStore eventStore) {
-        return new DefaultEventSourcingHandler<>(eventStore, Organization::new);
+        return new EventSourcingHandler<>(eventStore, Organization::new);
     }
 
     @Bean
@@ -28,6 +26,6 @@ public class OrganizationEventConfiguration {
             OrganizationEventStoreRepository organizationEventStoreRepository,
             EventProducer eventProducer
     ) {
-        return new DefaultEventStore<>(organizationEventStoreRepository, eventProducer, Organization.class);
+        return new EventStore<>(organizationEventStoreRepository, eventProducer, Organization.class);
     }
 }

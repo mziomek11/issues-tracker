@@ -1,4 +1,4 @@
 package com.mateuszziomek.cqrs.query;
 
-public abstract class Query {
+public abstract class Query<T> {
 }

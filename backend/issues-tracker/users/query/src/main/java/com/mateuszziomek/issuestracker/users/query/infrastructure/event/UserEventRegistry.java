@@ -1,9 +1,9 @@
 package com.mateuszziomek.issuestracker.users.query.infrastructure.event;
 
+import com.mateuszziomek.cqrs.event.dispatcher.EventDispatcher;
 import com.mateuszziomek.issuestracker.users.query.application.event.handler.UserActivatedEventHandler;
 import com.mateuszziomek.issuestracker.users.query.application.event.handler.UserRegisteredEventHandler;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.cqrs.event.dispatcher.EventDispatcher;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserActivatedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
 import org.springframework.context.annotation.Configuration;

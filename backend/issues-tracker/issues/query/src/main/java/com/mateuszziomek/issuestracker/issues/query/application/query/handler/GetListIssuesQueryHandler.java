@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class GetListIssuesQueryHandler implements QueryHandler<GetListIssuesQuery, Flux<ListIssue>> {
+public class GetListIssuesQueryHandler implements QueryHandler<Flux<ListIssue>, GetListIssuesQuery> {
     private final ListIssueFinder listIssueFinder;
     private final OrganizationGateway organizationGateway;
 

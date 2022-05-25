@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1;
 
+import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
@@ -17,7 +18,6 @@ import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.dto.GetJWTDto
 import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper.GetJWTDtoMapper;
 import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper.GetListUsersParamMapper;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

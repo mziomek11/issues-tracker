@@ -1,9 +1,9 @@
 package com.mateuszziomek.issuestracker.users.command.infrastructure.command;
 
+import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.users.command.application.command.ActivateUserCommand;
 import com.mateuszziomek.issuestracker.users.command.application.command.handler.ActivateUserCommandHandler;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.users.command.application.command.RegisterUserCommand;
 import com.mateuszziomek.issuestracker.users.command.application.command.handler.RegisterUserCommandHandler;
 import org.springframework.context.annotation.Configuration;

@@ -1,9 +1,9 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
+import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
-import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.issues.command.application.command.VoteIssueCommentCommand;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;

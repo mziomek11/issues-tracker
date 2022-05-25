@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class GetDetailsIssueQueryHandler implements QueryHandler<GetDetailsIssueQuery, Mono<DetailsIssue>> {
+public class GetDetailsIssueQueryHandler implements QueryHandler<Mono<DetailsIssue>, GetDetailsIssueQuery> {
     private final DetailsIssueFinder detailsIssueFinder;
     private final OrganizationGateway organizationGateway;
 

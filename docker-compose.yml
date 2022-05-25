@@ -1,7 +1,7 @@
 version: "3.4"
 
 volumes:
-  maven-repo:
+  mvn:
 
 services:
   apigateway:
@@ -26,7 +26,7 @@ services:
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY  
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   discovery:
     build:
       args:
@@ -41,7 +41,7 @@ services:
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   issues-command:
     build:
       args:
@@ -62,7 +62,7 @@ services:
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   issues-command-mongo:
     image: mongo:5.0.7
   issues-query:
@@ -86,7 +86,7 @@ services:
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   issues-query-mongo:
     image: mongo:5.0.7
   frontend:
@@ -139,7 +139,7 @@ services:
       - SERVICE_NOTIFICATIONS_NAME=NOTIFICATIONS
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   notifications-mongo:
     image: mongo:5.0.7
   organizations-command:
@@ -162,7 +162,7 @@ services:
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   organizations-command-mongo:
     image: mongo:5.0.7
   organizations-query:
@@ -185,7 +185,7 @@ services:
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   organizations-query-mongo:
     image: mongo:5.0.7
   users-command:
@@ -208,7 +208,7 @@ services:
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   users-command-mongo:
     image: mongo:5.0.7
   users-query:
@@ -231,7 +231,7 @@ services:
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
-      - maven-repo:/usr/mvn
+      - mvn:/usr/mvn
   users-query-mongo:
     image: mongo:5.0.7
   zookeeper:

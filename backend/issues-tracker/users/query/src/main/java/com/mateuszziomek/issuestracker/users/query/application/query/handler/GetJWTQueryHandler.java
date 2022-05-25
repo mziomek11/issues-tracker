@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GetJWTQueryHandler implements QueryHandler<GetJWTQuery, String> {
+public class GetJWTQueryHandler implements QueryHandler<String, GetJWTQuery> {
     private final UserRepository userRepository;
     private final JWTService jwtService;
     private final PasswordVerifier passwordVerifier;

@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.command.application.command.handler;
 
+import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.MemberGateway;
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
@@ -7,7 +8,6 @@ import com.mateuszziomek.issuestracker.organizations.command.domain.member.excep
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.OrganizationOwner;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
-import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.Invitation;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationAlreadyPresentException;

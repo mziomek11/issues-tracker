@@ -1,11 +1,10 @@
 package com.mateuszziomek.issuestracker.users.query.infrastructure.event;
 
-import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.event.dispatcher.EventDispatcher;
+import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserActivatedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 @Service

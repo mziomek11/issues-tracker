@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.organizations.command.infrastructure.command;
 
-import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
+import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand;

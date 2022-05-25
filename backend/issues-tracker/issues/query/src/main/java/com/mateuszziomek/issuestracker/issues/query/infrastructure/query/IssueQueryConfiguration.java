@@ -1,6 +1,5 @@
 package com.mateuszziomek.issuestracker.issues.query.infrastructure.query;
 
-import com.mateuszziomek.cqrs.query.dispatcher.DefaultQueryDispatcher;
 import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
 public class IssueQueryConfiguration {
     @Bean
     public QueryDispatcher queryDispatcher() {
-        return new DefaultQueryDispatcher();
+        return new QueryDispatcher();
     }
 }

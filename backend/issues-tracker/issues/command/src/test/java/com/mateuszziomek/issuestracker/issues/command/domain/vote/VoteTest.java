@@ -1,9 +1,7 @@
-package com.mateuszziomek.issuetracker.issues.command.domain.vote;
+package com.mateuszziomek.issuestracker.issues.command.domain.vote;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.mateuszziomek.issuestracker.issues.command.domain.vote.Vote;
-import com.mateuszziomek.issuestracker.issues.command.domain.vote.VoterId;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.VoteType;
 import org.junit.jupiter.api.Test;
 

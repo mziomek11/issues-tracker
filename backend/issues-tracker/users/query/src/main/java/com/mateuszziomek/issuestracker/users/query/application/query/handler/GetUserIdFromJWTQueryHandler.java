@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GetUserIdFromJWTQueryHandler implements QueryHandler<GetUserIdFromJWTQuery, ObjectId> {
+public class GetUserIdFromJWTQueryHandler implements QueryHandler<ObjectId, GetUserIdFromJWTQuery> {
     private final JWTService jwtService;
 
     /**

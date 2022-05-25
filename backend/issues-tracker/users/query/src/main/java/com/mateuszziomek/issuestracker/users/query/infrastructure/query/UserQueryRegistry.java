@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.users.query.infrastructure.query;
 
+import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetJWTQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetListUsersQuery;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetUserIdFromJWTQuery;
@@ -7,7 +8,6 @@ import com.mateuszziomek.issuestracker.users.query.application.query.handler.Get
 import com.mateuszziomek.issuestracker.users.query.application.query.handler.GetListUsersQueryHandler;
 import com.mateuszziomek.issuestracker.users.query.application.query.handler.GetUserIdFromJWTQueryHandler;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.cqrs.query.dispatcher.QueryDispatcher;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;

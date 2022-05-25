@@ -1,9 +1,9 @@
 package com.mateuszziomek.issuestracker.users.command.application.command.handler;
 
+import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
-import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.users.command.application.command.ActivateUserCommand;
 import com.mateuszziomek.issuestracker.users.command.domain.user.User;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserActivationToken;
