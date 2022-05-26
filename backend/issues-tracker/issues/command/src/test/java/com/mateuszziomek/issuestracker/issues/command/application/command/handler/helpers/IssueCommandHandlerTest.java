@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
 
 public abstract class IssueCommandHandlerTest {
-    protected OrganizationGateway createOrganizationGatewayMock(RuntimeException expectedException) {
+    protected OrganizationGateway createOrganizationGatewayExceptionMock(RuntimeException expectedException) {
         var organizationGateway = mock(OrganizationGateway.class);
 
         doThrow(expectedException)

@@ -1,27 +1,30 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
-import static com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.IssueCommandData.*;
-import static org.mockito.Mockito.*;
-
 import com.mateuszziomek.cqrs.event.producer.EventProducer;
 import com.mateuszziomek.cqrs.event.store.EventStoreRepository;
 import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.IssueCommandHandlerIntegrationTest;
 import com.mateuszziomek.issuestracker.issues.command.infrastructure.gateway.OrganizationGatewayImpl;
-import com.mateuszziomek.issuestracker.shared.domain.event.IssueOpenedEvent;
+import com.mateuszziomek.issuestracker.shared.domain.event.IssueRenamedEvent;
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.ReactiveOrganizationRestClient;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.List;
 
-class OpenIssueCommandHandlerIntegrationTest extends IssueCommandHandlerIntegrationTest {
+import static com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.IssueCommandData.*;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+
+class RenameIssueCommandHandlerIntegrationTest extends IssueCommandHandlerIntegrationTest {
     @Test
-    void openingIssueSavesEventToDbAndSendsMessageToBroker() {
+    void renamingIssueSavesEventToDbAndSendsMessageToBroker() {
         // Arrange
         var eventProducer = mock(EventProducer.class);
         var eventStoreRepository = mock(EventStoreRepository.class);
         var organizationRestClient = createOrganizationRestClientMock();
 
-        when(eventStoreRepository.findByAggregateId(any())).thenReturn(new ArrayList<>());
+        when(eventStoreRepository.findByAggregateId(ISSUE_ID)).thenReturn(List.of(ISSUE_OPENED_EVENT_MODEL));
 
         var sut = createHandler(
                 eventProducer,
@@ -30,24 +33,24 @@ class OpenIssueCommandHandlerIntegrationTest extends IssueCommandHandlerIntegrat
         );
 
         // Act
-        sut.handle(OPEN_ISSUE_COMMAND);
+        sut.handle(RENAME_ISSUE_COMMAND);
 
         // Assert
         verify(eventProducer, times(1)).produce(
-                eq("IssueOpenedEvent"),
-                argThat(event -> hasIssueOpenedEventCorrectedData((IssueOpenedEvent) event))
+                eq("IssueRenamedEvent"),
+                argThat(event -> hasIssueRenamedEventCorrectedData((IssueRenamedEvent) event))
         );
 
         verify(eventStoreRepository, times(1)).save(
                 argThat(eventModel -> (
-                        eventModel.eventType().equals("IssueOpenedEvent")
+                        eventModel.eventType().equals("IssueRenamedEvent")
                         && eventModel.aggregateId().getValue().equals(ISSUE_UUID))
-                        && hasIssueOpenedEventCorrectedData((IssueOpenedEvent) eventModel.eventData())
+                        && hasIssueRenamedEventCorrectedData((IssueRenamedEvent) eventModel.eventData())
                 )
         );
     }
 
-    private OpenIssueCommandHandler createHandler(
+    private RenameIssueCommandHandler createHandler(
             EventProducer eventProducer,
             EventStoreRepository eventStoreRepository,
             ReactiveOrganizationRestClient organizationRestClient
@@ -56,18 +59,16 @@ class OpenIssueCommandHandlerIntegrationTest extends IssueCommandHandlerIntegrat
         var eventSourcingHandler = createSourcingHandler(eventStore);
         var organizationGateway = new OrganizationGatewayImpl(organizationRestClient);
 
-        return new OpenIssueCommandHandler(eventSourcingHandler, organizationGateway);
+        return new RenameIssueCommandHandler(eventSourcingHandler, organizationGateway);
     }
 
-    private boolean hasIssueOpenedEventCorrectedData(IssueOpenedEvent event) {
-        var command = OPEN_ISSUE_COMMAND;
+    private boolean hasIssueRenamedEventCorrectedData(IssueRenamedEvent event) {
+        var command = RENAME_ISSUE_COMMAND;
         var organizationDetails = command.getOrganizationDetails();
 
         return (
                 event.getId().equals(command.getIssueId().getValue())
-                && event.getIssueContent().equals(command.getIssueContent().text())
                 && event.getIssueName().equals(command.getIssueName().text())
-                && event.getIssueType().equals(command.getIssueType())
                 && event.getMemberId().equals(organizationDetails.memberId().getValue())
                 && event.getOrganizationId().equals(organizationDetails.organizationId().getValue())
                 && event.getProjectId().equals(organizationDetails.projectId().getValue())

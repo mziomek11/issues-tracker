@@ -16,7 +16,7 @@ class OpenIssueCommandHandlerTest extends IssueCommandHandlerTest {
     void eventSourcingHandlerIsNotCalledWhenGatewayThrows(RuntimeException gatewayException) {
         // Arrange
         var eventSourcingHandler = mock(EventSourcingHandler.class);
-        var organizationGateway = createOrganizationGatewayMock(gatewayException);
+        var organizationGateway = createOrganizationGatewayExceptionMock(gatewayException);
         var sut = new OpenIssueCommandHandler(eventSourcingHandler, organizationGateway);
 
         // Assert
