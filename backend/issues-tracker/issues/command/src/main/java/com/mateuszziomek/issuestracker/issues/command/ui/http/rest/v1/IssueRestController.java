@@ -312,6 +312,7 @@ class IssueRestController {
     }
 
     /**
+     * @throws CommentNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws IssueClosedException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws IssueNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
      * @throws OrganizationMemberNotFoundException see {@link VoteIssueCommandHandler#handle(VoteIssueCommand)}
