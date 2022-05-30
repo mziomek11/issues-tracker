@@ -37,12 +37,13 @@ class IssueRestControllerIntegrationTest {
             PROJECT_UUID
     );
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     private CommandDispatcher commandDispatcher;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void issueCanBeOpened() throws Exception {
