@@ -8,10 +8,6 @@ public record UserActivationToken(UUID value) {
         return new UserActivationToken(UUID.randomUUID());
     }
 
-    public static UserActivationToken fromString(String value) {
-        return new UserActivationToken(UUID.fromString(value));
-    }
-
     public UserActivationToken {
         Objects.requireNonNull(value);
     }

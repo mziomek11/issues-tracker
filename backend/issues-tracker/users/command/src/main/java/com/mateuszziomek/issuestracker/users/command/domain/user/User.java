@@ -65,7 +65,7 @@ public class User extends AggregateRoot {
         email = new UserEmail(userRegisteredEvent.getUserEmail());
         password = new UserHashedPassword(userRegisteredEvent.getUserHashedPassword());
         status = UserStatus.UNVERIFIED;
-        activationToken = Optional.of(UserActivationToken.fromString(userRegisteredEvent.getUserActivationToken()));
+        activationToken = Optional.of(new UserActivationToken(userRegisteredEvent.getUserActivationToken()));
     }
 
     public void on(UserActivatedEvent userActivatedEvent) {

@@ -15,7 +15,7 @@ import java.util.UUID;
 public class UserRegisteredEvent extends BaseEvent {
     private String userEmail;
     private String userHashedPassword;
-    private String userActivationToken;
+    private UUID userActivationToken;
 
     public static UserRegisteredEventBuilder builder() {
         return new UserRegisteredEventBuilder();
@@ -25,7 +25,7 @@ public class UserRegisteredEvent extends BaseEvent {
             UUID userId,
             String userEmail,
             String userHashedPassword,
-            String userActivationToken
+            UUID userActivationToken
     ) {
         super(userId);
 
@@ -74,7 +74,7 @@ public class UserRegisteredEvent extends BaseEvent {
                     userId,
                     userEmail,
                     userHashedPassword,
-                    userActivationToken.toString()
+                    userActivationToken
             );
         }
     }
