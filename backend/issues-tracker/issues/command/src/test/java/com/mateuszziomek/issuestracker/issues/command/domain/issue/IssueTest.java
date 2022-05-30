@@ -2,6 +2,7 @@ package com.mateuszziomek.issuestracker.issues.command.domain.issue;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.mateuszziomek.cqrs.domain.AbstractAggregateRootTest;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueNameSetException;
@@ -29,7 +30,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.UUID;
 
-class IssueTest {
+class IssueTest extends AbstractAggregateRootTest {
      private final UUID ISSUE_UUID = UUID.randomUUID();
      private final String ISSUE_NAME_PLAIN = "Example name";
      private final String ISSUE_CONTENT_PLAIN = "Example content";
@@ -598,21 +599,6 @@ class IssueTest {
          var content = new CommentContent("Example second comment content");
 
          return new Comment(id, content);
-     }
-
-     private void assertThatTheOnlyRaisedEventIs(Issue issue, Class<?> clazz) {
-         assertThat(issue.getUncommittedChanges().size()).isEqualTo(1);
-
-         var event = issue.getUncommittedChanges().get(0);
-         assertThat(event).isInstanceOf(clazz);
-     }
-
-     private void assertThatNoEventsAreRaised(Issue issue) {
-         assertThatAmountOfRaisedEventsIsEqualTo(issue, 0);
-     }
-
-     private void assertThatAmountOfRaisedEventsIsEqualTo(Issue issue, int amount) {
-         assertThat(issue.getUncommittedChanges().size()).isEqualTo(amount);
      }
 
      private void assertThatIssueClosedExceptionIsThrownBy(ThrowableAssert.ThrowingCallable throwingCallable) {
