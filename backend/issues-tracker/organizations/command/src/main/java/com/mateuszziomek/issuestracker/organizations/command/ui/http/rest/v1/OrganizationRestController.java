@@ -23,7 +23,7 @@ import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.e
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.exception.OrganizationOwnerNotValidException;
-import com.mateuszziomek.rest.v1.RestValidationException;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

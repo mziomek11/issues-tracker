@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.query.ui.http.rest.v1;
 
-import com.mateuszziomek.rest.v1.RestErrorAttributes;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

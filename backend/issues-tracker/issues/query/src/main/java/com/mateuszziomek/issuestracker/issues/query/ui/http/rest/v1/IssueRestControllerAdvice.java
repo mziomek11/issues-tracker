@@ -5,9 +5,14 @@ import com.mateuszziomek.issuestracker.issues.query.application.gateway.organiza
 import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.issues.query.application.query.exception.IssueNotFoundException;
-import com.mateuszziomek.rest.v1.RestErrorResponse;
-import com.mateuszziomek.rest.v1.RestValidationException;
-import org.springframework.http.HttpStatus;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericValidationFailedRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.issue.IssueNotFoundRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationAccessDeniedRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationInvitationNotFoundRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationProjectNotFoundRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationServiceUnavailableRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,55 +21,31 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class IssueRestControllerAdvice {
     @ExceptionHandler(RestValidationException.class)
     public ResponseEntity<RestErrorResponse> handle(RestValidationException ex) {
-        var errorResponse = new RestErrorResponse("Validation failed", ex.getErrors());
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+        return GenericValidationFailedRestErrorResponse.asResponseEntity(ex.getErrors());
     }
 
     @ExceptionHandler(OrganizationMemberNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationMemberNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("User is not in organization");
-
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body(errorResponse);
+        return OrganizationAccessDeniedRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(OrganizationNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("Organization not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return OrganizationInvitationNotFoundRestErrorResponse.asResponseEntity(ex.getOrganizationId());
     }
 
     @ExceptionHandler(OrganizationProjectNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationProjectNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("Project not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return OrganizationProjectNotFoundRestErrorResponse.asResponseEntity(ex.getOrganizationProjectId());
     }
 
     @ExceptionHandler(OrganizationServiceUnavailableException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationServiceUnavailableException ex) {
-        var errorResponse = new RestErrorResponse("Service unavailable");
-
-        return ResponseEntity
-                .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(errorResponse);
+        return OrganizationServiceUnavailableRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(IssueNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(IssueNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("Issue not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return IssueNotFoundRestErrorResponse.asResponseEntity(ex.getIssueId());
     }
 }

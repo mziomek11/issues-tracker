@@ -16,7 +16,7 @@ import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserA
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.dto.RegisterUserDto;
-import com.mateuszziomek.rest.v1.RestValidationException;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

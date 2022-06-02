@@ -6,7 +6,7 @@ import com.mateuszziomek.issuestracker.shared.domain.event.*;
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.notification.ReactiveNotificationRestClient;
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.ReactiveOrganizationRestClient;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
-import com.mateuszziomek.issuestracker.shared.ui.notification.UserNotification;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.notification.UserNotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -104,7 +104,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
 
     private Mono<Void> notifyAboutIssueChange(String eventName, Issue issue, UUID memberId) {
         return getOrganizationUserIds(issue)
-                .map(ids -> new UserNotification(
+                .map(ids -> new UserNotificationDto(
                         eventName,
                         IssueNotification.issue(issue, memberId),
                         ids
@@ -114,7 +114,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
 
     private Mono<Void> notifyAboutIssueCommentChange(String eventName, Issue issue, UUID memberId, UUID commentId) {
         return getOrganizationUserIds(issue)
-                .map(ids -> new UserNotification(
+                .map(ids -> new UserNotificationDto(
                         eventName,
                         IssueNotification.issueComment(issue, memberId, commentId),
                         ids
@@ -133,7 +133,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
                 );
     }
 
-    private Mono<Void> notifyUsers(UserNotification notification) {
+    private Mono<Void> notifyUsers(UserNotificationDto notification) {
         return notificationRestClient
                 .notifyUsers(notification)
                 .onErrorResume(throwable -> Mono.empty());

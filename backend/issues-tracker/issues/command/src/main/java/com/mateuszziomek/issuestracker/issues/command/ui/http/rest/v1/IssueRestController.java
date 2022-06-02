@@ -7,7 +7,6 @@ import com.mateuszziomek.issuestracker.issues.command.application.gateway.organi
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
@@ -19,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
-import com.mateuszziomek.rest.v1.RestValidationException;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -213,8 +212,6 @@ class IssueRestController {
     }
 
     /**
-     * @throws CommentWithIdExistsException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
-     * @throws IssueClosedException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws IssueNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws OrganizationMemberNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws OrganizationNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}

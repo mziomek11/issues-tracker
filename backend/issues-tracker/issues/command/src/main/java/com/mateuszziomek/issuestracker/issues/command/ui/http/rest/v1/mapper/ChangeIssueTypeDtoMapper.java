@@ -4,8 +4,8 @@ import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganiza
 import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueTypeDto;
 import com.mateuszziomek.issuestracker.issues.command.application.command.ChangeIssueTypeCommand;
 import com.mateuszziomek.issuestracker.issues.command.application.command.ChangeIssueTypeCommand.ChangeIssueTypeCommandBuilder;
-import com.mateuszziomek.rest.v1.RestValidationErrorsMapper;
-import com.mateuszziomek.rest.v1.RestValidationException;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 
 import javax.validation.ConstraintViolation;
 import java.util.HashMap;

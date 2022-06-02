@@ -2,7 +2,7 @@ package com.mateuszziomek.issuestracker.users.command.infrastructure.gateway;
 
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.user.ReactiveUserRestClient;
 import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
-import com.mateuszziomek.issuestracker.shared.ui.user.http.rest.v1.param.GetListUsersParam;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.param.user.GetListUsersParam;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.UserGateway;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;

@@ -11,7 +11,6 @@ import com.mateuszziomek.issuestracker.issues.command.application.gateway.organi
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.Comment;
-import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.Issue;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
@@ -25,7 +24,6 @@ public class CommentIssueCommandHandler implements CommandHandler<CommentIssueCo
     private final OrganizationGateway organizationGateway;
 
     /**
-     * @throws CommentWithIdExistsException see {@link Issue#comment(Comment, OrganizationMemberId)}
      * @throws IssueClosedException see {@link Issue#comment(Comment, OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
      * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}

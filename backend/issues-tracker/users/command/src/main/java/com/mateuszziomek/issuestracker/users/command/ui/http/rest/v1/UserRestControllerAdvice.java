@@ -1,13 +1,18 @@
 package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1;
 
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericEmailUnavailableRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericValidationFailedRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserInvalidActivationTokenRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserAlreadyActivatedRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserNotFoundRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserServiceUnavailableRestErrorResponse;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
-import com.mateuszziomek.rest.v1.RestErrorResponse;
-import com.mateuszziomek.rest.v1.RestValidationException;
-import org.springframework.http.HttpStatus;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,55 +21,31 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class UserRestControllerAdvice {
     @ExceptionHandler(RestValidationException.class)
     public ResponseEntity<RestErrorResponse> handle(RestValidationException ex) {
-        var errorResponse = new RestErrorResponse("Validation failed", ex.getErrors());
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+        return GenericValidationFailedRestErrorResponse.asResponseEntity(ex.getErrors());
     }
 
     @ExceptionHandler(UserEmailUnavailableException.class)
     public ResponseEntity<RestErrorResponse> handle(UserEmailUnavailableException ex) {
-        var errorResponse = new RestErrorResponse("User email already taken");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return GenericEmailUnavailableRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(UserActivationTokenMismatchException.class)
     public ResponseEntity<RestErrorResponse> handle(UserActivationTokenMismatchException ex) {
-        var errorResponse = new RestErrorResponse("User activation token is not valid");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return UserInvalidActivationTokenRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(UserAlreadyActivatedException.class)
     public ResponseEntity<RestErrorResponse> handle(UserAlreadyActivatedException ex) {
-        var errorResponse = new RestErrorResponse("User already activated");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return UserAlreadyActivatedRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(UserNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("User not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return UserNotFoundRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(UserServiceUnavailableException.class)
     public ResponseEntity<RestErrorResponse> handle(UserServiceUnavailableException ex) {
-        var errorResponse = new RestErrorResponse("Service unavailable");
-
-        return ResponseEntity
-                .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(errorResponse);
+        return UserServiceUnavailableRestErrorResponse.asResponseEntity();
     }
 }

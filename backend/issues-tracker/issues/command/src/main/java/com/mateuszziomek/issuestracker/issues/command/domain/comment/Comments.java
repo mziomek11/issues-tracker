@@ -3,7 +3,6 @@ package com.mateuszziomek.issuestracker.issues.command.domain.comment;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.Vote;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
@@ -20,27 +19,11 @@ public class Comments {
         this.commentList = new ArrayList<>();
     }
 
-    /**
-     * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
-     */
     public Comments add(Comment comment) {
-        ensureCanAdd(comment);
-
         var newComments = new ArrayList<>(commentList);
         newComments.add(comment);
 
         return new Comments(newComments);
-    }
-
-    /**
-     * @throws CommentWithIdExistsException if comment with given id exists
-     */
-    public void ensureCanAdd(Comment comment) {
-        var optionalExistingComment = findCommentById(comment.id());
-
-        if (optionalExistingComment.isPresent()) {
-            throw new CommentWithIdExistsException(comment.id());
-        }
     }
 
     /**

@@ -18,7 +18,6 @@ import com.mateuszziomek.issuestracker.issues.command.domain.comment.CommentId;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.Vote;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.VoterId;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
@@ -278,17 +277,6 @@ class IssueTest extends AbstractAggregateRootTest {
 
          // Assert
          assertThatIssueClosedExceptionIsThrownBy(() -> sut.comment(firstComment, OPERATOR_ID));
-         assertThatNoEventsAreRaised(sut);
-     }
-
-     @Test
-     void issueCanNotHaveTwoCommentsWithTheSameId() {
-         // Arrange
-         var sut = createIssueWithFirstComment();
-         var firstComment = createFirstComment();
-
-         // Assert
-         assertThatExceptionOfType(CommentWithIdExistsException.class).isThrownBy(() -> sut.comment(firstComment, OPERATOR_ID));
          assertThatNoEventsAreRaised(sut);
      }
 

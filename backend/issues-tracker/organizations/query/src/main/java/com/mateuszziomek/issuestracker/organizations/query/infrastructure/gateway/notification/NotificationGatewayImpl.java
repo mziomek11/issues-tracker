@@ -4,7 +4,7 @@ import com.mateuszziomek.issuestracker.organizations.query.application.gateway.n
 import com.mateuszziomek.issuestracker.organizations.query.domain.Member;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
-import com.mateuszziomek.issuestracker.shared.ui.notification.UserNotification;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.notification.UserNotificationDto;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
@@ -31,7 +31,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
 
     @Override
     public Mono<Void> notify(OrganizationCreatedEvent event, Organization organization) {
-        var notification = new UserNotification(
+        var notification = new UserNotificationDto(
                 ORGANIZATION_CREATED,
                 OrganizationNotification.created(event),
                 getOrganizationUsers(organization)
@@ -42,7 +42,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
 
     @Override
     public Mono<Void> notify(OrganizationMemberInvitedEvent event, Organization organization) {
-        var notification = new UserNotification(
+        var notification = new UserNotificationDto(
                 ORGANIZATION_MEMBER_INVITED,
                 OrganizationNotification.memberInvited(event),
                 Stream
@@ -55,7 +55,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
 
     @Override
     public Mono<Void> notify(OrganizationMemberJoinedEvent event, Organization organization) {
-        var notification = new UserNotification(
+        var notification = new UserNotificationDto(
                 ORGANIZATION_MEMBER_JOINED,
                 OrganizationNotification.memberJoined(event),
                 getOrganizationUsers(organization)
@@ -66,7 +66,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
 
     @Override
     public Mono<Void> notify(OrganizationProjectCreatedEvent event, Organization organization) {
-        var notification = new UserNotification(
+        var notification = new UserNotificationDto(
                 ORGANIZATION_PROJECT_CREATED,
                 OrganizationNotification.projectCreated(event),
                 getOrganizationUsers(organization)
@@ -75,7 +75,7 @@ public class NotificationGatewayImpl implements NotificationGateway {
         return notifyUsers(notification);
     }
 
-    private Mono<Void> notifyUsers(UserNotification notification) {
+    private Mono<Void> notifyUsers(UserNotificationDto notification) {
         return notificationRestClient
                 .notifyUsers(notification)
                 .onErrorResume(throwable -> Mono.empty());

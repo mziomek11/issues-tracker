@@ -6,7 +6,6 @@ import com.mateuszziomek.issuestracker.issues.command.domain.comment.Comments;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueClosedException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueNameSetException;
@@ -102,13 +101,8 @@ public class Issue extends AggregateRoot {
         raiseEvent(ef.issueContentChanged(newContent, operatorId));
     }
 
-    /**
-     * @throws IssueClosedException see {@link Issue#ensureIsOpen()}
-     * @throws CommentWithIdExistsException see {@link Comments#ensureCanAdd(Comment)}
-     */
     public void comment(Comment comment, OrganizationMemberId operatorId) {
         ensureIsOpen();
-        comments.ensureCanAdd(comment);
 
         raiseEvent(ef.issueCommented(comment, operatorId));
     }

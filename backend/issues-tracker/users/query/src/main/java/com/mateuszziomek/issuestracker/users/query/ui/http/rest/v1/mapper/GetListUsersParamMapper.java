@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper;
 
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
-import com.mateuszziomek.issuestracker.shared.ui.user.http.rest.v1.param.GetListUsersParam;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.param.user.GetListUsersParam;
 import com.mateuszziomek.issuestracker.users.query.application.query.GetListUsersQuery;
 
 public class GetListUsersParamMapper {

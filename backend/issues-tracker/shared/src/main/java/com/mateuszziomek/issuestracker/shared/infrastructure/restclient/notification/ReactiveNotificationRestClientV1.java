@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.shared.infrastructure.restclient.notification;
 
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.AbstractRestClient;
-import com.mateuszziomek.issuestracker.shared.ui.notification.UserNotification;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.notification.UserNotificationDto;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.notification.exception.NotificationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
@@ -17,10 +17,10 @@ public class ReactiveNotificationRestClientV1 extends AbstractRestClient impleme
     }
 
     /**
-     * @throws NotificationServiceUnavailableException see {@link ReactiveNotificationRestClient#notifyUsers(UserNotification)}
+     * @throws NotificationServiceUnavailableException see {@link ReactiveNotificationRestClient#notifyUsers(UserNotificationDto)}
      */
     @Override
-    public Mono<Void> notifyUsers(UserNotification notification) {
+    public Mono<Void> notifyUsers(UserNotificationDto notification) {
         return createClient()
                 .post()
                 .uri(NOTIFY_USERS_PATH)

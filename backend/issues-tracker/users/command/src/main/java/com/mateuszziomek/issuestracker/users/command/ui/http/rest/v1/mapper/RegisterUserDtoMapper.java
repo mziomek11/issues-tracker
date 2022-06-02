@@ -3,8 +3,8 @@ package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.mapper;
 import com.mateuszziomek.issuestracker.users.command.application.command.RegisterUserCommand;
 import com.mateuszziomek.issuestracker.users.command.application.command.RegisterUserCommand.RegisterUserCommandBuilder;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.dto.RegisterUserDto;
-import com.mateuszziomek.rest.v1.RestValidationErrorsMapper;
-import com.mateuszziomek.rest.v1.RestValidationException;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 
 import javax.validation.ConstraintViolation;
 import java.util.HashMap;

@@ -4,16 +4,19 @@ import com.mateuszziomek.issuestracker.issues.command.application.gateway.organi
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentWithIdExistsException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
-import com.mateuszziomek.rest.v1.RestErrorResponse;
-import com.mateuszziomek.rest.v1.RestValidationException;
-import org.springframework.http.HttpStatus;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericValidationFailedRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.issue.*;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationAccessDeniedRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationNotFoundRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationProjectNotFoundRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationServiceUnavailableRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,136 +25,71 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class IssueRestControllerAdvice {
     @ExceptionHandler(RestValidationException.class)
     public ResponseEntity<RestErrorResponse> handle(RestValidationException ex) {
-        var errorResponse = new RestErrorResponse("Validation failed", ex.getErrors());
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
+        return GenericValidationFailedRestErrorResponse.asResponseEntity(ex.getErrors());
     }
 
     @ExceptionHandler(IssueNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(IssueNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("Issue not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return IssueNotFoundRestErrorResponse.asResponseEntity(ex.getIssueId().getValue());
     }
 
     @ExceptionHandler(IssueClosedException.class)
     public ResponseEntity<RestErrorResponse> handle(IssueClosedException ex) {
-        var errorResponse = new RestErrorResponse("Issue is closed");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return IssueClosedRestErrorResponse.asResponseEntity(ex.getIssueId().getValue());
     }
 
     @ExceptionHandler(IssueTypeSetException.class)
     public ResponseEntity<RestErrorResponse> handle(IssueTypeSetException ex) {
-        var errorResponse = new RestErrorResponse("Issue type is already set");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return IssueTypeSetRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(IssueContentSetException.class)
     public ResponseEntity<RestErrorResponse> handle(IssueContentSetException ex) {
-        var errorResponse = new RestErrorResponse("Issue content is already set");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return IssueContentSetRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(IssueNameSetException.class)
     public ResponseEntity<RestErrorResponse> handle(IssueNameSetException ex) {
-        var errorResponse = new RestErrorResponse("Issue name is already set");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return IssueNameSetRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(VoteAlreadyExistsException.class)
     public ResponseEntity<RestErrorResponse> handle(VoteAlreadyExistsException ex) {
-        var errorResponse = new RestErrorResponse("Vote already exists");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
-    }
-
-    @ExceptionHandler(CommentWithIdExistsException.class)
-    public ResponseEntity<RestErrorResponse> handle(CommentWithIdExistsException ex) {
-        var errorResponse = new RestErrorResponse("Comment with id already exist");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return IssueVoteAlreadyExistsRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(CommentNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(CommentNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("Comment not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return IssueCommentNotFoundRestErrorResponse.asResponseEntity(ex.getCommentId().getValue());
     }
 
     @ExceptionHandler(CommentHiddenException.class)
     public ResponseEntity<RestErrorResponse> handle(CommentHiddenException ex) {
-        var errorResponse = new RestErrorResponse("Comment is hidden");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return IssueCommentHiddenRestErrorResponse.asResponseEntity(ex.getCommentId().getValue());
     }
 
     @ExceptionHandler(CommentContentSetException.class)
     public ResponseEntity<RestErrorResponse> handle(CommentContentSetException ex) {
-        var errorResponse = new RestErrorResponse("Comment content is already set");
-
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(errorResponse);
+        return IssueCommentContentSetRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(OrganizationNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("Organization not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return OrganizationNotFoundRestErrorResponse.asResponseEntity(ex.getOrganizationId().getValue());
     }
 
     @ExceptionHandler(OrganizationProjectNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationProjectNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("Project not found");
-
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
+        return OrganizationProjectNotFoundRestErrorResponse.asResponseEntity(ex.getOrganizationProjectId().getValue());
     }
 
     @ExceptionHandler(OrganizationMemberNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationMemberNotFoundException ex) {
-        var errorResponse = new RestErrorResponse("User is not member of organization");
-
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body(errorResponse);
+        return OrganizationAccessDeniedRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(OrganizationServiceUnavailableException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationServiceUnavailableException ex) {
-        var errorResponse = new RestErrorResponse("Service unavailable");
-
-        return ResponseEntity
-                .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(errorResponse);
+        return OrganizationServiceUnavailableRestErrorResponse.asResponseEntity();
     }
 }

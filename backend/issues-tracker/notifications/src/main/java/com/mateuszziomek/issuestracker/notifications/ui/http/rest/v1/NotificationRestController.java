@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.notifications.ui.http.rest.v1;
 
-import com.mateuszziomek.issuestracker.shared.ui.notification.UserNotification;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.notification.UserNotificationDto;
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/notification-management")
 public class NotificationRestController {
-    private final Sinks.Many<UserNotification> userNotificationSink = Sinks.many().multicast().directBestEffort();
+    private final Sinks.Many<UserNotificationDto> userNotificationSink = Sinks.many().multicast().directBestEffort();
 
     /**
      * @throws AccessDeniedException if user role is not {@link UserRole#SYSTEM}
@@ -25,7 +25,7 @@ public class NotificationRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> createNotification(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
-            @RequestBody UserNotification userNotification
+            @RequestBody UserNotificationDto userNotification
     ) {
         if (!UserRole.SYSTEM.equals(userRole)) {
             throw new AccessDeniedException();
