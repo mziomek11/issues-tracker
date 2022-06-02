@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
-import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.ChangeIssueTypeDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.issue.ChangeIssueTypeDto;
 import com.mateuszziomek.issuestracker.issues.command.application.command.ChangeIssueTypeCommand;
 import com.mateuszziomek.issuestracker.issues.command.application.command.ChangeIssueTypeCommand.ChangeIssueTypeCommandBuilder;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;

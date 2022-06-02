@@ -1,4 +1,4 @@
-package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto;
+package com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.issue;
 
 import com.mateuszziomek.issuestracker.shared.domain.valueobject.VoteType;
 

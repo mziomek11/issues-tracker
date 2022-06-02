@@ -14,7 +14,7 @@ import com.mateuszziomek.issuestracker.users.query.application.query.handler.Get
 import com.mateuszziomek.issuestracker.users.query.application.query.handler.GetListUsersQueryHandler;
 import com.mateuszziomek.issuestracker.users.query.application.query.handler.GetUserIdFromJWTQueryHandler;
 import com.mateuszziomek.issuestracker.users.query.application.service.jwt.exception.InvalidJWTException;
-import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.dto.GetJWTDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user.GetJWTDto;
 import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper.GetJWTDtoMapper;
 import com.mateuszziomek.issuestracker.users.query.ui.http.rest.v1.mapper.GetListUsersParamMapper;
 import lombok.RequiredArgsConstructor;

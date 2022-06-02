@@ -3,7 +3,7 @@ package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
-import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.dto.ActivateUserDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user.ActivateUserDto;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.mapper.ActivateUserDtoMapper;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.mapper.RegisterUserDtoMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import com.mateuszziomek.issuestracker.users.command.application.gateway.user.ex
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
-import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.dto.RegisterUserDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user.RegisterUserDto;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

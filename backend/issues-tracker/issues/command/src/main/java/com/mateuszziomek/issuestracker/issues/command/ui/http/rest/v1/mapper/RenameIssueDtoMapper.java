@@ -2,7 +2,7 @@ package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import com.mateuszziomek.issuestracker.issues.command.application.command.RenameIssueCommand;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
-import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.RenameIssueDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.issue.RenameIssueDto;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 

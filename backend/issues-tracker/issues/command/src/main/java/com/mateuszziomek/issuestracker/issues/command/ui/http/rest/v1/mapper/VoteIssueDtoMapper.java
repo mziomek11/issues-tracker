@@ -2,7 +2,7 @@ package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper;
 
 import com.mateuszziomek.issuestracker.issues.command.application.command.VoteIssueCommand;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
-import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.VoteIssueDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.issue.VoteIssueDto;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 

@@ -1,4 +1,4 @@
-package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.dto;
+package com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user;
 
 import java.util.UUID;
 

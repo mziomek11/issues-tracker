@@ -10,10 +10,10 @@ import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.C
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.IssueOrganizationDetails;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
-import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.dto.*;
 import com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1.mapper.*;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.issue.*;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;

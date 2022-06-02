@@ -2,7 +2,7 @@ package com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.ma
 
 import com.mateuszziomek.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand.InviteOrganizationMemberCommandBuilder;
-import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.InviteOrganizationMemberDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.organization.InviteOrganizationMemberDto;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 

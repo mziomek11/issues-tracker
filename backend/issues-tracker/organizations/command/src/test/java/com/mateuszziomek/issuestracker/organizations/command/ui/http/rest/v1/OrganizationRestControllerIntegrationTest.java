@@ -6,9 +6,9 @@ import com.mateuszziomek.issuestracker.organizations.command.application.command
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.InviteOrganizationMemberCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.JoinOrganizationMemberCommand;
-import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationDto;
-import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationProjectDto;
-import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.InviteOrganizationMemberDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.organization.CreateOrganizationDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.organization.CreateOrganizationProjectDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.organization.InviteOrganizationMemberDto;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.mapper;
 
-import com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1.dto.CreateOrganizationProjectDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.organization.CreateOrganizationProjectDto;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.CreateOrganizationProjectCommand.CreateOrganizationProjectCommandBuilder;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;

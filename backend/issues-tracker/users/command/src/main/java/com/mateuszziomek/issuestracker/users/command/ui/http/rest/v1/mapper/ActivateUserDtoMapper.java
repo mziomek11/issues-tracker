@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.mapper;
 
-import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.dto.ActivateUserDto;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user.ActivateUserDto;
 import com.mateuszziomek.issuestracker.users.command.application.command.ActivateUserCommand;
 import com.mateuszziomek.issuestracker.users.command.application.command.ActivateUserCommand.ActivateUserCommandBuilder;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationErrorsMapper;
