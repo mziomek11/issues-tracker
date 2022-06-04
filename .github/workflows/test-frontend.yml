@@ -1,5 +1,7 @@
 name: test-frontend
-on: [push]
+on:
+  - push
+  - pull_request
 jobs:
   check-frontend:
     runs-on: ubuntu-22.04
