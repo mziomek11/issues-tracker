@@ -1,4 +1,4 @@
-name: check-frontend
+name: test-frontend
 on: [push]
 jobs:
   check-frontend:
