@@ -24,7 +24,7 @@ jobs:
         run: yarn install
       - name: Typescript check
         working-directory: ./frontend
-        run: yarn run lint:check
+        run: yarn run typescript:check
       - name: Lint check
         working-directory: ./frontend
         run: yarn run lint:check
