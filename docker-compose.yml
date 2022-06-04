@@ -188,6 +188,12 @@ services:
       - mvn:/usr/mvn
   organizations-query-mongo:
     image: mongo:5.0.7
+  swagger:
+    image: swaggerapi/swagger-ui
+    volumes:
+        - ./swagger:/usr/share/nginx/html/doc
+    environment:
+        API_URL: doc/openapi.yml
   users-command:
     build:
       args:

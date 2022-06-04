@@ -33,7 +33,7 @@ public class DetailsIssue {
     public static class IssueUpdate<T> {
         private IssueUpdateType type;
         private LocalDateTime updatedAt;
-        private T previousValues;
+        private T previousValue;
         private T currentValue;
     }
 

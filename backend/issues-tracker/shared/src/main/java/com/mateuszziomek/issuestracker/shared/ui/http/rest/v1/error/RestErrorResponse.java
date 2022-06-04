@@ -11,20 +11,19 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestErrorResponse {
     private String message;
-    private HttpStatus status;
-    private ApplicationErrorCode code;
+    private int status;
+    private String code;
     private Map<String, ? extends Object> details;
 
     public RestErrorResponse(ApplicationErrorCode code, HttpStatus status, String message) {
-        this.code = code;
-        this.status = status;
+        this.code = code.code();
+        this.status = status.value();
         this.message = message;
     }
 
-
     public RestErrorResponse(ApplicationErrorCode code, HttpStatus status, String message, Map<String, ? extends Object> details) {
-        this.code = code;
-        this.status = status;
+        this.code = code.code();
+        this.status = status.value();
         this.message = message;
         this.details = details;
     }

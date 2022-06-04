@@ -212,6 +212,7 @@ class IssueRestController {
     }
 
     /**
+     * @throws IssueClosedException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws IssueNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws OrganizationMemberNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
      * @throws OrganizationNotFoundException see {@link CommentIssueCommandHandler#handle(CommentIssueCommand)}
@@ -285,7 +286,7 @@ class IssueRestController {
      * @throws OrganizationServiceUnavailableException see {@link ChangeIssueCommentContentCommandHandler#handle(ChangeIssueCommentContentCommand)}
      * @throws RestValidationException see {@link ChangeIssueCommentContentDtoMapper#toCommand(UUID, UUID, IssueOrganizationDetails, ChangeIssueCommentContentDto)}
      */
-    @DeleteMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content")
+    @PatchMapping("/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content")
     public ResponseEntity changeIssueCommentContent(
             @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId,

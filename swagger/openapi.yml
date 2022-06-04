@@ -1,0 +1,2106 @@
+openapi: 3.0.3
+
+info:
+  title: Issues tracker API
+  version: 1.0.0
+
+paths:
+  /api/v1/user-management/users:
+    get:
+      tags:
+       - User management
+      summary: Returns list of users.
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+            format: email
+            example: example@mail.com
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/UserStatus' 
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ListUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/AuthAccessDenied'
+    post: 
+      tags:
+       - User management
+      summary: Registers new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@mail.com
+                password:
+                  type: string
+                  example: examplePassword123
+              required:
+                - email
+                - password
+      responses:
+        '201':
+          description: User has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectId' 
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '409':
+          $ref: '#/components/responses/GenericEmailUnavailable'
+        '503':
+          $ref: '#/components/responses/UserServiceUnavailable'
+  /api/v1/user-management/users/{userId}/activation-token:
+    post:
+      tags: 
+        - User management
+      summary: Activates user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 86af373f-6353-42d6-9780-da7070f188af
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activationToken:
+                  type: string
+                  format: uuid
+                  example: 226c526c-b00f-4fe4-bd0c-f05ed7710234
+              required:
+                - activationToken
+      responses:
+        '200':
+          description: User has been successfully activated
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '404':
+          $ref: '#/components/responses/UserNotFound'
+        '409':
+          description: Invalid activation token | User already activated
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserInvalidActivationToken'
+                  - $ref: '#/components/schemas/UserAlreadyActivated'
+  /api/v1/user-management/users/authentication:
+    post:
+      tags:
+        - User management
+      summary: Generates JSON Web Token
+      responses:
+        '200':
+          description: JSON Web Token
+          content:
+            text/plain:
+              example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxM2E2MDg1MC00YTkwLTQ2ZjMtOThhZS03ZjViMGU1YmM2ZDYiLCJleHAiOjE2NTE3MDEwMzJ9.86n8U1z1qa54OLK6fAV_qubnxiEeZcem4NUAe7uq6rU
+        '409':
+          $ref: '#/components/responses/AuthInvalidCredentials'
+  /api/v1/organization-management/organizations:
+    get:
+      tags:
+        - Organization management
+      summary: Returns list of user organizations
+      responses:
+        '200':
+          description: List of user organizations
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ListOrganization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+        - Organization management
+      summary: Creates new organization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My organization 1
+              required:
+                - name
+      responses:
+        '201':
+          description: User has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectId'
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/organization-management/organizations/{organizationId}:
+    get:
+      tags:
+        - Organization management
+      summary: Returns organization details
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 0158d1b1-d2f7-46ba-bb07-003d0e3fd514
+      responses:
+        '200':
+          description: Organization details
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/DetailsOrganization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/AuthAccessDenied'
+        '404':
+          $ref: '#/components/responses/OrganizationNotFound'
+  /api/v1/organization-management/organizations/{organizationId}/invitations:
+    post:
+      tags:
+        - Organization management
+      summary: Invites user to organization
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 8de20cf4-a26b-4915-9902-387743330d91
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@mail.com
+              required:
+                - email
+      responses:
+        '201':
+          description: User has been successfully invited
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/organization-management/organizations/{organizationId}/members:
+    post:
+      tags:
+        - Organization management
+      summary: Joins organization
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 8815e434-8c39-46f8-b275-0ce274fd5575
+      responses:
+        '200':
+          description: User successfully joined to organization
+        '404':
+          description: User not found | Organization not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserNotFound'
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+  /api/v1/organization-management/organizations/{organizationId}/projects:
+    post:
+      tags:
+        - Organization management
+      summary: Creates new project
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: d509b158-14ff-46c4-a135-65568d489dbc
+      responses:
+        '201':
+          description: Project successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectId'
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '403':
+          $ref: '#/components/responses/OrganizationOwnerInvalid'
+        '404':
+          $ref: '#/components/responses/OrganizationNotFound'
+  /api/v1/organization-management/invitations:
+    get:
+      tags:
+        - Organization management
+      summary: Returns list of user invitations
+      responses:
+        '200':
+          description: List of user invitations
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ListInvitation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationOwnerInvalid'
+        '404':
+          description: User not found | Organization not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserNotFound'
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+        '409':
+          description: Invitation already exists | Member already in organization
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationInvitationAlreadyPresent'
+                  - $ref: '#/components/schemas/OrganizationMemberAlreadyPresent'
+        '503':
+          $ref: '#/components/responses/UserServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues:
+    get:
+      tags:
+        - Issue management
+      summary: Returns list of project issues
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+      responses:
+        '200':
+          description: A list of project issues
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ListIssue'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+    post:
+      tags:
+        - Issue management
+      summary: Creates new issue
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  $ref: '#/components/schemas/IssueType' 
+                name:
+                  type: string
+                  example: My issue 1
+                content:
+                  type: string
+                  example: Example content of issue
+              required:
+                - type
+                - name
+                - content
+      responses:
+        '201':
+          description: Issue has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectId' 
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}:
+    get:
+      tags:
+        - Issue management
+      summary: Returns issue details
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+      responses:
+        '200':
+          description: Issue details
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/DetailsIssue'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+    delete:
+      tags:
+        - Issue management
+      summary: Closes issue
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+      responses:
+        '200':
+          description: Issue has been successfully closed
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+        '409':
+          $ref: '#/components/responses/IssueClosed'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/name:
+    patch:
+      tags:
+        - Issue management
+      summary: Renames issue
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My issue 1
+              required:
+                - name
+      responses:
+        '200':
+          description: Issue has been successfully renamed
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+        '409':
+          description: Issue closed | Issue name set
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/IssueClosed'
+                  - $ref: '#/components/schemas/IssueNameSet'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/type:
+    patch:
+      tags:
+        - Issue management
+      summary: Changes issue type
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  $ref: '#/components/schemas/IssueType' 
+              required:
+                - type
+      responses:
+        '200':
+          description: Issue type has been successfully changed
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+        '409':
+          description: Issue closed | Issue type set
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/IssueClosed'
+                  - $ref: '#/components/schemas/IssueTypeSet'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/content:
+    patch:
+      tags:
+        - Issue management
+      summary: Changes issue content
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: Example content of issue
+              required:
+                - content
+      responses:
+        '200':
+          description: Issue content has been successfully changed
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+        '409':
+          description: Issue closed | Issue content set
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/IssueClosed'
+                  - $ref: '#/components/schemas/IssueContentSet'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/votes:
+    post:
+      tags:
+        - Issue management
+      summary: Votes issue
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                voteType:
+                  $ref: '#/components/schemas/VoteType' 
+              required:
+                - voteType
+      responses:
+        '200':
+          description: Issue has been successfully voted
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+        '409':
+          description: Issue closed | Vote already exists
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/IssueClosed'
+                  - $ref: '#/components/schemas/IssueVoteAlreadyExists'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments:
+    post:
+      tags:
+        - Issue management
+      summary: Comments issue
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                voteType:
+                  type: string
+                  example: This is example comment
+              required:
+                - content
+      responses:
+        '201':
+          description: Issue has been successfully commented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectId' 
+        '400':
+          $ref: '#/components/responses/GenericValidationFailed'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+        '409':
+          $ref: '#/components/responses/IssueClosed'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}:
+    delete:
+      tags:
+        - Issue management
+      summary: Hides issue comment
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: c85b49c9-8814-4d89-97c1-89ec95df9561
+      responses:
+        '200':
+          description: Comment has been successfully hidden
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found | Comment not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+                  - $ref: '#/components/schemas/IssueCommentNotFound'
+        '409':
+          description: Issue closed | Comment hidden
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/IssueClosed'
+                  - $ref: '#/components/schemas/IssueCommentHidden'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content:
+    patch:
+      tags:
+        - Issue management
+      summary: Changes issue comment content
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: c85b49c9-8814-4d89-97c1-89ec95df9561
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                voteType:
+                  type: string
+                  example: This is example content
+              required:
+                - content
+      responses:
+        '200':
+          description: Comment content has been successfully changed
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found | Comment not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+                  - $ref: '#/components/schemas/IssueCommentNotFound'
+        '409':
+          description: Issue closed | Content already set
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/IssueClosed'
+                  - $ref: '#/components/schemas/IssueCommentContentSet'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+  /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/votes:
+    post:
+      tags:
+        - Issue management
+      summary: Votes issue comment
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: cb6d8ab4-f76b-41f5-adc0-6a1a2eaa124d
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 4d9305fa-37d7-4680-9996-10aa58e53ef1
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: bde102c5-3fd8-4fc4-89b0-5a0275a73506
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: c85b49c9-8814-4d89-97c1-89ec95df9561
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                voteType:
+                  $ref: '#/components/schemas/VoteType' 
+              required:
+                - voteType
+      responses:
+        '200':
+          description: Comment has been successfully voted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationAccessDenied'
+        '404':
+          description: Organization not found | Project not found | Issue not found | Comment not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+                  - $ref: '#/components/schemas/OrganizationProjectNotFound'
+                  - $ref: '#/components/schemas/IssueNotFound'
+                  - $ref: '#/components/schemas/IssueCommentNotFound'
+        '409':
+          description: Issue closed | Vote already exists
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/IssueClosed'
+                  - $ref: '#/components/schemas/IssueVoteAlreadyExists'
+        '503':
+          $ref: '#/components/responses/OrganizationServiceUnavailable'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    AuthAccessDenied:
+      description: Access denied
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthAccessDenied' 
+    AuthInvalidCredentials:
+      description: Invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthInvalidCredentials' 
+    UserInvalidActivationToken:
+      description: Invalid activation token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserInvalidActivationToken' 
+    UserAlreadyActivated:
+      description: User already activated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserAlreadyActivated'
+    UserNotFound:
+      description: User does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserNotFound' 
+    UserServiceUnavailable:
+      description: User service unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserServiceUnavailable'
+    OrganizationNotFound:
+      description: Organization does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationNotFound'
+    OrganizationOwnerInvalid:
+      description: Only organization owner is allowed to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationOwnerInvalid'
+    OrganizationInvitationNotFound:
+      description: Invitation not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationInvitationNotFound'
+    OrganizationInvitationAlreadyPresent:
+      description: Member already invited
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationInvitationAlreadyPresent'
+    OrganizationMemberAlreadyPresent:
+      description: Member already in organization
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationMemberAlreadyPresent'
+    OrganizationAccessDenied:
+      description: Access to organization denied
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationAccessDenied'
+    OrganizationProjectNotFound:
+      description: Project not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationProjectNotFound'
+    OrganizationServiceUnavailable:
+      description: Organization service unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganizationServiceUnavailable'
+    IssueNotFound:
+      description: Issue not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueNotFound'
+    IssueClosed:
+      description: Issue closed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueClosed'
+    IssueTypeSet:
+      description: Issue type already set
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueTypeSet'
+    IssueContentSet:
+      description: Issue content already set
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueContentSet'
+    IssueNameSet:
+      description: Issue name already set
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueNameSet'
+    IssueVoteAlreadyExists:
+      description: Vote already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueVoteAlreadyExists'
+    IssueCommentNotFound:
+      description: Comment not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueCommentNotFound'
+    IssueCommentHidden:
+      description: Comment is hidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueCommentHidden'
+    IssueCommentContentSet:
+      description: Comment content already set
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueCommentContentSet'
+    Unauthorized:
+      description: Access token is missing or invalid
+    GenericEmailUnavailable:
+      description: Email unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericEmailUnavailable' 
+    GenericValidationFailed:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericValidationFailed' 
+  schemas:
+    ObjectId:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e72692ac-85ce-40f8-bb4d-7fbb3147cbb2 
+    UserStatus:
+      type: string
+      enum: [UNVERIFIED, ACTIVATED]
+      example: UNVERIFIED
+    ListUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b5f5bea7-02f3-4179-8b12-fab4ae8b439e
+        email:
+          type: string
+          format: email
+          example: example@mail.com
+      required:
+        - id
+        - email
+    ListOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 55a7d266-97d4-417f-819b-5505208d44d5
+        name:
+          type: string
+          example: My organization 1
+        ownerId:
+          type: string
+          format: uuid
+          example: 2e5a9893-0d01-4c84-a08b-6287260eb3c6
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 9cacc223-31dd-459e-9faa-6ef2b71cb7ca
+            required:
+              - id
+        projects:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 61270ca3-4f75-4ba3-839f-2cba04d489ed
+              name:
+                type: string
+                example: My project 1
+            required:
+              - id
+      required:
+        - id
+        - name
+        - ownerId
+        - members
+        - projects
+    ListInvitation:
+      type: object
+      properties:
+        member:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 41c99913-e7a8-423b-be89-ccd79cf429db
+          required:
+            - id
+        organization:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 21a83595-ea57-4e7c-b216-cba7b1355f70
+            name:
+              type: string
+              example: My organization 1
+          required:
+            - id
+            - name
+      required:
+        - member
+        - organization
+    DetailsOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 55a7d266-97d4-417f-819b-5505208d44d5
+        name:
+          type: string
+          example: My organization 1
+        ownerId:
+          type: string
+          format: uuid
+          example: 2e5a9893-0d01-4c84-a08b-6287260eb3c6
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 9cacc223-31dd-459e-9faa-6ef2b71cb7ca
+            required:
+              - id
+        projects:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 61270ca3-4f75-4ba3-839f-2cba04d489ed
+              name:
+                type: string
+                example: My project 1
+            required:
+              - id
+      required:
+        - id
+        - name
+        - ownerId
+        - members
+        - projects
+    IssueType:
+      type: string
+      enum: [BUG, ENHANCEMENT]
+      example: BUG
+    IssueStatus:
+      type: string
+      enum: [OPENED, CLOSED]
+      example: OPENED
+    IssueUpdateType:
+      type: string
+      enum: [RENAMED, CONTENT_CHANGED, TYPE_CHANGED]
+      example: RENAMED
+    CommentUpdateType:
+      type: string
+      enum: [CONTENT_CHANGED]
+      example: CONTENT_CHANGED
+    VoteType:
+      type: string
+      enum: [UP, DOWN]
+      example: UP
+    CommentStatus:
+      type: string
+      enum: [ACTIVE, HIDDEN]
+      example: ACTIVE
+    ListIssue:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 8fc6cc80-422e-47be-9a68-3fc1d1e4948e
+        name:
+          type: string
+          example: Example issue name
+        status:
+          $ref: '#/components/schemas/IssueStatus'
+        type:
+          $ref: '#/components/schemas/IssueType'
+        votes:
+          type: array
+          items:
+            type: object
+            properties:
+              memberId:
+                type: string
+                format: uuid
+                example: f062b8f4-ed89-415c-9f54-282ba5e3b931
+              type:
+                $ref: '#/components/schemas/VoteType'
+            required:
+              - memberId
+              - type
+        creator:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 6d07226f-8973-42e8-abcb-c0ea765e04f0
+            email:
+              type: string
+              format: email
+              example: example@email.com
+          required:
+            - id
+            - email
+        project:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: afa5f0e3-eabf-4568-9f9b-a78f3b821927
+          required:
+            - id
+        organization:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d5889c10-4c74-4340-a744-a54a6d0cc55a
+          required:
+            - id
+      required:
+        - id
+        - name
+        - status
+        - type
+        - votes
+        - creator
+        - project
+        - organization
+    DetailsIssue:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 8fc6cc80-422e-47be-9a68-3fc1d1e4948e
+        name:
+          type: string
+          example: Example issue name
+        status:
+          $ref: '#/components/schemas/IssueStatus'
+        type:
+          $ref: '#/components/schemas/IssueType'
+        votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetailsIssueVote'
+        updates:
+          type: array
+          items:
+            oneOf:
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    example: RENAMED
+                  previousValue:
+                    type: string
+                    example: Previous name
+                  currentValue:
+                    type: string
+                    example: Current name
+                required:
+                  - type
+                  - previousValue
+                  - currentValue
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    example: CONTENT_CHANGED
+                  previousValue:
+                    type: string
+                    example: Previous content
+                  currentValue:
+                    type: string
+                    example: Current content
+                required:
+                  - type
+                  - previousValue
+                  - currentValue
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    example: TYPE_CHANGED
+                  previousValue:
+                    type: string
+                    example: BUG
+                  currentValue:
+                    type: string
+                    example: ENHANCEMENT
+                required:
+                  - type
+                  - previousValue
+                  - currentValue
+        comments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 2c6ce9ae-0f32-4d0b-9022-b88a5645b93d
+              content:
+                type: string
+                example: Example comment content
+              status:
+                $ref: '#/components/schemas/CommentStatus'
+              creator:
+                $ref: '#/components/schemas/DetailsIssueCreator'
+              updates:
+                type: array
+                items:
+                  oneOf:
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          example: CONTENT_CHANGED
+                        previousValue:
+                          type: string
+                          example: Previous content
+                        currentValue:
+                          type: string
+                          example: Current content
+                      required:
+                        - type
+                        - previousValue
+                        - currentValue
+              votes:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DetailsIssueVote'
+            required:
+              - id
+              - content
+              - status
+              - creator
+              - updates
+              - votes
+        creator:
+          $ref: '#/components/schemas/DetailsIssueCreator'
+        project:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: afa5f0e3-eabf-4568-9f9b-a78f3b821927
+          required:
+            - id
+        organization:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d5889c10-4c74-4340-a744-a54a6d0cc55a
+          required:
+            - id
+      required:
+        - id
+        - name
+        - status
+        - type
+        - votes
+        - updates
+        - comments
+        - creator
+        - project
+        - organization
+    DetailsIssueCreator:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 6d07226f-8973-42e8-abcb-c0ea765e04f0
+        email:
+          type: string
+          format: email
+          example: example@email.com
+      required:
+        - id
+        - email
+    DetailsIssueVote:
+      type: object
+      properties:
+        memberId:
+          type: string
+          format: uuid
+          example: f062b8f4-ed89-415c-9f54-282ba5e3b931
+        type:
+          $ref: '#/components/schemas/VoteType'
+      required:
+        - memberId
+        - type
+    AuthAccessDenied:
+      type: object
+      properties:
+        code:
+          type: string
+          example: AUTH_1
+        status:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Access Denied
+      required:
+        - code
+        - status
+        - message
+    AuthInvalidCredentials:
+      type: object
+      properties:
+        code:
+          type: string
+          example: AUTH_2
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Invalid credentials
+      required:
+        - code
+        - status
+        - message
+    UserInvalidActivationToken:
+      type: object
+      properties:
+        code:
+          type: string
+          example: USER_1
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Invalid activation token
+      required:
+        - code
+        - status
+        - message
+    UserAlreadyActivated:
+      type: object
+      properties:
+        code:
+          type: string
+          example: USER_2
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: User already activated
+      required:
+        - code
+        - status
+        - message
+    UserNotFound:
+      type: object
+      properties:
+        code:
+          type: string
+          example: USER_3
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: User does not exist
+      required:
+        - code
+        - status
+        - message
+    UserServiceUnavailable:
+      type: object
+      properties:
+        code:
+          type: string
+          example: USER_4
+        status:
+          type: integer
+          example: 503
+        message:
+          type: string
+          example: User service unavailable
+      required:
+        - code
+        - status
+        - message
+    OrganizationNotFound:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_1
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Organization with id 040a960c-ea03-4997-9667-fb0e72983780 does not exist
+        details:
+          type: object
+          properties:
+            organizationId:
+              type: string
+              format: uuid
+              example: 040a960c-ea03-4997-9667-fb0e72983780
+          required:
+            - organizationId
+      required:
+        - code
+        - status
+        - message
+        - details
+    OrganizationOwnerInvalid:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_2
+        status:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Only organization owner is allowed to perform this action
+      required:
+        - code
+        - status
+        - message
+    OrganizationInvitationNotFound:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_3
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Invitation for member with id c93ee2f8-136f-4453-95f9-581c26f17838 not found
+        details:
+          type: object
+          properties:
+            invitationId:
+              type: string
+              format: uuid
+              example: c93ee2f8-136f-4453-95f9-581c26f17838
+          required:
+            - invitationId
+      required:
+        - code
+        - status
+        - message
+        - details
+    OrganizationInvitationAlreadyPresent:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_4
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Member with id d73fc83d-70ed-4de9-87fe-c27a91c4756e is already invited
+        details:
+          type: object
+          properties:
+            invitationId:
+              type: string
+              format: uuid
+              example: d73fc83d-70ed-4de9-87fe-c27a91c4756e
+          required:
+            - invitationId
+      required:
+        - code
+        - status
+        - message
+        - details
+    OrganizationMemberAlreadyPresent:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_5
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Member with id aeca19b2-ba1a-401f-b756-5fe687c2bd79 is already in organization
+        details:
+          type: object
+          properties:
+            memberId:
+              type: string
+              format: uuid
+              example: aeca19b2-ba1a-401f-b756-5fe687c2bd79
+          required:
+            - memberId
+      required:
+        - code
+        - status
+        - message
+        - details
+    OrganizationAccessDenied:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_6
+        status:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Organization access denied
+      required:
+        - code
+        - status
+        - message
+    OrganizationProjectNotFound:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_6
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Organization project with id ad007d16-b212-4546-a8e2-ad3850b9299d does not exist
+        details:
+          type: object
+          properties:
+            projectId:
+              type: string
+              format: uuid
+              example: ad007d16-b212-4546-a8e2-ad3850b9299d
+          required:
+            - projectId
+      required:
+        - code
+        - status
+        - message
+        - details
+    OrganizationServiceUnavailable:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ORGANIZATION_7
+        status:
+          type: integer
+          example: 503
+        message:
+          type: string
+          example: Organization service unavailable
+      required:
+        - code
+        - status
+        - message
+    IssueNotFound:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_1
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Issue with id b48b80b8-6d11-47fa-a901-a510159d5db5 does not exist
+        details:
+          type: object
+          properties:
+            issueId:
+              type: string
+              format: uuid
+              example: b48b80b8-6d11-47fa-a901-a510159d5db5
+          required:
+            - issueId
+      required:
+        - code
+        - status
+        - message
+        - details
+    IssueClosed:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_2
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Issue with id 1833aa06-f45f-469b-833c-e3f8c7f70892 is closed
+        details:
+          type: object
+          properties:
+            issueId:
+              type: string
+              format: uuid
+              example: 1833aa06-f45f-469b-833c-e3f8c7f70892
+          required:
+            - issueId
+      required:
+        - code
+        - status
+        - message
+        - details
+    IssueTypeSet:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_3
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Issue already has given type
+      required:
+        - code
+        - status
+        - message
+    IssueContentSet:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_4
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Issue already has given content
+      required:
+        - code
+        - status
+        - message
+    IssueNameSet:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_5
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Issue already has given name
+      required:
+        - code
+        - status
+        - message
+    IssueVoteAlreadyExists:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_6
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Vote already exists
+      required:
+        - code
+        - status
+        - message
+    IssueCommentNotFound:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_8
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Comment with id 2e340404-bab8-4e93-8708-91c324e8a150 does not exist
+        details:
+          type: object
+          properties:
+            commentId:
+              type: string
+              format: uuid
+              example: 2e340404-bab8-4e93-8708-91c324e8a150
+          required:
+            - commentId
+      required:
+        - code
+        - status
+        - message
+        - details
+    IssueCommentHidden:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_9
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Comment with id 7913d1af-fb99-4213-b055-ea9c6454887c is hidden
+        details:
+          type: object
+          properties:
+            commentId:
+              type: string
+              format: uuid
+              example: 7913d1af-fb99-4213-b055-ea9c6454887c
+          required:
+            - commentId
+      required:
+        - code
+        - status
+        - message
+        - details
+    IssueCommentContentSet:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ISSUE_10
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Comment already has given content
+      required:
+        - code
+        - status
+        - message
+    GenericEmailUnavailable:
+      type: object
+      properties:
+        code:
+          type: string
+          example: GENERIC_3
+        status:
+          type: integer
+          example: 409
+        message:
+          type: string
+          example: Email unavailable
+      required:
+        - code
+        - status
+        - message
+    GenericValidationFailed:
+      type: object
+      properties:
+        code:
+          type: string
+          example: GENERIC_2
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Validation Failed
+        details:
+          type: object
+          properties:
+            someField:
+              type: array
+              items:
+                type: string
+                example: ["Some field error 1", "Some field error 2"]
+            anotherField:
+              type: array
+              items:
+                type: string
+                example: ["Another field error 1", "Another field error 2"]
+      required:
+        - code
+        - status
+        - message
+        - details
