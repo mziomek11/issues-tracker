@@ -1,0 +1,29 @@
+name: test-frontend
+on: [push]
+jobs:
+  check-typescript:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: frontend/package.json
+      - run: cd frontend
+      - run: npm run typescript:check
+  check-lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: frontend/package.json
+      - run: cd frontend
+      - run: npm run lint:check
