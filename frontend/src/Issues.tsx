@@ -1,60 +1,59 @@
-import { FormEvent, useState } from "react";
-import { get, post, patch, deletee } from "./http";
+/* eslint-disable */
+
+import { FormEvent, useState } from 'react';
+import { get, post, patch, deletee } from './http';
 
 export const Issues = () => {
   const [getIssueForm, setGetIssueForm] = useState({
-    organization: "",
-    project: "",
-    issue: "",
+    organization: '',
+    project: '',
+    issue: '',
   });
   const [issueForm, setIssueForm] = useState({
-    name: "",
-    content: "Some content",
-    type: "BUG",
-    organization: "",
-    project: "",
+    name: '',
+    content: 'Some content',
+    type: 'BUG',
+    organization: '',
+    project: '',
   });
   const [changeContentForm, setChangeContentForm] = useState({
-    content: "",
-    issue: "",
-    organization: "",
-    project: "",
+    content: '',
+    issue: '',
+    organization: '',
+    project: '',
   });
   const [changeTypeForm, setChangeTypeForm] = useState({
-    type: "ENHANCEMENT",
-    issue: "",
-    organization: "",
-    project: "",
+    type: 'ENHANCEMENT',
+    issue: '',
+    organization: '',
+    project: '',
   });
   const [renameIssueForm, setRenameIssueForm] = useState({
-    name: "",
-    issue: "",
-    organization: "",
-    project: "",
+    name: '',
+    issue: '',
+    organization: '',
+    project: '',
   });
   const [voteIssueForm, setVoteIssueForm] = useState({
-    voteType: "UP",
-    issue: "",
-    organization: "",
-    project: "",
+    voteType: 'UP',
+    issue: '',
+    organization: '',
+    project: '',
   });
   const [closeIssueForm, setCloseIssueForm] = useState({
-    issue: "",
-    organization: "",
-    project: "",
+    issue: '',
+    organization: '',
+    project: '',
   });
   const [issuesForm, setIssuesForm] = useState({
-    organization: "",
-    project: "",
+    organization: '',
+    project: '',
   });
 
   const createIssues = (e: FormEvent) => {
     e.preventDefault();
     const { project, organization, ...dto } = issueForm;
-    post(
-      `/api/v1/issue-management/organizations/${organization}/projects/${project}/issues`,
-      dto
-    );
+    post(`/api/v1/issue-management/organizations/${organization}/projects/${project}/issues`, dto);
   };
 
   const renameIssues = (e: FormEvent) => {
@@ -134,17 +133,13 @@ export const Issues = () => {
         <label>Organization</label>
         <input
           value={issuesForm.organization}
-          onChange={(e) =>
-            setIssuesForm({ ...issuesForm, organization: e.target.value })
-          }
+          onChange={(e) => setIssuesForm({ ...issuesForm, organization: e.target.value })}
         />
 
         <label>Project</label>
         <input
           value={issuesForm.project}
-          onChange={(e) =>
-            setIssuesForm({ ...issuesForm, project: e.target.value })
-          }
+          onChange={(e) => setIssuesForm({ ...issuesForm, project: e.target.value })}
         />
 
         <button>Get Issues</button>
@@ -155,25 +150,19 @@ export const Issues = () => {
         <label>Organization</label>
         <input
           value={getIssueForm.organization}
-          onChange={(e) =>
-            setGetIssueForm({ ...getIssueForm, organization: e.target.value })
-          }
+          onChange={(e) => setGetIssueForm({ ...getIssueForm, organization: e.target.value })}
         />
 
         <label>Project</label>
         <input
           value={getIssueForm.project}
-          onChange={(e) =>
-            setGetIssueForm({ ...getIssueForm, project: e.target.value })
-          }
+          onChange={(e) => setGetIssueForm({ ...getIssueForm, project: e.target.value })}
         />
 
         <label>Issue</label>
         <input
           value={getIssueForm.issue}
-          onChange={(e) =>
-            setGetIssueForm({ ...getIssueForm, issue: e.target.value })
-          }
+          onChange={(e) => setGetIssueForm({ ...getIssueForm, issue: e.target.value })}
         />
 
         <button>Get Issue</button>
@@ -184,17 +173,13 @@ export const Issues = () => {
         <label>Organization</label>
         <input
           value={issueForm.organization}
-          onChange={(e) =>
-            setIssueForm({ ...issueForm, organization: e.target.value })
-          }
+          onChange={(e) => setIssueForm({ ...issueForm, organization: e.target.value })}
         />
 
         <label>Project</label>
         <input
           value={issueForm.project}
-          onChange={(e) =>
-            setIssueForm({ ...issueForm, project: e.target.value })
-          }
+          onChange={(e) => setIssueForm({ ...issueForm, project: e.target.value })}
         />
 
         <label>Name</label>
@@ -222,25 +207,19 @@ export const Issues = () => {
         <label>Project</label>
         <input
           value={renameIssueForm.project}
-          onChange={(e) =>
-            setRenameIssueForm({ ...renameIssueForm, project: e.target.value })
-          }
+          onChange={(e) => setRenameIssueForm({ ...renameIssueForm, project: e.target.value })}
         />
 
         <label>Issue</label>
         <input
           value={renameIssueForm.issue}
-          onChange={(e) =>
-            setRenameIssueForm({ ...renameIssueForm, issue: e.target.value })
-          }
+          onChange={(e) => setRenameIssueForm({ ...renameIssueForm, issue: e.target.value })}
         />
 
         <label>Name</label>
         <input
           value={renameIssueForm.name}
-          onChange={(e) =>
-            setRenameIssueForm({ ...renameIssueForm, name: e.target.value })
-          }
+          onChange={(e) => setRenameIssueForm({ ...renameIssueForm, name: e.target.value })}
         />
 
         <button>Rename Issue</button>
@@ -387,17 +366,13 @@ export const Issues = () => {
         <label>Project</label>
         <input
           value={closeIssueForm.project}
-          onChange={(e) =>
-            setCloseIssueForm({ ...closeIssueForm, project: e.target.value })
-          }
+          onChange={(e) => setCloseIssueForm({ ...closeIssueForm, project: e.target.value })}
         />
 
         <label>Issue</label>
         <input
           value={closeIssueForm.issue}
-          onChange={(e) =>
-            setCloseIssueForm({ ...closeIssueForm, issue: e.target.value })
-          }
+          onChange={(e) => setCloseIssueForm({ ...closeIssueForm, issue: e.target.value })}
         />
 
         <button>Close Issue</button>

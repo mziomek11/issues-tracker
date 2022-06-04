@@ -1,28 +1,29 @@
-import { FormEvent, useState } from "react";
-import { post, get } from "./http";
+/* eslint-disable */
+
+import { FormEvent, useState } from 'react';
+import { post, get } from './http';
 
 export const Organizations = () => {
-  const [organizationForm, setOrganizationForm] = useState({ name: "" });
-  const [projectForm, setProjectForm] = useState({ name: "", id: "" });
+  const [organizationForm, setOrganizationForm] = useState({ name: '' });
+  const [projectForm, setProjectForm] = useState({ name: '', id: '' });
   const [invitationForm, setInvitationForm] = useState({
-    email: "",
-    organization: "",
+    email: '',
+    organization: '',
   });
   const [joinOrganizationForm, setJoinOrganizationForm] = useState({
-    organization: "",
+    organization: '',
   });
 
   const createOrganization = (e: FormEvent) => {
     e.preventDefault();
-    post("/api/v1/organization-management/organizations", organizationForm);
+    post('/api/v1/organization-management/organizations', organizationForm);
   };
 
   const createProject = (e: FormEvent) => {
     e.preventDefault();
-    post(
-      `/api/v1/organization-management/organizations/${projectForm.id}/projects`,
-      { name: projectForm.name }
-    );
+    post(`/api/v1/organization-management/organizations/${projectForm.id}/projects`, {
+      name: projectForm.name,
+    });
   };
 
   const inviteMember = (e: FormEvent) => {
@@ -44,13 +45,13 @@ export const Organizations = () => {
   };
 
   const getOrganizations = async () => {
-    const orgs = await get("/api/v1/organization-management/organizations");
+    const orgs = await get('/api/v1/organization-management/organizations');
 
     console.log(orgs);
   };
 
   const getInvitations = async () => {
-    const orgs = await get("/api/v1/organization-management/invitations");
+    const orgs = await get('/api/v1/organization-management/invitations');
 
     console.log(orgs);
   };
@@ -66,9 +67,7 @@ export const Organizations = () => {
         <label>Name</label>
         <input
           value={organizationForm.name}
-          onChange={(e) =>
-            setOrganizationForm({ ...organizationForm, name: e.target.value })
-          }
+          onChange={(e) => setOrganizationForm({ ...organizationForm, name: e.target.value })}
         />
 
         <button>Create organization</button>
@@ -79,16 +78,12 @@ export const Organizations = () => {
         <label>id</label>
         <input
           value={projectForm.id}
-          onChange={(e) =>
-            setProjectForm({ ...projectForm, id: e.target.value })
-          }
+          onChange={(e) => setProjectForm({ ...projectForm, id: e.target.value })}
         />
         <label>Name</label>
         <input
           value={projectForm.name}
-          onChange={(e) =>
-            setProjectForm({ ...projectForm, name: e.target.value })
-          }
+          onChange={(e) => setProjectForm({ ...projectForm, name: e.target.value })}
         />
 
         <button>Create project</button>
@@ -111,9 +106,7 @@ export const Organizations = () => {
         <label>Email</label>
         <input
           value={invitationForm.email}
-          onChange={(e) =>
-            setInvitationForm({ ...invitationForm, email: e.target.value })
-          }
+          onChange={(e) => setInvitationForm({ ...invitationForm, email: e.target.value })}
         />
 
         <button>Invite member</button>
