@@ -274,7 +274,7 @@ class IssueRestControllerIntegrationTest {
         // Arrange
         var dto = new ChangeIssueCommentContentDto("Changed content");
         var request = MockMvcRequestBuilders
-                .delete(URL_BASE + String.format("/%s/comments/%s/content", ISSUE_UUID, COMMENT_UUID))
+                .patch(URL_BASE + String.format("/%s/comments/%s/content", ISSUE_UUID, COMMENT_UUID))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .header(SecurityHeaders.ISSUES_TRACKER_USER_ID, MEMBER_UUID)
                 .content(objectMapper.writeValueAsBytes(dto));
