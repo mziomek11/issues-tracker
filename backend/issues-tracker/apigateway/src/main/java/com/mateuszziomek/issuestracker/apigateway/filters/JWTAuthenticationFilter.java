@@ -4,6 +4,7 @@ import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -21,6 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Component
 public class JWTAuthenticationFilter implements GatewayFilter, Ordered {
     private final DiscoveryClient discoveryClient;
+    private @Value("${service.users-query.name}") String serviceUsersQueryName;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -35,7 +37,7 @@ public class JWTAuthenticationFilter implements GatewayFilter, Ordered {
             return onError(exchange, HttpStatus.UNAUTHORIZED);
         }
 
-        var userServices = discoveryClient.getInstances(System.getenv("SERVICE_USERS_QUERY_NAME"));
+        var userServices = discoveryClient.getInstances(System.getenv(serviceUsersQueryName));
         if (userServices == null || userServices.isEmpty()) {
             return onError(exchange, HttpStatus.SERVICE_UNAVAILABLE);
         }

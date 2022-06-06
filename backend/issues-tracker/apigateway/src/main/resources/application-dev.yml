@@ -5,6 +5,21 @@ eureka:
 server:
   application:
     name: ${SERVICE_APIGATEWAY_NAME}
+service:
+  issues-command:
+    name: ${SERVICE_ISSUES_COMMAND_NAME}
+  issues-query:
+    name: ${SERVICE_ISSUES_QUERY_NAME}
+  notifications:
+    name: ${SERVICE_NOTIFICATIONS_NAME}
+  organizations-command:
+    name: ${SERVICE_ORGANIZATIONS_COMMAND_NAME}
+  organizations-query:
+    name: ${SERVICE_ORGANIZATIONS_QUERY_NAME}
+  users-command:
+    name: ${SERVICE_USERS_COMMAND_NAME}
+  users-query:
+    name: ${SERVICE_USERS_QUERY_NAME}
 spring:
   application:
     name: ${SERVICE_APIGATEWAY_NAME}
