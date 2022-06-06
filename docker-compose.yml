@@ -65,6 +65,8 @@ services:
       - mvn:/usr/mvn
   issues-command-mongo:
     image: mongo:5.0.7
+    volumes:
+      - /data/db
   issues-query:
     build:
       args:
@@ -89,6 +91,8 @@ services:
       - mvn:/usr/mvn
   issues-query-mongo:
     image: mongo:5.0.7
+    volumes:
+      - /data/db
   frontend:
     build:
       context: frontend
@@ -143,6 +147,8 @@ services:
       - mvn:/usr/mvn
   notifications-mongo:
     image: mongo:5.0.7
+    volumes:
+      - /data/db
   organizations-command:
     build:
       args:
@@ -166,6 +172,8 @@ services:
       - mvn:/usr/mvn
   organizations-command-mongo:
     image: mongo:5.0.7
+    volumes:
+      - /data/db
   organizations-query:
     build:
       args:
@@ -189,6 +197,8 @@ services:
       - mvn:/usr/mvn
   organizations-query-mongo:
     image: mongo:5.0.7
+    volumes:
+      - /data/db
   swagger:
     image: swaggerapi/swagger-ui
     volumes:
@@ -218,6 +228,8 @@ services:
       - mvn:/usr/mvn
   users-command-mongo:
     image: mongo:5.0.7
+    volumes:
+      - /data/db
   users-query:
     build:
       args:
@@ -241,6 +253,8 @@ services:
       - mvn:/usr/mvn
   users-query-mongo:
     image: mongo:5.0.7
+    volumes:
+      - /data/db
   zookeeper:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
