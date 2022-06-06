@@ -3,7 +3,7 @@ on:
   - push
   - pull_request
 jobs:
-  check-frontend:
+  test-frontend:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
