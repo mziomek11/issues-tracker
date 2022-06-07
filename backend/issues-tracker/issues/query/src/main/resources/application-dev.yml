@@ -8,8 +8,6 @@ rest:
   client:
     notifications:
       name: ${SERVICE_NOTIFICATIONS_NAME}
-    organizations-query:
-      name: ${SERVICE_ORGANIZATIONS_QUERY_NAME}
 server:
   port: 0
 spring:

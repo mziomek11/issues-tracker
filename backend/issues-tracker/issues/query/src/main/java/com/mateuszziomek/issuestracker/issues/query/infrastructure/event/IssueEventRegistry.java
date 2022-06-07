@@ -25,6 +25,7 @@ public class IssueEventRegistry {
     private final IssueVotedEventHandler issueVotedEventHandler;
     private final OrganizationCreatedEventHandler organizationCreatedEventHandler;
     private final OrganizationMemberJoinedEventHandler organizationMemberJoinedEventHandler;
+    private final OrganizationProjectCreatedEventHandler organizationProjectCreatedEventHandler;
     private final UserRegisteredEventHandler userRegisteredEventHandler;
 
     @PostConstruct
@@ -41,6 +42,7 @@ public class IssueEventRegistry {
         eventDispatcher.registerHandler(IssueVotedEvent.class, issueVotedEventHandler);
         eventDispatcher.registerHandler(OrganizationCreatedEvent.class, organizationCreatedEventHandler);
         eventDispatcher.registerHandler(OrganizationMemberJoinedEvent.class, organizationMemberJoinedEventHandler);
+        eventDispatcher.registerHandler(OrganizationProjectCreatedEvent.class, organizationProjectCreatedEventHandler);
         eventDispatcher.registerHandler(UserRegisteredEvent.class, userRegisteredEventHandler);
     }
 }

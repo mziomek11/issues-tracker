@@ -347,8 +347,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/OrganizationNotFound'
                   - $ref: '#/components/schemas/OrganizationProjectNotFound'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
     post:
       tags:
         - Issue management
@@ -456,8 +454,6 @@ paths:
                   - $ref: '#/components/schemas/OrganizationNotFound'
                   - $ref: '#/components/schemas/OrganizationProjectNotFound'
                   - $ref: '#/components/schemas/IssueNotFound'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
     delete:
       tags:
         - Issue management

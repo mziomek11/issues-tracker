@@ -1,12 +1,11 @@
 package com.mateuszziomek.issuestracker.issues.query.application.query.handler;
 
 import com.mateuszziomek.cqrs.query.QueryHandler;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.OrganizationGateway;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationMemberNotFoundException;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationNotFoundException;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationProjectNotFoundException;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.issues.query.application.query.GetListIssuesQuery;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.OrganizationService;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.exception.OrganizationMemberNotFoundException;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.exception.OrganizationNotFoundException;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.query.readmodel.issue.list.ListIssueFilter;
 import com.mateuszziomek.issuestracker.issues.query.readmodel.issue.list.ListIssueFinder;
 import com.mateuszziomek.issuestracker.shared.readmodel.issue.ListIssue;
@@ -20,24 +19,23 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GetListIssuesQueryHandler implements QueryHandler<Flux<ListIssue>, GetListIssuesQuery> {
     private final ListIssueFinder listIssueFinder;
-    private final OrganizationGateway organizationGateway;
+    private final OrganizationService organizationService;
 
     /**
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
-     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
-     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
+     * @throws OrganizationNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
+     * @throws OrganizationProjectNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
      */
     @Override
     public Flux<ListIssue> handle(GetListIssuesQuery query) {
-        return organizationGateway
+        return organizationService
                 .ensureOrganizationHasProjectAndMember(
                     query.getOrganizationId(),
                     query.getProjectId(),
                     query.getMemberId()
                 )
                 .flux()
-                .flatMap((unused) -> listIssueFinder.findByFilter(createFilter(query)));
+                .flatMap(unused -> listIssueFinder.findByFilter(createFilter(query)));
     }
 
     private ListIssueFilter createFilter(GetListIssuesQuery query) {

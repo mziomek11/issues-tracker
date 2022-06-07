@@ -1,4 +1,4 @@
-package com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception;
+package com.mateuszziomek.issuestracker.issues.query.application.service.organization.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

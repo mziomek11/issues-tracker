@@ -75,7 +75,12 @@ public class IssueEventConsumer {
     public void consume(OrganizationMemberJoinedEvent event, Acknowledgment acknowledgment) {
         consumeEvent(event, acknowledgment, Mono.empty());
     }
-    
+
+    @KafkaListener(topics = "OrganizationProjectCreatedEvent", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(OrganizationProjectCreatedEvent event, Acknowledgment acknowledgment) {
+        consumeEvent(event, acknowledgment, Mono.empty());
+    }
+
     @KafkaListener(topics = "UserRegisteredEvent", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(UserRegisteredEvent event, Acknowledgment acknowledgment) {
         consumeEvent(event, acknowledgment, Mono.empty());

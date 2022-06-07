@@ -1,13 +1,12 @@
 package com.mateuszziomek.issuestracker.issues.query.application.query.handler;
 
 import com.mateuszziomek.cqrs.query.QueryHandler;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.OrganizationGateway;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationMemberNotFoundException;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationNotFoundException;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationProjectNotFoundException;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.organization.exception.OrganizationServiceUnavailableException;
 import com.mateuszziomek.issuestracker.issues.query.application.query.GetDetailsIssueQuery;
 import com.mateuszziomek.issuestracker.issues.query.application.query.exception.IssueNotFoundException;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.OrganizationService;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.exception.OrganizationMemberNotFoundException;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.exception.OrganizationNotFoundException;
+import com.mateuszziomek.issuestracker.issues.query.application.service.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.query.readmodel.issue.details.DetailsIssueFinder;
 import com.mateuszziomek.issuestracker.shared.readmodel.issue.DetailsIssue;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +19,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GetDetailsIssueQueryHandler implements QueryHandler<Mono<DetailsIssue>, GetDetailsIssueQuery> {
     private final DetailsIssueFinder detailsIssueFinder;
-    private final OrganizationGateway organizationGateway;
+    private final OrganizationService organizationService;
 
     /**
      * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
-     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
-     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
+     * @throws OrganizationNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
+     * @throws OrganizationProjectNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(UUID, UUID, UUID)}
      */
     @Override
     public Mono<DetailsIssue> handle(GetDetailsIssueQuery query) {
-        return organizationGateway
+        return organizationService
                 .ensureOrganizationHasProjectAndMember(
                         query.getOrganizationId(),
                         query.getProjectId(),
