@@ -1,7 +1,6 @@
 package com.mateuszziomek.issuestracker.issues.query.application.event.handler;
 
 import com.mateuszziomek.cqrs.event.ReactiveEventHandler;
-import com.mateuszziomek.issuestracker.issues.query.application.gateway.notification.NotificationGateway;
 import com.mateuszziomek.issuestracker.issues.query.domain.comment.Comment;
 import com.mateuszziomek.issuestracker.issues.query.domain.issue.Issue;
 import com.mateuszziomek.issuestracker.issues.query.domain.issue.IssueRepository;
@@ -18,7 +17,6 @@ import reactor.util.function.Tuple2;
 public class IssueCommentedEventHandler implements ReactiveEventHandler<IssueCommentedEvent> {
     private final MemberRepository memberRepository;
     private final IssueRepository issueRepository;
-    private final NotificationGateway notificationGateway;
 
     @Override
     public Mono<Void> handle(IssueCommentedEvent event) {
@@ -29,7 +27,6 @@ public class IssueCommentedEventHandler implements ReactiveEventHandler<IssueCom
                 .doOnNext(tuple -> commentIssue(event, tuple))
                 .map(Tuple2::getT2)
                 .flatMap(issueRepository::save)
-                .doOnNext(issue -> notificationGateway.notify(event, issue).subscribe())
                 .then();
     }
 

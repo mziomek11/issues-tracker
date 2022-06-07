@@ -37,7 +37,7 @@ public class JWTAuthenticationFilter implements GatewayFilter, Ordered {
             return onError(exchange, HttpStatus.UNAUTHORIZED);
         }
 
-        var userServices = discoveryClient.getInstances(System.getenv(serviceUsersQueryName));
+        var userServices = discoveryClient.getInstances(serviceUsersQueryName);
         if (userServices == null || userServices.isEmpty()) {
             return onError(exchange, HttpStatus.SERVICE_UNAVAILABLE);
         }

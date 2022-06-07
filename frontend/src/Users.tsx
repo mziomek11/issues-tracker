@@ -22,7 +22,7 @@ export const Users = () => {
   const login2 = async (e: FormEvent) => {
     e.preventDefault();
     (window as any).jwt = await post('/api/v1/user-management/users/authentication', {
-      email: 'admin17@admin.com',
+      email: 'admin18@admin.com',
       password: 'password',
     });
   };

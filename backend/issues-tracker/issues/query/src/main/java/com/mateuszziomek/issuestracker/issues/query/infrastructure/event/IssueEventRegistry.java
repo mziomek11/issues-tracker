@@ -23,6 +23,8 @@ public class IssueEventRegistry {
     private final IssueRenamedEventHandler issueRenamedEventHandler;
     private final IssueTypeChangedEventHandler issueTypeChangedEventHandler;
     private final IssueVotedEventHandler issueVotedEventHandler;
+    private final OrganizationCreatedEventHandler organizationCreatedEventHandler;
+    private final OrganizationMemberJoinedEventHandler organizationMemberJoinedEventHandler;
     private final UserRegisteredEventHandler userRegisteredEventHandler;
 
     @PostConstruct
@@ -37,6 +39,8 @@ public class IssueEventRegistry {
         eventDispatcher.registerHandler(IssueRenamedEvent.class, issueRenamedEventHandler);
         eventDispatcher.registerHandler(IssueTypeChangedEvent.class, issueTypeChangedEventHandler);
         eventDispatcher.registerHandler(IssueVotedEvent.class, issueVotedEventHandler);
+        eventDispatcher.registerHandler(OrganizationCreatedEvent.class, organizationCreatedEventHandler);
+        eventDispatcher.registerHandler(OrganizationMemberJoinedEvent.class, organizationMemberJoinedEventHandler);
         eventDispatcher.registerHandler(UserRegisteredEvent.class, userRegisteredEventHandler);
     }
 }

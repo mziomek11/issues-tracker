@@ -1,10 +1,9 @@
-package com.mateuszziomek.issuestracker.organizations.query.application.event.handler;
+package com.mateuszziomek.issuestracker.issues.query.application.event.handler;
 
 import com.mateuszziomek.cqrs.event.ReactiveEventHandler;
-import com.mateuszziomek.issuestracker.organizations.query.domain.InvitationRepository;
-import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.issuestracker.organizations.query.domain.OrganizationRepository;
+import com.mateuszziomek.issuestracker.issues.query.domain.organization.OrganizationRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -12,7 +11,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class OrganizationMemberJoinedEventHandler implements ReactiveEventHandler<OrganizationMemberJoinedEvent> {
     private final OrganizationRepository organizationRepository;
-    private final InvitationRepository invitationRepository;
 
     @Override
     public Mono<Void> handle(OrganizationMemberJoinedEvent event) {
@@ -20,7 +18,6 @@ public class OrganizationMemberJoinedEventHandler implements ReactiveEventHandle
                 .findById(event.getId())
                 .doOnNext(organization -> organization.joinMember(event))
                 .flatMap(organizationRepository::save)
-                .flatMap(organization -> invitationRepository.deleteById(organization.getId()))
                 .then();
     }
 }

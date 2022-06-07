@@ -1,7 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.query.application.event.handler;
 
 import com.mateuszziomek.cqrs.event.ReactiveEventHandler;
-import com.mateuszziomek.issuestracker.organizations.query.application.gateway.notification.NotificationGateway;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Invitation;
 import com.mateuszziomek.issuestracker.organizations.query.domain.InvitationRepository;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
@@ -16,7 +15,6 @@ import reactor.core.publisher.Mono;
 public class OrganizationMemberInvitedEventHandler implements ReactiveEventHandler<OrganizationMemberInvitedEvent> {
     private final OrganizationRepository organizationRepository;
     private final InvitationRepository invitationRepository;
-    private final NotificationGateway notificationGateway;
 
     @Override
     public Mono<Void> handle(OrganizationMemberInvitedEvent event) {
@@ -26,7 +24,6 @@ public class OrganizationMemberInvitedEventHandler implements ReactiveEventHandl
                         .save(createInvitation(event, organization))
                         .map(invitation -> organization)
                 )
-                .doOnNext(organization -> notificationGateway.notify(event, organization).subscribe())
                 .then();
     }
 
