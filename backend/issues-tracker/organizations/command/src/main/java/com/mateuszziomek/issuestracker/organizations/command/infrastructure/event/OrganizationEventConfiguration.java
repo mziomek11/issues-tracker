@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.command.infrastructure.event;
 
+import com.mateuszziomek.cqrs.event.dispatcher.EventDispatcher;
 import com.mateuszziomek.cqrs.event.producer.EventProducer;
 import com.mateuszziomek.cqrs.event.producer.KafkaEventProducer;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -27,5 +28,10 @@ public class OrganizationEventConfiguration {
             EventProducer eventProducer
     ) {
         return new EventStore<>(organizationEventStoreRepository, eventProducer, Organization.class);
+    }
+
+    @Bean
+    public EventDispatcher eventDispatcher() {
+        return new EventDispatcher();
     }
 }

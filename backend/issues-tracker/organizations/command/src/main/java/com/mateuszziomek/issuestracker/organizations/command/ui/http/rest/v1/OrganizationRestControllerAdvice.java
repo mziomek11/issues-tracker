@@ -1,8 +1,7 @@
 package com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1;
 
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
+import com.mateuszziomek.issuestracker.organizations.command.application.service.exception.MemberNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationAlreadyPresentException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.exception.OrganizationNotFoundException;
@@ -11,7 +10,6 @@ import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorRes
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericValidationFailedRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.*;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserNotFoundRestErrorResponse;
-import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserServiceUnavailableRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,10 +50,5 @@ public class OrganizationRestControllerAdvice {
     @ExceptionHandler(MemberNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(MemberNotFoundException ex) {
         return UserNotFoundRestErrorResponse.asResponseEntity();
-    }
-
-    @ExceptionHandler(MemberServiceUnavailableException.class)
-    public ResponseEntity<RestErrorResponse> handle(MemberServiceUnavailableException ex) {
-        return UserServiceUnavailableRestErrorResponse.asResponseEntity();
     }
 }

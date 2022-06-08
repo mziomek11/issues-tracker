@@ -220,6 +220,24 @@ paths:
           $ref: '#/components/responses/GenericValidationFailed'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationOwnerInvalid'
+        '404':
+          description: User not found | Organization not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/UserNotFound'
+                  - $ref: '#/components/schemas/OrganizationNotFound'
+        '409':
+          description: Invitation already exists | Member already in organization
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OrganizationInvitationAlreadyPresent'
+                  - $ref: '#/components/schemas/OrganizationMemberAlreadyPresent'
   /api/v1/organization-management/organizations/{organizationId}/members:
     post:
       tags:
@@ -236,13 +254,17 @@ paths:
       responses:
         '200':
           description: User successfully joined to organization
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/OrganizationOwnerInvalid'
         '404':
-          description: User not found | Organization not found
+          description: Invitation not found | Organization not found
           content:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/UserNotFound'
+                  - $ref: '#/components/schemas/OrganizationInvitationNotFound'
                   - $ref: '#/components/schemas/OrganizationNotFound'
   /api/v1/organization-management/organizations/{organizationId}/projects:
     post:
@@ -286,26 +308,6 @@ paths:
                   $ref: '#/components/schemas/ListInvitation'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/OrganizationOwnerInvalid'
-        '404':
-          description: User not found | Organization not found
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/UserNotFound'
-                  - $ref: '#/components/schemas/OrganizationNotFound'
-        '409':
-          description: Invitation already exists | Member already in organization
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/OrganizationInvitationAlreadyPresent'
-                  - $ref: '#/components/schemas/OrganizationMemberAlreadyPresent'
-        '503':
-          $ref: '#/components/responses/UserServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues:
     get:
       tags:

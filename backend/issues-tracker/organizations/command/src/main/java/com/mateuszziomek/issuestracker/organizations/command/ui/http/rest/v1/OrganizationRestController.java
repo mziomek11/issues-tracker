@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.organizations.command.ui.http.rest.v1;
 
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
+import com.mateuszziomek.issuestracker.organizations.command.application.service.exception.MemberNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.organization.CreateOrganizationDto;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.organization.CreateOrganizationProjectDto;
@@ -18,7 +18,6 @@ import com.mateuszziomek.issuestracker.organizations.command.application.command
 import com.mateuszziomek.issuestracker.organizations.command.application.command.handler.CreateOrganizationProjectCommandHandler;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.handler.InviteOrganizationMemberCommandHandler;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.handler.JoinOrganizationMemberCommandHandler;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationAlreadyPresentException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.invitation.exception.InvitationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.exception.OrganizationNotFoundException;
@@ -62,7 +61,6 @@ public class OrganizationRestController {
      * @throws InvitationAlreadyPresentException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws MemberAlreadyPresentException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws MemberNotFoundException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
-     * @throws MemberServiceUnavailableException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws OrganizationNotFoundException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws OrganizationOwnerNotValidException see {@link InviteOrganizationMemberCommandHandler#handle(InviteOrganizationMemberCommand)}
      * @throws RestValidationException see {@link InviteOrganizationMemberDtoMapper#toCommand(UUID, UUID, InviteOrganizationMemberDto)}

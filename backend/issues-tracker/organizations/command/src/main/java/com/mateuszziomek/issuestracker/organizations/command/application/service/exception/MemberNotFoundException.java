@@ -1,8 +1,8 @@
-package com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception;
+package com.mateuszziomek.issuestracker.organizations.command.application.service.exception;
 
+import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberEmail;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberEmail;
 
 @RequiredArgsConstructor
 @Getter

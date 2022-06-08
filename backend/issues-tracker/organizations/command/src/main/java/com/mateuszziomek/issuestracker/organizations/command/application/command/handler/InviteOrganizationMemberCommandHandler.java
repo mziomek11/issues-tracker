@@ -1,9 +1,8 @@
 package com.mateuszziomek.issuestracker.organizations.command.application.command.handler;
 
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.MemberGateway;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberNotFoundException;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.exception.MemberServiceUnavailableException;
+import com.mateuszziomek.issuestracker.organizations.command.application.service.MemberService;
+import com.mateuszziomek.issuestracker.organizations.command.application.service.exception.MemberNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.member.exception.MemberAlreadyPresentException;
 import com.mateuszziomek.issuestracker.organizations.command.domain.organization.OrganizationOwner;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +21,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InviteOrganizationMemberCommandHandler implements CommandHandler<InviteOrganizationMemberCommand> {
     private final EventSourcingHandler<Organization> eventSourcingHandler;
-    private final MemberGateway memberGateway;
+    private final MemberService memberService;
 
     /**
      * @throws InvitationAlreadyPresentException see {@link Organization#invite(OrganizationOwner, Invitation)}
      * @throws MemberAlreadyPresentException see {@link Organization#invite(OrganizationOwner, Invitation)}
-     * @throws MemberNotFoundException see {@link MemberGateway#getMemberId(MemberEmail)}
-     * @throws MemberServiceUnavailableException see {@link MemberGateway#getMemberId(MemberEmail)}
+     * @throws MemberNotFoundException see {@link MemberService#getMemberId(MemberEmail)}
      * @throws OrganizationNotFoundException if organization with given id does not exist
      * @throws OrganizationOwnerNotValidException see {@link Organization#invite(OrganizationOwner, Invitation)}
      */
@@ -38,7 +36,7 @@ public class InviteOrganizationMemberCommandHandler implements CommandHandler<In
                 .getById(command.getOrganizationId())
                 .orElseThrow(() -> new OrganizationNotFoundException(command.getOrganizationId()));
 
-        var memberId = memberGateway.getMemberId(command.getMemberEmail());
+        var memberId = memberService.getMemberId(command.getMemberEmail());
         var organizationOwner = new OrganizationOwner(command.getOrganizationOwnerId());
         var invitation = new Invitation(new Member((memberId)));
 
