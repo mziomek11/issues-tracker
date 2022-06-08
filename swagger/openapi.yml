@@ -405,8 +405,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/OrganizationNotFound'
                   - $ref: '#/components/schemas/OrganizationProjectNotFound'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}:
     get:
       tags:
@@ -498,8 +496,6 @@ paths:
                   - $ref: '#/components/schemas/IssueNotFound'
         '409':
           $ref: '#/components/responses/IssueClosed'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/name:
     patch:
       tags:
@@ -564,8 +560,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueNameSet'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/type:
     patch:
       tags:
@@ -629,8 +623,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueTypeSet'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/content:
     patch:
       tags:
@@ -695,8 +687,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueContentSet'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/votes:
     post:
       tags:
@@ -760,8 +750,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueVoteAlreadyExists'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments:
     post:
       tags:
@@ -824,8 +812,6 @@ paths:
                   - $ref: '#/components/schemas/IssueNotFound'
         '409':
           $ref: '#/components/responses/IssueClosed'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}:
     delete:
       tags:
@@ -885,8 +871,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueCommentHidden'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/content:
     patch:
       tags:
@@ -957,8 +941,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueCommentContentSet'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
   /api/v1/issue-management/organizations/{organizationId}/projects/{projectId}/issues/{issueId}/comments/{commentId}/votes:
     post:
       tags:
@@ -1028,8 +1010,6 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueVoteAlreadyExists'
-        '503':
-          $ref: '#/components/responses/OrganizationServiceUnavailable'
 components:
   securitySchemes:
     BearerAuth:
@@ -1115,12 +1095,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OrganizationProjectNotFound'
-    OrganizationServiceUnavailable:
-      description: Organization service unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OrganizationServiceUnavailable'
     IssueNotFound:
       description: Issue not found
       content:
@@ -1854,22 +1828,6 @@ components:
         - status
         - message
         - details
-    OrganizationServiceUnavailable:
-      type: object
-      properties:
-        code:
-          type: string
-          example: ORGANIZATION_7
-        status:
-          type: integer
-          example: 503
-        message:
-          type: string
-          example: Organization service unavailable
-      required:
-        - code
-        - status
-        - message
     IssueNotFound:
       type: object
       properties:

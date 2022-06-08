@@ -1,21 +1,19 @@
 package com.mateuszziomek.issuestracker.issues.command.ui.http.rest.v1;
 
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.exception.OrganizationMemberNotFoundException;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.exception.OrganizationNotFoundException;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentHiddenException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.*;
 import com.mateuszziomek.issuestracker.issues.command.domain.vote.exception.VoteAlreadyExistsException;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericValidationFailedRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.issue.*;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationAccessDeniedRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationNotFoundRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationProjectNotFoundRestErrorResponse;
-import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationServiceUnavailableRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -86,10 +84,5 @@ public class IssueRestControllerAdvice {
     @ExceptionHandler(OrganizationMemberNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationMemberNotFoundException ex) {
         return OrganizationAccessDeniedRestErrorResponse.asResponseEntity();
-    }
-
-    @ExceptionHandler(OrganizationServiceUnavailableException.class)
-    public ResponseEntity<RestErrorResponse> handle(OrganizationServiceUnavailableException ex) {
-        return OrganizationServiceUnavailableRestErrorResponse.asResponseEntity();
     }
 }

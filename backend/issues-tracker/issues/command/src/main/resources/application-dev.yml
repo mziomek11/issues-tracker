@@ -4,10 +4,6 @@ eureka:
       defaultZone: ${SERVICE_DISCOVERY_ZONE}
   instance:
     instance-id: ${spring.application.name}:${instanceId:${random.value}}
-rest:
-  client:
-    organizations-query:
-      name: ${SERVICE_ORGANIZATIONS_QUERY_NAME}
 server:
   port: 0
 spring:
@@ -17,6 +13,18 @@ spring:
     mongodb:
       host: ${SERVICE_ISSUES_COMMAND_MONGO_HOST}
   kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      group-id: issues-command
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.mateuszziomek.issuestracker.*
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
     producer:
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer

@@ -1,15 +1,14 @@
 package com.mateuszziomek.issuestracker.issues.command.application.command.handler;
 
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationServiceUnavailableException;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.OrganizationService;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.exception.OrganizationMemberNotFoundException;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.exception.OrganizationNotFoundException;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.domain.organization.OrganizationMemberId;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.cqrs.command.CommandHandler;
 import com.mateuszziomek.issuestracker.issues.command.application.command.ChangeIssueCommentContentCommand;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationMemberNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationNotFoundException;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.exception.OrganizationProjectNotFoundException;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.CommentContent;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.CommentId;
 import com.mateuszziomek.issuestracker.issues.command.domain.comment.exception.CommentContentSetException;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChangeIssueCommentContentCommandHandler implements CommandHandler<ChangeIssueCommentContentCommand> {
     private final EventSourcingHandler<Issue> eventSourcingHandler;
-    private final OrganizationGateway organizationGateway;
+    private final OrganizationService organizationService;
 
 
     /**
@@ -32,14 +31,13 @@ public class ChangeIssueCommentContentCommandHandler implements CommandHandler<C
      * @throws CommentNotFoundException see {@link Issue#changeCommentContent(CommentId, CommentContent, OrganizationMemberId)}
      * @throws IssueClosedException see {@link Issue#changeCommentContent(CommentId, CommentContent, OrganizationMemberId)}
      * @throws IssueNotFoundException if issue with given id does not exist
-     * @throws OrganizationMemberNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
-     * @throws OrganizationNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
-     * @throws OrganizationProjectNotFoundException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
-     * @throws OrganizationServiceUnavailableException see {@link OrganizationGateway#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationMemberNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
+     * @throws OrganizationProjectNotFoundException see {@link OrganizationService#ensureOrganizationHasProjectAndMember(IssueOrganizationDetails)}
      */
     @Override
     public void handle(ChangeIssueCommentContentCommand command) {
-        organizationGateway.ensureOrganizationHasProjectAndMember(command.getOrganizationDetails());
+        organizationService.ensureOrganizationHasProjectAndMember(command.getOrganizationDetails());
         var issue = eventSourcingHandler
                 .getById(command.getIssueId())
                 .orElseThrow(() -> new IssueNotFoundException(command.getIssueId()));
