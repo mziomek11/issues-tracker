@@ -3,14 +3,15 @@ package com.mateuszziomek.issuestracker.users.command.application.command.handle
 import com.mateuszziomek.cqrs.event.producer.EventProducer;
 import com.mateuszziomek.cqrs.event.store.EventStoreRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
-import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.user.ReactiveUserRestClient;
 import com.mateuszziomek.issuestracker.users.command.application.command.handler.helpers.UserCommandHandlerIntegrationTest;
+import com.mateuszziomek.issuestracker.users.command.application.service.user.UserService;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserHashedPassword;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserPasswordHashingAlgorithm;
 import com.mateuszziomek.issuestracker.users.command.domain.user.UserPlainPassword;
-import com.mateuszziomek.issuestracker.users.command.infrastructure.gateway.UserGatewayImpl;
+import com.mateuszziomek.issuestracker.users.command.projection.UserRepository;
 import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Flux;
+
+import java.util.Optional;
 
 import static com.mateuszziomek.issuestracker.users.command.application.command.handler.helpers.UserCommandData.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -22,11 +23,11 @@ class RegisterUserCommandHandlerIntegrationTest extends UserCommandHandlerIntegr
         // Arrange
         var eventProducer = mock(EventProducer.class);
         var eventStoreRepository = mock(EventStoreRepository.class);
-        var userRestClient = mock(ReactiveUserRestClient.class);
-        var sut = createHandler(eventProducer, eventStoreRepository, userRestClient);
+        var userRepository = mock(UserRepository.class);
+        var sut = createHandler(eventProducer, eventStoreRepository, userRepository);
 
-        when(userRestClient.getUsers(argThat(p -> p.getEmail().equals(USER_EMAIL_PLAIN))))
-                .thenReturn(Flux.empty());
+        when(userRepository.findByEmail(argThat(p -> p.equals(USER_EMAIL_PLAIN))))
+                .thenReturn(Optional.empty());
 
         // Act
         sut.handle(REGISTER_USER_COMMAND);
@@ -49,13 +50,13 @@ class RegisterUserCommandHandlerIntegrationTest extends UserCommandHandlerIntegr
     private RegisterUserCommandHandler createHandler(
             EventProducer eventProducer,
             EventStoreRepository eventStoreRepository,
-            ReactiveUserRestClient userRestClient
+            UserRepository userRepository
     ) {
         var eventStore = createEventStore(eventStoreRepository, eventProducer);
         var eventSourcingHandler = createSourcingHandler(eventStore);
-        var userGateway = new UserGatewayImpl(userRestClient);
+        var userService = new UserService(userRepository);
 
-        return new RegisterUserCommandHandler(eventSourcingHandler, userGateway, new TestPasswordHashingAlgorithm());
+        return new RegisterUserCommandHandler(eventSourcingHandler, userService, new TestPasswordHashingAlgorithm());
     }
 
     private boolean hasUserRegisteredEventCorrectedData(UserRegisteredEvent event) {
