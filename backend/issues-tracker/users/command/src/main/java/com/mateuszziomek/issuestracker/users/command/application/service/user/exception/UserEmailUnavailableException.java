@@ -1,8 +1,8 @@
-package com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception;
+package com.mateuszziomek.issuestracker.users.command.application.service.user.exception;
 
+import com.mateuszziomek.issuestracker.users.command.domain.user.UserEmail;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.issuestracker.users.command.domain.user.UserEmail;
 
 @RequiredArgsConstructor
 @Getter
