@@ -6,6 +6,7 @@ import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCr
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,10 +18,12 @@ public class Organization {
     private Set<UUID> memberIds;
 
     public static Organization create(OrganizationCreatedEvent event) {
+        var memberIds = new HashSet<UUID>();
+        memberIds.add(event.getOrganizationOwnerId());
         return new Organization(
                 event.getId(),
-                Set.of(),
-                Set.of(event.getOrganizationOwnerId())
+                new HashSet<>(),
+                memberIds
         );
     }
 

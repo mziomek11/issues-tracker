@@ -2,8 +2,8 @@ package com.mateuszziomek.issuestracker.issues.command.application.command.handl
 
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.IssueCommandHandlerTest;
-import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.OrganizationGatewayExceptionArgumentProvider;
-import com.mateuszziomek.issuestracker.issues.command.application.gateway.organization.OrganizationGateway;
+import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.OrganizationServiceExceptionArgumentProvider;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.OrganizationService;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.exception.IssueNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,8 +18,8 @@ import static org.mockito.Mockito.*;
 
 class VoteIssueCommandHandlerTest extends IssueCommandHandlerTest {
     @ParameterizedTest
-    @ArgumentsSource(OrganizationGatewayExceptionArgumentProvider.class)
-    void eventSourcingHandlerIsNotCalledWhenGatewayThrows(RuntimeException gatewayException) {
+    @ArgumentsSource(OrganizationServiceExceptionArgumentProvider.class)
+    void eventSourcingHandlerIsNotCalledWhenServiceThrows(RuntimeException gatewayException) {
         // Arrange
         var eventSourcingHandler = mock(EventSourcingHandler.class);
         var organizationGateway = createOrganizationGatewayExceptionMock(gatewayException);
@@ -35,8 +35,8 @@ class VoteIssueCommandHandlerTest extends IssueCommandHandlerTest {
         // Arrange
         var eventSourcingHandler = mock(EventSourcingHandler.class);
         when(eventSourcingHandler.getById(any())).thenReturn(Optional.empty());
-        var organizationGateway = mock(OrganizationGateway.class);
-        var sut = new VoteIssueCommandHandler(eventSourcingHandler, organizationGateway);
+        var organizationService = mock(OrganizationService.class);
+        var sut = new VoteIssueCommandHandler(eventSourcingHandler, organizationService);
 
         // Assert
         assertThatExceptionOfType(IssueNotFoundException.class).isThrownBy(() -> sut.handle(VOTE_ISSUE_COMMAND));

@@ -8,11 +8,13 @@ import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.cqrs.event.store.EventStore;
 import com.mateuszziomek.cqrs.event.store.EventStoreRepository;
 import com.mateuszziomek.issuestracker.issues.command.domain.issue.Issue;
-import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.ReactiveOrganizationRestClient;
-import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
-import reactor.core.publisher.Mono;
+import com.mateuszziomek.issuestracker.issues.command.projection.Organization;
+import com.mateuszziomek.issuestracker.issues.command.projection.OrganizationRepository;
+import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
+import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
+import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public abstract class IssueCommandHandlerIntegrationTest {
@@ -27,34 +29,42 @@ public abstract class IssueCommandHandlerIntegrationTest {
         return new EventSourcingHandler<>(eventStore, Issue::new);
     }
 
-    protected ReactiveOrganizationRestClient createOrganizationRestClientMock() {
-        var organizationRestClient = mock(ReactiveOrganizationRestClient.class);
+    protected OrganizationRepository createOrganizationRepositoryMock() {
+        var organizationRepository = mock(OrganizationRepository.class);
 
+        when(organizationRepository.findById(ORGANIZATION_UUID))
+                .thenReturn(Optional.of(createOrganization()));
 
-        when(organizationRestClient.getOrganizationById(ORGANIZATION_UUID))
-                .thenReturn(Mono.just(createDetailsOrganization()));
-
-        return organizationRestClient;
+        return organizationRepository;
     }
 
-    private DetailsOrganization createDetailsOrganization() {
-        var member = DetailsOrganization.Member
+    private Organization createOrganization() {
+        var organization = Organization.create(
+            OrganizationCreatedEvent
                 .builder()
-                .id(MEMBER_UUID)
-                .build();
+                .organizationId(ORGANIZATION_UUID)
+                .organizationName("Example name")
+                .organizationOwnerId(UUID.randomUUID())
+                .build()
+        );
 
-        var project = DetailsOrganization.Project
+        organization.addProject(
+            OrganizationProjectCreatedEvent
                 .builder()
-                .id(PROJECT_UUID)
-                .name("Example name")
-                .build();
+                .organizationId(ORGANIZATION_UUID)
+                .projectId(PROJECT_UUID)
+                .projectName("Example name")
+                .build()
+        );
 
-        return DetailsOrganization
+        organization.joinMember(
+            OrganizationMemberJoinedEvent
                 .builder()
-                .id(ORGANIZATION_UUID)
-                .members(List.of(member))
-                .projects(List.of(project))
-                .ownerId(UUID.randomUUID())
-                .build();
+                .organizationId(ORGANIZATION_UUID)
+                .memberId(MEMBER_UUID)
+                .build()
+        );
+
+        return organization;
     }
 }
