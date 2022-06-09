@@ -95,7 +95,6 @@ services:
     build:
       context: frontend
       target: dev
-    command: sh entrypoint.sh
     volumes:
       - ./frontend:/usr/src/app
     ports:
