@@ -1,7 +1,6 @@
 name: test-backend
 on:
   - push
-  - pull_request
 jobs:
   test-backend:
     runs-on: ubuntu-22.04
