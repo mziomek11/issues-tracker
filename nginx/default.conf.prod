@@ -1,0 +1,46 @@
+upstream api {
+    server apigateway:8080;
+}
+
+upstream frontend {
+    server frontend:80;
+}
+
+upstream mailhog {
+    server mailhog:8025;
+}
+
+upstream swagger {
+    server swagger:8080;
+}
+
+server {
+    listen 80 default_server;
+
+    location /api/notification-management {
+        proxy_pass http://api;
+
+        proxy_set_header Connection '';
+        proxy_http_version 1.1;
+        chunked_transfer_encoding off;
+        proxy_buffering off;
+        proxy_cache off;
+    }
+
+    location /api {
+        proxy_pass http://api;
+    }
+
+    location /mailhog {
+        proxy_pass http://mailhog;
+    }
+
+    location /swagger/ {
+        rewrite /swagger/(.*) /$1 break;
+        proxy_pass http://swagger;
+    }
+
+    location / {
+        proxy_pass http://frontend;
+    }
+}

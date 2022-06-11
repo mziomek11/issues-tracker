@@ -1,0 +1,13 @@
+FROM openjdk:17-alpine AS builder
+
+ARG MODULE_NAME
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN cd issues-tracker && ./mvnw clean package spring-boot:repackage -pl $MODULE_NAME -am && cd $MODULE_NAME && cp -r target /usr/src/app
+
+FROM openjdk:17-alpine AS prod
+
+COPY --from=builder /usr/src/app/target ./target

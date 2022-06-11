@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine AS dev
+FROM openjdk:17-alpine
 
 ARG MODULE_NAME
 

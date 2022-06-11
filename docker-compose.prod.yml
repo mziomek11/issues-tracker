@@ -1,18 +1,15 @@
 version: "3.4"
 
-volumes:
-  mvn:
-
 services:
   apigateway:
     build:
       args:
         - MODULE_NAME=apigateway
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/apigateway-1.0.0.jar
     environment:
-      - MODULE_NAME=apigateway
       - SERVICE_APIGATEWAY_NAME=APIGATEWAY
       - SERVICE_APIGATEWAY_PORT=80
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
@@ -23,42 +20,42 @@ services:
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
       - SERVICE_USERS_COMMAND_NAME=USERS-COMMAND
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY  
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   discovery:
     build:
       args:
         - MODULE_NAME=discovery
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/discovery-1.0.0.jar
+    container_name: discovery-prod
     environment:
-      - MODULE_NAME=discovery
       - SERVICE_DISCOVERY_PORT=8761
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.prod
+      target: prod
+    container_name: frontend-prod
   issues-command:
     build:
       args:
         - MODULE_NAME=issues/command
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/issues.command-1.0.0.jar
+    container_name: issues-command-prod
     depends_on:
       - issues-command-mongo
       - kafka
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MODULE_NAME=issues/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ISSUES_COMMAND_MONGO_HOST=issues-command-mongo
       - SERVICE_ISSUES_COMMAND_NAME=ISSUES-COMMAND
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   issues-command-mongo:
+    container_name: issues-command-mongo-prod
     image: mongo:5.0.7
     volumes:
       - /data/db
@@ -67,33 +64,26 @@ services:
       args:
         - MODULE_NAME=issues/query
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/issues.query-1.0.0.jar
+    container_name: issues-query-prod
     depends_on:
       - issues-query-mongo
       - kafka
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MODULE_NAME=issues/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ISSUES_QUERY_MONGO_HOST=issues-query-mongo
       - SERVICE_ISSUES_QUERY_NAME=ISSUES-QUERY
       - SERVICE_NOTIFICATIONS_NAME=NOTIFICATIONS
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   issues-query-mongo:
+    container_name: issues-query-mongo-prod
     image: mongo:5.0.7
     volumes:
       - /data/db
-  frontend:
-    build:
-      context: frontend
-    volumes:
-      - ./frontend:/usr/src/app
-    ports:
-      - 3000:3000
   kafka:
+    container_name: kafka-prod
     depends_on:
       - zookeeper
     environment:
@@ -110,6 +100,7 @@ services:
   nginx:
     build:
       context: nginx
+      dockerfile: Dockerfile.prod
     depends_on:
       - apigateway
     ports:
@@ -119,8 +110,10 @@ services:
       args:
         - MODULE_NAME=notifications
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/notifications-1.0.0.jar
+    container_name: notifications-prod
     depends_on:
       - notifications-mongo
       - kafka
@@ -128,14 +121,11 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MAIL_HOST=mailhog
       - MAIL_PORT=1025
-      - MODULE_NAME=notifications
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_NOTIFICATIONS_MONGO_HOST=notifications-mongo
       - SERVICE_NOTIFICATIONS_NAME=NOTIFICATIONS
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   notifications-mongo:
+    container_name: notifications-mongo-prod
     image: mongo:5.0.7
     volumes:
       - /data/db
@@ -144,21 +134,20 @@ services:
       args:
         - MODULE_NAME=organizations/command
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/organizations.command-1.0.0.jar
+    container_name: organizations-command-prod
     depends_on:
       - kafka
       - organizations-command-mongo
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MODULE_NAME=organizations/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_ORGANIZATIONS_COMMAND_MONGO_HOST=organizations-command-mongo
       - SERVICE_ORGANIZATIONS_COMMAND_NAME=ORGANIZATIONS-COMMAND
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   organizations-command-mongo:
+    container_name: organizations-command-mongo-prod
     image: mongo:5.0.7
     volumes:
       - /data/db
@@ -167,29 +156,30 @@ services:
       args:
         - MODULE_NAME=organizations/query
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/organizations.query-1.0.0.jar
+    container_name: organizations-query-prod
     depends_on:
       - kafka
       - organizations-query-mongo
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MODULE_NAME=organizations/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_NOTIFICATIONS_NAME=NOTIFICATIONS
       - SERVICE_ORGANIZATIONS_QUERY_MONGO_HOST=organizations-query-mongo
       - SERVICE_ORGANIZATIONS_QUERY_NAME=ORGANIZATIONS-QUERY
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   organizations-query-mongo:
+    container_name: organizations-query-mongo-prod
     image: mongo:5.0.7
     volumes:
       - /data/db
   swagger:
-    image: swaggerapi/swagger-ui
-    volumes:
-        - ./swagger:/usr/share/nginx/html/doc
+    build:
+      dockerfile: Dockerfile.prod
+      context: swagger
+      target: prod
+    container_name: swagger-prod
     environment:
         API_URL: doc/openapi.yml
   users-command:
@@ -197,21 +187,20 @@ services:
       args:
         - MODULE_NAME=users/command
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/users.command-1.0.0.jar
+    container_name: users-command-prod
     depends_on:
       - kafka
       - users-command-mongo
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MODULE_NAME=users/command
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_USERS_COMMAND_MONGO_HOST=users-command-mongo
       - SERVICE_USERS_COMMAND_NAME=USERS-COMMAND
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   users-command-mongo:
+    container_name: users-command-mongo-prod
     image: mongo:5.0.7
     volumes:
       - /data/db
@@ -220,26 +209,28 @@ services:
       args:
         - MODULE_NAME=users/query
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.prod
+      target: prod
+    command: java -jar -Dspring.profiles.active=prod target/users.query-1.0.0.jar
+    container_name: users-query-prod
     depends_on:
       - kafka
       - users-query-mongo
     environment:
       - JWT_SECRET=some-jwt-secret
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MODULE_NAME=users/query
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_USERS_QUERY_MONGO_HOST=users-query-mongo
       - SERVICE_USERS_QUERY_NAME=USERS-QUERY
-    volumes:
-      - ./backend:/usr/src/app
-      - mvn:/usr/mvn
   users-query-mongo:
+    container_name: users-query-mongo-prod
     image: mongo:5.0.7
     volumes:
       - /data/db
   zookeeper:
+    container_name: zookeeper-prod
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     image: bitnami/zookeeper
+
+ 
