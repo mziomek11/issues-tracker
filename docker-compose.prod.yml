@@ -232,5 +232,3 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     image: bitnami/zookeeper
-
- 
