@@ -107,6 +107,10 @@ services:
       - apigateway
     ports:
       - 80:80
+      - 443:443
+    volumes:
+      - ./letsencrypt:/letsencrypt
+      - ./certs:/etc/letsencrypt
   notifications:
     build:
       args:
