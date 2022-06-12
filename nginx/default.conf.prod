@@ -26,8 +26,8 @@ server {
 server {
     listen 443 ssl;
     server_name issuestracker.mateuszziomek.com www.issuestracker.mateuszziomek.com;
-    ssl_certificate certs/issuestracker.pem
-    ssl_certificate_key certs/issuestracker-key.pem
+    ssl_certificate certs/issuestracker.pem;
+    ssl_certificate_key certs/issuestracker-key.pem;
     ssl_protocols TLSv1.3;
 
     location /api/notification-management {
