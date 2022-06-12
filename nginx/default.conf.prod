@@ -22,6 +22,17 @@ server {
         root /letsencrypt/;
     }
 
+    return 301 https://$host$request_url;
+}
+
+
+server {
+    listen 443 ssl;
+    server_name issuestracker.mateuszziomek.com www.issuestracker.mateuszziomek.com;
+    ssl_certificate /etc/letsencrypt/live/issuestracker.mateuszziomek.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/issuestracker.mateuszziomek.com/privkey.pem;
+    ssl_protocols TLSv1.3;
+
     location /api/notification-management {
         proxy_pass http://api;
 
