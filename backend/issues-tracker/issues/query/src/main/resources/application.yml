@@ -1,0 +1,18 @@
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${instanceId:${random.value}}
+server:
+  port: 0
+spring:
+  kafka:
+    consumer:
+      group-id: issues-query
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.mateuszziomek.issuestracker.*
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: MANUAL_IMMEDIATE

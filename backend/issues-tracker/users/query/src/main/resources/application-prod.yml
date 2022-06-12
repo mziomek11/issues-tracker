@@ -13,4 +13,3 @@ spring:
   kafka:
     consumer:
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-

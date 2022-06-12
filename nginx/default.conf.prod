@@ -1,0 +1,62 @@
+upstream api {
+    server apigateway:8080;
+}
+
+upstream frontend {
+    server frontend:80;
+}
+
+upstream mailhog {
+    server mailhog:8025;
+}
+
+upstream swagger {
+    server swagger:8080;
+}
+
+server {
+    listen 80;
+    server_name issuestracker.mateuszziomek.com www.issuestracker.mateuszziomek.com;
+
+    location /.well-known/acme-challenge {
+        root /letsencrypt/;
+    }
+
+    return 301 https://$host$request_uri;
+}
+
+
+server {
+    listen 443 ssl;
+    server_name issuestracker.mateuszziomek.com www.issuestracker.mateuszziomek.com;
+    ssl_certificate /etc/letsencrypt/live/issuestracker.mateuszziomek.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/issuestracker.mateuszziomek.com/privkey.pem;
+    ssl_protocols TLSv1.3;
+
+    location /api/notification-management {
+        proxy_pass http://api;
+
+        proxy_set_header Connection '';
+        proxy_http_version 1.1;
+        chunked_transfer_encoding off;
+        proxy_buffering off;
+        proxy_cache off;
+    }
+
+    location /api {
+        proxy_pass http://api;
+    }
+
+    location /mailhog {
+        proxy_pass http://mailhog;
+    }
+
+    location /swagger/ {
+        rewrite /swagger/(.*) /$1 break;
+        proxy_pass http://swagger;
+    }
+
+    location / {
+        proxy_pass http://frontend;
+    }
+}
