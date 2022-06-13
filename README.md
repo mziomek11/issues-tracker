@@ -34,7 +34,7 @@ The project consists of a total of 11 applications. The backend layer almost ent
 
 Each application that requires a database has its own mognodb instance (I chose mongodb so I don't have to worry about database schema and migration). Kafka was used as a message broker, but I did not spend too much time understanding all its configurations (I was more interested in getting to know the concepts related to event driven architecture than spending time on huge concept which is kafka).
 
-![Screenshot](images/architecture.svg)
+![Architecture](images/architecture.svg)
 
 ## Client/Server communication
 
@@ -42,7 +42,7 @@ Communications between frontend and backend applications takes place in two ways
 
 ### Synchronous communication - it occurs when a logged out user uses the application
 
-@TODO Image
+![Synchronous communication](images/sync.svg)
 
 1. The client sends the request
 2. Server returns a response
@@ -51,15 +51,15 @@ Nothing special
 
 ### Asynchronous communication - it occurs when a logged in user uses the application
 
-@TODO Image
+![Asynchronous communication](images/async.svg)
 
 1. Client starts listening to SSE (notification service)
 2. Client sends a command (for example `OpenIssueCommand` to Issues Command application)
 3. Command is being processed and server returns a response with id of created entity
 4. Event is being sent to message broken (for example `IssueOpenedEvent`)
-5. Query application (for example Issues Query application) receives event, processes it and then sends message to Notification application about data change 
-6. Through SSE Notification application informs client about changes (for example `IssueOpened` - `{ issuesId: ..., organizationId: ..., projectId: ... }`)
-7. Client decides what he wants to do. It can be asking backend for the new data with GET request, updating UI or just doing nothing
+5. Query service (for example Issues Query) receives event and processes it
+6. Query service sends message to Notification application about data change 
+7. Through SSE Notification service informs client about changes (for example `IssueOpened` - `{ issuesId: ..., organizationId: ..., projectId: ... }`)
 
 ## Local development
 
