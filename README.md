@@ -5,9 +5,12 @@ Issues tracker is application that helps organizations to track issues inside th
 ## Authors
 
 Backend: [Mateusz Ziomek](https://github.com/hommat)
+
 Frontend: [Piotr Ligaj](https://github.com/ptrlgj)
 
 ## Frontend
+
+You can find frontend related information @TODO Frontend link
 
 ## Why such an application?
 
@@ -51,16 +54,16 @@ Nothing special
 @TODO Image
 
 1. Client starts listening to SSE (notification service)
-2. Client sends a command (for example OpenIssueCommand to Issues Command application)
+2. Client sends a command (for example `OpenIssueCommand` to Issues Command application)
 3. Command is being processed and server returns a response with id of created entity
-4. Event is being sent to message broken (for example IssueOpenedEvent)
+4. Event is being sent to message broken (for example `IssueOpenedEvent`)
 5. Query application (for example Issues Query application) receives event, processes it and then sends message to Notification application about data change 
-6. Through SSE Notification application informs client about changes (for example IssueOpened - { issuesId: ..., organizationId: ..., projectId: .... })
+6. Through SSE Notification application informs client about changes (for example `IssueOpened` - `{ issuesId: ..., organizationId: ..., projectId: ... }`)
 7. Client decides what he wants to do. It can be asking backend for the new data with GET request, updating UI or just doing nothing
 
 ## Local development
 
-In order to start application locally you need to install docker and docker-compose on your machine first. Then you can start everything with docker-compose up command. First launch of the application may take a while, because all dependencies must be downloaded. When everything is ready (you can check that by visiting http://localhost/eureka and seeing @TODO Image) you will have access to the following sites:
+In order to start application locally you need to install docker and docker-compose on your machine first. Then you can start everything with `docker-compose up -d` command. First launch of the application may take a while, because all dependencies must be downloaded. When everything is ready (you can check that by visiting http://localhost/eureka and seeing @TODO Image) you will have access to the following sites:
 
 - Frontend application - http://localhost
 - Api documentation - http://localhost/swagger
