@@ -2,81 +2,83 @@
 
 Issues tracker is application that helps organizations to track issues inside their projects. Application has been created for educational purposes.
 
-## Dlaczego taka apliakcja?
+## Authors
 
-Celem utworzenia tej aplikacji bylo zrobycie praktycznej wiedzy na tematy zwiazane zarowno ze springiem (spring/spring boot/spring web/spring webflux) jak i rowniez na tematy zwiazane z architura/dobrymi praktykami (DDD/CQRS/Event Sourcing/Event Driven Architecture/Testing). Do tematow zwiazanych z CQRS/Event sourcingiem postanowilem nie uzywac zadnych bibliotek, zeby nie uczyc sie zbyt wielu rzeczy jednoczesnie. Oczywiscie architektura i narzedzia nie sa najlepije dobrane jesli chodzi o problem do rozwiazania, ale priorytet bylo zdobycie wiedzy, a nie dowiezienie produktu
+- Backend - @TODO Author
+- Frontend - @TODO Author
 
-## Architektura
+## Frontend
 
-Projekts sklada sie w sumie z 11 aplikacji. Warstwa backendu prawie w calosci komunikuje sie asynchronicznie. W sklad aplikacji wchodza
+## Why such an application?
 
-- Issues Command (Spring web)
-- Issues Query (Spring webflux)
-- Organization Command (Spring web)
-- Organization Query (Spring webflux)
-- Users Command (Spring web)
-- Users Query (Spring webflux)
-- Notifications (Spring webflux)
+The purpose of creating this application was to gain practical knowledge on topics related to both Spring (Spring/Spring Boot/Spring Web/Spring WebFlux) and architecture/good practices (Domain Driven Design/CQRS/Event Sourcing/Event Driven Architecture/Testing). I have decided to not use any libraries for CQRS/Event Sourcing in order to not having to learn too many thing at the same time. Of course architecture and tools are not chosen the best if it comes to application problem, but priority was to gain knowledge and not to create real product.
+
+## Architecture
+
+The project consists of a total of 11 applications. The backend layer almost entirely communicates asynchronously. The application includes
+
+- Issues Command (Spring Web)
+- Issues Query (Spring WebFlux)
+- Organization Command (Spring Web)
+- Organization Query (Spring WebFlux)
+- Users Command (Spring Web)
+- Users Query (Spring WebFlux)
+- Notifications (Spring WebFlux)
 - Api gateway (Spring Cloud Gateway)
 - Discovery service (Eureka)
 - Reverse proxy (nginx)
 - Frontend (React + nginx)
 
-Kazdy z applikacji operujacych na bazie danym ma swoja instancje mongodb (dlaczego mongo? zeby zawracac sobie glowy schematem bazy i migracjami). Jako message broker uzywata zostala kafka, ale nie poswiecalem zbyt duzo czasu na zrozumienie jej wszystkich konfiguracji (zalezalo mi bardziej na poznaniu konceptow zwiazanych z event driven, niz poznawania konkretnego event brokera).
+Each application that requires a database has its own mognodb instance (I chose mongodb so I don't have to worry about database schema and migration). Kafka was used as a message broker, but I did not spend too much time understanding all its configurations (I was more interested in getting to know the concepts related to event driven architecture than spending time on huge concept which is kafka).
 
-TUTAJ OBRAZEK ARCHITEKTURY
+@TODO Image
 
-## Frontend
+## Client/Server communication
 
-TUTAJ LINK DO README W MODULE FRONTEND
+Communications between frontend and backend applications takes place in two ways
 
-## Komunikacja client <-> server
+### Synchronous communication - it occurs when a logged out user uses the application
 
-Komunikacja pomiedzy aplikacja frontowa, odbywa sie na 2 sposoby
+@TODO Image
 
-1. Komunikacja synchroniczna - wystepuje gdy niezalogowany uzykownik korzysta z aplikacji
+1. The client sends the request
+2. Server returns a response
 
-TU OBRAZEK
+Nothing special
 
-1. Klient wysyla request
-2. Server zwraca response
+### Asynchronous communication - it occurs when a logged in user uses the application
 
-Nic ciekawego
+@TODO Image
 
-2. Komunikacja asynchroniczna - wystepuje gdy zalogowany uzytkwonik korzysta z aplikacji
+1. Client starts listening to SSE (notification service)
+2. Client sends a command (for example OpenIssueCommand to Issues Command application)
+3. Command is being processed and server returns a response with id of created entity
+4. Event is being sent to message broken (for example IssueOpenedEvent)
+5. Query application (for example Issues Query application) receives event, processes it and then sends message to Notification application about data change 
+6. Through SSE Notification application informs client about changes (for example IssueOpened - { issuesId: ..., organizationId: ..., projectId: .... })
+7. Client decides what he wants to do. It can be asking backend for the new data with GET request, updating UI or just doing nothing
 
-TU OBRAKZEK
+## Local development
 
-1. Client zaczyna nasluchiwac na SSE (modul notyfikacji)
-2. Client wysyla komende
-3. Komenda zostaje przetworzona, a klient otrzymuje id utworzonego obiektu (jesli takowy zostal utworzony)
-4. Zdarzenie zostaje przeslane do message brokera
-5. Aplikacja do odczytu otrzymuje zdarzenie, przetwarza je, a nastepnie wysyla informacje do modulu notyfikacji o tym, ze dane sa gotowe do pobrania
-6. Poprzez SSE modul notyfikacji informuje klienta o nowym danych
-7. Klient decyduje co chce zrobic, albo odpytuje o swieze dane, albo nie.
+In order to start application locally you need to install docker and docker-compose on your machine first. Then you can start everything with docker-compose up command. First launch of the application may take a while, because all dependencies must be downloaded. When everything is ready (you can check that by visiting http://localhost/eureka and seeing @TODO Image) you will have access to the following sites:
 
-## Uruchomienia applikacji
-
-Aby uruchomic aplikacje potrzebny jest docker i docker-compose. Przy pierwszych uruchomieniu nalezy zbudowac kontenery poprzez komende docker-compose build. Nastepnie kontenery mozna uruchomic komenda docker-compose up. Pierwsze uruchomienia moze troche potrwac, bo wszystko zaleznosci musze sie zainstalowac. Po uruchomieniu dostepne sa nastepujace strony
-
-- Aplikacja frontowa - http://localhost
-- Dokumentacja API - http://localhost/swagger
+- Frontend application - http://localhost
+- Api documentation - http://localhost/swagger
 - Eureka dashboard - http://localhost/eureka
-- Mailhog (mail client) - http://localhost/mailhog
+- Mailhog (this is the place, where all mails are sent in dev mode) - http://localhost/mailhog
 
 ## Known issues
 
-- Brak outbox/inbox pattern -> mozliwa niedotarcie zdarzen/deduplikacja zdarzen
-- Brak transakcji baz danych
-- Logika authoryzacji w module users, powinniem byc osobnt modul auth pod to
-- Logika sprawdzania dostepu w komendach prawdopodobnie powinna byc wyciagnieta do jakichs dekoratorow
-- Brak hateos
-- 504 jesli sse przez jakis czas nie rzuci eventu
-- api gateway nie formatuje bledow tak jak reszta applikacji
-- testy integractyjne testuja mocki, zamiast uzywac prawdziwej bazy danych
-- brak testow w applikacjach do odczytu i pod event handlery w applikacjach do zapisu
-- produkcyjny config dockera (mongo/kafka/networking/using docker-compose in production) moze nie byc najlepszy, natomiast nie chcialem tracic zbyt duzo czasu na rzeczy zwiazane z infrastuktura
+- Lack of outbox/inbox pattern - possibility of losing and multiple processing of the same message
+- Lack of database transactions
+- Auth logic inside users module - module responsible for auth should be created instead
+- Access check inside commands/queries - probably some kind of decorator should be used
+- Integration tests uses repository mock - real DB should be used instead
+- Lack of query apps test
+- Lack of event handler in command apps
+- Lack of HATEOAS
+- Production docker config (mongo/kafka/networking/docker-compose) is not the best (it's just bad). The reason behind that is that I didn't want to spend too much time on infrastructure related stuff
 
-## Wnioski
+## Conclusions
 
-Uzycie tak skomplikowanej architektury to chyba najlepsze to moglem zrobic. Nauczylem sie przy tym mase nowych konceptow. Jednoczesnie zobaczylem jak wiele jest jeszcze do nauki ;)
+Using such a complex architecture is probably the best thing i could do. Thanks to this, I learned a lot of new concepts. At the same time, I saw how much there is still to learn ;)
