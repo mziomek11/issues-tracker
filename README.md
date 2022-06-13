@@ -2,6 +2,17 @@
 
 Issues tracker is application that helps organizations to track issues inside their projects. Application has been created for educational purposes. Demo is available [here](https://issuestracker.mateuszziomek.com)
 
+## Table of contents
+
+- [Authors](#authors)
+- [Frontend](#frontend)
+- [Project purpose](#project-purpose)
+- [Architecture](#architecture)
+- [Client/Server communication](#client/server-communication)
+- [Local development](#local-development)
+- [Knows issues](#knows-issues)
+- [Conclusions](#conclusions)
+
 ## Authors
 
 Backend: [Mateusz Ziomek](https://github.com/hommat)
@@ -12,7 +23,7 @@ Frontend: [Piotr Ligaj](https://github.com/ptrlgj)
 
 You can find frontend related information [here](https://github.com/hommat/issues-tracker/tree/master/frontend)
 
-## Why such an application?
+## Project purpose
 
 The purpose of creating this application was to gain practical knowledge on topics related to both Spring (Spring/Spring Boot/Spring Web/Spring WebFlux) and architecture/good practices (Domain Driven Design/CQRS/Event Sourcing/Event Driven Architecture/Testing). I have decided to not use any libraries for CQRS/Event Sourcing in order to not having to learn too many thing at the same time. Of course architecture and tools are not chosen the best if it comes to application problem, but priority was to gain knowledge and not to create real product.
 
