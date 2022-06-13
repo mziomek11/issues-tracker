@@ -1,9 +1,9 @@
-FROM node:16-alpine as dev
-
-WORKDIR /usr/src/cache
-
-COPY package.json yarn.lock ./
-
-RUN yarn install
+FROM node:16-alpine
 
 WORKDIR /usr/src/app
+
+COPY entrypoint.sh ./
+
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]

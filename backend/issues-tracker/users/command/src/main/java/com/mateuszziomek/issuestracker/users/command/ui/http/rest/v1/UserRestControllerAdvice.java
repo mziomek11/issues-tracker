@@ -5,9 +5,7 @@ import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.Gene
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserInvalidActivationTokenRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserAlreadyActivatedRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserNotFoundRestErrorResponse;
-import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserServiceUnavailableRestErrorResponse;
-import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
-import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
+import com.mateuszziomek.issuestracker.users.command.application.service.user.exception.UserEmailUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
@@ -42,10 +40,5 @@ public class UserRestControllerAdvice {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(UserNotFoundException ex) {
         return UserNotFoundRestErrorResponse.asResponseEntity();
-    }
-
-    @ExceptionHandler(UserServiceUnavailableException.class)
-    public ResponseEntity<RestErrorResponse> handle(UserServiceUnavailableException ex) {
-        return UserServiceUnavailableRestErrorResponse.asResponseEntity();
     }
 }

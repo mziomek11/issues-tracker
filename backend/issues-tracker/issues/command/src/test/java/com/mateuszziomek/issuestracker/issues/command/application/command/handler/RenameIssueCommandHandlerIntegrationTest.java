@@ -3,9 +3,9 @@ package com.mateuszziomek.issuestracker.issues.command.application.command.handl
 import com.mateuszziomek.cqrs.event.producer.EventProducer;
 import com.mateuszziomek.cqrs.event.store.EventStoreRepository;
 import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.IssueCommandHandlerIntegrationTest;
-import com.mateuszziomek.issuestracker.issues.command.infrastructure.gateway.OrganizationGatewayImpl;
+import com.mateuszziomek.issuestracker.issues.command.application.service.organization.OrganizationService;
+import com.mateuszziomek.issuestracker.issues.command.projection.OrganizationRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.IssueRenamedEvent;
-import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.organization.ReactiveOrganizationRestClient;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,14 +22,14 @@ class RenameIssueCommandHandlerIntegrationTest extends IssueCommandHandlerIntegr
         // Arrange
         var eventProducer = mock(EventProducer.class);
         var eventStoreRepository = mock(EventStoreRepository.class);
-        var organizationRestClient = createOrganizationRestClientMock();
+        var organizationRepository = createOrganizationRepositoryMock();
 
         when(eventStoreRepository.findByAggregateId(ISSUE_ID)).thenReturn(List.of(ISSUE_OPENED_EVENT_MODEL));
 
         var sut = createHandler(
                 eventProducer,
                 eventStoreRepository,
-                organizationRestClient
+                organizationRepository
         );
 
         // Act
@@ -53,13 +53,13 @@ class RenameIssueCommandHandlerIntegrationTest extends IssueCommandHandlerIntegr
     private RenameIssueCommandHandler createHandler(
             EventProducer eventProducer,
             EventStoreRepository eventStoreRepository,
-            ReactiveOrganizationRestClient organizationRestClient
+            OrganizationRepository organizationRepository
     ) {
         var eventStore = createEventStore(eventStoreRepository, eventProducer);
         var eventSourcingHandler = createSourcingHandler(eventStore);
-        var organizationGateway = new OrganizationGatewayImpl(organizationRestClient);
+        var organizationService = new OrganizationService(organizationRepository);
 
-        return new RenameIssueCommandHandler(eventSourcingHandler, organizationGateway);
+        return new RenameIssueCommandHandler(eventSourcingHandler, organizationService);
     }
 
     private boolean hasIssueRenamedEventCorrectedData(IssueRenamedEvent event) {

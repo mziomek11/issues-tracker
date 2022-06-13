@@ -10,7 +10,6 @@ services:
         - MODULE_NAME=apigateway
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     environment:
       - MODULE_NAME=apigateway
@@ -33,12 +32,10 @@ services:
         - MODULE_NAME=discovery
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     environment:
       - MODULE_NAME=discovery
       - SERVICE_DISCOVERY_PORT=8761
-      - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
     volumes:
       - ./backend:/usr/src/app
       - mvn:/usr/mvn
@@ -48,7 +45,6 @@ services:
         - MODULE_NAME=issues/command
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
       - issues-command-mongo
@@ -72,7 +68,6 @@ services:
         - MODULE_NAME=issues/query
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
       - issues-query-mongo
@@ -94,8 +89,6 @@ services:
   frontend:
     build:
       context: frontend
-      target: dev
-    command: sh entrypoint.sh
     volumes:
       - ./frontend:/usr/src/app
     ports:
@@ -127,7 +120,6 @@ services:
         - MODULE_NAME=notifications
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
       - notifications-mongo
@@ -153,7 +145,6 @@ services:
         - MODULE_NAME=organizations/command
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
       - kafka
@@ -177,7 +168,6 @@ services:
         - MODULE_NAME=organizations/query
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
       - kafka
@@ -208,7 +198,6 @@ services:
         - MODULE_NAME=users/command
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
       - kafka
@@ -219,7 +208,6 @@ services:
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
       - SERVICE_USERS_COMMAND_MONGO_HOST=users-command-mongo
       - SERVICE_USERS_COMMAND_NAME=USERS-COMMAND
-      - SERVICE_USERS_QUERY_NAME=USERS-QUERY
     volumes:
       - ./backend:/usr/src/app
       - mvn:/usr/mvn
@@ -233,7 +221,6 @@ services:
         - MODULE_NAME=users/query
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile
-      target: dev
     command: sh issues-tracker/entrypoint.sh
     depends_on:
       - kafka

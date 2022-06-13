@@ -65,8 +65,6 @@ paths:
           $ref: '#/components/responses/GenericValidationFailed'
         '409':
           $ref: '#/components/responses/GenericEmailUnavailable'
-        '503':
-          $ref: '#/components/responses/UserServiceUnavailable'
   /api/v1/user-management/users/{userId}/activation-token:
     post:
       tags: 
@@ -1049,12 +1047,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UserNotFound' 
-    UserServiceUnavailable:
-      description: User service unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UserServiceUnavailable'
     OrganizationNotFound:
       description: Organization does not exist
       content:
@@ -1648,22 +1640,6 @@ components:
         message:
           type: string
           example: User does not exist
-      required:
-        - code
-        - status
-        - message
-    UserServiceUnavailable:
-      type: object
-      properties:
-        code:
-          type: string
-          example: USER_4
-        status:
-          type: integer
-          example: 503
-        message:
-          type: string
-          example: User service unavailable
       required:
         - code
         - status

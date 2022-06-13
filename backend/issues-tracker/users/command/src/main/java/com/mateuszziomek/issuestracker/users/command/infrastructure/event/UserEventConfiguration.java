@@ -1,5 +1,6 @@
 package com.mateuszziomek.issuestracker.users.command.infrastructure.event;
 
+import com.mateuszziomek.cqrs.event.dispatcher.EventDispatcher;
 import com.mateuszziomek.cqrs.event.producer.EventProducer;
 import com.mateuszziomek.cqrs.event.producer.KafkaEventProducer;
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
@@ -24,5 +25,10 @@ public class UserEventConfiguration {
     @Bean
     public EventStore eventStore(UserEventStoreRepository userEventStoreRepository, EventProducer eventProducer) {
         return new EventStore<>(userEventStoreRepository, eventProducer, User.class);
+    }
+
+    @Bean
+    public EventDispatcher eventDispatcher() {
+        return new EventDispatcher();
     }
 }

@@ -6,14 +6,14 @@ import static org.mockito.Mockito.*;
 
 import com.mateuszziomek.cqrs.event.sourcinghandler.EventSourcingHandler;
 import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.IssueCommandHandlerTest;
-import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.OrganizationGatewayExceptionArgumentProvider;
+import com.mateuszziomek.issuestracker.issues.command.application.command.handler.helpers.OrganizationServiceExceptionArgumentProvider;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 class OpenIssueCommandHandlerTest extends IssueCommandHandlerTest {
     @ParameterizedTest
-    @ArgumentsSource(OrganizationGatewayExceptionArgumentProvider.class)
-    void eventSourcingHandlerIsNotCalledWhenGatewayThrows(RuntimeException gatewayException) {
+    @ArgumentsSource(OrganizationServiceExceptionArgumentProvider.class)
+    void eventSourcingHandlerIsNotCalledWhenServiceThrows(RuntimeException gatewayException) {
         // Arrange
         var eventSourcingHandler = mock(EventSourcingHandler.class);
         var organizationGateway = createOrganizationGatewayExceptionMock(gatewayException);

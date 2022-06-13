@@ -2,8 +2,8 @@ package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1;
 
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
-import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserServiceUnavailableException;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user.ActivateUserDto;
+import com.mateuszziomek.issuestracker.users.command.application.service.user.exception.UserEmailUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.mapper.ActivateUserDtoMapper;
 import com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1.mapper.RegisterUserDtoMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import com.mateuszziomek.issuestracker.users.command.application.command.Activat
 import com.mateuszziomek.issuestracker.users.command.application.command.RegisterUserCommand;
 import com.mateuszziomek.issuestracker.users.command.application.command.handler.ActivateUserCommandHandler;
 import com.mateuszziomek.issuestracker.users.command.application.command.handler.RegisterUserCommandHandler;
-import com.mateuszziomek.issuestracker.users.command.application.gateway.user.exception.UserEmailUnavailableException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
@@ -31,7 +30,6 @@ public class UserRestController {
 
     /**
      * @throws UserEmailUnavailableException see {@link RegisterUserCommandHandler#handle(RegisterUserCommand)}
-     * @throws UserServiceUnavailableException see {@link RegisterUserCommandHandler#handle(RegisterUserCommand)}
      * @throws RestValidationException see {@link RegisterUserDtoMapper#toCommand(UUID, RegisterUserDto)}
      */
     @PostMapping("/users")

@@ -3,17 +3,16 @@ package com.mateuszziomek.issuestracker.organizations.command.application.comman
 import com.mateuszziomek.cqrs.event.producer.EventProducer;
 import com.mateuszziomek.cqrs.event.store.EventStoreRepository;
 import com.mateuszziomek.issuestracker.organizations.command.application.command.handler.helpers.OrganizationCommandHandlerIntegrationTest;
-import com.mateuszziomek.issuestracker.organizations.command.application.gateway.member.MemberGateway;
-import com.mateuszziomek.issuestracker.organizations.command.domain.member.MemberId;
-import com.mateuszziomek.issuestracker.organizations.command.infrastructure.gateway.MemberGatewayImpl;
+import com.mateuszziomek.issuestracker.organizations.command.application.service.MemberService;
+import com.mateuszziomek.issuestracker.organizations.command.projection.Member;
+import com.mateuszziomek.issuestracker.organizations.command.projection.MemberRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserStatus;
-import com.mateuszziomek.issuestracker.shared.infrastructure.restclient.user.ReactiveUserRestClient;
-import com.mateuszziomek.issuestracker.shared.readmodel.user.ListUser;
+import com.mateuszziomek.issuestracker.shared.domain.event.UserRegisteredEvent;
 import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.mateuszziomek.issuestracker.organizations.command.application.command.handler.helpers.OrganizationCommandData.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -25,14 +24,23 @@ class InviteOrganizationMemberCommandHandlerIntegrationTest extends Organization
         // Arrange
         var eventProducer = mock(EventProducer.class);
         var eventStoreRepository = mock(EventStoreRepository.class);
-        var userRestClient = mock(ReactiveUserRestClient.class);
-        var sut = createHandler(eventProducer, eventStoreRepository, userRestClient);
+        var memberRepository = mock(MemberRepository.class);
+        var sut = createHandler(eventProducer, eventStoreRepository, memberRepository);
+        var member = Member.register(
+                UserRegisteredEvent
+                        .builder()
+                        .userActivationToken(UUID.randomUUID())
+                        .userEmail(INVITED_MEMBER_EMAIL)
+                        .userHashedPassword("password")
+                        .userId(INVITED_MEMBER_UUID)
+                        .build()
+        );
 
         when(eventStoreRepository.findByAggregateId(ORGANIZATION_ID))
                 .thenReturn(List.of(ORGANIZATION_CREATED_EVENT_MODEL));
 
-        when(userRestClient.getUsers(argThat(p -> p.getEmail().equals(INVITED_MEMBER_EMAIL) && p.getStatus().equals(UserStatus.ACTIVATED))))
-                .thenReturn(Flux.just(ListUser.builder().id(INVITED_MEMBER_UUID).build()));
+        when(memberRepository.findByEmail(argThat(p -> p.equals(INVITED_MEMBER_EMAIL))))
+                .thenReturn(Optional.of(member));
 
         // Act
         sut.handle(INVITE_ORGANIZATION_MEMBER_COMMAND);
@@ -55,13 +63,13 @@ class InviteOrganizationMemberCommandHandlerIntegrationTest extends Organization
     private InviteOrganizationMemberCommandHandler createHandler(
             EventProducer eventProducer,
             EventStoreRepository eventStoreRepository,
-            ReactiveUserRestClient userRestClient
+            MemberRepository memberRepository
     ) {
         var eventStore = createEventStore(eventStoreRepository, eventProducer);
         var eventSourcingHandler = createSourcingHandler(eventStore);
-        var memberGateway = new MemberGatewayImpl(userRestClient);
+        var memberService = new MemberService(memberRepository);
 
-        return new InviteOrganizationMemberCommandHandler(eventSourcingHandler, memberGateway);
+        return new InviteOrganizationMemberCommandHandler(eventSourcingHandler, memberService);
     }
 
     private boolean hasOrganizationMemberInvitedEventCorrectedData(OrganizationMemberInvitedEvent event) {
