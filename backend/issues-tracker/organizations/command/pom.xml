@@ -65,9 +65,8 @@
 
 		<dependency>
 			<groupId>com.mateuszziomek</groupId>
-			<artifactId>cqrs</artifactId>
+			<artifactId>cqrs-test</artifactId>
 			<version>1.0.0</version>
-			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

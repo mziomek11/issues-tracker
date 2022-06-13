@@ -16,6 +16,7 @@
 
     <modules>
         <module>../cqrs</module>
+        <module>../cqrs-test</module>
         <module>apigateway</module>
         <module>discovery</module>
         <module>issues/command</module>
