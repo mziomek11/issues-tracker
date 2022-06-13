@@ -10,7 +10,7 @@ Frontend: [Piotr Ligaj](https://github.com/ptrlgj)
 
 ## Frontend
 
-You can find frontend related information @TODO Frontend link
+You can find frontend related information [here](https://github.com/hommat/issues-tracker/tree/master/frontend)
 
 ## Why such an application?
 
