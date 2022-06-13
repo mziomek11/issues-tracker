@@ -8,9 +8,9 @@ Issues tracker is application that helps organizations to track issues inside th
 - [Frontend](#frontend)
 - [Project purpose](#project-purpose)
 - [Architecture](#architecture)
-- [Client/Server communication](#client/server-communication)
+- [Client/Server communication](#clientserver-communication)
 - [Local development](#local-development)
-- [Knows issues](#knows-issues)
+- [Known issues](#known-issues)
 - [Conclusions](#conclusions)
 
 ## Authors
