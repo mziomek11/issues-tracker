@@ -1,4 +1,4 @@
-vf# IssuesTracker
+# IssuesTracker
 
 Issues tracker is application that helps organizations to track issues inside their projects. Application has been created for educational purposes. Demo is available [here](https://issuestracker.mateuszziomek.com)
 
