@@ -74,7 +74,7 @@ Nothing special
 
 ## Local development
 
-In order to start application locally you need to install docker and docker-compose on your machine first. Then you can start everything with `docker-compose up -d` command. First launch of the application may take a while, because all dependencies must be downloaded. When everything is ready (you can check that by visiting http://localhost/eureka and seeing @TODO Image) you will have access to the following sites:
+In order to start application locally you need to install docker and docker-compose on your machine first. Then you can start everything with `docker-compose up -d` command. First launch of the application may take a while, because all dependencies must be downloaded. When everything is ready (you can check that by visiting http://localhost/eureka and seeing [here](images/eureka.png)) you will have access to the following sites:
 
 - Frontend application - http://localhost
 - Api documentation - http://localhost/swagger
