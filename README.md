@@ -1,11 +1,11 @@
 # IssuesTracker
 
-Issues tracker is application that helps organizations to track issues inside their projects. Application has been created for educational purposes.
+Issues tracker is application that helps organizations to track issues inside their projects. Application has been created for educational purposes. Demo is available [here](https://issuestracker.mateuszziomek.com)
 
 ## Authors
 
-- Backend - @TODO Author
-- Frontend - @TODO Author
+Backend: [Mateusz Ziomek](https://github.com/hommat)
+Frontend: [Piotr Ligaj](https://github.com/ptrlgj)
 
 ## Frontend
 
