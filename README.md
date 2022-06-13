@@ -40,7 +40,7 @@ Each application that requires a database has its own mognodb instance (I chose 
 
 Communications between frontend and backend applications takes place in two ways
 
-### Synchronous communication - it occurs when a logged out user uses the application
+### Synchronous communication - when user is logged out
 
 ![Synchronous communication](images/sync.svg)
 
@@ -49,9 +49,9 @@ Communications between frontend and backend applications takes place in two ways
 
 Nothing special
 
-### Asynchronous communication - it occurs when a logged in user uses the application
+### Asynchronous communication - when user is logged in
 
-![Asynchronous communication](images/async.svg)
+![Asynchronous communication](images/async2.svg)
 
 1. Client starts listening to SSE (notification service)
 2. Client sends a command (for example `OpenIssueCommand` to Issues Command application)
