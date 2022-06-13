@@ -65,7 +65,7 @@ Nothing special
 ![Asynchronous communication](images/async2.svg)
 
 1. Client starts listening to SSE (notification service)
-2. Client sends a command (for example `OpenIssueCommand` to Issues Command application)
+2. Client sends a command (for example `OpenIssueCommand` to Issues Command service)
 3. Command is being processed and server returns a response with id of created entity
 4. Event is being sent to message broken (for example `IssueOpenedEvent`)
 5. Query service (for example Issues Query) receives event and processes it
