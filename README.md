@@ -34,7 +34,7 @@ The project consists of a total of 11 applications. The backend layer almost ent
 
 Each application that requires a database has its own mognodb instance (I chose mongodb so I don't have to worry about database schema and migration). Kafka was used as a message broker, but I did not spend too much time understanding all its configurations (I was more interested in getting to know the concepts related to event driven architecture than spending time on huge concept which is kafka).
 
-@TODO Image
+![Screenshot](images/architecture.svg)
 
 ## Client/Server communication
 
