@@ -13,7 +13,7 @@ const initialValues: FormFields = {
 const handleSubmitForm = (values: FormFields): void => {
   console.log(values);
 };
-export const LoginForm: React.FC<{}> = (): JSX.Element => {
+export const LoginForm: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
 
   const handleNavigate = (): void => navigate('/register');

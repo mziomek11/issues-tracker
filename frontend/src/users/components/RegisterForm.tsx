@@ -19,7 +19,7 @@ const initialValues: FormFields = {
   password: '',
   repeatPassword: '',
 };
-export const RegisterForm: React.FC<{}> = () => {
+export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
   const [errorCode, setErrorCode] = useState<ErrorCode>({ code: null, message: '' });
   const { mutate, error } = useRegister(setErrorCode);
