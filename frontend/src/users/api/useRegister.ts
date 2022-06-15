@@ -14,8 +14,13 @@ export enum GenericServerError {
 }
 export const useRegister = (
   setErrorCode: React.Dispatch<React.SetStateAction<ErrorCode>>
-): UseMutationResult<AxiosResponse<any, any>, AxiosError<unknown, any>, Credentials, unknown> => {
-  const postRegister = (data: Credentials) => {
+): UseMutationResult<
+  AxiosResponse<string, Credentials>,
+  AxiosError<unknown, any>,
+  Credentials,
+  unknown
+> => {
+  const postRegister = (data: Credentials): Promise<AxiosResponse<string, Credentials>> => {
     return axios.post(`http://localhost/api/v1/user-management/users`, data);
   };
   const defineError = (code: GenericServerError, message: string): void => {
