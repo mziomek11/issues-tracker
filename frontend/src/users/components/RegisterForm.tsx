@@ -23,9 +23,9 @@ export const RegisterForm: React.FC<{}> = () => {
   const navigate = useNavigate();
   const [errorCode, setErrorCode] = useState<ErrorCode>({ code: null, message: '' });
   const { mutate, error } = useRegister(setErrorCode);
-  const handleNavigate = () => navigate('/login');
+  const handleNavigate = ():void  => navigate('/login');
 
-  const handleSubmitForm = (values: FormFields) => {
+  const handleSubmitForm = (values: FormFields):void  => {
     const credentials = { email: values.email, password: values.password };
     if (values.password === values.repeatPassword) {
       mutate(credentials);

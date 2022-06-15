@@ -10,13 +10,13 @@ const initialValues: FormFields = {
   email: '',
   password: '',
 };
-const handleSubmitForm = (values: FormFields) => {
+const handleSubmitForm = (values: FormFields): void => {
   console.log(values);
 };
-export const LoginForm: React.FC<{}> = () => {
+export const LoginForm: React.FC<{}> = (): JSX.Element => {
   const navigate = useNavigate();
 
-  const handleNavigate = () => navigate('/register');
+  const handleNavigate = (): void => navigate('/register');
 
   const formik: FormikProps<FormFields> = useFormik<FormFields>({
     initialValues,
