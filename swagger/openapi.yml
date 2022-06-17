@@ -1010,6 +1010,444 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/IssueClosed'
                   - $ref: '#/components/schemas/IssueVoteAlreadyExists'
+  /api/v1/notification-management/notifications/users:
+    get:
+      tags:
+        - Notification Management
+      summary:
+        Streams events
+      responses:
+        '200':
+          description: Events
+          content:
+            text/event-stream:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: OrganizationCreatedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: OrganizationMemberInvitedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: OrganizationMemberJoinedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: OrganizationProjectCreatedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueClosedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueCommentContentChangedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          commentId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - commentId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueCommentedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          commentId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - commentId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueCommentHiddenEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          commentId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - commentId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueCommentVotedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          commentId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - commentId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueContentChangedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueOpenedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueRenamedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueTypeChangedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - memberId
+                    required:
+                      - event
+                      - data
+                  - type: object
+                    properties:
+                      event:
+                        type: string
+                        example: IssueVotedEvent
+                      data:
+                        type: object
+                        properties:
+                          organizationId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          projectId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          issueId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                          memberId:
+                            type: string
+                            format: uuid
+                            example: cfc585c2-6d7c-45c0-b7f6-c770e5cad543
+                        required:
+                          - organizationId
+                          - projectId
+                          - issueId
+                          - memberId
+                    required:
+                      - event
+                      - data
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 components:
   securitySchemes:
     BearerAuth:
@@ -1427,10 +1865,15 @@ components:
                   currentValue:
                     type: string
                     example: Current name
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2022-06-17T08:38:32.977
                 required:
                   - type
                   - previousValue
                   - currentValue
+                  - updatedAt
               - type: object
                 properties:
                   type:
@@ -1442,10 +1885,15 @@ components:
                   currentValue:
                     type: string
                     example: Current content
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2022-06-17T08:38:32.977
                 required:
                   - type
                   - previousValue
                   - currentValue
+                  - updatedAt
               - type: object
                 properties:
                   type:
@@ -1457,10 +1905,15 @@ components:
                   currentValue:
                     type: string
                     example: ENHANCEMENT
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2022-06-17T08:38:32.977
                 required:
                   - type
                   - previousValue
                   - currentValue
+                  - updatedAt
         comments:
           type: array
           items:
@@ -1492,10 +1945,15 @@ components:
                         currentValue:
                           type: string
                           example: Current content
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2022-06-17T08:38:32.977
                       required:
                         - type
                         - previousValue
                         - currentValue
+                        - updatedAt
               votes:
                 type: array
                 items:
