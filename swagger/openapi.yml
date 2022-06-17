@@ -1427,10 +1427,15 @@ components:
                   currentValue:
                     type: string
                     example: Current name
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2022-06-17T08:38:32.977
                 required:
                   - type
                   - previousValue
                   - currentValue
+                  - updatedAt
               - type: object
                 properties:
                   type:
@@ -1442,10 +1447,15 @@ components:
                   currentValue:
                     type: string
                     example: Current content
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2022-06-17T08:38:32.977
                 required:
                   - type
                   - previousValue
                   - currentValue
+                  - updatedAt
               - type: object
                 properties:
                   type:
@@ -1457,10 +1467,15 @@ components:
                   currentValue:
                     type: string
                     example: ENHANCEMENT
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2022-06-17T08:38:32.977
                 required:
                   - type
                   - previousValue
                   - currentValue
+                  - updatedAt
         comments:
           type: array
           items:
@@ -1492,10 +1507,15 @@ components:
                         currentValue:
                           type: string
                           example: Current content
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2022-06-17T08:38:32.977
                       required:
                         - type
                         - previousValue
                         - currentValue
+                        - updatedAt
               votes:
                 type: array
                 items:
