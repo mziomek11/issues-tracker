@@ -1,0 +1,4 @@
+export enum ApplicationErrorCode {
+  GENERIC_VALIDATION_FAILED = 'GENERIC_2',
+  GENERIC_EMAIL_UNAVAILABLE = 'GENERIC_3',
+}
