@@ -3,9 +3,9 @@ import { FormControl, FormLabel, Input, Button, VStack, Text } from '@chakra-ui/
 import { FormikProps, useFormik } from 'formik';
 import { object, string, ref } from 'yup';
 import { reverse } from '../../shared/helpers/reverse';
+import { ApplicationErrorHandler } from '../../shared/helpers/ApplicationErrorHandler';
 import { ApplicationErrorCode, applicationErrors } from '../../shared/dtos/application-error.dto';
 import { useRegister } from '../hooks/api/useRegister';
-// import { onSuccessRegister } from '../hooks/api/onSuccessRegister';
 import { RegisterFormFields, ResponseDataDto } from '../dtos/register-user.dto';
 import { AxiosError } from 'axios';
 
@@ -26,26 +26,29 @@ const ValidationSchema = object().shape({
 export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
   const { mutate } = useRegister();
+
   const navigateToLogin = (): void => navigate(reverse('users.login'));
 
   const handleSubmitForm = (values: RegisterFormFields): void => {
     const registerUser = { email: values.email, password: values.password };
     mutate(registerUser, { onError });
   };
+
   const formik: FormikProps<RegisterFormFields> = useFormik<RegisterFormFields>({
     initialValues,
     onSubmit: handleSubmitForm,
     validationSchema: ValidationSchema,
   });
+
   const onError = (error: AxiosError<ResponseDataDto, unknown>): void => {
-    if (error?.response?.data.code === ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE) {
+    const applicationErrorHandler = new ApplicationErrorHandler(error?.response?.data.code);
+    applicationErrorHandler.onGenericEmailUnavailable(() => {
       formik.setFieldError(
         'email',
         applicationErrors[ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE]
       );
-    }
+    });
   };
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <VStack spacing={1} width="30vw">
@@ -58,7 +61,7 @@ export const RegisterForm: React.FC = () => {
             value={formik.values.email}
             onChange={formik.handleChange}
           />
-          {(formik.errors.email && formik.touched.email) && (
+          {formik.errors.email && formik.touched.email && (
             <Text fontSize="sm" color="red">
               {formik.errors.email}
             </Text>
