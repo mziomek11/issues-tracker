@@ -1,42 +1,51 @@
+import { useNavigate } from 'react-router-dom';
 import { FormControl, FormLabel, Input, Button, VStack, Text } from '@chakra-ui/react';
 import { FormikProps, useFormik } from 'formik';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { GenericServerError, useRegister } from '../api/useRegister';
+import { object, string, ref } from 'yup';
+import { reverse } from '../../shared/helpers/reverse';
+import { ApplicationErrorCode, applicationErrors } from '../../shared/dtos/application-error.dto';
+import { useRegister } from '../hooks/api/useRegister';
+// import { onSuccessRegister } from '../hooks/api/onSuccessRegister';
+import { RegisterFormFields, ResponseDataDto } from '../dtos/register-user.dto';
+import { AxiosError } from 'axios';
 
-interface FormFields {
-  email: string;
-  password: string;
-  repeatPassword: string;
-}
-export interface ErrorCode {
-  code: GenericServerError | null;
-  message: string;
-}
-
-const initialValues: FormFields = {
+const initialValues: RegisterFormFields = {
   email: '',
   password: '',
   repeatPassword: '',
 };
+
+const ValidationSchema = object().shape({
+  email: string().required('Required').email('Invalid email'),
+  password: string().required('Required'),
+  repeatPassword: string()
+    .required('Required')
+    .oneOf([ref('password')], 'Passwords do not match'),
+});
+
 export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
-  const [errorCode, setErrorCode] = useState<ErrorCode>({ code: null, message: '' });
-  const { mutate, error } = useRegister(setErrorCode);
-  const handleNavigate = (): void => navigate('/login');
+  const { mutate } = useRegister();
+  const navigateToLogin = (): void => navigate(reverse('users.login'));
 
-  const handleSubmitForm = (values: FormFields): void => {
-    const credentials = { email: values.email, password: values.password };
-    if (values.password === values.repeatPassword) {
-      mutate(credentials);
-    } else {
-      console.error('Passwords dont match');
-    }
+  const handleSubmitForm = (values: RegisterFormFields): void => {
+    const registerUser = { email: values.email, password: values.password };
+    mutate(registerUser, { onError });
   };
-  const formik: FormikProps<FormFields> = useFormik<FormFields>({
+  const formik: FormikProps<RegisterFormFields> = useFormik<RegisterFormFields>({
     initialValues,
     onSubmit: handleSubmitForm,
+    validationSchema: ValidationSchema,
   });
+  const onError = (error: AxiosError<ResponseDataDto, unknown>): void => {
+    if (error?.response?.data.code === ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE) {
+      formik.setFieldError(
+        'email',
+        applicationErrors[ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE]
+      );
+    }
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <VStack spacing={1} width="30vw">
@@ -48,11 +57,10 @@ export const RegisterForm: React.FC = () => {
             autoComplete="off"
             value={formik.values.email}
             onChange={formik.handleChange}
-            required
           />
-          {error && errorCode.code === GenericServerError.GENERIC_3 && (
+          {(formik.errors.email && formik.touched.email) && (
             <Text fontSize="sm" color="red">
-              {errorCode.message}
+              {formik.errors.email}
             </Text>
           )}
         </FormControl>
@@ -63,8 +71,12 @@ export const RegisterForm: React.FC = () => {
             type="password"
             value={formik.values.password}
             onChange={formik.handleChange}
-            required
           />
+          {formik.errors.password && formik.touched.password && (
+            <Text fontSize="sm" color="red">
+              {formik.errors.password}
+            </Text>
+          )}
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="repeatPassword">Repeat password</FormLabel>
@@ -73,13 +85,17 @@ export const RegisterForm: React.FC = () => {
             type="password"
             value={formik.values.repeatPassword}
             onChange={formik.handleChange}
-            required
           />
+          {formik.errors.repeatPassword && formik.touched.repeatPassword && (
+            <Text fontSize="sm" color="red">
+              {formik.errors.repeatPassword}
+            </Text>
+          )}
         </FormControl>
         <Button size="lg" variant="ghost" type="submit">
           Register
         </Button>
-        <Button size="xs" variant="ghost" onClick={handleNavigate}>
+        <Button size="xs" variant="ghost" onClick={navigateToLogin}>
           or login
         </Button>
       </VStack>
