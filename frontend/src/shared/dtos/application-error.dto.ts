@@ -4,7 +4,7 @@ export enum ApplicationErrorCode {
   GENERIC_EMAIL_UNAVAILABLE = 'GENERIC_3',
 }
 
-export const applicationErrors: Record<ApplicationErrorCode, string> = {
+export const applicationErrors: Record<string, string> = {
   GENERIC_1: 'Unnamed error',
   GENERIC_2: 'Validation failed',
   GENERIC_3: 'This email is unavailable',

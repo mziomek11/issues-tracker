@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
 import { CustomQueryClientProvider } from './shared/components/CustomQueryClientProvider';
-import { reverse } from './shared/reverse';
+import { reverse } from './shared/helpers/reverse';
 import { LoginPage, RegisterPage } from './users/pages';
 import './style.css';
 
