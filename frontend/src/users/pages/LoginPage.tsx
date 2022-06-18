@@ -1,5 +1,5 @@
 import { Text, VStack } from '@chakra-ui/react';
-import { LoginForm } from '../components/LoginForm';
+import { LoginForm } from '@users/components';
 
 export const LoginPage: React.FC = () => {
   return (

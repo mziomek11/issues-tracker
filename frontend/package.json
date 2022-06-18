@@ -19,10 +19,12 @@
     "axios": "^0.27.2",
     "formik": "^2.2.9",
     "framer-motion": "^6",
+    "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
+    "vite-tsconfig-paths": "^3.5.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

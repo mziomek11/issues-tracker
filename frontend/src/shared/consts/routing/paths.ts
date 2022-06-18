@@ -4,8 +4,3 @@ export const paths: Record<Path, string> = {
   'users.login': '/login',
   'users.register': '/register',
 };
-
-export enum Urls {
-  userLogin = '/login',
-  userRegister = '/register',
-}

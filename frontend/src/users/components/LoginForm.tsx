@@ -1,22 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import { FormikProps, useFormik } from 'formik';
 import { FormControl, FormLabel, Input, Button, VStack } from '@chakra-ui/react';
-import { reverse } from '../../shared/helpers/reverse';
-import { LoginFormFields } from '../dtos/login-user.dto';
+import { reverse } from '@shared/helpers/routing/reverse';
+import { LoginDto } from '@users/dtos';
 
-const initialValues: LoginFormFields = {
+const initialValues: LoginDto = {
   email: '',
   password: '',
 };
-const handleSubmitForm = (values: LoginFormFields): void => {
+
+const handleSubmitForm = (values: LoginDto): void => {
   console.log(values);
 };
+
 export const LoginForm: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
 
   const navigateToRegister = (): void => navigate(reverse('users.register'));
 
-  const formik: FormikProps<LoginFormFields> = useFormik<LoginFormFields>({
+  const formik: FormikProps<LoginDto> = useFormik<LoginDto>({
     initialValues,
     onSubmit: handleSubmitForm,
   });

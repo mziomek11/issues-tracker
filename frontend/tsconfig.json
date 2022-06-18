@@ -29,7 +29,8 @@
     "experimentalDecorators": true,
     "baseUrl": "./src",
     "paths": {
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@users/*": ["users/*"]
     }
   },
   "include": ["src"],
