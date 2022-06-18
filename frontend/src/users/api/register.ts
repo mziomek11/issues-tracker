@@ -1,8 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { RegisterUserDto } from 'users/dtos/register-user.dto';
+import { RegisterUserDto } from '@users/dtos';
 
-export const register = (
-  data: RegisterUserDto
-): Promise<AxiosResponse<string, RegisterUserDto>> => {
-  return axios.post(`http://localhost/api/v1/user-management/users`, data);
-};
+export const register = (dto: RegisterUserDto): Promise<AxiosResponse<string, RegisterUserDto>> =>
+  axios.post(`/api/v1/user-management/users`, dto);

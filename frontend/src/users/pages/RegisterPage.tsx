@@ -1,5 +1,5 @@
 import { Text, VStack } from '@chakra-ui/react';
-import { RegisterForm } from '../components/RegisterForm';
+import { RegisterForm } from '@users/components';
 
 export const RegisterPage: React.FC = () => {
   return (
