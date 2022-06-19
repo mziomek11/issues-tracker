@@ -9,6 +9,4 @@ export const useRegister = (): UseMutationResult<
   AxiosError<ApplicationErrorDto<any, any>, unknown>,
   RegisterUserDto,
   unknown
-> => {
-  return useMutation(register);
-};
+> => useMutation(register);
