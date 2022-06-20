@@ -1,9 +1,10 @@
-import { Params, useParams } from 'react-router-dom';
 import { Text, VStack } from '@chakra-ui/react';
 import { UserActivation } from '@users/components/UserActivation';
+import { useParams } from '@users/hooks/api';
+import { UserActivationParams } from '@users/types/activation';
 
 export const UserActivationPage: React.FC = () => {
-  const { userId, activationToken }: NonNullable<Readonly<Params<string>>> = useParams();
+  const { userId, activationToken } = useParams<UserActivationParams>();
 
   return (
     <VStack justifyContent="center">

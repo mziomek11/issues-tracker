@@ -1,5 +1,5 @@
 import { Path, paths } from '@shared/consts/routing';
-import { UserActivationParamsDto } from '@users/dtos';
+import { UserActivationParams } from '@users/types/activation';
 import { isString, replace } from 'lodash';
 
 interface DetailedPath<TPath extends string, TParams extends Record<string, any>> {
@@ -9,7 +9,7 @@ interface DetailedPath<TPath extends string, TParams extends Record<string, any>
 
 type RegularPaths = Exclude<Path, 'users.activation'>;
 
-type ReversiblePath = RegularPaths | DetailedPath<'users.activation', UserActivationParamsDto>;
+type ReversiblePath = RegularPaths | DetailedPath<'users.activation', UserActivationParams>;
 
 export const reverse = (path: ReversiblePath): string => {
   if (isString(path)) return paths[path as Path];

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 import { validate as uuidValidate } from 'uuid';
+import { Badge, Spinner, Text, VStack } from '@chakra-ui/react';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
-import { UserActivationParamsDto } from '@users/dtos';
 import { useActivate } from '@users/hooks/api';
-import { Badge, Spinner, Text, VStack } from '@chakra-ui/react';
+import { UserActivationParams } from '@users/types/activation';
 
 interface ActivationStatusDto {
   validUuids: boolean;
@@ -15,7 +15,7 @@ interface ActivationStatusDto {
   error: boolean;
   errorData?: ApplicationErrorDto<ApplicationErrorCode, HttpStatus>;
 }
-export const UserActivation: React.FC<UserActivationParamsDto> = ({ userId, activationToken }) => {
+export const UserActivation: React.FC<UserActivationParams> = ({ userId, activationToken }) => {
   const { mutate: activate } = useActivate();
   const isUuidValid = uuidValidate(userId) && uuidValidate(activationToken);
   const [activationStatus, setActivationStatus] = useState<ActivationStatusDto>({
@@ -33,7 +33,7 @@ export const UserActivation: React.FC<UserActivationParamsDto> = ({ userId, acti
   };
 
   const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void =>
-    applicationErrorHandler<UserActivationParamsDto>()
+    applicationErrorHandler<UserActivationParams>()
       .onGenericValidationFailed(({ details }) => console.log(details))
       .onUserInvalidActivationToken((err) => {
         setActivationStatus((state) => ({
@@ -90,7 +90,7 @@ export const UserActivation: React.FC<UserActivationParamsDto> = ({ userId, acti
       ) : (
         <>
           <Badge colorScheme="yellow">Warning</Badge>
-          <Text fontSize="md">Invalid uuids</Text>
+          <Text fontSize="md">These are not valid uuids</Text>
         </>
       )}
     </VStack>
