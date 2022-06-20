@@ -24,7 +24,7 @@ export const UserActivation: React.FC<UserActivationParams> = ({ userId, activat
     error: false,
   });
 
-  const handleSuccess = () => {
+  const handleSuccess = (): void => {
     setActivationStatus((state) => ({
       ...state,
       loading: false,
@@ -61,7 +61,7 @@ export const UserActivation: React.FC<UserActivationParams> = ({ userId, activat
       })
       .handleAxiosError(error);
 
-  const handleActivation = () => {
+  const handleActivation = (): void => {
     activate({ userId, activationToken }, { onError: handleError, onSuccess: handleSuccess });
   };
 

@@ -1,4 +1,3 @@
-
 import { UserActivationParams } from '@users/types/activation';
 import axios, { AxiosResponse } from 'axios';
 

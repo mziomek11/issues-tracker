@@ -1,1 +1,1 @@
-export * from './UserActivationParams'
+export * from './UserActivationParams';
