@@ -1,0 +1,5 @@
+FROM openjdk:17-alpine
+
+ARG MODULE_NAME
+
+WORKDIR /usr/src/app

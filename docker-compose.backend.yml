@@ -9,8 +9,8 @@ services:
       args:
         - MODULE_NAME=apigateway
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     environment:
       - MODULE_NAME=apigateway
       - SERVICE_APIGATEWAY_NAME=APIGATEWAY
@@ -31,8 +31,8 @@ services:
       args:
         - MODULE_NAME=discovery
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     environment:
       - MODULE_NAME=discovery
       - SERVICE_DISCOVERY_PORT=8761
@@ -44,8 +44,8 @@ services:
       args:
         - MODULE_NAME=issues/command
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     depends_on:
       - issues-command-mongo
       - kafka
@@ -67,8 +67,8 @@ services:
       args:
         - MODULE_NAME=issues/query
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     depends_on:
       - issues-query-mongo
       - kafka
@@ -119,8 +119,8 @@ services:
       args:
         - MODULE_NAME=notifications
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     depends_on:
       - notifications-mongo
       - kafka
@@ -144,8 +144,8 @@ services:
       args:
         - MODULE_NAME=organizations/command
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     depends_on:
       - kafka
       - organizations-command-mongo
@@ -167,8 +167,8 @@ services:
       args:
         - MODULE_NAME=organizations/query
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     depends_on:
       - kafka
       - organizations-query-mongo
@@ -197,8 +197,8 @@ services:
       args:
         - MODULE_NAME=users/command
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     depends_on:
       - kafka
       - users-command-mongo
@@ -220,8 +220,8 @@ services:
       args:
         - MODULE_NAME=users/query
       context: ./backend
-      dockerfile: ./issues-tracker/Dockerfile
-    command: sh issues-tracker/entrypoint.sh
+      dockerfile: ./issues-tracker/Dockerfile.backend
+    command: sh issues-tracker/entrypoint-backend.sh
     depends_on:
       - kafka
       - users-query-mongo
