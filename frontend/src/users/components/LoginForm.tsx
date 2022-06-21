@@ -25,7 +25,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <VStack spacing={1} width="30vw">
+      <VStack spacing={4} width="30vw">
         <FormControl>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
