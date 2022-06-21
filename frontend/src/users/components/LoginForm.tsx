@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { AxiosError, AxiosResponse } from 'axios';
 import { useFormik } from 'formik';
 import { FormControl, FormLabel, Input, Button, VStack, FormErrorMessage } from '@chakra-ui/react';
 import { reverse } from '@shared/helpers/routing/reverse';
 import { LoginDto } from '@users/dtos';
 import { useLogin } from '@users/hooks/api';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
-import { AxiosError } from 'axios';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { loginValidation } from '@users/validation';
 
@@ -21,27 +21,28 @@ export const LoginForm: React.FC = (): JSX.Element => {
 
   const handleSubmitForm = (values: LoginDto): void => {
     login(values, { onError: handleError, onSuccess: handleSuccess });
+    setFieldValue('password', '');
   };
 
-  const { errors, touched, values, handleSubmit, handleChange, setFieldError } = useFormik<LoginDto>({
-    initialValues,
-    onSubmit: handleSubmitForm,
-    validationSchema: loginValidation,
-  });
+  const { errors, touched, values, handleSubmit, handleChange, setFieldError, setFieldValue } =
+    useFormik<LoginDto>({
+      initialValues,
+      onSubmit: handleSubmitForm,
+      validationSchema: loginValidation,
+    });
 
   const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void => {
     applicationErrorHandler<LoginDto>()
-      .onAuthInvalidCredentials(({message}) => {
-        setFieldError('email', message)
-        setFieldError('password', message)
+      .onAuthInvalidCredentials(({ message }) => {
+        setFieldError('email', message);
+        setFieldError('password', message);
       })
       .handleAxiosError(error);
   };
 
-  const handleSuccess = (succ: unknown) => {
-    console.log(succ);
+  const handleSuccess = ({ data }: AxiosResponse) => {
+    localStorage.setItem('JWT', data);
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <VStack spacing={4} width="30vw">
