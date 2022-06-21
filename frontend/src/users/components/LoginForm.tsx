@@ -40,7 +40,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
       .handleAxiosError(error);
   };
 
-  const handleSuccess = ({ data }: AxiosResponse) => {
+  const handleSuccess = ({ data }: AxiosResponse): void => {
     localStorage.setItem('JWT', data);
   };
   return (
