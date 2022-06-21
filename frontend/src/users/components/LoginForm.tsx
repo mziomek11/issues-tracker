@@ -1,49 +1,67 @@
 import { useNavigate } from 'react-router-dom';
-import { FormikProps, useFormik } from 'formik';
-import { FormControl, FormLabel, Input, Button, VStack } from '@chakra-ui/react';
+import { useFormik } from 'formik';
+import { FormControl, FormLabel, Input, Button, VStack, FormErrorMessage } from '@chakra-ui/react';
 import { reverse } from '@shared/helpers/routing/reverse';
 import { LoginDto } from '@users/dtos';
+import { useLogin } from '@users/hooks/api';
+import { applicationErrorHandler } from '@shared/helpers/application-error';
+import { AxiosError } from 'axios';
+import { ApplicationErrorDto } from '@shared/dtos/application-error';
+import { loginValidation } from '@users/validation';
 
 const initialValues: LoginDto = {
   email: '',
   password: '',
 };
 
-const handleSubmitForm = (values: LoginDto): void => {
-  console.log(values);
-};
-
 export const LoginForm: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
-
+  const { mutate: login } = useLogin();
   const navigateToRegister = (): void => navigate(reverse('users.register'));
 
-  const formik: FormikProps<LoginDto> = useFormik<LoginDto>({
+  const handleSubmitForm = (values: LoginDto): void => {
+    login(values, { onError: handleError, onSuccess: handleSuccess });
+  };
+
+  const { errors, touched, values, handleSubmit, handleChange, setFieldError } = useFormik<LoginDto>({
     initialValues,
     onSubmit: handleSubmitForm,
+    validationSchema: loginValidation,
   });
 
+  const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void => {
+    applicationErrorHandler<LoginDto>()
+      .onAuthInvalidCredentials(({message}) => {
+        setFieldError('email', message)
+        setFieldError('password', message)
+      })
+      .handleAxiosError(error);
+  };
+
+  const handleSuccess = (succ: unknown) => {
+    console.log(succ);
+  };
+
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <VStack spacing={4} width="30vw">
-        <FormControl>
+        <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
             type="email"
             autoComplete="off"
-            value={formik.values.email}
-            onChange={formik.handleChange}
+            value={values.email}
+            onChange={handleChange}
           />
+          {errors.email && touched.email && <FormErrorMessage>{errors.email}</FormErrorMessage>}
         </FormControl>
-        <FormControl>
+        <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
-          <Input
-            id="password"
-            type="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-          />
+          <Input id="password" type="password" value={values.password} onChange={handleChange} />
+          {errors.password && touched.password && (
+            <FormErrorMessage>{errors.password}</FormErrorMessage>
+          )}
         </FormControl>
         <Button size="lg" variant="ghost" type="submit">
           Login

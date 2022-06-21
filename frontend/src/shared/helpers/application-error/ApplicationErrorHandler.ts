@@ -8,6 +8,9 @@ import {
   UserDoesNotExistDto,
   UserAlreadyActivatedDto,
 } from '@shared/dtos/application-error';
+import { AuthAccessDeniedDto } from '@shared/dtos/application-error/AuthAccesDenied';
+import { AuthInvalidCredentialsDto } from '@shared/dtos/application-error/AuthInvalidCredentials';
+import { AuthInvalidJwtDto } from '@shared/dtos/application-error/AuthInvalidJwt';
 
 type CallbackFn<TData> = (data: TData) => void;
 
@@ -23,6 +26,9 @@ interface Callbacks<TFields extends Record<string, unknown>> {
   [ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN]?: CallbackFn<UserInvalidActivationTokenDto>;
   [ApplicationErrorCode.USER_ALREADY_ACTIVATED]?: CallbackFn<UserAlreadyActivatedDto>;
   [ApplicationErrorCode.USER_DOES_NOT_EXIST]?: CallbackFn<UserDoesNotExistDto>;
+  [ApplicationErrorCode.AUTH_ACCESS_DENIED]?: CallbackFn<AuthAccessDeniedDto>;
+  [ApplicationErrorCode.AUTH_INVALID_CREDENTIALS]?: CallbackFn<AuthInvalidCredentialsDto>;
+  [ApplicationErrorCode.AUTH_INVALID_JWT]?: CallbackFn<AuthInvalidJwtDto>;
 }
 
 export interface ApplicationErrorHandler<TFields extends Record<string, unknown>> {
@@ -31,6 +37,9 @@ export interface ApplicationErrorHandler<TFields extends Record<string, unknown>
   onUserInvalidActivationToken: HandlerFn<UserInvalidActivationTokenDto, TFields>;
   onUserAlreadyActivated: HandlerFn<UserAlreadyActivatedDto, TFields>;
   onUserDoesNotExist: HandlerFn<UserDoesNotExistDto, TFields>;
+  onAuthAccessDenied: HandlerFn<AuthAccessDeniedDto, TFields>;
+  onAuthInvalidCredentials: HandlerFn<AuthInvalidCredentialsDto, TFields>;
+  onAuthInvalidJwt: HandlerFn<AuthInvalidJwtDto, TFields>;
   handleAxiosError: (error: AxiosError<ApplicationErrorDto<any, any>, unknown>) => void;
 }
 
@@ -70,6 +79,21 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
       applicationErrorHandler({
         ...callbacks,
         [ApplicationErrorCode.USER_DOES_NOT_EXIST]: callback,
+      }),
+    onAuthAccessDenied: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.AUTH_ACCESS_DENIED]: callback,
+      }),
+    onAuthInvalidCredentials: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.AUTH_INVALID_CREDENTIALS]: callback,
+      }),
+    onAuthInvalidJwt: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.AUTH_INVALID_JWT]: callback,
       }),
     handleAxiosError: (error): void => {
       if (!error.response?.data?.code) {
