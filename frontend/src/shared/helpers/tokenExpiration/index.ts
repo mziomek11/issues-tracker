@@ -1,1 +1,1 @@
-export * from './tokenExpirationCheck'
+export * from './tokenExpirationCheck';

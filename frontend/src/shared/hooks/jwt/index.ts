@@ -1,1 +1,1 @@
-export * from './useCheckToken'
+export * from './useCheckToken';
