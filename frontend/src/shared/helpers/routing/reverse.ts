@@ -1,6 +1,6 @@
+import { isString, replace } from 'lodash';
 import { Path, paths } from '@shared/consts/routing';
 import { UserActivationParams } from '@users/types/activation';
-import { isString, replace } from 'lodash';
 
 interface DetailedPath<TPath extends string, TParams extends Record<string, any>> {
   path: TPath;

@@ -1,5 +1,5 @@
-import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, UseMutationResult } from 'react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import { activate } from '@users/api';
 import { UserActivationParams } from '@users/types/activation';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';

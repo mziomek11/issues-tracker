@@ -1,5 +1,5 @@
-import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, UseMutationResult } from 'react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import { register } from '@users/api';
 import { RegisterUserDto } from '@users/dtos';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';

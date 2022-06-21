@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { FormControl, FormLabel, FormErrorMessage, Input, Button, VStack } from '@chakra-ui/react';
-import { useFormik } from 'formik';
 import { AxiosError } from 'axios';
+import { useFormik } from 'formik';
+import { FormControl, FormLabel, FormErrorMessage, Input, Button, VStack } from '@chakra-ui/react';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
+import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { reverse } from '@shared/helpers/routing/reverse';
 import { mapValidationErrors } from '@shared/mappers/application-error';
-import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { useRegister } from '@users/hooks/api/useRegister';
-import { registerValidation } from '@users/validation';
 import { RegisterUserDto } from '@users/dtos';
+import { registerValidation } from '@users/validation';
 
 interface RegisterFormValues {
   email: string;
