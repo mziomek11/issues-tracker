@@ -1,9 +1,9 @@
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
-import { ApplicationErrorDto } from './ApplicationErrorDto';
+import { ApplicationErrorResponseDto } from './ApplicationErrorResponseDto';
 
 export interface GenericValidationFailedErrorDto<TFields extends Record<string, unknown>>
-  extends ApplicationErrorDto<
+  extends ApplicationErrorResponseDto<
     ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE,
     HttpStatus.BAD_REQUEST
   > {

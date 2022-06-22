@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import {
-  ApplicationErrorDto,
+  ApplicationErrorResponseDto,
   GenericEmailUnavailableErrorDto,
   GenericValidationFailedErrorDto,
   UserInvalidActivationTokenDto,
@@ -31,13 +31,13 @@ export interface ApplicationErrorHandler<TFields extends Record<string, unknown>
   onUserInvalidActivationToken: HandlerFn<UserInvalidActivationTokenDto, TFields>;
   onUserAlreadyActivated: HandlerFn<UserAlreadyActivatedDto, TFields>;
   onUserDoesNotExist: HandlerFn<UserDoesNotExistDto, TFields>;
-  handleAxiosError: (error: AxiosError<ApplicationErrorDto<any, any>, unknown>) => void;
+  handleAxiosError: (error: AxiosError<ApplicationErrorResponseDto<any, any>, unknown>) => void;
 }
 
 export const applicationErrorHandler = <TFields extends Record<string, any>>(
   callbacks: Callbacks<TFields> = {}
 ): ApplicationErrorHandler<TFields> => {
-  const handleError = (error: ApplicationErrorDto<any, any>): void => {
+  const handleError = (error: ApplicationErrorResponseDto<any, any>): void => {
     const callback = callbacks[error.code as ApplicationErrorCode];
 
     if (callback) {

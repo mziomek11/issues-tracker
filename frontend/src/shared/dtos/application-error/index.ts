@@ -1,4 +1,4 @@
-export * from './ApplicationErrorDto';
+export * from './ApplicationErrorResponseDto';
 export * from './GenericEmailUnavailableErrorDto';
 export * from './GenericValidationFailedErrorDto';
 export * from './UserInvalidActivationTokenDto';

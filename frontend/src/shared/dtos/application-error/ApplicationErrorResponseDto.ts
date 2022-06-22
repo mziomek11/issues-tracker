@@ -1,7 +1,7 @@
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 
-export interface ApplicationErrorDto<
+export interface ApplicationErrorResponseDto<
   TCode extends ApplicationErrorCode,
   TStatus extends HttpStatus
 > {

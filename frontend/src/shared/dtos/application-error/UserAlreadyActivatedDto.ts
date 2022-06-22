@@ -1,9 +1,9 @@
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
-import { ApplicationErrorDto } from './ApplicationErrorDto';
+import { ApplicationErrorResponseDto } from './ApplicationErrorResponseDto';
 
 export interface UserAlreadyActivatedDto
-  extends ApplicationErrorDto<
+  extends ApplicationErrorResponseDto<
     ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN,
     HttpStatus.CONFLICT
   > {}

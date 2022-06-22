@@ -1,6 +1,6 @@
 import { Text, VStack } from '@chakra-ui/react';
 import { UserActivation } from '@users/components/UserActivation';
-import { useParams } from '@users/hooks/api';
+import { useParams } from '@shared/hooks/api';
 import { UserActivationParams } from '@users/types/activation';
 
 export const UserActivationPage: React.FC = () => {
