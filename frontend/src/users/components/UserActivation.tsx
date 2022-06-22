@@ -74,8 +74,8 @@ export const UserActivation: React.FC<UserActivationProps> = ({ userId, activati
           {isObject(activationStatus.message) && (
             <TableContainer>
               <Table>
-                {Object.keys(activationStatus.message).map((key) => (
-                  <Tr>
+                {Object.keys(activationStatus.message).map((key, index) => (
+                  <Tr key={index}>
                     <Td>{key}</Td>
                     <Td>{activationStatus.message[key as keyof unknown]}</Td>
                   </Tr>
