@@ -11,7 +11,6 @@ interface DecodedJwt {
 export const useAuthorization = (): void => {
   const isTokenExpired = (token: string): boolean => {
     const decodedJwt: DecodedJwt = jwt_decode(token);
-    console.log(decodedJwt.exp * TimeUnit.SECOND - TimeUnit.MINUTE, Date.now());
     return decodedJwt.exp * TimeUnit.SECOND - TimeUnit.MINUTE > Date.now();
   };
   useEffect(() => {
