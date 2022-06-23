@@ -1,10 +1,10 @@
-import { Box, Center, Container, Text, VStack } from '@chakra-ui/react';
-import { Header, LoginForm } from '@users/components';
+import { Box, Center, Text, VStack } from '@chakra-ui/react';
+import { Layout } from '@shared/components/Layout';
+import { LoginForm } from '@users/components';
 
 export const LoginPage: React.FC = () => {
   return (
-    <Container maxW="80vw" height="100vh">
-      <Header />
+    <Layout>
       <Center>
         <Box borderWidth="2px" maxWidth="max-content" p={8}>
           <VStack justifyContent="center">
@@ -13,6 +13,6 @@ export const LoginPage: React.FC = () => {
           </VStack>
         </Box>
       </Center>
-    </Container>
+    </Layout>
   );
 };
