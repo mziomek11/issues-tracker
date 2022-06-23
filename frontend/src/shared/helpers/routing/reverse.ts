@@ -12,18 +12,16 @@ type RegularPaths = Exclude<Path, 'users.activation'>;
 type ReversiblePath = RegularPaths | DetailedPath<'users.activation', UserActivationParams>;
 
 export const reverse = (path: ReversiblePath): string => {
-  let pathWithParams: string;
-  if (isString(path)) {
-    pathWithParams = paths[path as Path];
-  } else {
-    pathWithParams = paths[path.path];
-    Object.keys(path.params).forEach((param) => {
-      pathWithParams = replace(
-        pathWithParams,
-        `:${String(param)}`,
-        path.params[param as keyof ReversiblePath]
-      );
-    });
-  }
+  if (isString(path)) return paths[path as Path];
+
+  let pathWithParams = paths[path.path];
+  Object.keys(path.params).forEach((param) => {
+    pathWithParams = replace(
+      pathWithParams,
+      `:${String(param)}`,
+      path.params[param as keyof ReversiblePath]
+    );
+  });
+
   return pathWithParams;
 };
