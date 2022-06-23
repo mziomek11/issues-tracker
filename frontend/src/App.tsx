@@ -1,18 +1,12 @@
-import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { CustomQueryClientProvider } from '@shared/providers/query';
 import { LoginPage, RegisterPage, UserActivationPage } from '@users/pages';
 import { paths } from '@shared/consts/routing';
-import { useCheckToken } from '@shared/hooks/jwt';
+import { useAuthorization } from '@users/hooks/auth';
 
 export const App: React.FC = () => {
-  const checkJwt = useCheckToken();
-
-  useEffect(() => {
-    checkJwt();
-  }, []);
-
+  useAuthorization();
   return (
     <CustomQueryClientProvider>
       <ChakraProvider>

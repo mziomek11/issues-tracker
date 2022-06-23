@@ -1,6 +1,6 @@
 import { ButtonGroup, Center, Flex, Heading, Spacer } from '@chakra-ui/react';
-import { reverse } from '@shared/helpers/routing';
 import { Link } from 'react-router-dom';
+import { reverse } from '@shared/helpers/routing';
 
 export const Header: React.FC = () => {
   return (

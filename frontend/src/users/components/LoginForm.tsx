@@ -1,13 +1,14 @@
-import { useNavigate } from 'react-router-dom';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useFormik } from 'formik';
 import { FormControl, FormLabel, Input, Button, VStack, FormErrorMessage } from '@chakra-ui/react';
+import { useFormik } from 'formik';
+import { Link } from 'react-router-dom';
 import { reverse } from '@shared/helpers/routing/reverse';
 import { LoginDto } from '@users/dtos';
 import { useLogin } from '@users/hooks/api';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { loginValidation } from '@users/validation';
+import { AuthorizationConsts } from '@users/enums/authorization-consts';
 
 const initialValues: LoginDto = {
   email: '',
@@ -15,9 +16,7 @@ const initialValues: LoginDto = {
 };
 
 export const LoginForm: React.FC = (): JSX.Element => {
-  const navigate = useNavigate();
   const { mutate: login } = useLogin();
-  const navigateToRegister = (): void => navigate(reverse('users.register'));
 
   const handleSubmitForm = (values: LoginDto): void => {
     login(values, { onError: handleError, onSuccess: handleSuccess });
@@ -40,8 +39,8 @@ export const LoginForm: React.FC = (): JSX.Element => {
       .handleAxiosError(error);
   };
 
-  const handleSuccess = ({ data }: AxiosResponse): void => {
-    localStorage.setItem('JWT', data);
+  const handleSuccess = ({ data: LoggedInUserToken }: AxiosResponse): void => {
+    localStorage.setItem(AuthorizationConsts.JWT, LoggedInUserToken);
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -67,9 +66,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
         <Button size="lg" variant="ghost" type="submit">
           Login
         </Button>
-        <Button size="xs" variant="ghost" onClick={navigateToRegister}>
-          or register
-        </Button>
+        <Link to={reverse('users.register')}>or register</Link>
       </VStack>
     </form>
   );

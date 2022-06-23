@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
-import { validate as uuidValidate } from 'uuid';
 import { Badge, Spinner, Text, VStack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { validate as uuidValidate } from 'uuid';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
