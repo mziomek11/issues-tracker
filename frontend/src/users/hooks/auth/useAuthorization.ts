@@ -8,8 +8,8 @@ interface DecodedJwt {
   exp: number;
 }
 
-export const useAuthorization = () => {
-  const isTokenExpired = (token: string) => {
+export const useAuthorization = (): void => {
+  const isTokenExpired = (token: string): boolean => {
     const decodedJwt: DecodedJwt = jwt_decode(token);
     return decodedJwt.exp * TimeUnit.SECOND - TimeUnit.MINUTE > Date.now();
   };
