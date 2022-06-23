@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { FormControl, FormLabel, FormErrorMessage, Input, Button, VStack } from '@chakra-ui/react';
-import { ApplicationErrorResponseDto } from '@shared/dtos/application-error';
+import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { reverse } from '@shared/helpers/routing/reverse';
 import { mapValidationErrors } from '@shared/mappers/application-error';
@@ -38,7 +38,7 @@ export const RegisterForm: React.FC = () => {
       validationSchema: registerValidation,
     });
 
-  const handleError = (error: AxiosError<ApplicationErrorResponseDto<any, any>, unknown>): void =>
+  const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void =>
     applicationErrorHandler<RegisterUserDto>()
       .onGenericValidationFailed(({ details }) => setErrors(mapValidationErrors(details)))
       .onGenericEmailUnavailable(({ message }) => setFieldError('email', message))

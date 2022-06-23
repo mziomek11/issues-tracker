@@ -1,12 +1,12 @@
-import { useMutation, UseMutationResult } from 'react-query';
 import { AxiosError, AxiosResponse } from 'axios';
+import { useMutation, UseMutationResult } from 'react-query';
 import { register } from '@users/api';
 import { RegisterUserDto } from '@users/dtos';
-import { ApplicationErrorResponseDto } from '@shared/dtos/application-error';
+import { ApplicationErrorDto } from '@shared/dtos/application-error';
 
 export const useRegister = (): UseMutationResult<
   AxiosResponse<string, RegisterUserDto>,
-  AxiosError<ApplicationErrorResponseDto<any, any>, unknown>,
+  AxiosError<ApplicationErrorDto<any, any>, unknown>,
   RegisterUserDto,
   unknown
 > => useMutation(register);

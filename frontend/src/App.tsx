@@ -1,5 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
+import { Route, Routes } from 'react-router-dom';
 import { paths } from '@shared/consts/routing';
 import { CustomQueryClientProvider } from '@shared/providers/query';
 import { LoginPage, RegisterPage, UserActivationPage } from '@users/pages';

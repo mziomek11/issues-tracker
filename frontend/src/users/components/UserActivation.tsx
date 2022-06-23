@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
-import { validate as uuidValidate } from 'uuid';
 import { useEffect, useState } from 'react';
+import { validate as uuidValidate } from 'uuid';
 import { Badge, Spinner, Text, VStack } from '@chakra-ui/react';
-import { ApplicationErrorResponseDto } from '@shared/dtos/application-error';
+import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { useActivate } from '@users/hooks/api';
 import { UserActivationParams } from '@users/types/activation';
@@ -17,11 +17,11 @@ export const UserActivation: React.FC<UserActivationProps> = ({ userId, activati
 
   const handleAppliactionError = ({
     message,
-  }: ApplicationErrorResponseDto<ApplicationErrorCode, any>): void => {
+  }: ApplicationErrorDto<ApplicationErrorCode, any>): void => {
     setActivationErrorMessage(message);
   };
   const handleError = (
-    error: AxiosError<ApplicationErrorResponseDto<ApplicationErrorCode, any>, unknown>
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, any>, unknown>
   ): void =>
     applicationErrorHandler<UserActivationParams>()
       .onUserInvalidActivationToken((err) => handleAppliactionError(err))
