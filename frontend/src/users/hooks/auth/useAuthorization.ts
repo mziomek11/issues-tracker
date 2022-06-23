@@ -11,12 +11,13 @@ interface DecodedJwt {
 export const useAuthorization = (): void => {
   const isTokenExpired = (token: string): boolean => {
     const decodedJwt: DecodedJwt = jwt_decode(token);
+    console.log(decodedJwt.exp * TimeUnit.SECOND - TimeUnit.MINUTE, Date.now());
     return decodedJwt.exp * TimeUnit.SECOND - TimeUnit.MINUTE > Date.now();
   };
   useEffect(() => {
     const currrentJwt = localStorage.getItem(AuthorizationConsts.JWT);
     if (!currrentJwt) return;
 
-    if (!isTokenExpired) return localStorage.removeItem(AuthorizationConsts.JWT);
+    if (!isTokenExpired(currrentJwt)) return localStorage.removeItem(AuthorizationConsts.JWT);
   }, []);
 };
