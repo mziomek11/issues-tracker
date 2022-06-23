@@ -1,6 +1,6 @@
+import { isString, replace } from 'lodash';
 import { Path, paths } from '@shared/consts/routing';
 import { UserActivationParams } from '@users/types/activation';
-import { isString, replace } from 'lodash';
 
 interface DetailedPath<TPath extends string, TParams extends Record<string, any>> {
   path: TPath;
@@ -13,12 +13,15 @@ type ReversiblePath = RegularPaths | DetailedPath<'users.activation', UserActiva
 
 export const reverse = (path: ReversiblePath): string => {
   if (isString(path)) return paths[path as Path];
-  else {
-    const pathWithParams = replace(
-      replace(paths[path.path], ':userId', path.params.userId),
-      ':activationToken',
-      path.params.userId
+
+  let pathWithParams = paths[path.path];
+  Object.keys(path.params).forEach((param) => {
+    pathWithParams = replace(
+      pathWithParams,
+      `:${String(param)}`,
+      path.params[param as keyof ReversiblePath]
     );
-    return pathWithParams;
-  }
+  });
+
+  return pathWithParams;
 };

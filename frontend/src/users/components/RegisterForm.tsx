@@ -3,12 +3,12 @@ import { FormControl, FormLabel, FormErrorMessage, Input, Button, VStack } from 
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
+import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { reverse } from '@shared/helpers/routing/reverse';
 import { mapValidationErrors } from '@shared/mappers/application-error';
-import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { useRegister } from '@users/hooks/api/useRegister';
-import { registerValidation } from '@users/validation';
 import { RegisterUserDto } from '@users/dtos';
+import { registerValidation } from '@users/validation';
 
 interface RegisterFormValues {
   email: string;
