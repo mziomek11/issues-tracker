@@ -1,6 +1,6 @@
-import { AuthorizationConsts } from '@users/enums/authorization-consts';
 import { createContext, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
+import { AuthorizationConsts } from '@users/enums/authorization-consts';
 
 interface ProviderProps {
   children: JSX.Element;

@@ -1,6 +1,6 @@
 import jwt_decode from 'jwt-decode';
-import { TimeUnit } from '@shared/enums/time-unit';
 import { useEffect } from 'react';
+import { TimeUnit } from '@shared/enums/time-unit';
 import { useJwt } from '@users/contexts';
 
 interface DecodedJwt {
