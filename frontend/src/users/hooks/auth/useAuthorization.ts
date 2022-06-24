@@ -1,7 +1,7 @@
 import jwt_decode from 'jwt-decode';
-import { AuthorizationConsts } from '@users/enums/authorization-consts';
 import { TimeUnit } from '@shared/enums/time-unit';
 import { useEffect } from 'react';
+import { JWT } from '@users/consts/localstorage';
 
 interface DecodedJwt {
   sub: string;
@@ -14,9 +14,9 @@ export const useAuthorization = (): void => {
     return decodedJwt.exp * TimeUnit.SECOND - TimeUnit.MINUTE > Date.now();
   };
   useEffect(() => {
-    const currrentJwt = localStorage.getItem(AuthorizationConsts.JWT);
+    const currrentJwt = localStorage.getItem(JWT);
     if (!currrentJwt) return;
 
-    if (!isTokenExpired(currrentJwt)) return localStorage.removeItem(AuthorizationConsts.JWT);
+    if (!isTokenExpired(currrentJwt)) return localStorage.removeItem(JWT);
   }, []);
 };
