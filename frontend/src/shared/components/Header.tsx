@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
       <Flex gap="3">
         {jwt ? (
           <>
-            <Button variant="ghost" onClick={() => removeJwt()}>
+            <Button variant="ghost" onClick={removeJwt}>
               Logout
             </Button>
           </>

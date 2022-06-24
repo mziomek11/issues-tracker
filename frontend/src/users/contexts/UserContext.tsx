@@ -1,6 +1,6 @@
+import { AuthorizationConsts } from '@users/enums/authorization-consts';
 import { createContext, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
-import { AuthorizationConsts } from '@users/enums/authorization-consts';
 
 interface ProviderProps {
   children: JSX.Element;
@@ -12,8 +12,8 @@ interface JwtContextProps {
 }
 const UserContext = createContext<JwtContextProps>({
   jwt: '',
-  setJwt: () => {},
-  removeJwt: () => {},
+  setJwt: null as any,
+  removeJwt: null as any,
 });
 
 export const useJwt = () => {
