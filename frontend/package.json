@@ -16,6 +16,7 @@
     "@microsoft/fetch-event-source": "^2.0.1",
     "@types/axios": "^0.14.0",
     "@types/react-router-dom": "^5.3.3",
+    "@types/uuid": "^8.3.4",
     "axios": "^0.27.2",
     "formik": "^2.2.9",
     "framer-motion": "^6",
@@ -24,6 +25,7 @@
     "react-dom": "^18.0.0",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
