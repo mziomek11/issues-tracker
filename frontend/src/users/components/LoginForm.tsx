@@ -8,7 +8,7 @@ import { useLogin } from '@users/hooks/api';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { loginValidation } from '@users/validation';
-import { AuthorizationConsts } from '@users/enums/authorization-consts';
+import { useJwt } from '@users/contexts';
 
 const initialValues: LoginDto = {
   email: '',
@@ -17,7 +17,7 @@ const initialValues: LoginDto = {
 
 export const LoginForm: React.FC = (): JSX.Element => {
   const { mutate: login } = useLogin();
-
+  const { setJwt } = useJwt();
   const handleSubmitForm = (values: LoginDto): void => {
     login(values, { onError: handleError, onSuccess: handleSuccess });
     setFieldValue('password', '');
@@ -40,7 +40,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
   };
 
   const handleSuccess = ({ data: LoggedInUserToken }: AxiosResponse): void => {
-    localStorage.setItem(AuthorizationConsts.JWT, LoggedInUserToken);
+    setJwt(LoggedInUserToken);
   };
   return (
     <form onSubmit={handleSubmit}>

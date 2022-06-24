@@ -1,8 +1,11 @@
-import { Center, Flex, Heading, Spacer } from '@chakra-ui/react';
+import { Button, Center, Flex, Heading, Spacer } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { reverse } from '@shared/helpers/routing';
+import { useJwt } from '@users/contexts';
 
 export const Header: React.FC = () => {
+  const { jwt, removeJwt } = useJwt();
+
   return (
     <Flex minWidth="max-content">
       <Center>
@@ -10,8 +13,22 @@ export const Header: React.FC = () => {
       </Center>
       <Spacer />
       <Flex gap="3">
-        <Link to={reverse('users.login')}>Login</Link>
-        <Link to={reverse('users.register')}>Register</Link>
+        {jwt ? (
+          <>
+            <Button variant="ghost" onClick={() => removeJwt()}>
+              Logout
+            </Button>
+          </>
+        ) : (
+          <>
+            <Link to={reverse('users.login')}>
+              <Button variant="ghost">Login</Button>
+            </Link>
+            <Link to={reverse('users.register')}>
+              <Button variant="ghost">Register</Button>
+            </Link>
+          </>
+        )}
       </Flex>
     </Flex>
   );
