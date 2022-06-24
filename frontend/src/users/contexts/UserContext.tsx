@@ -16,7 +16,7 @@ const UserContext = createContext<JwtContextProps>({
   removeJwt: null as any,
 });
 
-export const useJwt = () => {
+export const useJwt = (): JwtContextProps => {
   return useContext(UserContext);
 };
 export const UserProvider: React.FC<ProviderProps> = ({ children }) => {
