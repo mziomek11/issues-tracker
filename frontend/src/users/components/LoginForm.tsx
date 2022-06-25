@@ -39,8 +39,8 @@ export const LoginForm: React.FC = (): JSX.Element => {
       .handleAxiosError(error);
   };
 
-  const handleSuccess = ({ data: LoggedInUserToken }: AxiosResponse): void => {
-    setJwt(LoggedInUserToken);
+  const handleSuccess = ({ data: loggedInUserToken }: AxiosResponse): void => {
+    setJwt(loggedInUserToken);
   };
   return (
     <form onSubmit={handleSubmit}>
