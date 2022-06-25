@@ -14,11 +14,9 @@ export const Header: React.FC = () => {
       <Spacer />
       <Flex gap="3">
         {jwt ? (
-          <>
-            <Button variant="ghost" onClick={removeJwt}>
-              Logout
-            </Button>
-          </>
+          <Button variant="ghost" onClick={removeJwt}>
+            Logout
+          </Button>
         ) : (
           <>
             <Link to={reverse('users.login')}>

@@ -2,15 +2,13 @@ import { Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { paths } from '@shared/consts/routing';
 import { CustomQueryClientProvider } from '@shared/providers/query';
-import { UserProvider } from '@users/contexts';
-import { useAuthorization } from '@users/hooks/auth';
+import { JwtProvider } from '@users/contexts';
 import { LoginPage, RegisterPage, UserActivationPage } from '@users/pages';
 
 export const App: React.FC = () => {
-  useAuthorization();
   return (
     <CustomQueryClientProvider>
-      <UserProvider>
+      <JwtProvider>
         <ChakraProvider>
           <Routes>
             <Route path={paths['users.login']} element={<LoginPage />} />
@@ -18,7 +16,7 @@ export const App: React.FC = () => {
             <Route path={paths['users.activation']} element={<UserActivationPage />} />
           </Routes>
         </ChakraProvider>
-      </UserProvider>
+      </JwtProvider>
     </CustomQueryClientProvider>
   );
 };
