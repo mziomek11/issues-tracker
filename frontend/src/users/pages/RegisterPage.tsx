@@ -1,11 +1,18 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { Box, Center, Text, VStack } from '@chakra-ui/react';
+import { Layout } from '@shared/components/Layout';
 import { RegisterForm } from '@users/components';
 
 export const RegisterPage: React.FC = () => {
   return (
-    <VStack justifyContent="center">
-      <Text fontSize="6xl">Register</Text>
-      <RegisterForm />
-    </VStack>
+    <Layout>
+      <Center>
+        <Box borderWidth="2px" maxWidth="max-content" p={8}>
+          <VStack justifyContent="center">
+            <Text fontSize="6xl">Register</Text>
+            <RegisterForm />
+          </VStack>
+        </Box>
+      </Center>
+    </Layout>
   );
 };

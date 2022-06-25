@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
-import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import { FormControl, FormLabel, FormErrorMessage, Input, Button, VStack } from '@chakra-ui/react';
+import { useFormik } from 'formik';
+import { Link } from 'react-router-dom';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { reverse } from '@shared/helpers/routing/reverse';
@@ -23,10 +23,7 @@ const initialValues: RegisterFormValues = {
 };
 
 export const RegisterForm: React.FC = () => {
-  const navigate = useNavigate();
   const { mutate: register } = useRegister();
-
-  const navigateToLogin = (): void => navigate(reverse('users.login'));
 
   const handleSubmitForm = (values: RegisterFormValues): void =>
     register({ email: values.email, password: values.password }, { onError: handleError });
@@ -83,9 +80,7 @@ export const RegisterForm: React.FC = () => {
         <Button size="lg" type="submit">
           Register
         </Button>
-        <Button size="xs" variant="ghost" onClick={navigateToLogin}>
-          or login
-        </Button>
+        <Link to={reverse('users.login')}>or login</Link>
       </VStack>
     </form>
   );

@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
+import { Badge, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { validate as uuidValidate } from 'uuid';
-import { Badge, Spinner, Text, VStack } from '@chakra-ui/react';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { useActivate } from '@users/hooks/api';

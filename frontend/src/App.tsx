@@ -1,10 +1,12 @@
-import { ChakraProvider } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
-import { paths } from '@shared/consts/routing';
+import { ChakraProvider } from '@chakra-ui/react';
 import { CustomQueryClientProvider } from '@shared/providers/query';
 import { LoginPage, RegisterPage, UserActivationPage } from '@users/pages';
+import { paths } from '@shared/consts/routing';
+import { useAuthorization } from '@users/hooks/auth';
 
 export const App: React.FC = () => {
+  useAuthorization();
   return (
     <CustomQueryClientProvider>
       <ChakraProvider>
