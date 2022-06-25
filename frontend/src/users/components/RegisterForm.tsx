@@ -1,5 +1,15 @@
 import { AxiosError } from 'axios';
-import { FormControl, FormLabel, FormErrorMessage, Input, Button, VStack } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Button,
+  VStack,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+} from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
@@ -23,7 +33,7 @@ const initialValues: RegisterFormValues = {
 };
 
 export const RegisterForm: React.FC = () => {
-  const { mutate: register } = useRegister();
+  const { mutate: register, isSuccess } = useRegister();
 
   const handleSubmitForm = (values: RegisterFormValues): void =>
     register({ email: values.email, password: values.password }, { onError: handleError });
@@ -44,6 +54,15 @@ export const RegisterForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <VStack spacing={4} width="30vw">
+        {isSuccess && (
+          <Alert status="success">
+            <AlertIcon />
+            <AlertDescription>
+              An account has been created and the activation link has been sent to your email
+              address.
+            </AlertDescription>
+          </Alert>
+        )}
         <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
