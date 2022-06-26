@@ -25,10 +25,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProv
   useSubscribe(jwt);
 
   const isLoggedIn = !!jwt;
-  const loginUser = (jwt: string | undefined) => {
+  const loginUser = (jwt: string | undefined): void => {
     setJwt(jwt);
   };
-  const logoutUser = () => {
+  const logoutUser = (): void => {
     removeJwt();
     userAbortController.abort();
   };
