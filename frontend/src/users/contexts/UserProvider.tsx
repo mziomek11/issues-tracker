@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
+import { userAbortController } from '@users/api';
 import { JWT } from '@users/consts/localstorage';
 import { isTokenExpired } from '@users/helpers/jwt';
-import { subscribe, userAbortController } from '@users/api';
+import { useSubscribe } from '@users/hooks/api';
 
 interface UserState {
   loginUser: (jwt: string | undefined) => void;
@@ -21,7 +22,7 @@ export const useUser = (): UserState => {
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderProps) => {
   const [jwt, setJwt, removeJwt] = useLocalStorage<string>(JWT);
-  subscribe(jwt);
+  useSubscribe(jwt);
 
   const isLoggedIn = !!jwt;
   const loginUser = (jwt: string | undefined) => {
