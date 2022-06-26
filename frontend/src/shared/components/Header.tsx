@@ -1,10 +1,10 @@
 import { Button, Center, Flex, Heading, Spacer } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { reverse } from '@shared/helpers/routing';
-import { useJwt } from '@users/contexts';
+import { useUser } from '@users/contexts';
 
 export const Header: React.FC = () => {
-  const { jwt, removeJwt } = useJwt();
+  const { isLoggedIn, logoutUser } = useUser();
 
   return (
     <Flex minWidth="max-content">
@@ -13,8 +13,8 @@ export const Header: React.FC = () => {
       </Center>
       <Spacer />
       <Flex gap="3">
-        {jwt ? (
-          <Button variant="ghost" onClick={removeJwt}>
+        {isLoggedIn ? (
+          <Button variant="ghost" onClick={logoutUser}>
             Logout
           </Button>
         ) : (

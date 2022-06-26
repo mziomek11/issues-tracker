@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { reverse } from '@shared/helpers/routing/reverse';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
-import { useJwt } from '@users/contexts';
+import { useUser } from '@users/contexts';
 import { LoginDto } from '@users/dtos';
 import { useLogin } from '@users/hooks/api';
 import { loginValidation } from '@users/validation';
@@ -17,7 +17,7 @@ const initialValues: LoginDto = {
 
 export const LoginForm: React.FC = (): JSX.Element => {
   const { mutate: login } = useLogin();
-  const { setJwt } = useJwt();
+  const { loginUser } = useUser();
   const handleSubmitForm = (values: LoginDto): void => {
     login(values, { onError: handleError, onSuccess: handleSuccess });
     setFieldValue('password', '');
@@ -40,7 +40,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
   };
 
   const handleSuccess = ({ data: loggedInUserToken }: AxiosResponse): void => {
-    setJwt(loggedInUserToken);
+    loginUser(loggedInUserToken);
   };
   return (
     <form onSubmit={handleSubmit}>
