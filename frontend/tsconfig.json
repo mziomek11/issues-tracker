@@ -30,7 +30,8 @@
     "baseUrl": "./src",
     "paths": {
       "@shared/*": ["shared/*"],
-      "@users/*": ["users/*"]
+      "@users/*": ["users/*"],
+      "@notifications/*": ["notifications/*"],
     }
   },
   "include": ["src"],

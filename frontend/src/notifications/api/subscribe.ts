@@ -1,9 +1,8 @@
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 
-export const userAbortController = new AbortController();
-
-export const subscribe = (jwt: string): Promise<void> => {
-  return fetchEventSource(`/api/v1/notification-management/notifications/users`, {
+export const subscribe = (jwt: string): AbortController => {
+  const userAbortController = new AbortController();
+  fetchEventSource(`/api/v1/notification-management/notifications/users`, {
     signal: userAbortController.signal,
     headers: {
       Authorization: `Bearer ${jwt}`,
@@ -13,4 +12,5 @@ export const subscribe = (jwt: string): Promise<void> => {
     },
     openWhenHidden: true,
   });
+  return userAbortController;
 };
