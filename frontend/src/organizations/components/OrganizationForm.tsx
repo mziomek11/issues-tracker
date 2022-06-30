@@ -45,7 +45,7 @@ export const OrganizationForm: React.FC = () => {
   );
   useSseSubscription(handler);
 
-  const handleSubmitForm = ({ name }: CreateOrganizationDto) => {
+  const handleSubmitForm = ({ name }: CreateOrganizationDto): void => {
     if (!jwt) return;
     setIsLoading(true);
     createOrganization({ dto: { name }, jwt }, { onError: handleError, onSuccess: handleSuccess });
@@ -60,7 +60,9 @@ export const OrganizationForm: React.FC = () => {
       .onGenericValidationFailed(({ details }) => setErrors(mapValidationErrors(details)))
       .handleAxiosError(error);
 
-  const handleSuccess = (message: AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>) => {
+  const handleSuccess = (
+    message: AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>
+  ): void => {
     responseMessageRef.current = message.data;
   };
   return (

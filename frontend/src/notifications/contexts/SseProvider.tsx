@@ -1,12 +1,12 @@
 import { v4 } from 'uuid';
 import { createContext, useContext, useRef } from 'react';
-import { sseHandler } from '@notifications/helpers/sse-handler';
+import { SseHandler, sseHandler } from '@notifications/helpers/sse-handler';
 import { useSubscribe } from '@notifications/hooks/api';
 import { useUser } from '@users/contexts';
 import { NotificationEventDto } from '@notifications/dtos/notification-event';
 import { NotificationEvent } from '@notifications/enums/notification-event';
 interface SseValues {
-  subscribe: (handler: any) => string;
+  subscribe: (handler: SseHandler<Record<string, any>>) => string;
   unsubscribe: (id: string) => void;
   sseMessageRef: React.MutableRefObject<NotificationEventDto<NotificationEvent>>;
 }
@@ -19,17 +19,17 @@ export const SseProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const handlersRef = useRef<Record<string, ReturnType<typeof sseHandler>>>({});
   const sseMessageRef = useRef<NotificationEventDto<NotificationEvent>>(null as any);
 
-  const handleSse = (sse: any) => {
+  const handleSse = (sse: NotificationEventDto<NotificationEvent>): void => {
     sseMessageRef.current = sse;
     Object.values(handlersRef.current).forEach((handler) => handler.handle(sse));
   };
-  const subscribe = (handler: any) => {
+  const subscribe = (handler: SseHandler<Record<string, any>>): string => {
     const id = v4();
     handlersRef.current[id] = handler;
     return id;
   };
 
-  const unsubscribe = (id: string) => {
+  const unsubscribe = (id: string): void => {
     delete handlersRef.current[id];
   };
 
