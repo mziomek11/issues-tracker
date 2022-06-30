@@ -1,1 +1,1 @@
-export * from './CreateOrganizationDto'
+export * from './CreateOrganizationDto';

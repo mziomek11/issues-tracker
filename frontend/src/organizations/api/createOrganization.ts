@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
-import { CreateOrganizationDto } from 'organizations/dtos';
-// import { CreateOrganizationDto } from 'organizations/dtos';
-interface CreateOrganizationProps<TParams extends CreateOrganizationDto> {
+import { CreateOrganizationDto } from '@organizations/dtos';
+import { OrganizationCreatedDto } from '@organizations/components';
+
+export interface CreateOrganizationProps<TParams extends CreateOrganizationDto> {
   dto: TParams;
   jwt: string;
 }
@@ -9,7 +10,9 @@ interface CreateOrganizationProps<TParams extends CreateOrganizationDto> {
 export const createOrganization = ({
   dto,
   jwt,
-}: CreateOrganizationProps<CreateOrganizationDto>): Promise<AxiosResponse<any, any>> =>
+}: CreateOrganizationProps<CreateOrganizationDto>): Promise<
+  AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>
+> =>
   axios.post('/api/v1/organization-management/organizations', dto, {
     headers: { Authorization: `Bearer ${jwt}` },
   });
