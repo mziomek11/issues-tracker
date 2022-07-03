@@ -7,7 +7,7 @@ interface UserState {
   loginUser: (jwt: string) => void;
   logoutUser: () => void;
   isLoggedIn: boolean;
-  jwt: string | undefined;
+  jwt?: string;
 }
 interface UserProviderProps {}
 

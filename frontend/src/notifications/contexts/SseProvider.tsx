@@ -6,9 +6,8 @@ import { useUser } from '@users/contexts';
 import { NotificationEventDto } from '@notifications/dtos/notification-event';
 import { NotificationEvent } from '@notifications/enums/notification-event';
 interface SseValues {
-  subscribe: (handler: SseHandler<Record<string, any>>) => string;
+  subscribe: (handler: SseHandler) => string;
   unsubscribe: (id: string) => void;
-  sseMessageRef: React.MutableRefObject<NotificationEventDto<NotificationEvent>>;
 }
 const SseContext = createContext<SseValues>(null as any);
 
@@ -17,13 +16,11 @@ export const useSse = (): SseValues => useContext(SseContext);
 export const SseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { jwt } = useUser();
   const handlersRef = useRef<Record<string, ReturnType<typeof sseHandler>>>({});
-  const sseMessageRef = useRef<NotificationEventDto<NotificationEvent>>(null as any);
 
   const handleSse = (sse: NotificationEventDto<NotificationEvent>): void => {
-    sseMessageRef.current = sse;
     Object.values(handlersRef.current).forEach((handler) => handler.handle(sse));
   };
-  const subscribe = (handler: SseHandler<Record<string, any>>): string => {
+  const subscribe = (handler: SseHandler): string => {
     const id = v4();
     handlersRef.current[id] = handler;
     return id;
@@ -35,9 +32,5 @@ export const SseProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useSubscribe(jwt, handleSse);
 
-  return (
-    <SseContext.Provider value={{ subscribe, unsubscribe, sseMessageRef }}>
-      {children}
-    </SseContext.Provider>
-  );
+  return <SseContext.Provider value={{ subscribe, unsubscribe }}>{children}</SseContext.Provider>;
 };

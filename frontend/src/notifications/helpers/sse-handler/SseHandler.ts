@@ -6,21 +6,17 @@ import { NotificationEvent } from '@notifications/enums/notification-event';
 
 type CallbackFn<TData> = (data: TData) => void;
 
-type HandlerFn<TData, TFields extends Record<string, unknown>> = (
-  callback: CallbackFn<TData>
-) => SseHandler<TFields>;
+type HandlerFn<TData> = (callback: CallbackFn<TData>) => SseHandler;
 
 interface Callbacks {
-  [NotificationEvent.ORGANIZATION_CREATED_EVENT]?: CallbackFn<OrganizationCreatedEventDto>;
+  [NotificationEvent.ORGANIZATION_CREATED]?: CallbackFn<OrganizationCreatedEventDto>;
 }
-export interface SseHandler<TFields extends Record<string, unknown>> {
-  onOrganizationCreatedEvent: HandlerFn<OrganizationCreatedEventDto, TFields>;
+export interface SseHandler {
+  onOrganizationCreatedEvent: HandlerFn<OrganizationCreatedEventDto>;
   handle: (sse: NotificationEventDto<NotificationEvent>) => void;
 }
 
-export const sseHandler = <TFields extends Record<string, any>>(
-  callbacks: Callbacks = {}
-): SseHandler<TFields> => {
+export const sseHandler = (callbacks: Callbacks = {}): SseHandler => {
   const handle = (sse: NotificationEventDto<NotificationEvent>): void => {
     const callback = callbacks[sse.event as NotificationEvent];
 
@@ -30,7 +26,7 @@ export const sseHandler = <TFields extends Record<string, any>>(
   };
   return {
     onOrganizationCreatedEvent: (callback) =>
-      sseHandler({ ...callbacks, [NotificationEvent.ORGANIZATION_CREATED_EVENT]: callback }),
+      sseHandler({ ...callbacks, [NotificationEvent.ORGANIZATION_CREATED]: callback }),
     handle,
   };
 };

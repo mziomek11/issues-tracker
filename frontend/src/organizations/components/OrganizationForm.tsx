@@ -12,63 +12,65 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useRef, useState } from 'react';
-import { useSse } from '@notifications/contexts';
+import { useState } from 'react';
 import { sseHandler } from '@notifications/helpers/sse-handler';
 import { useSseSubscription } from '@notifications/hooks/api';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { mapValidationErrors } from '@shared/mappers/application-error';
-import { useUser } from '@users/contexts';
-import { CreateOrganizationDto } from '@organizations/dtos/CreateOrganizationDto';
+import { CreateOrganizationDto, OrganizationCreatedDto } from '@organizations/dtos';
 import { useCreateOrganization } from '@organizations/hooks/api';
 
 const initialValues: CreateOrganizationDto = {
   name: '',
 };
-export interface OrganizationCreatedDto {
-  id: string;
-}
+
 export const OrganizationForm: React.FC = () => {
-  const { mutate: createOrganization, isSuccess } = useCreateOrganization();
-  const [isLoading, setIsLoading] = useState(false);
-  const { jwt } = useUser();
-  const { sseMessageRef } = useSse();
-  const responseMessageRef = useRef<OrganizationCreatedDto>({ id: '' });
-  const [handler] = useState(
-    sseHandler().onOrganizationCreatedEvent(() => {
-      if (responseMessageRef.current.id === sseMessageRef.current.data.organizationId) {
-        setIsLoading(false);
-        setFieldValue('name', '');
-      }
-    })
-  );
+  const { mutate: createOrganization, isSuccess, isLoading } = useCreateOrganization();
+  const [isOrganizationCreatedEventReceived, setIsOrganizationCreatedEventReceived] =
+    useState(false);
+  const [handler, setHandler] = useState(sseHandler());
   useSseSubscription(handler);
 
-  const handleSubmitForm = ({ name }: CreateOrganizationDto): void => {
-    if (!jwt) return;
-    setIsLoading(true);
-    createOrganization({ dto: { name }, jwt }, { onError: handleError, onSuccess: handleSuccess });
-  };
-  const { errors, touched, values, handleSubmit, handleChange, setFieldValue, setErrors } =
+  const handleSubmitForm = (dto: CreateOrganizationDto): void =>
+    createOrganization(
+      { dto },
+      { onError: handleCreateOrganizationFailure, onSuccess: handleCreateOrganizationSuccess }
+    );
+
+  const { errors, touched, values, handleSubmit, handleChange, setErrors, resetForm } =
     useFormik<CreateOrganizationDto>({
       initialValues,
       onSubmit: handleSubmitForm,
     });
-  const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void =>
+
+  const handleCreateOrganizationFailure = (
+    error: AxiosError<ApplicationErrorDto<any, any>, unknown>
+  ): void =>
     applicationErrorHandler<CreateOrganizationDto>()
       .onGenericValidationFailed(({ details }) => setErrors(mapValidationErrors(details)))
       .handleAxiosError(error);
 
-  const handleSuccess = (
-    message: AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>
+  const handleCreateOrganizationSuccess = (
+    response: AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>
   ): void => {
-    responseMessageRef.current = message.data;
+    setIsOrganizationCreatedEventReceived(false);
+    setHandler(
+      handler.onOrganizationCreatedEvent(({ data }) => {
+        handleOrganizationCreatedEvent();
+        return response.data.id === data.organizationId;
+      })
+    );
+  };
+
+  const handleOrganizationCreatedEvent = (): void => {
+    setIsOrganizationCreatedEventReceived(true);
+    resetForm();
   };
   return (
     <form onSubmit={handleSubmit}>
       <VStack>
-        {isSuccess && !isLoading && (
+        {isSuccess && isOrganizationCreatedEventReceived && (
           <Alert status="success">
             <AlertIcon />
             <AlertDescription>An organization has been created.</AlertDescription>
