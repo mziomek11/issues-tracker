@@ -20,7 +20,7 @@ export const UserOrganizationsList: React.FC = () => {
     return (
       <>
         <Badge colorScheme="yellow">Warning</Badge>
-        <Text fontSize="md">No user data to get</Text>
+        <Text fontSize="md">No user</Text>
       </>
     );
   }
