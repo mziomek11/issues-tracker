@@ -5,7 +5,7 @@ import { NotificationEvent } from '@notifications/enums/notification-event';
 
 export const useSubscribe = (
   jwt: string | undefined,
-  handleSse: (sse: NotificationEventDto<NotificationEvent>) => void
+  handleSse: (sse: NotificationEventDto<NotificationEvent, Record<string, unknown>>) => void
 ): void => {
   const userAbortController = useRef<AbortController>(null as any);
   useEffect(() => {
