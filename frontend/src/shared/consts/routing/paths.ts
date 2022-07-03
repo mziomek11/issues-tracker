@@ -3,6 +3,7 @@ export type Path =
   | 'users.register'
   | 'users.login'
   | 'users.activation'
+  | 'organizations.list'
   | 'organizations.create';
 
 export const paths: Record<Path, string> = {
@@ -10,5 +11,6 @@ export const paths: Record<Path, string> = {
   'users.login': '/login',
   'users.register': '/register',
   'users.activation': '/users/:userId/activation/:activationToken',
+  'organizations.list': '/organizations',
   'organizations.create': '/organizations/create',
 };

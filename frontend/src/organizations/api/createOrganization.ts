@@ -9,6 +9,5 @@ export interface CreateOrganizationProps<TParams extends CreateOrganizationDto> 
 export const createOrganization = (
   { dto }: CreateOrganizationProps<CreateOrganizationDto>,
   authorizationHeaders: AuthorizationHeadersDto
-): Promise<AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>> => {
-  return axios.post('/api/v1/organization-management/organizations', dto, authorizationHeaders);
-};
+): Promise<AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>> =>
+  axios.post('/api/v1/organization-management/organizations', dto, authorizationHeaders);
