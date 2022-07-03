@@ -2,7 +2,7 @@ import { Text, VStack } from '@chakra-ui/react';
 import { UserOrganizationsList } from '@organizations/components';
 import { Layout } from '@shared/components/Layout';
 
-export const OrganizationsPage = () => {
+export const OrganizationsPage: React.FC = () => {
   return (
     <Layout>
       <VStack>

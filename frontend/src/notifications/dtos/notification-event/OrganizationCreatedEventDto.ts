@@ -1,5 +1,5 @@
 import { NotificationEvent } from '@notifications/enums/notification-event';
-import { NotificationEventDto } from './NotificationEventDto';
+import { NotificationEventDto } from '@notifications/dtos/notification-event/NotificationEventDto';
 
 export interface OrganizationCreatedEventDto
   extends NotificationEventDto<NotificationEvent, Record<string, string>> {

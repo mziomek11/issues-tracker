@@ -9,12 +9,17 @@ export const Header: React.FC = () => {
   return (
     <Flex minWidth="max-content">
       <Center>
-        <Heading size="md">IssuesTracker</Heading>
+        <Link to={reverse('shared.home')}>
+          <Heading size="md">IssuesTracker</Heading>
+        </Link>
       </Center>
       <Spacer />
       <Flex gap="3">
         {isLoggedIn ? (
           <>
+            <Link to={reverse('organizations.list')}>
+              <Button variant="ghost">Organizations</Button>
+            </Link>
             <Link to={reverse('organizations.create')}>
               <Button variant="ghost">Add Organization</Button>
             </Link>
