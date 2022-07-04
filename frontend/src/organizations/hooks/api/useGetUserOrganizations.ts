@@ -4,12 +4,16 @@ import { getUserOrganizations } from '@organizations/api';
 import { UserOrganizationDto } from '@organizations/dtos';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { useAuthorizationHeaders } from '@shared/hooks/api';
+import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { HttpStatus } from '@shared/enums/http';
 
 export const useGetUserOrganizations = (
-  onError: (error: AxiosError<ApplicationErrorDto<any, any>, unknown>) => void
+  onError: (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ) => void
 ): UseQueryResult<
   AxiosResponse<UserOrganizationDto[], unknown>,
-  AxiosError<ApplicationErrorDto<any, any>, unknown>
+  AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
 > => {
   const authorizationHeaders = useAuthorizationHeaders();
   return useQuery('userOrganizationsList', () => getUserOrganizations(authorizationHeaders), {

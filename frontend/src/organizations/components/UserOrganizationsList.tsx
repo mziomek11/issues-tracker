@@ -7,11 +7,15 @@ import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { reverse } from '@shared/helpers/routing';
 import { useUser } from '@users/contexts';
+import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { HttpStatus } from '@shared/enums/http';
 
 export const UserOrganizationsList: React.FC = () => {
   const { isLoggedIn } = useUser();
 
-  const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void => {
+  const handleError = (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ): void => {
     applicationErrorHandler().handleAxiosError(error);
   };
   const { isLoading, data } = useGetUserOrganizations(handleError);
