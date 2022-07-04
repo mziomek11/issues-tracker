@@ -9,6 +9,8 @@ import { useUser } from '@users/contexts';
 import { LoginDto } from '@users/dtos';
 import { useLogin } from '@users/hooks/api';
 import { loginValidation } from '@users/validation';
+import { HttpStatus } from '@shared/enums/http';
+import { ApplicationErrorCode } from '@shared/enums/error-code';
 
 const initialValues: LoginDto = {
   email: '',
@@ -30,7 +32,9 @@ export const LoginForm: React.FC = (): JSX.Element => {
       validationSchema: loginValidation,
     });
 
-  const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void => {
+  const handleError = (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ): void => {
     applicationErrorHandler<LoginDto>()
       .onAuthInvalidCredentials(({ message }) => {
         setFieldError('email', message);

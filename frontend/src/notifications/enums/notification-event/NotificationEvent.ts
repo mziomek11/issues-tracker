@@ -2,7 +2,7 @@ export enum NotificationEvent {
   ORGANIZATION_CREATED = 'OrganizationCreatedEvent',
   // ORGANIZATION_MEMBER_INVITED = 'OrganizationMemberInvitedEvent',
   // ORGANIZATION_MEMBER_JOINED = 'OrganizationMemberJoinedEvent',
-  // ORGANIZATION_PROJECT_CREATED = 'OrganizationProjectCreatedEvent',
+  ORGANIZATION_PROJECT_CREATED = 'OrganizationProjectCreatedEvent',
   // ISSUE_CLOSED = 'IssueClosedEvent',
   // ISSUE_COMMENT_CONTENT_CHANGED = 'IssueCommentContentChangedEvent',
   // ISSUE_COMMENTED = 'IssueCommentedEvent',

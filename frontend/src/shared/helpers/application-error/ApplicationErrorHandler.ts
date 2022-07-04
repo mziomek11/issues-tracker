@@ -13,6 +13,7 @@ import {
   UserInvalidActivationTokenErrorDto,
   UserNotFoundErrorDto,
 } from '@shared/dtos/application-error';
+import { HttpStatus } from '@shared/enums/http';
 
 type CallbackFn<TData> = (data: TData) => void;
 
@@ -46,13 +47,15 @@ export interface ApplicationErrorHandler<TFields extends Record<string, unknown>
   onAuthInvalidJwt: HandlerFn<AuthInvalidJwtErrorDto, TFields>;
   onOrganizationNotFound: HandlerFn<OrganizationNotFoundErrorDto, TFields>;
   onOrganizationOwnerInvalid: HandlerFn<OrganizationOwnerInvalidErrorDto, TFields>;
-  handleAxiosError: (error: AxiosError<ApplicationErrorDto<any, any>, unknown>) => void;
+  handleAxiosError: (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ) => void;
 }
 
 export const applicationErrorHandler = <TFields extends Record<string, any>>(
   callbacks: Callbacks<TFields> = {}
 ): ApplicationErrorHandler<TFields> => {
-  const handleError = (error: ApplicationErrorDto<any, any>): void => {
+  const handleError = (error: ApplicationErrorDto<ApplicationErrorCode, HttpStatus>): void => {
     const callback = callbacks[error.code as ApplicationErrorCode];
 
     if (callback) {
