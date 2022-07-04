@@ -26,7 +26,7 @@ export const UserActivation: React.FC<UserActivationProps> = ({ userId, activati
     applicationErrorHandler<UserActivationParams>()
       .onUserInvalidActivationToken((err) => handleAppliactionError(err))
       .onUserAlreadyActivated((err) => handleAppliactionError(err))
-      .onUserDoesNotExist((err) => handleAppliactionError(err))
+      .onUserNotFound((err) => handleAppliactionError(err))
       .handleAxiosError(error);
 
   const handleActivation = (): void => {

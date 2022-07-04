@@ -2,8 +2,5 @@ import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { ApplicationErrorDto } from './ApplicationErrorDto';
 
-export interface UserInvalidActivationTokenDto
-  extends ApplicationErrorDto<
-    ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN,
-    HttpStatus.CONFLICT
-  > {}
+export interface UserNotFoundErrorDto
+  extends ApplicationErrorDto<ApplicationErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND> {}

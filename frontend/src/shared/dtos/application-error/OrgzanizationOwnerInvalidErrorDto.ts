@@ -2,8 +2,8 @@ import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { ApplicationErrorDto } from './ApplicationErrorDto';
 
-export interface UserAlreadyActivatedDto
+export interface OrganizationOwnerInvalidErrorDto
   extends ApplicationErrorDto<
-    ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN,
-    HttpStatus.CONFLICT
+    ApplicationErrorCode.ORGANIZATION_OWNER_INVALID,
+    HttpStatus.FORBIDDEN
   > {}
