@@ -8,7 +8,7 @@ import { useAuthorizationHeaders } from '@shared/hooks/api';
 export const useCreateOrganization = (): UseMutationResult<
   AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>,
   AxiosError<ApplicationErrorDto<any, any>, unknown>,
-  CreateOrganizationProps<CreateOrganizationDto>,
+  CreateOrganizationProps,
   unknown
 > => {
   const authorizationHeaders = useAuthorizationHeaders();

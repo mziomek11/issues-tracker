@@ -13,11 +13,11 @@ interface Callbacks {
 }
 export interface SseHandler {
   onOrganizationCreatedEvent: HandlerFn<OrganizationCreatedEventDto>;
-  handle: (sse: NotificationEventDto<NotificationEvent, Record<string, unknown>>) => void;
+  handle: (sse: NotificationEventDto<Record<string, unknown>>) => void;
 }
 
 export const sseHandler = (callbacks: Callbacks = {}): SseHandler => {
-  const handle = (sse: NotificationEventDto<NotificationEvent, Record<string, unknown>>): void => {
+  const handle = (sse: NotificationEventDto<Record<string, unknown>>): void => {
     const callback = callbacks[sse.event as NotificationEvent];
 
     if (callback) {

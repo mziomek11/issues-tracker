@@ -4,7 +4,6 @@ import { SseHandler, sseHandler } from '@notifications/helpers/sse-handler';
 import { useSubscribe } from '@notifications/hooks/api';
 import { useUser } from '@users/contexts';
 import { NotificationEventDto } from '@notifications/dtos/notification-event';
-import { NotificationEvent } from '@notifications/enums/notification-event';
 interface SseValues {
   subscribe: (handler: SseHandler) => string;
   unsubscribe: (id: string) => void;
@@ -17,9 +16,7 @@ export const SseProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const { jwt } = useUser();
   const handlersRef = useRef<Record<string, ReturnType<typeof sseHandler>>>({});
 
-  const handleSse = (
-    sse: NotificationEventDto<NotificationEvent, Record<string, unknown>>
-  ): void => {
+  const handleSse = (sse: NotificationEventDto<Record<string, unknown>>): void => {
     Object.values(handlersRef.current).forEach((handler) => handler.handle(sse));
   };
   const subscribe = (handler: SseHandler): string => {
