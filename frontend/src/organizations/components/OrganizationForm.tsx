@@ -57,8 +57,7 @@ export const OrganizationForm: React.FC = () => {
     setIsOrganizationCreatedEventReceived(false);
     setHandler(
       handler.onOrganizationCreatedEvent(({ data }) => {
-        handleOrganizationCreatedEvent();
-        return response.data.id === data.organizationId;
+        if (response.data.id === data.organizationId) handleOrganizationCreatedEvent();
       })
     );
   };

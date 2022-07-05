@@ -1,4 +1,4 @@
-export interface AuthorizationHeadersDto {
+export interface AuthorizationHeaders {
   headers: {
     Authorization: string;
   };

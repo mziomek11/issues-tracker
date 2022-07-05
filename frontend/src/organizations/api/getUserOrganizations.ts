@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
-import { AuthorizationHeadersDto } from '@shared/dtos/api-headers';
+import { AuthorizationHeaders } from '@shared/interfaces/api-headers';
 import { UserOrganizationDto } from '@organizations/dtos';
 
 export const getUserOrganizations = (
-  authorizationHeaders: AuthorizationHeadersDto
+  authorizationHeaders: AuthorizationHeaders
 ): Promise<AxiosResponse<UserOrganizationDto[], unknown>> =>
   axios.get('/api/v1/organization-management/organizations', authorizationHeaders);

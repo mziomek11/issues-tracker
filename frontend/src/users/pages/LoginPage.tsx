@@ -1,5 +1,5 @@
 import { Box, Center, Text, VStack } from '@chakra-ui/react';
-import { Layout } from '@shared/components/Layout';
+import { Layout } from '@shared/components';
 import { LoginForm } from '@users/components';
 
 export const LoginPage: React.FC = () => {

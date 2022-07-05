@@ -1,5 +1,5 @@
 import { Text, VStack } from '@chakra-ui/react';
-import { Layout } from '@shared/components/Layout';
+import { Layout } from '@shared/components';
 import { OrganizationForm } from '@organizations/components';
 
 export const CreateOrganizationPage: React.FC = () => {
