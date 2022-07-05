@@ -1,3 +1,3 @@
 export * from './NotificationEventDto';
 export * from './OrganizationCreatedEventDto';
-export * from './OrganizationProjectCreatedEvent';
+export * from './OrganizationProjectCreatedEventDto';
