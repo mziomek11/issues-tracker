@@ -1,14 +1,14 @@
-import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source';
 
-export const subscribe = (jwt: string): AbortController => {
+export const subscribe = (jwt: string, handleSse: (sse: any) => void): AbortController => {
   const userAbortController = new AbortController();
   fetchEventSource(`/api/v1/notification-management/notifications/users`, {
     signal: userAbortController.signal,
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
-    onmessage: (message: any) => {
-      console.log(JSON.parse(message));
+    onmessage: (message: EventSourceMessage) => {
+      handleSse({ ...message, data: JSON.parse(message.data) });
     },
     openWhenHidden: true,
   });

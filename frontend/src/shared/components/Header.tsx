@@ -14,9 +14,14 @@ export const Header: React.FC = () => {
       <Spacer />
       <Flex gap="3">
         {isLoggedIn ? (
-          <Button variant="ghost" onClick={logoutUser}>
-            Logout
-          </Button>
+          <>
+            <Link to={reverse('organizations.create')}>
+              <Button variant="ghost">Add Organization</Button>
+            </Link>
+            <Button variant="ghost" onClick={logoutUser}>
+              Logout
+            </Button>
+          </>
         ) : (
           <>
             <Link to={reverse('users.login')}>

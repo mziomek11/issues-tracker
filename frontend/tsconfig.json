@@ -32,6 +32,7 @@
       "@shared/*": ["shared/*"],
       "@users/*": ["users/*"],
       "@notifications/*": ["notifications/*"],
+      "@organizations/*": ["organizations/*"],
     }
   },
   "include": ["src"],
