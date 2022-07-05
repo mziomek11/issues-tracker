@@ -71,8 +71,7 @@ export const ProjectForm: React.FC<ProjectFormParms> = ({ organizationId }) => {
     setIsProjectCreatedEventReceived(false);
     setHandler(
       handler.onOrganizationProjectCreatedEvent(({ data }) => {
-        handleProjectCreatedEvent();
-        return response.data.id === data.projectId;
+        if (response.data.id === data.projectId) handleProjectCreatedEvent();
       })
     );
   };

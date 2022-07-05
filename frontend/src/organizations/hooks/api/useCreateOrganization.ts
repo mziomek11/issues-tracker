@@ -10,7 +10,7 @@ import { HttpStatus } from '@shared/enums/http';
 export const useCreateOrganization = (): UseMutationResult<
   AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>,
   AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>,
-  CreateOrganizationProps<CreateOrganizationDto>,
+  CreateOrganizationProps,
   unknown
 > => {
   const authorizationHeaders = useAuthorizationHeaders();

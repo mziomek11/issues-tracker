@@ -1,5 +1,5 @@
 import { Box, Center, Text, VStack } from '@chakra-ui/react';
-import { Layout } from '@shared/components/Layout';
+import { Layout } from '@shared/components';
 import { RegisterForm } from '@users/components';
 
 export const RegisterPage: React.FC = () => {

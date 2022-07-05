@@ -18,10 +18,10 @@ import { useSseSubscription } from '@notifications/hooks/api';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { mapValidationErrors } from '@shared/mappers/application-error';
-import { CreateOrganizationDto, OrganizationCreatedDto } from '@organizations/dtos';
-import { useCreateOrganization } from '@organizations/hooks/api';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
+import { CreateOrganizationDto, OrganizationCreatedDto } from '@organizations/dtos';
+import { useCreateOrganization } from '@organizations/hooks/api';
 
 const initialValues: CreateOrganizationDto = {
   name: '',
@@ -59,8 +59,7 @@ export const OrganizationForm: React.FC = () => {
     setIsOrganizationCreatedEventReceived(false);
     setHandler(
       handler.onOrganizationCreatedEvent(({ data }) => {
-        handleOrganizationCreatedEvent();
-        return response.data.id === data.organizationId;
+        if (response.data.id === data.organizationId) handleOrganizationCreatedEvent();
       })
     );
   };

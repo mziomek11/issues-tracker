@@ -1,39 +1,27 @@
 import { AxiosError } from 'axios';
-import { Flex, Button, Spinner, Text, Badge } from '@chakra-ui/react';
+import { Flex, Button, Spinner } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { UserOrganizationsListElement } from '@organizations/components/UserOrganizationsListElement';
-import { useGetUserOrganizations } from '@organizations/hooks/api';
+import { UserOrganizationsListElement } from '@organizations/components';
+import { useOrganizations } from '@organizations/hooks/api';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { reverse } from '@shared/helpers/routing';
-import { useUser } from '@users/contexts';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 
 export const UserOrganizationsList: React.FC = () => {
-  const { isLoggedIn } = useUser();
-
   const handleError = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ): void => {
     applicationErrorHandler().handleAxiosError(error);
   };
-  const { isLoading, data } = useGetUserOrganizations(handleError);
-
-  if (!isLoggedIn) {
-    return (
-      <>
-        <Badge colorScheme="yellow">Warning</Badge>
-        <Text fontSize="md">No user</Text>
-      </>
-    );
-  }
+  const { isLoading, data: organizations } = useOrganizations(handleError);
 
   if (isLoading) return <Spinner />;
 
   return (
     <Flex width="80%" direction="column" gap={5}>
-      {data?.data.map((organization) => (
+      {organizations?.data.map((organization) => (
         <UserOrganizationsListElement key={organization.id} {...organization} />
       ))}
       <Link to={reverse('organizations.create')}>
