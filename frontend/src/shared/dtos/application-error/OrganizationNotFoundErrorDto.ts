@@ -2,5 +2,5 @@ import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { ApplicationErrorDto } from './ApplicationErrorDto';
 
-export interface AuthInvalidCredentialsDto
-  extends ApplicationErrorDto<ApplicationErrorCode.AUTH_INVALID_CREDENTIALS, HttpStatus.CONFLICT> {}
+export interface OrganizationNotFoundErrorDto
+  extends ApplicationErrorDto<ApplicationErrorCode.ORGANIZATION_NOT_FOUND, HttpStatus.NOT_FOUND> {}

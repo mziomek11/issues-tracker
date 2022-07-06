@@ -2,15 +2,18 @@ import { AxiosError } from 'axios';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import {
   ApplicationErrorDto,
+  AuthAccessDeniedErrorDto,
+  AuthInvalidCredentialsErrorDto,
+  AuthInvalidJwtErrorDto,
   GenericEmailUnavailableErrorDto,
   GenericValidationFailedErrorDto,
-  UserInvalidActivationTokenDto,
-  UserDoesNotExistDto,
-  UserAlreadyActivatedDto,
+  OrganizationNotFoundErrorDto,
+  OrganizationOwnerInvalidErrorDto,
+  UserAlreadyActivatedErrorDto,
+  UserInvalidActivationTokenErrorDto,
+  UserNotFoundErrorDto,
 } from '@shared/dtos/application-error';
-import { AuthAccessDeniedDto } from '@shared/dtos/application-error/AuthAccesDenied';
-import { AuthInvalidCredentialsDto } from '@shared/dtos/application-error/AuthInvalidCredentials';
-import { AuthInvalidJwtDto } from '@shared/dtos/application-error/AuthInvalidJwt';
+import { HttpStatus } from '@shared/enums/http';
 
 type CallbackFn<TData> = (data: TData) => void;
 
@@ -23,30 +26,36 @@ interface Callbacks<TFields extends Record<string, unknown>> {
     GenericValidationFailedErrorDto<TFields>
   >;
   [ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE]?: CallbackFn<GenericEmailUnavailableErrorDto>;
-  [ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN]?: CallbackFn<UserInvalidActivationTokenDto>;
-  [ApplicationErrorCode.USER_ALREADY_ACTIVATED]?: CallbackFn<UserAlreadyActivatedDto>;
-  [ApplicationErrorCode.USER_DOES_NOT_EXIST]?: CallbackFn<UserDoesNotExistDto>;
-  [ApplicationErrorCode.AUTH_ACCESS_DENIED]?: CallbackFn<AuthAccessDeniedDto>;
-  [ApplicationErrorCode.AUTH_INVALID_CREDENTIALS]?: CallbackFn<AuthInvalidCredentialsDto>;
-  [ApplicationErrorCode.AUTH_INVALID_JWT]?: CallbackFn<AuthInvalidJwtDto>;
+  [ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN]?: CallbackFn<UserInvalidActivationTokenErrorDto>;
+  [ApplicationErrorCode.USER_ALREADY_ACTIVATED]?: CallbackFn<UserAlreadyActivatedErrorDto>;
+  [ApplicationErrorCode.USER_NOT_FOUND]?: CallbackFn<UserNotFoundErrorDto>;
+  [ApplicationErrorCode.AUTH_ACCESS_DENIED]?: CallbackFn<AuthAccessDeniedErrorDto>;
+  [ApplicationErrorCode.AUTH_INVALID_CREDENTIALS]?: CallbackFn<AuthInvalidCredentialsErrorDto>;
+  [ApplicationErrorCode.AUTH_INVALID_JWT]?: CallbackFn<AuthInvalidJwtErrorDto>;
+  [ApplicationErrorCode.ORGANIZATION_NOT_FOUND]?: CallbackFn<OrganizationNotFoundErrorDto>;
+  [ApplicationErrorCode.ORGANIZATION_OWNER_INVALID]?: CallbackFn<OrganizationOwnerInvalidErrorDto>;
 }
 
 export interface ApplicationErrorHandler<TFields extends Record<string, unknown>> {
   onGenericValidationFailed: HandlerFn<GenericValidationFailedErrorDto<TFields>, TFields>;
   onGenericEmailUnavailable: HandlerFn<GenericEmailUnavailableErrorDto, TFields>;
-  onUserInvalidActivationToken: HandlerFn<UserInvalidActivationTokenDto, TFields>;
-  onUserAlreadyActivated: HandlerFn<UserAlreadyActivatedDto, TFields>;
-  onUserDoesNotExist: HandlerFn<UserDoesNotExistDto, TFields>;
-  onAuthAccessDenied: HandlerFn<AuthAccessDeniedDto, TFields>;
-  onAuthInvalidCredentials: HandlerFn<AuthInvalidCredentialsDto, TFields>;
-  onAuthInvalidJwt: HandlerFn<AuthInvalidJwtDto, TFields>;
-  handleAxiosError: (error: AxiosError<ApplicationErrorDto<any, any>, unknown>) => void;
+  onUserInvalidActivationToken: HandlerFn<UserInvalidActivationTokenErrorDto, TFields>;
+  onUserAlreadyActivated: HandlerFn<UserAlreadyActivatedErrorDto, TFields>;
+  onUserNotFound: HandlerFn<UserNotFoundErrorDto, TFields>;
+  onAuthAccessDenied: HandlerFn<AuthAccessDeniedErrorDto, TFields>;
+  onAuthInvalidCredentials: HandlerFn<AuthInvalidCredentialsErrorDto, TFields>;
+  onAuthInvalidJwt: HandlerFn<AuthInvalidJwtErrorDto, TFields>;
+  onOrganizationNotFound: HandlerFn<OrganizationNotFoundErrorDto, TFields>;
+  onOrganizationOwnerInvalid: HandlerFn<OrganizationOwnerInvalidErrorDto, TFields>;
+  handleAxiosError: (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ) => void;
 }
 
 export const applicationErrorHandler = <TFields extends Record<string, any>>(
   callbacks: Callbacks<TFields> = {}
 ): ApplicationErrorHandler<TFields> => {
-  const handleError = (error: ApplicationErrorDto<any, any>): void => {
+  const handleError = (error: ApplicationErrorDto<ApplicationErrorCode, HttpStatus>): void => {
     const callback = callbacks[error.code as ApplicationErrorCode];
 
     if (callback) {
@@ -75,10 +84,10 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
         ...callbacks,
         [ApplicationErrorCode.USER_ALREADY_ACTIVATED]: callback,
       }),
-    onUserDoesNotExist: (callback) =>
+    onUserNotFound: (callback) =>
       applicationErrorHandler({
         ...callbacks,
-        [ApplicationErrorCode.USER_DOES_NOT_EXIST]: callback,
+        [ApplicationErrorCode.USER_NOT_FOUND]: callback,
       }),
     onAuthAccessDenied: (callback) =>
       applicationErrorHandler({
@@ -95,11 +104,20 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
         ...callbacks,
         [ApplicationErrorCode.AUTH_INVALID_JWT]: callback,
       }),
+    onOrganizationNotFound: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ORGANIZATION_NOT_FOUND]: callback,
+      }),
+    onOrganizationOwnerInvalid: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ORGANIZATION_OWNER_INVALID]: callback,
+      }),
     handleAxiosError: (error): void => {
       if (!error.response?.data?.code) {
         return;
       }
-
       handleError(error.response.data);
     },
   };

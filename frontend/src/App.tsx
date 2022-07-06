@@ -1,13 +1,13 @@
-import { Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
+import { Route, Routes } from 'react-router-dom';
+import { SecureRoute } from '@shared/components';
 import { paths } from '@shared/consts/routing';
 import { HomePage } from '@shared/pages';
 import { CustomQueryClientProvider } from '@shared/providers/query';
 import { UserProvider } from '@users/contexts';
 import { LoginPage, RegisterPage, UserActivationPage } from '@users/pages';
-import { CreateOrganizationPage, OrganizationsPage } from 'organizations/pages';
+import { CreateOrganizationPage, CreateProjectPage, OrganizationsPage } from '@organizations/pages';
 import { SseProvider } from '@notifications/contexts';
-import { SecureRoute } from '@shared/components';
 
 export const App: React.FC = () => {
   return (
@@ -25,6 +25,10 @@ export const App: React.FC = () => {
               <Route path={paths['shared.home']} element={<SecureRoute userRequired={true} />}>
                 <Route path={paths['organizations.list']} element={<OrganizationsPage />} />
                 <Route path={paths['organizations.create']} element={<CreateOrganizationPage />} />
+                <Route
+                  path={paths['organizations.projects.create']}
+                  element={<CreateProjectPage />}
+                />
               </Route>
             </Routes>
           </ChakraProvider>

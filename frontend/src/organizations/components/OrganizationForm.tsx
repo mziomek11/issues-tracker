@@ -18,6 +18,8 @@ import { useSseSubscription } from '@notifications/hooks/api';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { mapValidationErrors } from '@shared/mappers/application-error';
+import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { HttpStatus } from '@shared/enums/http';
 import { CreateOrganizationDto, OrganizationCreatedDto } from '@organizations/dtos';
 import { useCreateOrganization } from '@organizations/hooks/api';
 
@@ -45,7 +47,7 @@ export const OrganizationForm: React.FC = () => {
     });
 
   const handleCreateOrganizationFailure = (
-    error: AxiosError<ApplicationErrorDto<any, any>, unknown>
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ): void =>
     applicationErrorHandler<CreateOrganizationDto>()
       .onGenericValidationFailed(({ details }) => setErrors(mapValidationErrors(details)))

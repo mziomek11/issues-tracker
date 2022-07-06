@@ -19,6 +19,8 @@ import { mapValidationErrors } from '@shared/mappers/application-error';
 import { useRegister } from '@users/hooks/api/useRegister';
 import { RegisterUserDto } from '@users/dtos';
 import { registerValidation } from '@users/validation';
+import { HttpStatus } from '@shared/enums/http';
+import { ApplicationErrorCode } from '@shared/enums/error-code';
 
 interface RegisterFormValues {
   email: string;
@@ -45,7 +47,9 @@ export const RegisterForm: React.FC = () => {
       validationSchema: registerValidation,
     });
 
-  const handleError = (error: AxiosError<ApplicationErrorDto<any, any>, unknown>): void =>
+  const handleError = (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ): void =>
     applicationErrorHandler<RegisterUserDto>()
       .onGenericValidationFailed(({ details }) => setErrors(mapValidationErrors(details)))
       .onGenericEmailUnavailable(({ message }) => setFieldError('email', message))
