@@ -11,9 +11,9 @@ import { SseProvider } from '@notifications/contexts';
 
 export const App: React.FC = () => {
   return (
-    <CustomQueryClientProvider>
-      <UserProvider>
-        <SseProvider>
+    <UserProvider>
+      <SseProvider>
+        <CustomQueryClientProvider>
           <ChakraProvider>
             <Routes>
               <Route path={paths['shared.home']} element={<HomePage />} />
@@ -32,8 +32,8 @@ export const App: React.FC = () => {
               </Route>
             </Routes>
           </ChakraProvider>
-        </SseProvider>
-      </UserProvider>
-    </CustomQueryClientProvider>
+        </CustomQueryClientProvider>
+      </SseProvider>
+    </UserProvider>
   );
 };
