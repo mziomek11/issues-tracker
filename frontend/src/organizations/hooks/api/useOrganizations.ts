@@ -17,7 +17,5 @@ export const useOrganizations = (
   const authorizationHeaders = useAuthorizationHeaders();
   return useQuery(GET_ORGANIZATIONS_QUERY, () => getUserOrganizations(authorizationHeaders), {
     onError,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
   });
 };
