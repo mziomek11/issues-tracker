@@ -1,3 +1,3 @@
 export * from './createOrganization';
-export * from './getOrganizations';
+export * from './getUserOrganizations';
 export * from './createProject';
