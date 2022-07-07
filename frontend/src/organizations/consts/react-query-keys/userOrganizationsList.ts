@@ -1,1 +1,1 @@
-export const userOrganizationsList = 'userOrganizationsList';
+export const GET_ORGANIZATIONS_QUERY = 'userOrganizationsList';
