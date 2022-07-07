@@ -1,1 +1,2 @@
-export * from './userOrganizationsList';
+export * from './GET_ORGANIZATIONS_QUERY';
+export * from './GET_ORGANIZATION_DETAILS_QUERY';
