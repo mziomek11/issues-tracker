@@ -1,7 +1,7 @@
 import { Text, VStack } from '@chakra-ui/react';
 import { ProjectForm } from '@organizations/components';
 import { OrganizationParams } from '@organizations/types';
-import { Layout } from '@shared/components/Layout';
+import { Layout } from '@shared/components';
 import { useParams } from '@shared/hooks/api';
 
 export const CreateProjectPage: React.FC = () => {
