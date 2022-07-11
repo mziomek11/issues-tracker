@@ -110,6 +110,22 @@ paths:
       tags:
         - User management
       summary: Generates JSON Web Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@mail.com
+                password:
+                  type: string
+                  example: ExamplePassword
+              required:
+                - email
+                - password
       responses:
         '200':
           description: JSON Web Token
