@@ -4,7 +4,7 @@ import { OrganizationParams } from '@organizations/types';
 import { Layout } from '@shared/components';
 import { useParams } from '@shared/hooks/api';
 
-export const MemberInvitationPage = () => {
+export const MemberInvitationPage: React.FC = () => {
   const params = useParams<OrganizationParams>();
   return (
     <Layout>
