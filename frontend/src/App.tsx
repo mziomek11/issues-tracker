@@ -11,6 +11,7 @@ import {
   CreateProjectPage,
   OrganizationsPage,
   MemberInvitationPage,
+  MemberAcceptancePage,
 } from '@organizations/pages';
 import { SseProvider } from '@notifications/contexts';
 
@@ -37,6 +38,10 @@ export const App: React.FC = () => {
                 <Route
                   path={paths['organizations.member.invite']}
                   element={<MemberInvitationPage />}
+                />
+                <Route
+                  path={paths['organizations.member.accept']}
+                  element={<MemberAcceptancePage />}
                 />
               </Route>
             </Routes>
