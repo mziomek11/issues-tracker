@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -33,5 +34,9 @@ public class DetailsOrganization {
     public static class Project {
         private UUID id;
         private String name;
+    }
+
+    public boolean hasMemberWithId(UUID memberId) {
+        return members.stream().map(Member::getId).anyMatch(id -> id.equals(memberId));
     }
 }
