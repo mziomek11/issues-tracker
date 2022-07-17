@@ -6,9 +6,7 @@ import com.mateuszziomek.issuestracker.organizations.query.application.query.Get
 import com.mateuszziomek.issuestracker.organizations.query.application.query.GetListOrganizationsQuery;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.exception.OrganizationNotFoundException;
 import com.mateuszziomek.issuestracker.organizations.query.application.query.handler.GetDetailsOrganizationQueryHandler;
-import com.mateuszziomek.issuestracker.shared.domain.valueobject.UserRole;
 import com.mateuszziomek.issuestracker.shared.infrastructure.security.SecurityHeaders;
-import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.AccessDeniedException;
 import com.mateuszziomek.issuestracker.shared.readmodel.invitation.ListInvitation;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.ListOrganization;
 import lombok.RequiredArgsConstructor;
@@ -35,16 +33,15 @@ public class OrganizationRestController {
     }
 
      /**
-     * @throws AccessDeniedException see {@link GetDetailsOrganizationQueryHandler#handle(GetDetailsOrganizationQuery)}
      * @throws OrganizationNotFoundException see {@link GetDetailsOrganizationQueryHandler#handle(GetDetailsOrganizationQuery)}
      */
     @GetMapping("/organizations/{organizationId}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<DetailsOrganization> getDetailsOrganization(
-            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ROLE) UserRole userRole,
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
             @PathVariable UUID organizationId
     ) {
-        return queryDispatcher.dispatch(new GetDetailsOrganizationQuery(organizationId, userRole));
+        return queryDispatcher.dispatch(new GetDetailsOrganizationQuery(userId, organizationId));
     }
 
     @GetMapping("/invitations")
