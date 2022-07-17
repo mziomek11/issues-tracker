@@ -5,7 +5,8 @@ export type Path =
   | 'users.activation'
   | 'organizations.list'
   | 'organizations.create'
-  | 'organizations.projects.create';
+  | 'organizations.projects.create'
+  | 'organizations.member.invite';
 export const paths: Record<Path, string> = {
   'shared.home': '/',
   'users.login': '/login',
@@ -14,4 +15,5 @@ export const paths: Record<Path, string> = {
   'organizations.list': '/organizations',
   'organizations.create': '/organizations/create',
   'organizations.projects.create': '/organizations/:organizationId/projects/create',
+  'organizations.member.invite': '/organizations/:organizationId/invitations',
 };

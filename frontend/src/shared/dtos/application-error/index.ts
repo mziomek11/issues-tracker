@@ -9,3 +9,5 @@ export * from './AuthInvalidCredentialsDto';
 export * from './AuthInvalidJwtErrorDto';
 export * from './OrganizationNotFoundErrorDto';
 export * from './OrgzanizationOwnerInvalidErrorDto';
+export * from './OrganizationInvitationAlreadyPresentErrorDto';
+export * from './OrganizationMemberAlreadyPresentErrorDto';

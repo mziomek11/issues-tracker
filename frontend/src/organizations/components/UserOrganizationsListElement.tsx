@@ -16,7 +16,9 @@ export const UserOrganizationsListElement: React.FC<UserOrganizationsListElement
   };
   return (
     <Box>
-      <Heading size="lg">{name}</Heading>
+      <Heading size="lg">
+        {name} : {id}
+      </Heading>
       <List>
         {projects.map(({ id, name }) => (
           <ListItem key={id}>{name}</ListItem>

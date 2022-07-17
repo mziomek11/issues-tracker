@@ -6,7 +6,12 @@ import { HomePage } from '@shared/pages';
 import { CustomQueryClientProvider } from '@shared/providers/query';
 import { UserProvider } from '@users/contexts';
 import { LoginPage, RegisterPage, UserActivationPage } from '@users/pages';
-import { CreateOrganizationPage, CreateProjectPage, OrganizationsPage } from '@organizations/pages';
+import {
+  CreateOrganizationPage,
+  CreateProjectPage,
+  OrganizationsPage,
+  MemberInvitationPage,
+} from '@organizations/pages';
 import { SseProvider } from '@notifications/contexts';
 
 export const App: React.FC = () => {
@@ -28,6 +33,10 @@ export const App: React.FC = () => {
                 <Route
                   path={paths['organizations.projects.create']}
                   element={<CreateProjectPage />}
+                />
+                <Route
+                  path={paths['organizations.member.invite']}
+                  element={<MemberInvitationPage />}
                 />
               </Route>
             </Routes>
