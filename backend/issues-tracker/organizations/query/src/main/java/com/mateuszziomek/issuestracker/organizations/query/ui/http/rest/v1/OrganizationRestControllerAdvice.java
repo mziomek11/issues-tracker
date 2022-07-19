@@ -5,7 +5,7 @@ import com.mateuszziomek.issuestracker.shared.infrastructure.security.exception.
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.auth.AuthAccessDeniedRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericValidationFailedRestErrorResponse;
-import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationInvitationNotFoundRestErrorResponse;
+import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.organization.OrganizationNotFoundRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +25,6 @@ public class OrganizationRestControllerAdvice {
 
     @ExceptionHandler(OrganizationNotFoundException.class)
     public ResponseEntity<RestErrorResponse> handle(OrganizationNotFoundException ex) {
-        return OrganizationInvitationNotFoundRestErrorResponse.asResponseEntity(ex.getOrganizationId());
+        return OrganizationNotFoundRestErrorResponse.asResponseEntity(ex.getOrganizationId());
     }
 }

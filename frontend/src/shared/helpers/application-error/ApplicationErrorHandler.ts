@@ -7,6 +7,9 @@ import {
   AuthInvalidJwtErrorDto,
   GenericEmailUnavailableErrorDto,
   GenericValidationFailedErrorDto,
+  OrganizationInvitationAlreadyPresentErrorDto,
+  OrganizationInvitationNotFoundErrorDto,
+  OrganizationMemberAlreadyPresentErrorDto,
   OrganizationNotFoundErrorDto,
   OrganizationOwnerInvalidErrorDto,
   UserAlreadyActivatedErrorDto,
@@ -34,6 +37,9 @@ interface Callbacks<TFields extends Record<string, unknown>> {
   [ApplicationErrorCode.AUTH_INVALID_JWT]?: CallbackFn<AuthInvalidJwtErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_NOT_FOUND]?: CallbackFn<OrganizationNotFoundErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_OWNER_INVALID]?: CallbackFn<OrganizationOwnerInvalidErrorDto>;
+  [ApplicationErrorCode.ORGANIZATION_INVITATION_NOT_FOUND]?: CallbackFn<OrganizationInvitationNotFoundErrorDto>;
+  [ApplicationErrorCode.ORGANIZATION_INVITATION_ALREADY_PRESENT]?: CallbackFn<OrganizationInvitationAlreadyPresentErrorDto>;
+  [ApplicationErrorCode.ORGANIZATION_MEMBER_ALREADY_PRESENT]?: CallbackFn<OrganizationMemberAlreadyPresentErrorDto>;
 }
 
 export interface ApplicationErrorHandler<TFields extends Record<string, unknown>> {
@@ -47,6 +53,12 @@ export interface ApplicationErrorHandler<TFields extends Record<string, unknown>
   onAuthInvalidJwt: HandlerFn<AuthInvalidJwtErrorDto, TFields>;
   onOrganizationNotFound: HandlerFn<OrganizationNotFoundErrorDto, TFields>;
   onOrganizationOwnerInvalid: HandlerFn<OrganizationOwnerInvalidErrorDto, TFields>;
+  onOrganizationInvitationNotFound: HandlerFn<OrganizationInvitationNotFoundErrorDto, TFields>;
+  onOrganizationInvitationAlreadyPresent: HandlerFn<
+    OrganizationInvitationAlreadyPresentErrorDto,
+    TFields
+  >;
+  onOrganizationMemberAlreadyPresent: HandlerFn<OrganizationMemberAlreadyPresentErrorDto, TFields>;
   handleAxiosError: (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ) => void;
@@ -113,6 +125,21 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
       applicationErrorHandler({
         ...callbacks,
         [ApplicationErrorCode.ORGANIZATION_OWNER_INVALID]: callback,
+      }),
+    onOrganizationInvitationNotFound: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ORGANIZATION_INVITATION_NOT_FOUND]: callback,
+      }),
+    onOrganizationInvitationAlreadyPresent: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ORGANIZATION_INVITATION_ALREADY_PRESENT]: callback,
+      }),
+    onOrganizationMemberAlreadyPresent: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ORGANIZATION_MEMBER_ALREADY_PRESENT]: callback,
       }),
     handleAxiosError: (error): void => {
       if (!error.response?.data?.code) {
