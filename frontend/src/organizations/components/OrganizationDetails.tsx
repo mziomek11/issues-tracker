@@ -15,6 +15,7 @@ interface OrganizationDetailsProps extends OrganizationParams {}
 export const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({ organizationId }) => {
   const [error, setError] = useState<string>('');
   const organizationParams: OrganizationParams = { organizationId };
+
   const handleError = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ): void => {
