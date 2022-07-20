@@ -26,10 +26,9 @@ export const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({ organi
       .handleAxiosError(error);
   };
 
-  const { data, isLoading, isSuccess, isError } = useOrganizationDetails(
-    organizationId,
-    handleError
-  );
+  const { data, isLoading, isSuccess, isError } = useOrganizationDetails(organizationId, {
+    onError: handleError,
+  });
   return (
     <>
       {isLoading && <Spinner />}

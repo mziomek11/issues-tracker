@@ -1,2 +1,2 @@
-export * from './GET_ORGANIZATIONS_QUERY';
-export * from './GET_ORGANIZATION_DETAILS_QUERY';
+export const GET_ORGANIZATIONS_QUERY = 'userOrganizationsList';
+export const GET_ORGANIZATION_DETAILS_QUERY = 'userOrganizationDetials';
