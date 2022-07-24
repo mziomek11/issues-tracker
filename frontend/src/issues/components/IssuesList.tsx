@@ -1,32 +1,49 @@
 import { Spinner, Stack, Text } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useIssues } from '@issues/hooks';
 import { IssuesListParams } from '@issues/types';
+import { useOrganizationDetails } from '@organizations/hooks/api';
+import { AxiosResponse } from 'axios';
+import { ProjectDto, UserOrganizationDto } from '@organizations/dtos';
 
 interface IssuesListProps {
   params: IssuesListParams;
 }
+
 export const IssuesList: FC<IssuesListProps> = ({ params }) => {
-  const handleSuccess = ({ data }: any) => {
+  const [project, setProject] = useState<ProjectDto[]>([]);
+
+  const handleIssuesSuccess = ({ data }: any) => {
     console.log(data);
   };
 
-  const handleError = (error: any) => {
+  const handleIssuesError = (error: any) => {
     console.log(error);
   };
 
-  const {
-    data: issues,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useIssues(params, { onError: handleError, onSuccess: handleSuccess });
+  const handleOrganizationSuccess = ({ data }: AxiosResponse<UserOrganizationDto, unknown>) => {
+    setProject(data.projects.filter((project) => project.id === params.projectId));
+  };
+  const handleOrganizationError = (error: any) => {
+    console.log(error);
+  };
 
-  if (isLoading) return <Spinner />;
+  const { isLoading, isError, isSuccess } = useIssues(params, {
+    onError: handleIssuesError,
+    onSuccess: handleIssuesSuccess,
+  });
+
+  const { isLoading: isOrganizationLoading, isSuccess: isOrganizationSuccess } =
+    useOrganizationDetails(params.organizationId, {
+      onError: handleOrganizationError,
+      onSuccess: handleOrganizationSuccess,
+    });
+
+  if (isLoading || isOrganizationLoading) return <Spinner />;
 
   return (
     <Stack>
-      <Text>{params.organizationId}</Text>
+      <Text>{isOrganizationSuccess && project[0].name}</Text>
       <Text>
         {isSuccess && 'success'}
         {isError && 'error'}

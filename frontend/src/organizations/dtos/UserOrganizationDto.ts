@@ -1,7 +1,7 @@
 interface Member {
   id: string;
 }
-interface Project {
+export interface ProjectDto {
   id: string;
   name: string;
 }
@@ -10,5 +10,5 @@ export interface UserOrganizationDto {
   name: string;
   ownerId: string;
   members: Member[];
-  projects: Project[];
+  projects: ProjectDto[];
 }
