@@ -13,6 +13,7 @@ interface UseQueryConfig {
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ) => void;
   onSuccess?: (response: AxiosResponse<unknown, unknown>) => void;
+  onSettled?: (data?: any, error?: any) => void;
 }
 
 export const useIssues = (params: IssuesListParams, useQueryConfig?: UseQueryConfig) => {

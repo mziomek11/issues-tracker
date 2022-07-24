@@ -1,31 +1,27 @@
+import { AxiosError } from 'axios';
 import { Spinner, Stack, Text } from '@chakra-ui/react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useIssues } from '@issues/hooks';
 import { IssuesListParams } from '@issues/types';
 import { useOrganizationDetails } from '@organizations/hooks/api';
-import { AxiosResponse } from 'axios';
-import { ProjectDto, UserOrganizationDto } from '@organizations/dtos';
+import { ApplicationErrorDto } from '@shared/dtos/application-error';
+import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { HttpStatus } from '@shared/enums/http';
+import { applicationErrorHandler } from '@shared/helpers/application-error';
 
 interface IssuesListProps {
   params: IssuesListParams;
 }
 
 export const IssuesList: FC<IssuesListProps> = ({ params }) => {
-  const [project, setProject] = useState<ProjectDto[]>([]);
-
   const handleIssuesSuccess = ({ data }: any) => {
     console.log(data);
   };
 
-  const handleIssuesError = (error: any) => {
-    console.log(error);
-  };
-
-  const handleOrganizationSuccess = ({ data }: AxiosResponse<UserOrganizationDto, unknown>) => {
-    setProject(data.projects.filter((project) => project.id === params.projectId));
-  };
-  const handleOrganizationError = (error: any) => {
-    console.log(error);
+  const handleIssuesError = (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ) => {
+    applicationErrorHandler().onAuthInvalidJwt(()=>{}).
   };
 
   const { isLoading, isError, isSuccess } = useIssues(params, {
@@ -33,21 +29,20 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
     onSuccess: handleIssuesSuccess,
   });
 
-  const { isLoading: isOrganizationLoading, isSuccess: isOrganizationSuccess } =
-    useOrganizationDetails(params.organizationId, {
-      onError: handleOrganizationError,
-      onSuccess: handleOrganizationSuccess,
-    });
+  const { data: projectData, isFetching } = useOrganizationDetails(params.organizationId, {});
 
-  if (isLoading || isOrganizationLoading) return <Spinner />;
-
-  return (
-    <Stack>
-      <Text>{isOrganizationSuccess && project[0].name}</Text>
-      <Text>
-        {isSuccess && 'success'}
-        {isError && 'error'}
-      </Text>
-    </Stack>
-  );
+  if (isLoading || isFetching) return <Spinner />;
+  else {
+    return (
+      <Stack alignItems={'center'}>
+        <Text fontSize="4xl">
+          {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
+        </Text>
+        <Text>
+          {isSuccess && 'success'}
+          {isError && 'error'}
+        </Text>
+      </Stack>
+    );
+  }
 };

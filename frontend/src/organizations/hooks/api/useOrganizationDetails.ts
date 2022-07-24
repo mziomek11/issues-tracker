@@ -13,6 +13,7 @@ interface UseQueryConfig {
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ) => void;
   onSuccess?: (response: AxiosResponse<UserOrganizationDto, unknown>) => void;
+  onSettled?: (data?: any, error?: any) => void;
 }
 
 export const useOrganizationDetails = (
