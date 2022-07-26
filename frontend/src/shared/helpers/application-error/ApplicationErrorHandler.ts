@@ -7,11 +7,13 @@ import {
   AuthInvalidJwtErrorDto,
   GenericEmailUnavailableErrorDto,
   GenericValidationFailedErrorDto,
+  OrganizationAccessDeniedErrorDto,
   OrganizationInvitationAlreadyPresentErrorDto,
   OrganizationInvitationNotFoundErrorDto,
   OrganizationMemberAlreadyPresentErrorDto,
   OrganizationNotFoundErrorDto,
   OrganizationOwnerInvalidErrorDto,
+  OrganizationProjectNotFoundErrorDto,
   UserAlreadyActivatedErrorDto,
   UserInvalidActivationTokenErrorDto,
   UserNotFoundErrorDto,
@@ -40,6 +42,8 @@ interface Callbacks<TFields extends Record<string, unknown>> {
   [ApplicationErrorCode.ORGANIZATION_INVITATION_NOT_FOUND]?: CallbackFn<OrganizationInvitationNotFoundErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_INVITATION_ALREADY_PRESENT]?: CallbackFn<OrganizationInvitationAlreadyPresentErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_MEMBER_ALREADY_PRESENT]?: CallbackFn<OrganizationMemberAlreadyPresentErrorDto>;
+  [ApplicationErrorCode.ORGANIZATION_ACCESS_DENIED]?: CallbackFn<OrganizationAccessDeniedErrorDto>;
+  [ApplicationErrorCode.ORGANIZATION_PROJECT_NOT_FOUND]?: CallbackFn<OrganizationProjectNotFoundErrorDto>;
 }
 
 export interface ApplicationErrorHandler<TFields extends Record<string, unknown>> {
@@ -59,6 +63,8 @@ export interface ApplicationErrorHandler<TFields extends Record<string, unknown>
     TFields
   >;
   onOrganizationMemberAlreadyPresent: HandlerFn<OrganizationMemberAlreadyPresentErrorDto, TFields>;
+  onOrganizationAccessDenied: HandlerFn<OrganizationAccessDeniedErrorDto, TFields>;
+  onOrganizationProjectNotFound: HandlerFn<OrganizationProjectNotFoundErrorDto, TFields>;
   handleAxiosError: (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ) => void;
@@ -140,6 +146,16 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
       applicationErrorHandler({
         ...callbacks,
         [ApplicationErrorCode.ORGANIZATION_MEMBER_ALREADY_PRESENT]: callback,
+      }),
+    onOrganizationAccessDenied: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ORGANIZATION_ACCESS_DENIED]: callback,
+      }),
+    onOrganizationProjectNotFound: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ORGANIZATION_PROJECT_NOT_FOUND]: callback,
       }),
     handleAxiosError: (error): void => {
       if (!error.response?.data?.code) {

@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
-import { Spinner, Stack, Text } from '@chakra-ui/react';
-import { FC } from 'react';
+import { Button, Spinner, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
+import { FC, useState } from 'react';
 import { useIssues } from '@issues/hooks';
 import { IssuesListParams } from '@issues/types';
 import { useOrganizationDetails } from '@organizations/hooks/api';
@@ -14,6 +14,8 @@ interface IssuesListProps {
 }
 
 export const IssuesList: FC<IssuesListProps> = ({ params }) => {
+  const [error, setError] = useState<string>();
+
   const handleIssuesSuccess = ({ data }: any) => {
     console.log(data);
   };
@@ -21,10 +23,15 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
   const handleIssuesError = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ) => {
-    applicationErrorHandler().onAuthInvalidJwt(()=>{}).
+    applicationErrorHandler()
+      .onAuthInvalidJwt(({ message }) => setError(message))
+      .onOrganizationAccessDenied(({ message }) => setError(message))
+      .onOrganizationNotFound(({ message }) => setError(message))
+      .onOrganizationProjectNotFound(({ message }) => setError(message))
+      .handleAxiosError(error);
   };
 
-  const { isLoading, isError, isSuccess } = useIssues(params, {
+  const { isLoading, isSuccess, data: issues } = useIssues(params, {
     onError: handleIssuesError,
     onSuccess: handleIssuesSuccess,
   });
@@ -32,17 +39,39 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
   const { data: projectData, isFetching } = useOrganizationDetails(params.organizationId, {});
 
   if (isLoading || isFetching) return <Spinner />;
-  else {
+  else if (isSuccess) {
     return (
-      <Stack alignItems={'center'}>
-        <Text fontSize="4xl">
-          {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
-        </Text>
-        <Text>
-          {isSuccess && 'success'}
-          {isError && 'error'}
-        </Text>
+      <Stack width={'55%'}>
+        <Stack
+          width={'100%'}
+          direction={'row'}
+          alignItems="center"
+          justifyContent={'space-between'}
+        >
+          <Text fontSize="6xl">
+            {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
+          </Text>
+          <Button variant={'outline'}>Add issue</Button>
+        </Stack>
+        <Tabs
+          variant={'unstyled'}
+          sx={{
+            "[aria-selected='true']": {
+              fontWeight: 'bold',
+            },
+          }}
+        >
+          <TabList>
+            <Tab>Opened</Tab>
+            <Tab>Closed</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>{issues.data}</TabPanel>
+          </TabPanels>
+        </Tabs>
       </Stack>
     );
+  } else {
+    return <Text variant={'subtitle2'}>{error}</Text>;
   }
 };

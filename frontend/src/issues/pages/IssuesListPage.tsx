@@ -1,4 +1,4 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { Layout } from '@shared/components';
 import { useParams } from '@shared/hooks/api';
@@ -11,7 +11,6 @@ export const IssuesListPage: FC = () => {
   return (
     <Layout>
       <VStack>
-        <Text fontSize="6xl">Issues</Text>
         <IssuesList params={params} />
       </VStack>
     </Layout>
