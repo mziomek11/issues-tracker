@@ -1,5 +1,15 @@
 import { AxiosError } from 'axios';
-import { Button, Spinner, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Spinner,
+  Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from '@chakra-ui/react';
 import { FC, useState } from 'react';
 import { useIssues } from '@issues/hooks';
 import { IssuesListParams } from '@issues/types';
@@ -8,6 +18,7 @@ import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
+import { IssuesListElement } from './';
 
 interface IssuesListProps {
   params: IssuesListParams;
@@ -16,13 +27,9 @@ interface IssuesListProps {
 export const IssuesList: FC<IssuesListProps> = ({ params }) => {
   const [error, setError] = useState<string>();
 
-  const handleIssuesSuccess = ({ data }: any) => {
-    console.log(data);
-  };
-
   const handleIssuesError = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
-  ) => {
+  ): void => {
     applicationErrorHandler()
       .onAuthInvalidJwt(({ message }) => setError(message))
       .onOrganizationAccessDenied(({ message }) => setError(message))
@@ -31,9 +38,12 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
       .handleAxiosError(error);
   };
 
-  const { isLoading, isSuccess, data: issues } = useIssues(params, {
+  const {
+    isLoading,
+    isSuccess,
+    data: issues,
+  } = useIssues(params, {
     onError: handleIssuesError,
-    onSuccess: handleIssuesSuccess,
   });
 
   const { data: projectData, isFetching } = useOrganizationDetails(params.organizationId, {});
@@ -41,7 +51,7 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
   if (isLoading || isFetching) return <Spinner />;
   else if (isSuccess) {
     return (
-      <Stack width={'55%'}>
+      <Stack width={'65%'}>
         <Stack
           width={'100%'}
           direction={'row'}
@@ -55,6 +65,8 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
         </Stack>
         <Tabs
           variant={'unstyled'}
+          width="100%"
+          padding={0}
           sx={{
             "[aria-selected='true']": {
               fontWeight: 'bold',
@@ -66,7 +78,20 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
             <Tab>Closed</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel>{issues.data}</TabPanel>
+            <TabPanel width={'100%'}>
+              {issues.data
+                .filter((issue) => issue.status === 'OPENED')
+                .map((issue, index) => (
+                  <IssuesListElement key={index} {...issue} />
+                ))}
+            </TabPanel>
+            <TabPanel width={'100%'}>
+              {issues.data
+                .filter((issue) => issue.status === 'CLOSED')
+                .map((issue, index) => (
+                  <IssuesListElement key={index} {...issue} />
+                ))}
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </Stack>

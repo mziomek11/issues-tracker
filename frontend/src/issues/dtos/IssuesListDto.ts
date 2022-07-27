@@ -28,4 +28,4 @@ export interface IssuesListElement {
   project: Project;
   organization: Organization;
 }
-export type IssuesListDto = IssuesListElement[] 
+export interface IssuesListDto extends Array<IssuesListElement> {}

@@ -1,1 +1,1 @@
-export * from "./IssuesListDto"
+export * from './IssuesListDto';
