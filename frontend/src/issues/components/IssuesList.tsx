@@ -11,6 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { FC, useState } from 'react';
+import { IssuesListElement } from '@issues/components';
 import { useIssues } from '@issues/hooks';
 import { IssuesListParams } from '@issues/types';
 import { useOrganizationDetails } from '@organizations/hooks/api';
@@ -18,7 +19,6 @@ import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
-import { IssuesListElement } from './';
 
 interface IssuesListProps {
   params: IssuesListParams;
