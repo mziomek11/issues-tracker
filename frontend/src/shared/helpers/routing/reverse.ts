@@ -11,7 +11,11 @@ interface DetailedPath<TPath extends string, TParams extends Record<string, any>
 
 type RegularPaths = Exclude<
   Path,
-  'users.activation' | 'organizations.projects.create' | 'organizations.details' | 'issues.list'
+  | 'users.activation'
+  | 'organizations.projects.create'
+  | 'organizations.details'
+  | 'issues.list'
+  | 'issues.create'
 >;
 
 type ReversiblePath =
@@ -19,7 +23,8 @@ type ReversiblePath =
   | DetailedPath<'users.activation', UserActivationParams>
   | DetailedPath<'organizations.projects.create', OrganizationParams>
   | DetailedPath<'organizations.details', OrganizationParams>
-  | DetailedPath<'issues.list', IssuesListParams>;
+  | DetailedPath<'issues.list', IssuesListParams>
+  | DetailedPath<'issues.create', IssuesListParams>;
 
 export const reverse = (path: ReversiblePath): string => {
   if (isString(path)) return paths[path as Path];

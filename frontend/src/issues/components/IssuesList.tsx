@@ -19,6 +19,8 @@ import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
+import { Link } from 'react-router-dom';
+import { reverse } from '@shared/helpers/routing';
 
 interface IssuesListProps {
   params: IssuesListParams;
@@ -61,7 +63,9 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
           <Text fontSize="6xl">
             {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
           </Text>
-          <Button variant={'outline'}>Add issue</Button>
+          <Link to={reverse({ path: 'issues.create', params })}>
+            <Button variant={'outline'}>Add issue</Button>
+          </Link>
         </Stack>
         <Tabs
           variant={'unstyled'}

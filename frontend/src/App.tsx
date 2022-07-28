@@ -15,7 +15,7 @@ import {
   MemberAcceptancePage,
 } from '@organizations/pages';
 import { SseProvider } from '@notifications/contexts';
-import { IssuesListPage } from '@issues/pages';
+import { CreateIssuePage, IssuesListPage } from '@issues/pages';
 
 export const App: React.FC = () => {
   return (
@@ -50,6 +50,7 @@ export const App: React.FC = () => {
                   element={<MemberAcceptancePage />}
                 />
                 <Route path={paths['issues.list']} element={<IssuesListPage />} />
+                <Route path={paths['issues.create']} element={<CreateIssuePage />} />
               </Route>
             </Routes>
           </ChakraProvider>
