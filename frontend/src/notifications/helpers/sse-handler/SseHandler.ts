@@ -1,4 +1,5 @@
 import {
+  IssueOpenedEventDto,
   NotificationEventDto,
   OrganizationCreatedEventDto,
   OrganizationMemberInvitedEventDto,
@@ -16,12 +17,14 @@ interface Callbacks {
   [NotificationEvent.ORGANIZATION_PROJECT_CREATED]?: CallbackFn<OrganizationProjectCreatedEventDto>;
   [NotificationEvent.ORGANIZATION_MEMBER_INVITED]?: CallbackFn<OrganizationMemberInvitedEventDto>;
   [NotificationEvent.ORGANIZATION_MEMBER_JOINED]?: CallbackFn<OrganizationMemberJoinedEventDto>;
+  [NotificationEvent.ISSUE_OPENED]?: CallbackFn<IssueOpenedEventDto>;
 }
 export interface SseHandler {
   onOrganizationCreatedEvent: HandlerFn<OrganizationCreatedEventDto>;
   onOrganizationProjectCreatedEvent: HandlerFn<OrganizationProjectCreatedEventDto>;
   onOrganizationMemberInvitedEvent: HandlerFn<OrganizationMemberInvitedEventDto>;
   onOrganizationMemberJoinedEvent: HandlerFn<OrganizationMemberJoinedEventDto>;
+  onIssueOpenedEvent: HandlerFn<IssueOpenedEventDto>;
   handle: (sse: NotificationEventDto<Record<string, unknown>>) => void;
 }
 
@@ -42,6 +45,8 @@ export const sseHandler = (callbacks: Callbacks = {}): SseHandler => {
       sseHandler({ ...callbacks, [NotificationEvent.ORGANIZATION_MEMBER_INVITED]: callback }),
     onOrganizationMemberJoinedEvent: (callback) =>
       sseHandler({ ...callbacks, [NotificationEvent.ORGANIZATION_MEMBER_JOINED]: callback }),
+    onIssueOpenedEvent: (callback) =>
+      sseHandler({ ...callbacks, [NotificationEvent.ISSUE_OPENED]: callback }),
     handle,
   };
 };

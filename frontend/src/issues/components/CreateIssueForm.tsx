@@ -1,7 +1,5 @@
+import { AxiosError, AxiosResponse } from 'axios';
 import {
-  //   Alert,
-  //   AlertDescription,
-  //   AlertIcon,
   Button,
   FormControl,
   FormErrorMessage,
@@ -14,12 +12,19 @@ import {
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import { CreateIssueDto } from '@issues/dtos';
-import { Type } from '@issues/enums/issues-list';
-import { IssuesListParams } from '@issues/types';
-import { useOrganizationDetails } from '@organizations/hooks/api';
 import { useFormik } from 'formik';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { CreateIssueDto, IssueCreatedDto } from '@issues/dtos';
+import { Type } from '@issues/enums/issues-list';
+import { useCreateIssue } from '@issues/hooks';
+import { IssuesListParams } from '@issues/types';
+import { sseHandler } from '@notifications/helpers/sse-handler';
+import { useOrganizationDetails } from '@organizations/hooks/api';
+import { ApplicationErrorDto } from '@shared/dtos/application-error';
+import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { HttpStatus } from '@shared/enums/http';
+import { applicationErrorHandler } from '@shared/helpers/application-error';
+import { mapValidationErrors } from '@shared/mappers/application-error';
 
 interface CreateIssueFormProps extends IssuesListParams {}
 
@@ -30,12 +35,50 @@ const initialValues: CreateIssueDto = {
 };
 
 export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
-  const handleSubmitForm = () => {};
+  const [error, setError] = useState('');
+  const [handler, setHandler] = useState(sseHandler());
+  const [isIssueCreatedEventRecived, setIsIssueCreatedEventRecived] = useState(false);
 
-  const { handleSubmit, handleChange, errors, values, touched } = useFormik<CreateIssueDto>({
-    initialValues,
-    onSubmit: handleSubmitForm,
+  const handleSuccess = (response: AxiosResponse<IssueCreatedDto, CreateIssueDto>) => {
+    setIsIssueCreatedEventRecived(false);
+    setHandler(
+      handler.onIssueOpenedEvent(({ data }) => {
+        const organizationValidation = data.organizationId === params.organizationId;
+        const projectValidation = data.projectId === params.projectId;
+        const issueValidation = data.issueId === response.data.id;
+        // const memberValidation = data.memberId ===
+        if (organizationValidation && projectValidation && issueValidation)
+          setIsIssueCreatedEventRecived(true);
+      })
+    );
+  };
+
+  const handleError = (
+    error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
+  ) => {
+    applicationErrorHandler<CreateIssueDto>()
+      .onGenericValidationFailed(({ details }) => setErrors(mapValidationErrors(details)))
+      .onAuthInvalidJwt(({ message }) => setError(message))
+      .onOrganizationAccessDenied(({ message }) => setError(message))
+      .onOrganizationNotFound(({ message }) => setError(message))
+      .onOrganizationProjectNotFound(({ message }) => setError(message))
+      .handleAxiosError(error);
+  };
+
+  const { mutate: createIssue, isLoading } = useCreateIssue(params, {
+    onSuccess: handleSuccess,
+    onError: handleError,
   });
+
+  const handleSubmitForm = (values: CreateIssueDto) => {
+    createIssue(values);
+  };
+
+  const { handleSubmit, handleChange, setErrors, errors, values, touched } =
+    useFormik<CreateIssueDto>({
+      initialValues,
+      onSubmit: handleSubmitForm,
+    });
 
   const { data: projectData, isFetching } = useOrganizationDetails(params.organizationId, {});
 
@@ -44,16 +87,11 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
   return (
     <Stack alignItems={'center'}>
       <Text fontSize="4xl">
-        {projectData?.data.name} / {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
+        {projectData?.data.name} /{' '}
+        {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
       </Text>
       <form onSubmit={handleSubmit}>
         <VStack>
-          {/* {isSuccess && isOrganizationCreatedEventReceived && (
-            <Alert status="success">
-              <AlertIcon />
-              <AlertDescription>An organization has been created.</AlertDescription>
-            </Alert>
-          )} */}
           <FormControl isInvalid={!!errors.type}>
             <FormLabel>Issue type</FormLabel>
             <Select id="type" value={values.type} onChange={handleChange}>
@@ -70,8 +108,9 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
             <FormLabel>Issue content</FormLabel>
             <Textarea id="content" value={values.content} onChange={handleChange} />
           </FormControl>
-          <Button type="submit">Add</Button>
-          {/* {isLoading && <Spinner />} */}
+          <Button type="submit" disabled={isLoading}>
+            Add
+          </Button>
         </VStack>
       </form>
     </Stack>

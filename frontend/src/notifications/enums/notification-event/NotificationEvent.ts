@@ -9,7 +9,7 @@ export enum NotificationEvent {
   // ISSUE_COMMENT_HIDDEN = 'IssueCommentHiddenEvent',
   // ISSUE_COMMENT_VOTED = 'IssueCommentVotedEvent',
   // ISSUE_CONTENT_CHANGED = 'IssueContentChangedEvent',
-  // ISSUE_OPENED = 'IssueOpenedEvent',
+  ISSUE_OPENED = 'IssueOpenedEvent',
   // ISSUE_RENAMED = 'IssueRenamedEvent',
   // ISSUE_TYPE_CHANGED = 'IssueTypeChangedEvent',
   // ISSUE_VOTED = 'IssueVotedEvent',
