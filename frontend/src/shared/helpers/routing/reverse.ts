@@ -14,6 +14,7 @@ type RegularPaths = Exclude<
   | 'users.activation'
   | 'organizations.projects.create'
   | 'organizations.details'
+  | 'organizations.member.invite'
   | 'issues.list'
   | 'issues.create'
 >;
@@ -23,6 +24,7 @@ type ReversiblePath =
   | DetailedPath<'users.activation', UserActivationParams>
   | DetailedPath<'organizations.projects.create', OrganizationParams>
   | DetailedPath<'organizations.details', OrganizationParams>
+  | DetailedPath<'organizations.member.invite', OrganizationParams>
   | DetailedPath<'issues.list', IssuesListParams>
   | DetailedPath<'issues.create', IssuesListParams>;
 

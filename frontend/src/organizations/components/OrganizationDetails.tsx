@@ -67,7 +67,11 @@ export const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({ organi
               {data?.data.members.map((member) => (
                 <Text key={member.id}>{member.id}</Text>
               ))}
-              <Button>Add member</Button>
+              <Link
+                to={reverse({ path: 'organizations.member.invite', params: organizationParams })}
+              >
+                <Button>Add member</Button>
+              </Link>
             </Flex>
           </Flex>
         </>
