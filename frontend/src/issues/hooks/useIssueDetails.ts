@@ -1,8 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery, UseQueryResult } from 'react-query';
+import { IssueDetailsDto } from '@issues/dtos';
 import { getIssueDetails } from '@issues/api';
 import { IssueDetailsParams } from '@issues/types';
-import { IssueDetailsDto } from '@issues/dtos';
 import { useAuthorizationHeaders } from '@shared/hooks/api';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';

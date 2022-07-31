@@ -7,6 +7,7 @@ import {
   AuthInvalidJwtErrorDto,
   GenericEmailUnavailableErrorDto,
   GenericValidationFailedErrorDto,
+  IssueNotFoundErrorDto,
   OrganizationAccessDeniedErrorDto,
   OrganizationInvitationAlreadyPresentErrorDto,
   OrganizationInvitationNotFoundErrorDto,
@@ -44,6 +45,7 @@ interface Callbacks<TFields extends Record<string, unknown>> {
   [ApplicationErrorCode.ORGANIZATION_MEMBER_ALREADY_PRESENT]?: CallbackFn<OrganizationMemberAlreadyPresentErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_ACCESS_DENIED]?: CallbackFn<OrganizationAccessDeniedErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_PROJECT_NOT_FOUND]?: CallbackFn<OrganizationProjectNotFoundErrorDto>;
+  [ApplicationErrorCode.ISSUE_NOT_FOUND]?: CallbackFn<IssueNotFoundErrorDto>;
 }
 
 export interface ApplicationErrorHandler<TFields extends Record<string, unknown>> {
@@ -65,6 +67,7 @@ export interface ApplicationErrorHandler<TFields extends Record<string, unknown>
   onOrganizationMemberAlreadyPresent: HandlerFn<OrganizationMemberAlreadyPresentErrorDto, TFields>;
   onOrganizationAccessDenied: HandlerFn<OrganizationAccessDeniedErrorDto, TFields>;
   onOrganizationProjectNotFound: HandlerFn<OrganizationProjectNotFoundErrorDto, TFields>;
+  onIssueNotFound: HandlerFn<IssueNotFoundErrorDto, TFields>;
   handleAxiosError: (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ) => void;
@@ -157,6 +160,8 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
         ...callbacks,
         [ApplicationErrorCode.ORGANIZATION_PROJECT_NOT_FOUND]: callback,
       }),
+    onIssueNotFound: (callback) =>
+      applicationErrorHandler({ ...callbacks, [ApplicationErrorCode.ISSUE_NOT_FOUND]: callback }),
     handleAxiosError: (error): void => {
       if (!error.response?.data?.code) {
         return;

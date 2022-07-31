@@ -1,7 +1,7 @@
-import { Type } from '@issues/enums/issues-list';
+import { IssueType } from '@issues/enums';
 
 export interface CreateIssueDto {
-  type: Type;
+  type: IssueType;
   name: string;
   content: string;
 }

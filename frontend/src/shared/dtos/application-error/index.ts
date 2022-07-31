@@ -15,3 +15,4 @@ export * from './OrganizationMemberAlreadyPresentErrorDto';
 export * from './OrganizationAccessDeniedErrorDto';
 export * from './OrganizationNotFoundErrorDto';
 export * from './OrganizationProjectNotFoundErrorDto';
+export * from './IssueNotFoundErrorDto';

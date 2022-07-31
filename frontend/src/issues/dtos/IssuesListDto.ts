@@ -1,31 +1,3 @@
-import { Status, Type, VoteType } from '@issues/enums/issues-list';
+import { IssueListElementDto } from './IssueListElementDto';
 
-interface Vote {
-  memberId: string;
-  type: VoteType;
-}
-
-interface Creator {
-  id: string;
-  email: string;
-}
-
-interface Project {
-  id: string;
-}
-
-interface Organization {
-  id: string;
-}
-
-export interface IssueDetailsDto {
-  id: string;
-  name: string;
-  status: Status;
-  type: Type;
-  votes: Vote[];
-  creator: Creator;
-  project: Project;
-  organization: Organization;
-}
-export interface IssuesListDto extends Array<IssueDetailsDto> {}
+export interface IssuesListDto extends Array<IssueListElementDto> {}
