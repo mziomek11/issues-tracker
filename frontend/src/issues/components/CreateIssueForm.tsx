@@ -44,7 +44,7 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
   const [handler, setHandler] = useState(sseHandler());
   useSseSubscription(handler);
 
-  const handleSuccess = (response: AxiosResponse<IssueCreatedDto, CreateIssueDto>) => {
+  const handleSuccess = (response: AxiosResponse<IssueCreatedDto, CreateIssueDto>): void => {
     setHandler(
       handler.onIssueOpenedEvent(({ data }) => {
         const organizationValidation = data.organizationId === params.organizationId;
@@ -58,7 +58,7 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
 
   const handleError = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
-  ) => {
+  ): void => {
     applicationErrorHandler<CreateIssueDto>()
       .onGenericValidationFailed(({ details }) => setErrors(mapValidationErrors(details)))
       .onAuthInvalidJwt(({ message }) => setError(message))
@@ -77,7 +77,7 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
     onError: handleError,
   });
 
-  const handleSubmitForm = (values: CreateIssueDto) => {
+  const handleSubmitForm = (values: CreateIssueDto): void => {
     createIssue(values);
   };
 
@@ -87,7 +87,7 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
       onSubmit: handleSubmitForm,
     });
 
-  const handleIssueCreatedEvent = () => {
+  const handleIssueCreatedEvent = (): void => {
     navigate(reverse({ path: 'issues.list', params }));
   };
 
@@ -113,10 +113,12 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
             <Input name="name" id="name" value={values.name} onChange={handleChange} />
             {errors.name && touched.name && <FormErrorMessage>{errors.name}</FormErrorMessage>}
           </FormControl>
-          <FormControl  isInvalid={!!errors.content}>
+          <FormControl isInvalid={!!errors.content}>
             <FormLabel>Issue content</FormLabel>
             <Textarea name="content" id="content" value={values.content} onChange={handleChange} />
-            {errors.content && touched.content && <FormErrorMessage>{errors.content}</FormErrorMessage>}
+            {errors.content && touched.content && (
+              <FormErrorMessage>{errors.content}</FormErrorMessage>
+            )}
           </FormControl>
           <Button type="submit" disabled={isLoading}>
             Add
