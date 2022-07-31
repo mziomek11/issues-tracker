@@ -29,7 +29,7 @@ export const IssueDetails: FC<IssueDetailsProps> = (params) => {
 
   const handleError = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
-  ) => {
+  ): void => {
     applicationErrorHandler<IssueDetailsDto>()
       .onAuthInvalidJwt(({ message }) => setError(message))
       .onOrganizationAccessDenied(({ message }) => setError(message))
