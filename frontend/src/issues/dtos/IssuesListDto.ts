@@ -18,7 +18,7 @@ interface Organization {
   id: string;
 }
 
-export interface IssuesListElement {
+export interface IssueDetailsDto {
   id: string;
   name: string;
   status: Status;
@@ -28,4 +28,4 @@ export interface IssuesListElement {
   project: Project;
   organization: Organization;
 }
-export interface IssuesListDto extends Array<IssuesListElement> {}
+export interface IssuesListDto extends Array<IssueDetailsDto> {}

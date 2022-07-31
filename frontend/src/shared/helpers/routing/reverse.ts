@@ -2,7 +2,7 @@ import { isString, replace } from 'lodash';
 import { Path, paths } from '@shared/consts/routing';
 import { UserActivationParams } from '@users/types/activation';
 import { OrganizationParams } from '@organizations/types';
-import { IssuesListParams } from '@issues/types';
+import { IssueDetailsParams, IssuesListParams } from '@issues/types';
 
 interface DetailedPath<TPath extends string, TParams extends Record<string, any>> {
   path: TPath;
@@ -17,6 +17,7 @@ type RegularPaths = Exclude<
   | 'organizations.member.invite'
   | 'issues.list'
   | 'issues.create'
+  | 'issues.details'
 >;
 
 type ReversiblePath =
@@ -26,7 +27,8 @@ type ReversiblePath =
   | DetailedPath<'organizations.details', OrganizationParams>
   | DetailedPath<'organizations.member.invite', OrganizationParams>
   | DetailedPath<'issues.list', IssuesListParams>
-  | DetailedPath<'issues.create', IssuesListParams>;
+  | DetailedPath<'issues.create', IssuesListParams>
+  | DetailedPath<'issues.details', IssueDetailsParams>;
 
 export const reverse = (path: ReversiblePath): string => {
   if (isString(path)) return paths[path as Path];
