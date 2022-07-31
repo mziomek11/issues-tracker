@@ -1,8 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery, UseQueryResult } from 'react-query';
 import { getOrganizationDetails } from '@organizations/api';
-import { GET_ORGANIZATION_DETAILS_QUERY } from '@organizations/consts/react-query-keys';
 import { UserOrganizationDto } from '@organizations/dtos';
+import { GET_ORGANIZATION_DETAILS_QUERY } from '@shared/consts/react-query-keys';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';

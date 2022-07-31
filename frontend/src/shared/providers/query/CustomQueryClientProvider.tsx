@@ -4,6 +4,7 @@ import { useUser } from '@users/contexts';
 import { sseHandler } from '@notifications/helpers/sse-handler';
 import { useSseSubscription } from '@notifications/hooks/api';
 import {
+  invalidateIssueCreated,
   invalidateOrganizationCreated,
   invalidateOrganizationProjectCreated,
 } from '@shared/helpers/invalidation-cache';
@@ -23,7 +24,8 @@ export const CustomQueryClientProvider: React.FC<CustomQueryClientProviderProps>
 }) => {
   const handler = sseHandler()
     .onOrganizationCreatedEvent(() => invalidateOrganizationCreated(queryClient))
-    .onOrganizationProjectCreatedEvent(() => invalidateOrganizationProjectCreated(queryClient));
+    .onOrganizationProjectCreatedEvent(() => invalidateOrganizationProjectCreated(queryClient))
+    .onIssueOpenedEvent(({ data }) => invalidateIssueCreated(data.projectId, queryClient));
 
   useSseSubscription(handler);
   const { jwt } = useUser();

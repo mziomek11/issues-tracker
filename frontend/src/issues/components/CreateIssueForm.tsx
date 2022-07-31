@@ -1,5 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
   Button,
   FormControl,
   FormErrorMessage,
@@ -8,7 +11,6 @@ import {
   Select,
   Spinner,
   Stack,
-  Text,
   Textarea,
   VStack,
 } from '@chakra-ui/react';
@@ -19,12 +21,14 @@ import { Type } from '@issues/enums/issues-list';
 import { useCreateIssue } from '@issues/hooks';
 import { IssuesListParams } from '@issues/types';
 import { sseHandler } from '@notifications/helpers/sse-handler';
-import { useOrganizationDetails } from '@organizations/hooks/api';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { mapValidationErrors } from '@shared/mappers/application-error';
+import { useNavigate } from 'react-router-dom';
+import { reverse } from '@shared/helpers/routing';
+import { useSseSubscription } from '@notifications/hooks/api';
 
 interface CreateIssueFormProps extends IssuesListParams {}
 
@@ -35,20 +39,19 @@ const initialValues: CreateIssueDto = {
 };
 
 export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
+  const navigate = useNavigate();
   const [error, setError] = useState('');
   const [handler, setHandler] = useState(sseHandler());
-  const [isIssueCreatedEventRecived, setIsIssueCreatedEventRecived] = useState(false);
+  useSseSubscription(handler);
 
   const handleSuccess = (response: AxiosResponse<IssueCreatedDto, CreateIssueDto>) => {
-    setIsIssueCreatedEventRecived(false);
     setHandler(
       handler.onIssueOpenedEvent(({ data }) => {
         const organizationValidation = data.organizationId === params.organizationId;
         const projectValidation = data.projectId === params.projectId;
         const issueValidation = data.issueId === response.data.id;
-        // const memberValidation = data.memberId ===
         if (organizationValidation && projectValidation && issueValidation)
-          setIsIssueCreatedEventRecived(true);
+          handleIssueCreatedEvent();
       })
     );
   };
@@ -65,7 +68,11 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
       .handleAxiosError(error);
   };
 
-  const { mutate: createIssue, isLoading } = useCreateIssue(params, {
+  const {
+    mutate: createIssue,
+    isLoading,
+    isError,
+  } = useCreateIssue(params, {
     onSuccess: handleSuccess,
     onError: handleError,
   });
@@ -80,23 +87,25 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
       onSubmit: handleSubmitForm,
     });
 
-  const { data: projectData, isFetching } = useOrganizationDetails(params.organizationId, {});
-
-  if (isFetching) return <Spinner />;
+  const handleIssueCreatedEvent = () => {
+    navigate(reverse({ path: 'issues.list', params }));
+  };
 
   return (
     <Stack alignItems={'center'}>
-      <Text fontSize="4xl">
-        {projectData?.data.name} /{' '}
-        {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
-      </Text>
+      {isError && (
+        <Alert status="error">
+          <AlertIcon />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       <form onSubmit={handleSubmit}>
         <VStack>
           <FormControl isInvalid={!!errors.type}>
             <FormLabel>Issue type</FormLabel>
             <Select id="type" value={values.type} onChange={handleChange}>
-              <option value={Type.BUG}>BUG</option>
-              <option value={Type.ENHANCEMENT}>ENHANCEMENT</option>
+              <option value={Type.BUG}>{Type.BUG}</option>
+              <option value={Type.ENHANCEMENT}>{Type.ENHANCEMENT}</option>
             </Select>
           </FormControl>
           <FormControl isInvalid={!!errors.name}>
@@ -111,6 +120,7 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
           <Button type="submit" disabled={isLoading}>
             Add
           </Button>
+          {isLoading && <Spinner />}
         </VStack>
       </form>
     </Stack>
