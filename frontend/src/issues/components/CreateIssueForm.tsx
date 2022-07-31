@@ -93,7 +93,7 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
 
   return (
     <Stack alignItems={'center'}>
-      {isError && (
+      {isError && error && (
         <Alert status="error">
           <AlertIcon />
           <AlertDescription>{error}</AlertDescription>
@@ -110,12 +110,13 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
           </FormControl>
           <FormControl isInvalid={!!errors.name}>
             <FormLabel>Issue name</FormLabel>
-            <Input id="name" value={values.name} onChange={handleChange} />
+            <Input name="name" id="name" value={values.name} onChange={handleChange} />
             {errors.name && touched.name && <FormErrorMessage>{errors.name}</FormErrorMessage>}
           </FormControl>
-          <FormControl>
+          <FormControl  isInvalid={!!errors.content}>
             <FormLabel>Issue content</FormLabel>
-            <Textarea id="content" value={values.content} onChange={handleChange} />
+            <Textarea name="content" id="content" value={values.content} onChange={handleChange} />
+            {errors.content && touched.content && <FormErrorMessage>{errors.content}</FormErrorMessage>}
           </FormControl>
           <Button type="submit" disabled={isLoading}>
             Add
