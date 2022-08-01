@@ -9,6 +9,7 @@ import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { reverse } from '@shared/helpers/routing';
+import { IssuesListParams } from '@issues/types';
 
 interface OrganizationDetailsProps extends OrganizationParams {}
 
@@ -29,6 +30,7 @@ export const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({ organi
   const { data, isLoading, isSuccess, isError } = useOrganizationDetails(organizationId, {
     onError: handleError,
   });
+
   return (
     <>
       {isLoading && <Spinner />}
@@ -38,9 +40,21 @@ export const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({ organi
           <Flex width="100%">
             <Flex direction="column">
               <Heading size="lg">Projects</Heading>
-              {data?.data.projects.map((project) => (
-                <Text key={project.id}>{project.name}</Text>
-              ))}
+              {data?.data.projects.map((project) => {
+                const issuesListParams: IssuesListParams = {
+                  organizationId,
+                  projectId: project.id,
+                };
+
+                return (
+                  <Link
+                    key={project.id}
+                    to={reverse({ path: 'issues.list', params: issuesListParams })}
+                  >
+                    <Text>{project.name}</Text>
+                  </Link>
+                );
+              })}
               <Link
                 to={reverse({ path: 'organizations.projects.create', params: organizationParams })}
               >

@@ -8,7 +8,8 @@ export type Path =
   | 'organizations.projects.create'
   | 'organizations.details'
   | 'organizations.member.invite'
-  | 'organizations.member.accept';
+  | 'organizations.member.accept'
+  | 'issues.list';
 export const paths: Record<Path, string> = {
   'shared.home': '/',
   'users.login': '/login',
@@ -20,4 +21,5 @@ export const paths: Record<Path, string> = {
   'organizations.details': '/organizations/:organizationId',
   'organizations.member.invite': '/organizations/:organizationId/invitations',
   'organizations.member.accept': '/organizations/:organizationId/members',
+  'issues.list': '/organizations/:organizationId/projects/:projectId/issues',
 };

@@ -33,6 +33,7 @@
       "@users/*": ["users/*"],
       "@notifications/*": ["notifications/*"],
       "@organizations/*": ["organizations/*"],
+      "@issues/*": ["issues/*"],
     }
   },
   "include": ["src"],

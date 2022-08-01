@@ -12,3 +12,6 @@ export * from './OrgzanizationOwnerInvalidErrorDto';
 export * from './OrganizationInvitationNotFoundErrorDto';
 export * from './OrganizationInvitationAlreadyPresentErrorDto';
 export * from './OrganizationMemberAlreadyPresentErrorDto';
+export * from './OrganizationAccessDeniedErrorDto';
+export * from './OrganizationNotFoundErrorDto';
+export * from './OrganizationProjectNotFoundErrorDto';
