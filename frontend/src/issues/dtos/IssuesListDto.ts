@@ -1,4 +1,4 @@
-import { Status, Type, VoteType } from '@issues/enums/issues-list';
+import { IssueStatus, IssueType, VoteType } from '@issues/enums';
 
 interface Vote {
   memberId: string;
@@ -21,8 +21,8 @@ interface Organization {
 export interface IssuesListElement {
   id: string;
   name: string;
-  status: Status;
-  type: Type;
+  status: IssueStatus;
+  type: IssueType;
   votes: Vote[];
   creator: Creator;
   project: Project;

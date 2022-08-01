@@ -1,0 +1,5 @@
+export enum IssueUpdateType {
+  RENAMED = 'RENAMED',
+  CONTENT_CHANGED = 'CONTENT_CHANGED',
+  TYPE_CHANGED = 'TYPE_CHANGED',
+}

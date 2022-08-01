@@ -85,15 +85,25 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
             <TabPanel width={'100%'}>
               {issues.data
                 .filter((issue) => issue.status === 'OPENED')
-                .map((issue, index) => (
-                  <IssuesListElement key={index} {...issue} />
+                .map((issue) => (
+                  <IssuesListElement
+                    organizationId={params.organizationId}
+                    projectId={params.projectId}
+                    key={issue.id}
+                    {...issue}
+                  />
                 ))}
             </TabPanel>
             <TabPanel width={'100%'}>
               {issues.data
                 .filter((issue) => issue.status === 'CLOSED')
-                .map((issue, index) => (
-                  <IssuesListElement key={index} {...issue} />
+                .map((issue) => (
+                  <IssuesListElement
+                    organizationId={params.organizationId}
+                    projectId={params.projectId}
+                    key={issue.id}
+                    {...issue}
+                  />
                 ))}
             </TabPanel>
           </TabPanels>

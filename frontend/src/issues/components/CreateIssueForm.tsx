@@ -17,7 +17,7 @@ import {
 import { useFormik } from 'formik';
 import { FC, useState } from 'react';
 import { CreateIssueDto, IssueCreatedDto } from '@issues/dtos';
-import { Type } from '@issues/enums/issues-list';
+import { IssueType } from '@issues/enums';
 import { useCreateIssue } from '@issues/hooks';
 import { IssuesListParams } from '@issues/types';
 import { sseHandler } from '@notifications/helpers/sse-handler';
@@ -33,7 +33,7 @@ import { useSseSubscription } from '@notifications/hooks/api';
 interface CreateIssueFormProps extends IssuesListParams {}
 
 const initialValues: CreateIssueDto = {
-  type: Type.BUG,
+  type: IssueType.BUG,
   name: '',
   content: '',
 };
@@ -104,8 +104,8 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
           <FormControl isInvalid={!!errors.type}>
             <FormLabel>Issue type</FormLabel>
             <Select id="type" value={values.type} onChange={handleChange}>
-              <option value={Type.BUG}>{Type.BUG}</option>
-              <option value={Type.ENHANCEMENT}>{Type.ENHANCEMENT}</option>
+              <option value={IssueType.BUG}>{IssueType.BUG}</option>
+              <option value={IssueType.ENHANCEMENT}>{IssueType.ENHANCEMENT}</option>
             </Select>
           </FormControl>
           <FormControl isInvalid={!!errors.name}>
