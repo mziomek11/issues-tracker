@@ -65,46 +65,6 @@ paths:
           $ref: '#/components/responses/GenericValidationFailed'
         '409':
           $ref: '#/components/responses/GenericEmailUnavailable'
-  /api/v1/user-management/users/{userId}/activation-token:
-    post:
-      tags: 
-        - User management
-      summary: Activates user
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 86af373f-6353-42d6-9780-da7070f188af
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                activationToken:
-                  type: string
-                  format: uuid
-                  example: 226c526c-b00f-4fe4-bd0c-f05ed7710234
-              required:
-                - activationToken
-      responses:
-        '200':
-          description: User has been successfully activated
-        '400':
-          $ref: '#/components/responses/GenericValidationFailed'
-        '404':
-          $ref: '#/components/responses/UserNotFound'
-        '409':
-          description: Invalid activation token | User already activated
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/UserInvalidActivationToken'
-                  - $ref: '#/components/schemas/UserAlreadyActivated'
   /api/v1/user-management/users/authentication:
     post:
       tags:
@@ -1481,18 +1441,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/AuthInvalidCredentials' 
-    UserInvalidActivationToken:
-      description: Invalid activation token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UserInvalidActivationToken' 
-    UserAlreadyActivated:
-      description: User already activated
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UserAlreadyActivated'
     UserNotFound:
       description: User does not exist
       content:
@@ -2064,38 +2012,6 @@ components:
         message:
           type: string
           example: Invalid credentials
-      required:
-        - code
-        - status
-        - message
-    UserInvalidActivationToken:
-      type: object
-      properties:
-        code:
-          type: string
-          example: USER_1
-        status:
-          type: integer
-          example: 409
-        message:
-          type: string
-          example: Invalid activation token
-      required:
-        - code
-        - status
-        - message
-    UserAlreadyActivated:
-      type: object
-      properties:
-        code:
-          type: string
-          example: USER_2
-        status:
-          type: integer
-          example: 409
-        message:
-          type: string
-          example: User already activated
       required:
         - code
         - status

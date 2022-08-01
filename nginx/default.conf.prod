@@ -6,10 +6,6 @@ upstream frontend {
     server frontend:80;
 }
 
-upstream mailhog {
-    server mailhog:8025;
-}
-
 upstream swagger {
     server swagger:8080;
 }
@@ -45,10 +41,6 @@ server {
 
     location /api {
         proxy_pass http://api;
-    }
-
-    location /mailhog {
-        proxy_pass http://mailhog;
     }
 
     location /swagger/ {

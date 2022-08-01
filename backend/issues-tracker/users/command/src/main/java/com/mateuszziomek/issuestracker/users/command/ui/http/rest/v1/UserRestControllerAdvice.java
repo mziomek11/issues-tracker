@@ -2,12 +2,8 @@ package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1;
 
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericEmailUnavailableRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.generic.GenericValidationFailedRestErrorResponse;
-import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserInvalidActivationTokenRestErrorResponse;
-import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserAlreadyActivatedRestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.user.UserNotFoundRestErrorResponse;
 import com.mateuszziomek.issuestracker.users.command.application.service.user.exception.UserEmailUnavailableException;
-import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserActivationTokenMismatchException;
-import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserAlreadyActivatedException;
 import com.mateuszziomek.issuestracker.users.command.domain.user.exception.UserNotFoundException;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.error.RestErrorResponse;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.validation.RestValidationException;
@@ -25,16 +21,6 @@ public class UserRestControllerAdvice {
     @ExceptionHandler(UserEmailUnavailableException.class)
     public ResponseEntity<RestErrorResponse> handle(UserEmailUnavailableException ex) {
         return GenericEmailUnavailableRestErrorResponse.asResponseEntity();
-    }
-
-    @ExceptionHandler(UserActivationTokenMismatchException.class)
-    public ResponseEntity<RestErrorResponse> handle(UserActivationTokenMismatchException ex) {
-        return UserInvalidActivationTokenRestErrorResponse.asResponseEntity();
-    }
-
-    @ExceptionHandler(UserAlreadyActivatedException.class)
-    public ResponseEntity<RestErrorResponse> handle(UserAlreadyActivatedException ex) {
-        return UserAlreadyActivatedRestErrorResponse.asResponseEntity();
     }
 
     @ExceptionHandler(UserNotFoundException.class)

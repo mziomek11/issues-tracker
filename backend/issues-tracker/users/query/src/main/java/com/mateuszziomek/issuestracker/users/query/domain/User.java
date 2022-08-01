@@ -19,13 +19,9 @@ public class User {
         user.id = userRegisteredEvent.getId();
         user.email = userRegisteredEvent.getUserEmail();
         user.password = userRegisteredEvent.getUserHashedPassword();
-        user.status = UserStatus.UNVERIFIED;
+        user.status = UserStatus.ACTIVATED;
 
         return user;
-    }
-
-    public void activate() {
-        status = UserStatus.ACTIVATED;
     }
 
     public boolean isActivated() {

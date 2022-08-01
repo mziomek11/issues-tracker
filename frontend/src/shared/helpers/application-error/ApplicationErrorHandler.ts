@@ -14,8 +14,6 @@ import {
   OrganizationNotFoundErrorDto,
   OrganizationOwnerInvalidErrorDto,
   OrganizationProjectNotFoundErrorDto,
-  UserAlreadyActivatedErrorDto,
-  UserInvalidActivationTokenErrorDto,
   UserNotFoundErrorDto,
 } from '@shared/dtos/application-error';
 import { HttpStatus } from '@shared/enums/http';
@@ -31,8 +29,6 @@ interface Callbacks<TFields extends Record<string, unknown>> {
     GenericValidationFailedErrorDto<TFields>
   >;
   [ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE]?: CallbackFn<GenericEmailUnavailableErrorDto>;
-  [ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN]?: CallbackFn<UserInvalidActivationTokenErrorDto>;
-  [ApplicationErrorCode.USER_ALREADY_ACTIVATED]?: CallbackFn<UserAlreadyActivatedErrorDto>;
   [ApplicationErrorCode.USER_NOT_FOUND]?: CallbackFn<UserNotFoundErrorDto>;
   [ApplicationErrorCode.AUTH_ACCESS_DENIED]?: CallbackFn<AuthAccessDeniedErrorDto>;
   [ApplicationErrorCode.AUTH_INVALID_CREDENTIALS]?: CallbackFn<AuthInvalidCredentialsErrorDto>;
@@ -49,8 +45,6 @@ interface Callbacks<TFields extends Record<string, unknown>> {
 export interface ApplicationErrorHandler<TFields extends Record<string, unknown>> {
   onGenericValidationFailed: HandlerFn<GenericValidationFailedErrorDto<TFields>, TFields>;
   onGenericEmailUnavailable: HandlerFn<GenericEmailUnavailableErrorDto, TFields>;
-  onUserInvalidActivationToken: HandlerFn<UserInvalidActivationTokenErrorDto, TFields>;
-  onUserAlreadyActivated: HandlerFn<UserAlreadyActivatedErrorDto, TFields>;
   onUserNotFound: HandlerFn<UserNotFoundErrorDto, TFields>;
   onAuthAccessDenied: HandlerFn<AuthAccessDeniedErrorDto, TFields>;
   onAuthInvalidCredentials: HandlerFn<AuthInvalidCredentialsErrorDto, TFields>;
@@ -91,16 +85,6 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
       applicationErrorHandler({
         ...callbacks,
         [ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE]: callback,
-      }),
-    onUserInvalidActivationToken: (callback) =>
-      applicationErrorHandler({
-        ...callbacks,
-        [ApplicationErrorCode.USER_INVALID_ACTIVATION_TOKEN]: callback,
-      }),
-    onUserAlreadyActivated: (callback) =>
-      applicationErrorHandler({
-        ...callbacks,
-        [ApplicationErrorCode.USER_ALREADY_ACTIVATED]: callback,
       }),
     onUserNotFound: (callback) =>
       applicationErrorHandler({

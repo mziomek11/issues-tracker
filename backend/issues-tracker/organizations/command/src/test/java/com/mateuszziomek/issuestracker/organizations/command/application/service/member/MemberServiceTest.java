@@ -45,7 +45,6 @@ class MemberServiceTest {
                 .userId(memberUUID)
                 .userEmail(plainEmail)
                 .userHashedPassword("passowrd")
-                .userActivationToken(UUID.randomUUID())
                 .build();
         var member = Member.register(userRegisteredEvent);
 

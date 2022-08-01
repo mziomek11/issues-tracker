@@ -61,10 +61,7 @@ export const RegisterForm: React.FC = () => {
         {isSuccess && (
           <Alert status="success">
             <AlertIcon />
-            <AlertDescription>
-              An account has been created and the activation link has been sent to your email
-              address.
-            </AlertDescription>
+            <AlertDescription>An account has been created. Now you can log in</AlertDescription>
           </Alert>
         )}
         <FormControl isInvalid={!!errors.email}>

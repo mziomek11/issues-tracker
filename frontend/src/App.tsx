@@ -5,7 +5,7 @@ import { paths } from '@shared/consts/routing';
 import { HomePage } from '@shared/pages';
 import { CustomQueryClientProvider } from '@shared/providers/query';
 import { UserProvider } from '@users/contexts';
-import { LoginPage, RegisterPage, UserActivationPage } from '@users/pages';
+import { LoginPage, RegisterPage } from '@users/pages';
 import {
   CreateOrganizationPage,
   CreateProjectPage,
@@ -29,7 +29,6 @@ export const App: React.FC = () => {
                 <Route path={paths['users.login']} element={<LoginPage />} />
                 <Route path={paths['users.register']} element={<RegisterPage />} />
               </Route>
-              <Route path={paths['users.activation']} element={<UserActivationPage />} />
               <Route path={paths['shared.home']} element={<SecureRoute userRequired={true} />}>
                 <Route path={paths['organizations.list']} element={<OrganizationsPage />} />
                 <Route path={paths['organizations.create']} element={<CreateOrganizationPage />} />

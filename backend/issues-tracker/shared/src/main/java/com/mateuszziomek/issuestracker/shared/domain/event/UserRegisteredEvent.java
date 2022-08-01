@@ -15,7 +15,6 @@ import java.util.UUID;
 public class UserRegisteredEvent extends BaseEvent {
     private String userEmail;
     private String userHashedPassword;
-    private UUID userActivationToken;
 
     public static UserRegisteredEventBuilder builder() {
         return new UserRegisteredEventBuilder();
@@ -24,14 +23,12 @@ public class UserRegisteredEvent extends BaseEvent {
     private UserRegisteredEvent(
             UUID userId,
             String userEmail,
-            String userHashedPassword,
-            UUID userActivationToken
+            String userHashedPassword
     ) {
         super(userId);
 
         this.userEmail = userEmail;
         this.userHashedPassword = userHashedPassword;
-        this.userActivationToken = userActivationToken;
     }
 
     public static class UserRegisteredEventBuilder extends EventBuilder<UserRegisteredEventBuilder, UserRegisteredEvent> {
@@ -44,9 +41,6 @@ public class UserRegisteredEvent extends BaseEvent {
 
         @NotBlank
         private String userHashedPassword;
-
-        @NotNull
-        private UUID userActivationToken;
 
         public UserRegisteredEventBuilder userId(UUID userId) {
             this.userId = userId;
@@ -63,18 +57,12 @@ public class UserRegisteredEvent extends BaseEvent {
             return this;
         }
 
-        public UserRegisteredEventBuilder userActivationToken(UUID userActivationToken) {
-            this.userActivationToken = userActivationToken;
-            return this;
-        }
-
         @Override
         protected UserRegisteredEvent create() {
             return new UserRegisteredEvent(
                     userId,
                     userEmail,
-                    userHashedPassword,
-                    userActivationToken
+                    userHashedPassword
             );
         }
     }

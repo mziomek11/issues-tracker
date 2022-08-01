@@ -1,6 +1,5 @@
 import { isString, replace } from 'lodash';
 import { Path, paths } from '@shared/consts/routing';
-import { UserActivationParams } from '@users/types/activation';
 import { OrganizationParams } from '@organizations/types';
 import { IssuesListParams } from '@issues/types';
 
@@ -21,7 +20,6 @@ type RegularPaths = Exclude<
 
 type ReversiblePath =
   | RegularPaths
-  | DetailedPath<'users.activation', UserActivationParams>
   | DetailedPath<'organizations.projects.create', OrganizationParams>
   | DetailedPath<'organizations.details', OrganizationParams>
   | DetailedPath<'organizations.member.invite', OrganizationParams>

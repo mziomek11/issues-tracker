@@ -103,10 +103,6 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
     image: bitnami/kafka
     restart: always
-  mailhog:
-    environment:
-      MH_UI_WEB_PATH: mailhog
-    image: mailhog/mailhog
   nginx:
     build:
       context: nginx
@@ -121,24 +117,13 @@ services:
       context: ./backend
       dockerfile: ./issues-tracker/Dockerfile.backend
     command: sh issues-tracker/entrypoint-backend.sh
-    depends_on:
-      - notifications-mongo
-      - kafka
     environment:
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MAIL_HOST=mailhog
-      - MAIL_PORT=1025
       - MODULE_NAME=notifications
       - SERVICE_DISCOVERY_ZONE=http://discovery:8761/eureka
-      - SERVICE_NOTIFICATIONS_MONGO_HOST=notifications-mongo
       - SERVICE_NOTIFICATIONS_NAME=NOTIFICATIONS
     volumes:
       - ./backend:/usr/src/app
       - mvn:/usr/mvn
-  notifications-mongo:
-    image: mongo:5.0.7
-    volumes:
-      - /data/db
   organizations-command:
     build:
       args:

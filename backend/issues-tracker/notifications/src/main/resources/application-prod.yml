@@ -5,16 +5,3 @@ eureka:
 spring:
   application:
     name: ${SERVICE_NOTIFICATIONS_NAME}
-  data:
-    mongodb:
-      host: ${SERVICE_NOTIFICATIONS_MONGO_HOST}
-  kafka:
-    consumer:
-      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
-  mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    properties:
-      mail:
-        smtp:
-          auth: false

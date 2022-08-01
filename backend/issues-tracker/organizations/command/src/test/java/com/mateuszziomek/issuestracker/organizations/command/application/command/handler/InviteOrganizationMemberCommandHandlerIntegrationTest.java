@@ -29,7 +29,6 @@ class InviteOrganizationMemberCommandHandlerIntegrationTest extends Organization
         var member = Member.register(
                 UserRegisteredEvent
                         .builder()
-                        .userActivationToken(UUID.randomUUID())
                         .userEmail(INVITED_MEMBER_EMAIL)
                         .userHashedPassword("password")
                         .userId(INVITED_MEMBER_UUID)

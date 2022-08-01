@@ -3,7 +3,6 @@ package com.mateuszziomek.issuestracker.users.command.ui.http.rest.v1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateuszziomek.cqrs.command.dispatcher.CommandDispatcher;
 import com.mateuszziomek.issuestracker.shared.readmodel.ObjectId;
-import com.mateuszziomek.issuestracker.users.command.application.command.ActivateUserCommand;
 import com.mateuszziomek.issuestracker.users.command.application.command.RegisterUserCommand;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user.ActivateUserDto;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.user.RegisterUserDto;
@@ -60,30 +59,5 @@ class UserRestControllerIntegrationTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(objectMapper.readValue(response.getContentAsByteArray(), ObjectId.class).getId()).isEqualTo(userId);
-    }
-
-    @Test
-    void userCanBeActivated() throws Exception {
-        // Arrange
-        var activationTokenUUID = UUID.randomUUID();
-        var dto = new ActivateUserDto(activationTokenUUID);
-        var request = MockMvcRequestBuilders
-                .post(URL_BASE + String.format("/%s/activation-token", USER_UUID))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(dto));
-
-        // Act
-        var response = mvc.perform(request).andReturn().getResponse();
-
-        // Assert
-        var captor = ArgumentCaptor.forClass(ActivateUserCommand.class);
-        verify(commandDispatcher, times(1)).dispatch(captor.capture());
-
-        var command = captor.getValue();
-        assertThat(command.getUserId().getValue()).isEqualTo(USER_UUID);
-        assertThat(command.getUserActivationToken().value()).isEqualTo(activationTokenUUID);
-
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsByteArray()).isEmpty();
     }
 }
