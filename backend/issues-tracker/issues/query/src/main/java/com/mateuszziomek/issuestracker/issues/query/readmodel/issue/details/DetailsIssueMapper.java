@@ -19,6 +19,7 @@ public class DetailsIssueMapper {
                 .builder()
                 .organization(mapOrganization(issue))
                 .name(issue.getName())
+                .content(issue.getContent())
                 .id(issue.getId())
                 .creator(mapCreator(issue.getCreator()))
                 .project(mapProject(issue))

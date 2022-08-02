@@ -17,6 +17,7 @@ import java.util.UUID;
 public class DetailsIssue {
     private UUID id;
     private String name;
+    private String content;
     private IssueStatus status;
     private IssueType type;
     private List<DetailsIssue.Vote> votes;
