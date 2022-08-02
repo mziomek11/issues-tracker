@@ -3,6 +3,7 @@ import { HStack, Link as ChakraLink, Spacer, Stack, Tag, Text } from '@chakra-ui
 import { FC } from 'react';
 import { IssuesListElement as IssuesListElementDto } from '@issues/dtos';
 import { reverse } from '@shared/helpers/routing';
+import { VoteType } from '@issues/enums';
 
 interface IssuesListElementProps extends IssuesListElementDto {
   organizationId: string;
@@ -40,7 +41,8 @@ export const IssuesListElement: FC<IssuesListElementProps> = ({
         <Text fontSize={'xs'}>by {creator.email}</Text>
         <Spacer />
         <Text fontSize={'xs'} paddingRight="5px">
-          {votes.length} points
+          {votes.reduce((points, vote) => points + 1 * (vote.type === VoteType.UP ? 1 : -1), 0)}{' '}
+          points
         </Text>
       </HStack>
     </Stack>

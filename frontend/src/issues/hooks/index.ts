@@ -5,3 +5,4 @@ export * from './useIssues';
 export * from './useCreateIssue';
 export * from './useIssue';
 export * from './useRenameIssue';
+export * from './useVoteIssue';

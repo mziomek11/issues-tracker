@@ -9,6 +9,7 @@ import {
   invalidateIssueCreated,
   invalidateIssueRenamed,
   invalidateIssueTypeChanged,
+  invalidateIssueVoted,
   invalidateOrganizationCreated,
   invalidateOrganizationProjectCreated,
 } from '@shared/helpers/invalidation-cache';
@@ -39,6 +40,9 @@ export const CustomQueryClientProvider: React.FC<CustomQueryClientProviderProps>
     )
     .onIssueTypeChangedEvent(({ data }) =>
       invalidateIssueTypeChanged(data.projectId, data.issueId, queryClient)
+    )
+    .onIssueVotedEvent(({ data }) =>
+      invalidateIssueVoted(data.projectId, data.issueId, queryClient)
     )
     .onOrganizationCreatedEvent(() => invalidateOrganizationCreated(queryClient))
     .onOrganizationProjectCreatedEvent(() => invalidateOrganizationProjectCreated(queryClient));
