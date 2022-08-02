@@ -1,5 +1,5 @@
 import { Spinner, VStack } from '@chakra-ui/react';
-import { DetailsIssueHeader } from '@issues/components';
+import { DetailsIssueHeader } from '@issues/components/details/header';
 import { useIssue } from '@issues/hooks';
 import { IssuesDetailsParams } from '@issues/types';
 import { Layout } from '@shared/components';
@@ -14,7 +14,9 @@ export const DetailsIssuePage: FC = () => {
     <Layout>
       <VStack>
         {issueQuery.isLoading && <Spinner />}
-        {issueQuery.isSuccess && <DetailsIssueHeader issue={issueQuery.data.data} />}
+        {issueQuery.isSuccess && (
+          <DetailsIssueHeader params={params} issue={issueQuery.data.data} />
+        )}
       </VStack>
     </Layout>
   );

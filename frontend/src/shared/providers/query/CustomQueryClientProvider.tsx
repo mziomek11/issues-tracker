@@ -4,14 +4,18 @@ import { useUser } from '@users/contexts';
 import { sseHandler } from '@notifications/helpers/sse-handler';
 import { useSseSubscription } from '@notifications/hooks/api';
 import {
+  invalidateIssueClosed,
+  invalidateIssueContentChanged,
   invalidateIssueCreated,
+  invalidateIssueRenamed,
+  invalidateIssueTypeChanged,
   invalidateOrganizationCreated,
   invalidateOrganizationProjectCreated,
 } from '@shared/helpers/invalidation-cache';
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { refetchOnWindowFocus: false, refetchOnMount: false },
+    queries: { refetchOnWindowFocus: false, staleTime: Infinity },
   },
 });
 
@@ -23,9 +27,21 @@ export const CustomQueryClientProvider: React.FC<CustomQueryClientProviderProps>
   children,
 }) => {
   const handler = sseHandler()
+    .onIssueClosedEvent(({ data }) =>
+      invalidateIssueClosed(data.projectId, data.issueId, queryClient)
+    )
+    .onIssueContentChangedEvent(({ data }) =>
+      invalidateIssueContentChanged(data.projectId, data.issueId, queryClient)
+    )
+    .onIssueOpenedEvent(({ data }) => invalidateIssueCreated(data.projectId, queryClient))
+    .onIssueRenamedEvent(({ data }) =>
+      invalidateIssueRenamed(data.projectId, data.issueId, queryClient)
+    )
+    .onIssueTypeChangedEvent(({ data }) =>
+      invalidateIssueTypeChanged(data.projectId, data.issueId, queryClient)
+    )
     .onOrganizationCreatedEvent(() => invalidateOrganizationCreated(queryClient))
-    .onOrganizationProjectCreatedEvent(() => invalidateOrganizationProjectCreated(queryClient))
-    .onIssueOpenedEvent(({ data }) => invalidateIssueCreated(data.projectId, queryClient));
+    .onOrganizationProjectCreatedEvent(() => invalidateOrganizationProjectCreated(queryClient));
 
   useSseSubscription(handler);
   const { jwt } = useUser();

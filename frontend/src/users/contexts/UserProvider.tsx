@@ -1,13 +1,16 @@
 import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
+import jwt_decode from 'jwt-decode';
 import { JWT } from '@users/consts/localstorage';
 import { isTokenExpired } from '@users/helpers/jwt';
+import { DecodedJWTDto } from '@users/dtos';
 
 interface UserState {
   loginUser: (jwt: string) => void;
   logoutUser: () => void;
   isLoggedIn: boolean;
   jwt?: string;
+  userId: string | null;
 }
 interface UserProviderProps {}
 
@@ -33,7 +36,15 @@ export const UserProvider: React.FC<PropsWithChildren<UserProviderProps>> = ({ c
   }, []);
 
   return (
-    <UserContext.Provider value={{ loginUser, logoutUser, isLoggedIn, jwt }}>
+    <UserContext.Provider
+      value={{
+        loginUser,
+        logoutUser,
+        isLoggedIn,
+        jwt,
+        userId: jwt ? (jwt_decode(jwt) as DecodedJWTDto).sub : null,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

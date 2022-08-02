@@ -10,6 +10,7 @@ import {
 export interface IssueDetailsDto {
   id: string;
   name: string;
+  content: string;
   status: IssueStatus;
   type: IssueType;
   votes: IssueDetailsVoteDto[];

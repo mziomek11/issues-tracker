@@ -7,6 +7,15 @@ import {
   AuthInvalidJwtErrorDto,
   GenericEmailUnavailableErrorDto,
   GenericValidationFailedErrorDto,
+  IssueClosedErrorDto,
+  IssueCommentContentSetErrorDto,
+  IssueCommentHiddenErrorDto,
+  IssueCommentNotFoundErrorDto,
+  IssueContentSetErrorDto,
+  IssueNameSetErrorDto,
+  IssueNotFoundErrorDto,
+  IssueTypeSetErrorDto,
+  IssueVoteAlreadyExistsErrorDto,
   OrganizationAccessDeniedErrorDto,
   OrganizationInvitationAlreadyPresentErrorDto,
   OrganizationInvitationNotFoundErrorDto,
@@ -29,6 +38,15 @@ interface Callbacks<TFields extends Record<string, unknown>> {
     GenericValidationFailedErrorDto<TFields>
   >;
   [ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE]?: CallbackFn<GenericEmailUnavailableErrorDto>;
+  [ApplicationErrorCode.ISSUE_CLOSED]?: CallbackFn<IssueClosedErrorDto>;
+  [ApplicationErrorCode.ISSUE_COMMENT_CONTENT_SET]?: CallbackFn<IssueCommentContentSetErrorDto>;
+  [ApplicationErrorCode.ISSUE_COMMENT_HIDDEN]?: CallbackFn<IssueCommentHiddenErrorDto>;
+  [ApplicationErrorCode.ISSUE_COMMENT_NOT_FOUND]?: CallbackFn<IssueCommentNotFoundErrorDto>;
+  [ApplicationErrorCode.ISSUE_CONTENT_SET]?: CallbackFn<IssueContentSetErrorDto>;
+  [ApplicationErrorCode.ISSUE_NAME_SET]?: CallbackFn<IssueNameSetErrorDto>;
+  [ApplicationErrorCode.ISSUE_NOT_FOUND]?: CallbackFn<IssueNotFoundErrorDto>;
+  [ApplicationErrorCode.ISSUE_TYPE_SET]?: CallbackFn<IssueTypeSetErrorDto>;
+  [ApplicationErrorCode.ISSUE_VOTE_ALREADY_EXISTS]?: CallbackFn<IssueVoteAlreadyExistsErrorDto>;
   [ApplicationErrorCode.USER_NOT_FOUND]?: CallbackFn<UserNotFoundErrorDto>;
   [ApplicationErrorCode.AUTH_ACCESS_DENIED]?: CallbackFn<AuthAccessDeniedErrorDto>;
   [ApplicationErrorCode.AUTH_INVALID_CREDENTIALS]?: CallbackFn<AuthInvalidCredentialsErrorDto>;
@@ -40,11 +58,21 @@ interface Callbacks<TFields extends Record<string, unknown>> {
   [ApplicationErrorCode.ORGANIZATION_MEMBER_ALREADY_PRESENT]?: CallbackFn<OrganizationMemberAlreadyPresentErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_ACCESS_DENIED]?: CallbackFn<OrganizationAccessDeniedErrorDto>;
   [ApplicationErrorCode.ORGANIZATION_PROJECT_NOT_FOUND]?: CallbackFn<OrganizationProjectNotFoundErrorDto>;
+  defaultCallback?: CallbackFn<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>>;
 }
 
 export interface ApplicationErrorHandler<TFields extends Record<string, unknown>> {
   onGenericValidationFailed: HandlerFn<GenericValidationFailedErrorDto<TFields>, TFields>;
   onGenericEmailUnavailable: HandlerFn<GenericEmailUnavailableErrorDto, TFields>;
+  onIssueClosed: HandlerFn<IssueClosedErrorDto, TFields>;
+  onIssueCommentContentSet: HandlerFn<IssueCommentContentSetErrorDto, TFields>;
+  onIssueCommentHidden: HandlerFn<IssueCommentHiddenErrorDto, TFields>;
+  onIssueCommentNotFound: HandlerFn<IssueCommentNotFoundErrorDto, TFields>;
+  onIssueContentSet: HandlerFn<IssueContentSetErrorDto, TFields>;
+  onIssueNameSet: HandlerFn<IssueNameSetErrorDto, TFields>;
+  onIssueNotFound: HandlerFn<IssueNotFoundErrorDto, TFields>;
+  onIssueTypeSet: HandlerFn<IssueTypeSetErrorDto, TFields>;
+  onIssueVoteAlreadyExists: HandlerFn<IssueVoteAlreadyExistsErrorDto, TFields>;
   onUserNotFound: HandlerFn<UserNotFoundErrorDto, TFields>;
   onAuthAccessDenied: HandlerFn<AuthAccessDeniedErrorDto, TFields>;
   onAuthInvalidCredentials: HandlerFn<AuthInvalidCredentialsErrorDto, TFields>;
@@ -59,6 +87,7 @@ export interface ApplicationErrorHandler<TFields extends Record<string, unknown>
   onOrganizationMemberAlreadyPresent: HandlerFn<OrganizationMemberAlreadyPresentErrorDto, TFields>;
   onOrganizationAccessDenied: HandlerFn<OrganizationAccessDeniedErrorDto, TFields>;
   onOrganizationProjectNotFound: HandlerFn<OrganizationProjectNotFoundErrorDto, TFields>;
+  onDefault: HandlerFn<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, TFields>;
   handleAxiosError: (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
   ) => void;
@@ -72,6 +101,8 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
 
     if (callback) {
       callback(error as any);
+    } else if (callbacks.defaultCallback) {
+      callbacks.defaultCallback(error);
     }
   };
 
@@ -85,6 +116,51 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
       applicationErrorHandler({
         ...callbacks,
         [ApplicationErrorCode.GENERIC_EMAIL_UNAVAILABLE]: callback,
+      }),
+    onIssueClosed: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_CLOSED]: callback,
+      }),
+    onIssueCommentContentSet: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_COMMENT_CONTENT_SET]: callback,
+      }),
+    onIssueCommentHidden: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_COMMENT_HIDDEN]: callback,
+      }),
+    onIssueCommentNotFound: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_COMMENT_NOT_FOUND]: callback,
+      }),
+    onIssueContentSet: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_CONTENT_SET]: callback,
+      }),
+    onIssueNameSet: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_NAME_SET]: callback,
+      }),
+    onIssueNotFound: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_NOT_FOUND]: callback,
+      }),
+    onIssueTypeSet: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_TYPE_SET]: callback,
+      }),
+    onIssueVoteAlreadyExists: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        [ApplicationErrorCode.ISSUE_VOTE_ALREADY_EXISTS]: callback,
       }),
     onUserNotFound: (callback) =>
       applicationErrorHandler({
@@ -140,6 +216,11 @@ export const applicationErrorHandler = <TFields extends Record<string, any>>(
       applicationErrorHandler({
         ...callbacks,
         [ApplicationErrorCode.ORGANIZATION_PROJECT_NOT_FOUND]: callback,
+      }),
+    onDefault: (callback) =>
+      applicationErrorHandler({
+        ...callbacks,
+        defaultCallback: callback,
       }),
     handleAxiosError: (error): void => {
       if (!error.response?.data?.code) {
