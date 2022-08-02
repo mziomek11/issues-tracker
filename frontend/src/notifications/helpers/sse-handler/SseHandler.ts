@@ -2,6 +2,7 @@ import {
   IssueClosedEventDto,
   IssueCommentContentChangedEventDto,
   IssueCommentedEventDto,
+  IssueCommentHiddenEventDto,
   IssueCommentVotedEventDto,
   IssueContentChangedEventDto,
   IssueOpenedEventDto,
@@ -15,7 +16,6 @@ import {
   OrganizationProjectCreatedEventDto,
 } from '@notifications/dtos/notification-event';
 import { NotificationEvent } from '@notifications/enums/notification-event';
-import { IssueCommentHiddenErrorDto } from '@shared/dtos/application-error';
 
 type CallbackFn<TData> = (data: TData) => void;
 
@@ -29,7 +29,7 @@ interface Callbacks {
   [NotificationEvent.ISSUE_CLOSED]?: CallbackFn<IssueClosedEventDto>;
   [NotificationEvent.ISSUE_COMMENT_CONTENT_CHANGED]?: CallbackFn<IssueCommentContentChangedEventDto>;
   [NotificationEvent.ISSUE_COMMENTED]?: CallbackFn<IssueCommentedEventDto>;
-  [NotificationEvent.ISSUE_COMMENT_HIDDEN]?: CallbackFn<IssueCommentHiddenErrorDto>;
+  [NotificationEvent.ISSUE_COMMENT_HIDDEN]?: CallbackFn<IssueCommentHiddenEventDto>;
   [NotificationEvent.ISSUE_COMMENT_VOTED]?: CallbackFn<IssueCommentVotedEventDto>;
   [NotificationEvent.ISSUE_CONTENT_CHANGED]?: CallbackFn<IssueContentChangedEventDto>;
   [NotificationEvent.ISSUE_OPENED]?: CallbackFn<IssueOpenedEventDto>;
@@ -45,7 +45,7 @@ export interface SseHandler {
   onIssueClosedEvent: HandlerFn<IssueClosedEventDto>;
   onIssueCommentContentChangedEvent: HandlerFn<IssueCommentContentChangedEventDto>;
   onIssueCommentedEvent: HandlerFn<IssueCommentedEventDto>;
-  onIssueCommentHiddenEvent: HandlerFn<IssueCommentHiddenErrorDto>;
+  onIssueCommentHiddenEvent: HandlerFn<IssueCommentHiddenEventDto>;
   onIssueCommentVotedEvent: HandlerFn<IssueCommentVotedEventDto>;
   onIssueContentChangedEvent: HandlerFn<IssueContentChangedEventDto>;
   onIssueOpenedEvent: HandlerFn<IssueOpenedEventDto>;
@@ -75,9 +75,9 @@ export const sseHandler = (callbacks: Callbacks = {}): SseHandler => {
     onIssueClosedEvent: (callback) =>
       sseHandler({ ...callbacks, [NotificationEvent.ISSUE_CLOSED]: callback }),
     onIssueCommentContentChangedEvent: (callback) =>
-      sseHandler({ ...callbacks, [NotificationEvent.ISSUE_COMMENTED]: callback }),
-    onIssueCommentedEvent: (callback) =>
       sseHandler({ ...callbacks, [NotificationEvent.ISSUE_COMMENT_CONTENT_CHANGED]: callback }),
+    onIssueCommentedEvent: (callback) =>
+      sseHandler({ ...callbacks, [NotificationEvent.ISSUE_COMMENTED]: callback }),
     onIssueCommentHiddenEvent: (callback) =>
       sseHandler({ ...callbacks, [NotificationEvent.ISSUE_COMMENT_HIDDEN]: callback }),
     onIssueCommentVotedEvent: (callback) =>

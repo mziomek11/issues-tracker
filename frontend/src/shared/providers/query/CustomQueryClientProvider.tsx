@@ -5,6 +5,10 @@ import { sseHandler } from '@notifications/helpers/sse-handler';
 import { useSseSubscription } from '@notifications/hooks/api';
 import {
   invalidateIssueClosed,
+  invalidateIssueCommentContentChanged,
+  invalidateIssueCommented,
+  invalidateIssueCommentHidden,
+  invalidateIssueCommentVoted,
   invalidateIssueContentChanged,
   invalidateIssueCreated,
   invalidateIssueRenamed,
@@ -31,9 +35,17 @@ export const CustomQueryClientProvider: React.FC<CustomQueryClientProviderProps>
     .onIssueClosedEvent(({ data }) =>
       invalidateIssueClosed(data.projectId, data.issueId, queryClient)
     )
+    .onIssueCommentedEvent(({ data }) => invalidateIssueCommented(data.issueId, queryClient))
     .onIssueContentChangedEvent(({ data }) =>
       invalidateIssueContentChanged(data.projectId, data.issueId, queryClient)
     )
+    .onIssueCommentContentChangedEvent(({ data }) =>
+      invalidateIssueCommentContentChanged(data.issueId, queryClient)
+    )
+    .onIssueCommentHiddenEvent(({ data }) =>
+      invalidateIssueCommentHidden(data.issueId, queryClient)
+    )
+    .onIssueCommentVotedEvent(({ data }) => invalidateIssueCommentVoted(data.issueId, queryClient))
     .onIssueOpenedEvent(({ data }) => invalidateIssueCreated(data.projectId, queryClient))
     .onIssueRenamedEvent(({ data }) =>
       invalidateIssueRenamed(data.projectId, data.issueId, queryClient)

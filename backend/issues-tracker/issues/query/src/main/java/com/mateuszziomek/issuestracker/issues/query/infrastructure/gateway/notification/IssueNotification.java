@@ -27,7 +27,7 @@ public class IssueNotification {
         );
     }
 
-    public static Map<String, ? extends Object> issueComment(Issue issue, UUID commentId, UUID memberId) {
+    public static Map<String, ? extends Object> issueComment(Issue issue, UUID memberId, UUID commentId) {
         return Map.of(
                 ORGANIZATION_ID,
                 issue.getOrganizationId(),
