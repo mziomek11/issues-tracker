@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController
@@ -38,8 +39,10 @@ public class NotificationRestController {
 
     @GetMapping("/notifications/users")
     public Flux<ServerSentEvent> subscribeToUserNotifications(
-            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId
+            @RequestHeader(SecurityHeaders.ISSUES_TRACKER_USER_ID) UUID userId,
+            HttpServletResponse response
     ) {
+        response.addHeader("X-Accel-Buffering", "no");
 
         return userNotificationSink
                 .asFlux()
