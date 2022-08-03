@@ -9,10 +9,8 @@ import {
   FormLabel,
   Input,
   Select,
-  Spinner,
-  Stack,
+  Box,
   Textarea,
-  VStack,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { FC, useState } from 'react';
@@ -29,6 +27,7 @@ import { mapValidationErrors } from '@shared/mappers/application-error';
 import { useNavigate } from 'react-router-dom';
 import { reverse } from '@shared/helpers/routing';
 import { useSseSubscription } from '@notifications/hooks/api';
+import { FormActions, FormFields } from '@shared/components';
 
 interface CreateIssueFormProps extends IssuesListParams {}
 
@@ -42,16 +41,18 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [handler, setHandler] = useState(sseHandler());
+  const [isWaitingForProjectCreatedEvent, setIsWaitingForProjectCreatedEvent] = useState(false);
   useSseSubscription(handler);
 
   const handleSuccess = (response: AxiosResponse<IssueCreatedDto, CreateIssueDto>): void => {
+    setIsWaitingForProjectCreatedEvent(true);
     setHandler(
       handler.onIssueOpenedEvent(({ data }) => {
         const organizationValidation = data.organizationId === params.organizationId;
         const projectValidation = data.projectId === params.projectId;
         const issueValidation = data.issueId === response.data.id;
         if (organizationValidation && projectValidation && issueValidation)
-          handleIssueCreatedEvent();
+          navigate(reverse({ path: 'issues.list', params }));
       })
     );
   };
@@ -81,18 +82,13 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
     createIssue(values);
   };
 
-  const { handleSubmit, handleChange, setErrors, errors, values, touched } =
-    useFormik<CreateIssueDto>({
-      initialValues,
-      onSubmit: handleSubmitForm,
-    });
-
-  const handleIssueCreatedEvent = (): void => {
-    navigate(reverse({ path: 'issues.list', params }));
-  };
+  const { handleSubmit, handleChange, setErrors, errors, values } = useFormik<CreateIssueDto>({
+    initialValues,
+    onSubmit: handleSubmitForm,
+  });
 
   return (
-    <Stack alignItems={'center'}>
+    <Box>
       {isError && error && (
         <Alert status="error">
           <AlertIcon />
@@ -100,7 +96,7 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
         </Alert>
       )}
       <form onSubmit={handleSubmit}>
-        <VStack>
+        <FormFields>
           <FormControl isInvalid={!!errors.type}>
             <FormLabel>Issue type</FormLabel>
             <Select id="type" value={values.type} onChange={handleChange}>
@@ -111,21 +107,21 @@ export const CreateIssueForm: FC<CreateIssueFormProps> = (params) => {
           <FormControl isInvalid={!!errors.name}>
             <FormLabel>Issue name</FormLabel>
             <Input name="name" id="name" value={values.name} onChange={handleChange} />
-            {errors.name && touched.name && <FormErrorMessage>{errors.name}</FormErrorMessage>}
+            <FormErrorMessage>{errors.name}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.content}>
             <FormLabel>Issue content</FormLabel>
             <Textarea name="content" id="content" value={values.content} onChange={handleChange} />
-            {errors.content && touched.content && (
-              <FormErrorMessage>{errors.content}</FormErrorMessage>
-            )}
+            <FormErrorMessage>{errors.content}</FormErrorMessage>
           </FormControl>
-          <Button type="submit" disabled={isLoading}>
-            Add
+        </FormFields>
+
+        <FormActions>
+          <Button type="submit" isLoading={isLoading || isWaitingForProjectCreatedEvent}>
+            Open issue
           </Button>
-          {isLoading && <Spinner />}
-        </VStack>
+        </FormActions>
       </form>
-    </Stack>
+    </Box>
   );
 };

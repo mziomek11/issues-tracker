@@ -1,5 +1,6 @@
 interface Member {
   id: string;
+  email: string;
 }
 export interface ProjectDto {
   id: string;

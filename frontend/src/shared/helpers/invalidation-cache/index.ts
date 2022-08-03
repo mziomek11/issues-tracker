@@ -9,4 +9,6 @@ export * from './invalidateIssueRenamed';
 export * from './invalidateIssueTypeChanged';
 export * from './invalidateIssueVoted';
 export * from './invalidateOrganizationCreated';
+export * from './invalidateOrganizationMemberInvited';
+export * from './invalidateOrganizationMemberJoined';
 export * from './invalidateOrganizationProjectCreated';

@@ -1,7 +1,6 @@
 import { AxiosError } from 'axios';
-import { Flex, Button, Spinner } from '@chakra-ui/react';
+import { Flex, Button, Spinner, Text, UnorderedList, ListItem } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { UserOrganizationsListElement } from '@organizations/components';
 import { useOrganizations } from '@organizations/hooks/api';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
@@ -20,15 +19,32 @@ export const UserOrganizationsList: React.FC = () => {
   if (isLoading) return <Spinner />;
 
   return (
-    <Flex width="80%" direction="column" gap={5}>
-      {organizations?.data.map((organization) => (
-        <UserOrganizationsListElement key={organization.id} {...organization} />
-      ))}
-      <Link to={reverse('organizations.create')}>
-        <Button size="lg" variant="outline">
-          Add organization
-        </Button>
-      </Link>
+    <Flex width="80%" alignItems="center" direction="column" gap={5}>
+      {organizations?.data.length === 0 && (
+        <Text>You are not a member of any organization yet</Text>
+      )}
+
+      <UnorderedList>
+        {organizations?.data.map((organization) => (
+          <ListItem key={organization.id}>
+            <Text
+              as={Link}
+              to={reverse({
+                path: 'organizations.details',
+                params: { organizationId: organization.id },
+              })}
+              fontSize="2xl"
+              _hover={{ textDecoration: 'underline' }}
+            >
+              {organization.name}
+            </Text>
+          </ListItem>
+        ))}
+      </UnorderedList>
+
+      <Button as={Link} to={reverse('organizations.create')} mt="2">
+        Create organization
+      </Button>
     </Flex>
   );
 };

@@ -1,4 +1,4 @@
-import { Text, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import { OrganizationDetails } from '@organizations/components';
 import { OrganizationParams } from '@organizations/types';
 import { Layout } from '@shared/components';
@@ -9,7 +9,6 @@ export const OrganizationDetailsPage: React.FC = () => {
   return (
     <Layout>
       <VStack>
-        <Text fontSize="6xl">Organizations</Text>
         <OrganizationDetails {...params} />
       </VStack>
     </Layout>

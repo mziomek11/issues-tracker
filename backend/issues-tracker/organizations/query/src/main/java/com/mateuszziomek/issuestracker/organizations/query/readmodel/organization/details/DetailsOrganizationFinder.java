@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.query.readmodel.organization.details;
 
-import com.mateuszziomek.issuestracker.organizations.query.domain.OrganizationRepository;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 import org.springframework.stereotype.Component;

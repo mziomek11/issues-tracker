@@ -1,6 +1,4 @@
 import {
-  Flex,
-  Text,
   Button,
   IconButton,
   HStack,
@@ -8,6 +6,8 @@ import {
   FormErrorMessage,
   FormLabel,
   Select,
+  Tag,
+  VStack,
 } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { ChangeIssueTypeDto, IssueDetailsDto } from '@issues/dtos';
@@ -84,17 +84,24 @@ export const IssueType: React.FC<IssueTypeProps> = ({ params, issue }) => {
 
   if (type === null) {
     return (
-      <Flex>
-        <Text>{issue.type}</Text>
+      <HStack align="center">
+        <Tag
+          size="md"
+          colorScheme={issue.type === IssueTypeEnum.BUG ? 'red' : 'green'}
+          borderRadius="full"
+        >
+          {issue.type}
+        </Tag>
+
         {issue.status === IssueStatus.OPENED && (
           <IconButton aria-label="Change type" icon={<EditIcon />} onClick={toggleChangeType} />
         )}
-      </Flex>
+      </HStack>
     );
   }
 
   return (
-    <HStack as="form" onSubmit={handleSubmit}>
+    <VStack as="form" onSubmit={handleSubmit}>
       <FormControl isInvalid={!!typeError}>
         <FormLabel htmlFor="type">Type</FormLabel>
         <Select id="type" name="type" value={type} onChange={handleTypeChange}>
@@ -107,14 +114,14 @@ export const IssueType: React.FC<IssueTypeProps> = ({ params, issue }) => {
         <FormErrorMessage>{typeError}</FormErrorMessage>
       </FormControl>
 
-      <Flex>
+      <HStack>
         <Button onClick={toggleChangeType} isDisabled={isLoading || isWaitingForSse} type="button">
           Cancel
         </Button>
         <Button isLoading={isLoading || isWaitingForSse} type="submit">
           Change type
         </Button>
-      </Flex>
-    </HStack>
+      </HStack>
+    </VStack>
   );
 };

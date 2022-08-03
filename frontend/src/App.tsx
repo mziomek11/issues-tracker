@@ -2,7 +2,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
 import { SecureRoute } from '@shared/components';
 import { paths } from '@shared/consts/routing';
-import { HomePage } from '@shared/pages';
 import { CustomQueryClientProvider } from '@shared/providers/query';
 import { UserProvider } from '@users/contexts';
 import { LoginPage, RegisterPage } from '@users/pages';
@@ -16,6 +15,7 @@ import {
 } from '@organizations/pages';
 import { SseProvider } from '@notifications/contexts';
 import { CreateIssuePage, IssuesListPage, DetailsIssuePage } from '@issues/pages';
+import { HomePage } from '@shared/pages';
 
 export const App: React.FC = () => {
   return (

@@ -1,15 +1,9 @@
 package com.mateuszziomek.issuestracker.organizations.query.infrastructure.event;
 
 import com.mateuszziomek.cqrs.event.dispatcher.ReactiveEventDispatcher;
-import com.mateuszziomek.issuestracker.organizations.query.application.event.handler.OrganizationCreatedEventHandler;
-import com.mateuszziomek.issuestracker.organizations.query.application.event.handler.OrganizationMemberInvitedEventHandler;
-import com.mateuszziomek.issuestracker.organizations.query.application.event.handler.OrganizationMemberJoinedEventHandler;
-import com.mateuszziomek.issuestracker.organizations.query.application.event.handler.OrganizationProjectCreatedEventHandler;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
+import com.mateuszziomek.issuestracker.organizations.query.application.event.handler.*;
+import com.mateuszziomek.issuestracker.shared.domain.event.*;
 import lombok.RequiredArgsConstructor;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +16,7 @@ public class OrganizationEventRegistry {
     private final OrganizationMemberInvitedEventHandler organizationMemberInvitedEventHandler;
     private final OrganizationMemberJoinedEventHandler organizationMemberJoinedEventHandler;
     private final OrganizationProjectCreatedEventHandler organizationProjectCreatedEventHandler;
+    private final UserRegisteredEventHandler userRegisteredEventHandler;
 
     @PostConstruct
     public void registerHandlers() {
@@ -29,5 +24,6 @@ public class OrganizationEventRegistry {
         eventDispatcher.registerHandler(OrganizationMemberInvitedEvent.class, organizationMemberInvitedEventHandler);
         eventDispatcher.registerHandler(OrganizationMemberJoinedEvent.class, organizationMemberJoinedEventHandler);
         eventDispatcher.registerHandler(OrganizationProjectCreatedEvent.class, organizationProjectCreatedEventHandler);
+        eventDispatcher.registerHandler(UserRegisteredEvent.class, userRegisteredEventHandler);
     }
 }

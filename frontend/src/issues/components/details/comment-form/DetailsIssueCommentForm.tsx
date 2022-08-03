@@ -5,6 +5,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   Stack,
   Textarea,
   VStack,
@@ -78,16 +79,20 @@ export const DetailsIssueCommentForm: FC<DetailsIssueCommentFormProps> = ({ para
 
   return (
     <Stack>
-      {!isOpened && <Button onClick={toggleOpen}>Add comment</Button>}
+      {!isOpened && (
+        <Flex justify="center">
+          <Button onClick={toggleOpen}>Add comment</Button>
+        </Flex>
+      )}
       {isOpened && (
         <VStack as="form" onSubmit={handleSubmit as any}>
           <FormControl isInvalid={!!errors.content}>
-            <FormLabel htmlFor="content">Content</FormLabel>
+            <FormLabel htmlFor="content">Comment content</FormLabel>
             <Textarea id="content" name="content" value={values.content} onChange={handleChange} />
             <FormErrorMessage>{errors.content}</FormErrorMessage>
           </FormControl>
 
-          <Flex>
+          <HStack>
             <Button type="button" disabled={isLoading || isWaitingForSse} onClick={toggleOpen}>
               Cancel
             </Button>
@@ -95,7 +100,7 @@ export const DetailsIssueCommentForm: FC<DetailsIssueCommentFormProps> = ({ para
             <Button type="submit" isLoading={isLoading || isWaitingForSse}>
               Comment
             </Button>
-          </Flex>
+          </HStack>
         </VStack>
       )}
     </Stack>

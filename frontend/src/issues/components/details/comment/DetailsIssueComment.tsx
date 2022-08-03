@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, Box, Flex, Button, useToast } from '@chakra-ui/react';
+import { Text, Box, Flex, Button, useToast, HStack } from '@chakra-ui/react';
 import { IssueDetailsCommentDto, IssueDetailsDto } from '@issues/dtos';
 import { CommentStatus, IssueStatus } from '@issues/enums';
 import { useUser } from '@users/contexts';
@@ -69,27 +69,30 @@ export const DetailsIssueComment: React.FC<DetailsIssueCommentProps> = ({
 
   if (isHidden) {
     return (
-      <Flex>
-        <Text>Comment hidden</Text>
+      <HStack border="1px" borderColor="gray.200" p="4" w="full">
         <Button onClick={handleShow}>Show</Button>
-      </Flex>
+        <Text>Comment hidden</Text>
+      </HStack>
     );
   }
 
   return (
-    <Box>
-      <Text>{comment.creator.email}</Text>
+    <Box border="1px" borderColor="gray.200" p="4" w="full">
       <CommentContent
         comment={comment}
         issue={issue}
         params={{ ...params, commentId: comment.id }}
       />
-      <Flex>
-        {(issue.status === IssueStatus.OPENED || comment.status === CommentStatus.HIDDEN) && (
-          <Button onClick={handleHide} isLoading={isHidingComment || isWaitingForSse}>
-            Hide
-          </Button>
-        )}
+      <Text fontSize="sm">Commented by {comment.creator.email}</Text>
+
+      <Flex mt="8" justify="space-between">
+        <Box>
+          {(issue.status === IssueStatus.OPENED || comment.status === CommentStatus.HIDDEN) && (
+            <Button onClick={handleHide} isLoading={isHidingComment || isWaitingForSse}>
+              Hide
+            </Button>
+          )}
+        </Box>
 
         <CommentVotes
           comment={comment}

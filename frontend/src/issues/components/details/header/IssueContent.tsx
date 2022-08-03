@@ -8,6 +8,8 @@ import {
   FormErrorMessage,
   FormLabel,
   Textarea,
+  VStack,
+  Box,
 } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { ChangeIssueContentDto, IssueDetailsDto } from '@issues/dtos';
@@ -84,28 +86,30 @@ export const IssueContent: React.FC<IssueContentProps> = ({ params, issue }) => 
 
   if (content === null) {
     return (
-      <Flex>
+      <Flex justifyContent="space-between">
         <Text>{issue.content}</Text>
-        {issue.status === IssueStatus.OPENED && (
-          <IconButton
-            aria-label="Change content"
-            icon={<EditIcon />}
-            onClick={toggleChangeContent}
-          />
-        )}
+        <Box>
+          {issue.status === IssueStatus.OPENED && (
+            <IconButton
+              aria-label="Change content"
+              icon={<EditIcon />}
+              onClick={toggleChangeContent}
+            />
+          )}
+        </Box>
       </Flex>
     );
   }
 
   return (
-    <HStack as="form" onSubmit={handleSubmit}>
+    <VStack as="form" onSubmit={handleSubmit}>
       <FormControl isInvalid={!!contentError}>
         <FormLabel htmlFor="content">Content</FormLabel>
         <Textarea id="content" name="content" value={content} onChange={handleContentChange} />
         <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
-      <Flex>
+      <HStack>
         <Button
           onClick={toggleChangeContent}
           isDisabled={isLoading || isWaitingForSse}
@@ -116,7 +120,7 @@ export const IssueContent: React.FC<IssueContentProps> = ({ params, issue }) => 
         <Button isLoading={isLoading || isWaitingForSse} type="submit">
           Change content
         </Button>
-      </Flex>
-    </HStack>
+      </HStack>
+    </VStack>
   );
 };

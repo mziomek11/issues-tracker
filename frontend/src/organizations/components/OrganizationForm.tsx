@@ -1,16 +1,5 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Spinner,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { sseHandler } from '@notifications/helpers/sse-handler';
@@ -22,14 +11,18 @@ import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { CreateOrganizationDto, OrganizationCreatedDto } from '@organizations/dtos';
 import { useCreateOrganization } from '@organizations/hooks/api';
+import { FormActions, FormFields } from '@shared/components';
+import { useNavigate } from 'react-router-dom';
+import { reverse } from '@shared/helpers/routing';
 
 const initialValues: CreateOrganizationDto = {
   name: '',
 };
 
 export const OrganizationForm: React.FC = () => {
-  const { mutate: createOrganization, isSuccess, isLoading } = useCreateOrganization();
-  const [isOrganizationCreatedEventReceived, setIsOrganizationCreatedEventReceived] =
+  const navigate = useNavigate();
+  const { mutate: createOrganization, isLoading } = useCreateOrganization();
+  const [isWaitingForOrganizationCreatedEvent, setIsWaitingForOrganizationCreatedEvent] =
     useState(false);
   const [handler, setHandler] = useState(sseHandler());
   useSseSubscription(handler);
@@ -40,7 +33,7 @@ export const OrganizationForm: React.FC = () => {
       { onError: handleCreateOrganizationFailure, onSuccess: handleCreateOrganizationSuccess }
     );
 
-  const { errors, touched, values, handleSubmit, handleChange, setErrors, resetForm } =
+  const { errors, values, handleSubmit, handleChange, setErrors } =
     useFormik<CreateOrganizationDto>({
       initialValues,
       onSubmit: handleSubmitForm,
@@ -56,37 +49,33 @@ export const OrganizationForm: React.FC = () => {
   const handleCreateOrganizationSuccess = (
     response: AxiosResponse<OrganizationCreatedDto, CreateOrganizationDto>
   ): void => {
-    setIsOrganizationCreatedEventReceived(false);
+    setIsWaitingForOrganizationCreatedEvent(true);
     setHandler(
       handler.onOrganizationCreatedEvent(({ data }) => {
-        if (response.data.id === data.organizationId) handleOrganizationCreatedEvent();
+        if (response.data.id === data.organizationId) {
+          navigate(
+            reverse({ path: 'organizations.details', params: { organizationId: response.data.id } })
+          );
+        }
       })
     );
   };
 
-  const handleOrganizationCreatedEvent = (): void => {
-    setIsOrganizationCreatedEventReceived(true);
-    resetForm();
-  };
   return (
     <form onSubmit={handleSubmit}>
-      <VStack>
-        {isSuccess && isOrganizationCreatedEventReceived && (
-          <Alert status="success">
-            <AlertIcon />
-            <AlertDescription>An organization has been created.</AlertDescription>
-          </Alert>
-        )}
+      <FormFields>
         <FormControl isInvalid={!!errors.name}>
-          <FormLabel>Organization name</FormLabel>
-          <Input id="name" value={values.name} onChange={handleChange} />
-          {errors.name && touched.name && <FormErrorMessage>{errors.name}</FormErrorMessage>}
+          <FormLabel htmlFor="name">Organization name</FormLabel>
+          <Input id="name" name="name" value={values.name} onChange={handleChange} />
+          <FormErrorMessage>{errors.name}</FormErrorMessage>
         </FormControl>
-        <Button type="submit" disabled={isLoading}>
-          Add
+      </FormFields>
+
+      <FormActions>
+        <Button type="submit" isLoading={isLoading || isWaitingForOrganizationCreatedEvent}>
+          Create
         </Button>
-        {isLoading && <Spinner />}
-      </VStack>
+      </FormActions>
     </form>
   );
 };

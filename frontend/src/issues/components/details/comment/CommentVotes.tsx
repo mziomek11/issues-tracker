@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, Button, useToast, Flex } from '@chakra-ui/react';
+import { Text, Button, useToast, HStack } from '@chakra-ui/react';
 import { IssueDetailsCommentDto, IssueDetailsDto } from '@issues/dtos';
 import { IssueStatus, VoteType } from '@issues/enums';
 import { IssuesCommentDetailsParams } from '@issues/types';
@@ -62,7 +62,7 @@ export const CommentVotes: React.FC<CommentVotesProps> = ({ params, comment, iss
       .handleAxiosError(e);
 
   return (
-    <Flex>
+    <HStack>
       {issue.status === IssueStatus.OPENED && (
         <Button isDisabled={!canVote(VoteType.DOWN)} onClick={vote(VoteType.DOWN)}>
           -
@@ -80,6 +80,6 @@ export const CommentVotes: React.FC<CommentVotesProps> = ({ params, comment, iss
           +
         </Button>
       )}
-    </Flex>
+    </HStack>
   );
 };

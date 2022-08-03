@@ -15,11 +15,15 @@ export const DetailsIssuePage: FC = () => {
 
   return (
     <Layout>
-      <VStack>
-        {isLoading && <Spinner />}
-        {isSuccess && (
-          <Box>
-            <DetailsIssueHeader params={params} issue={issueResponse.data} />
+      {isLoading && (
+        <VStack>
+          <Spinner />
+        </VStack>
+      )}
+      {isSuccess && (
+        <Box mx="auto" maxW="60%">
+          <DetailsIssueHeader params={params} issue={issueResponse.data} />
+          <VStack my="8" spacing="8">
             {issueResponse.data.comments.map((comment) => (
               <DetailsIssueComment
                 key={comment.id}
@@ -28,12 +32,13 @@ export const DetailsIssuePage: FC = () => {
                 issue={issueResponse.data}
               />
             ))}
-            {issueResponse.data.status === IssueStatus.OPENED && (
-              <DetailsIssueCommentForm params={params} />
-            )}
-          </Box>
-        )}
-      </VStack>
+          </VStack>
+
+          {issueResponse.data.status === IssueStatus.OPENED && (
+            <DetailsIssueCommentForm params={params} />
+          )}
+        </Box>
+      )}
     </Layout>
   );
 };

@@ -3,10 +3,7 @@ package com.mateuszziomek.issuestracker.organizations.query.infrastructure.event
 import com.mateuszziomek.cqrs.event.BaseEvent;
 import com.mateuszziomek.cqrs.event.dispatcher.ReactiveEventDispatcher;
 import com.mateuszziomek.issuestracker.organizations.query.infrastructure.gateway.notification.NotificationGateway;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
+import com.mateuszziomek.issuestracker.shared.domain.event.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
@@ -37,6 +34,11 @@ public class OrganizationEventConsumer {
     @KafkaListener(topics = "OrganizationProjectCreatedEvent", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(OrganizationProjectCreatedEvent event, Acknowledgment acknowledgment) {
         consumeEvent(event, acknowledgment, notificationGateway.notify(event));
+    }
+
+    @KafkaListener(topics = "UserRegisteredEvent", groupId = "${spring.kafka.consumer.group-id}")
+    public void consume(UserRegisteredEvent event, Acknowledgment acknowledgment) {
+        consumeEvent(event, acknowledgment, Mono.empty());
     }
 
     private void consumeEvent(BaseEvent event, Acknowledgment acknowledgment, Mono<Void> notifyMono) {

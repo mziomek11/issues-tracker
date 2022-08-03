@@ -1,5 +1,4 @@
 import {
-  Flex,
   Text,
   Button,
   Input,
@@ -8,6 +7,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  VStack,
 } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { IssueDetailsDto, RenameIssueDto } from '@issues/dtos';
@@ -84,31 +84,31 @@ export const IssueName: React.FC<IssueNameProps> = ({ params, issue }) => {
 
   if (name === null) {
     return (
-      <Flex>
-        <Text>{issue.name}</Text>
+      <HStack align="center">
+        <Text fontSize="4xl">{issue.name}</Text>
         {issue.status === IssueStatus.OPENED && (
           <IconButton aria-label="Rename" icon={<EditIcon />} onClick={toggleRename} />
         )}
-      </Flex>
+      </HStack>
     );
   }
 
   return (
-    <HStack as="form" onSubmit={handleSubmit}>
+    <VStack as="form" align="flex-start" onSubmit={handleSubmit}>
       <FormControl isInvalid={!!nameError}>
         <FormLabel htmlFor="name">Name</FormLabel>
         <Input id="name" name="name" value={name} onChange={handleNameChange} />
         <FormErrorMessage>{nameError}</FormErrorMessage>
       </FormControl>
 
-      <Flex>
+      <HStack>
         <Button onClick={toggleRename} isDisabled={isLoading || isWaitingForSse} type="button">
           Cancel
         </Button>
         <Button isLoading={isLoading || isWaitingForSse} type="submit">
           Rename
         </Button>
-      </Flex>
-    </HStack>
+      </HStack>
+    </VStack>
   );
 };

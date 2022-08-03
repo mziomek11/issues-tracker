@@ -4,3 +4,4 @@ export * from './UserOrganizationDto';
 export * from './CreateProjectDto';
 export * from './ProjectCreatedDto';
 export * from './MemberInvitationDto';
+export * from './ListInvitation';

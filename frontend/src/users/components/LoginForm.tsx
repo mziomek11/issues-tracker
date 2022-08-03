@@ -1,5 +1,12 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { FormControl, FormLabel, Input, Button, VStack, FormErrorMessage } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  FormErrorMessage,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { ApplicationErrorDto } from '@shared/dtos/application-error';
@@ -8,9 +15,9 @@ import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { useUser } from '@users/contexts';
 import { LoginDto } from '@users/dtos';
 import { useLogin } from '@users/hooks/api';
-import { loginValidation } from '@users/validation';
 import { HttpStatus } from '@shared/enums/http';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { FormActions, FormFields } from '@shared/components';
 
 const initialValues: LoginDto = {
   email: '',
@@ -18,18 +25,17 @@ const initialValues: LoginDto = {
 };
 
 export const LoginForm: React.FC = (): JSX.Element => {
-  const { mutate: login } = useLogin();
+  const { mutate: login, isLoading } = useLogin();
   const { loginUser } = useUser();
   const handleSubmitForm = (values: LoginDto): void => {
     login(values, { onError: handleError, onSuccess: handleSuccess });
     setFieldValue('password', '');
   };
 
-  const { errors, touched, values, handleSubmit, handleChange, setFieldError, setFieldValue } =
+  const { errors, values, handleSubmit, handleChange, setFieldError, setFieldValue } =
     useFormik<LoginDto>({
       initialValues,
       onSubmit: handleSubmitForm,
-      validationSchema: loginValidation,
     });
 
   const handleError = (
@@ -48,7 +54,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
   };
   return (
     <form onSubmit={handleSubmit}>
-      <VStack spacing={4} width="30vw">
+      <FormFields>
         <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
@@ -58,20 +64,24 @@ export const LoginForm: React.FC = (): JSX.Element => {
             value={values.email}
             onChange={handleChange}
           />
-          {errors.email && touched.email && <FormErrorMessage>{errors.email}</FormErrorMessage>}
+          <FormErrorMessage>{errors.email}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input id="password" type="password" value={values.password} onChange={handleChange} />
-          {errors.password && touched.password && (
-            <FormErrorMessage>{errors.password}</FormErrorMessage>
-          )}
+          <FormErrorMessage>{errors.password}</FormErrorMessage>
         </FormControl>
-        <Button size="lg" variant="ghost" type="submit">
+      </FormFields>
+
+      <FormActions>
+        <Button size="lg" type="submit" isLoading={isLoading}>
           Login
         </Button>
-        <Link to={reverse('users.register')}>or register</Link>
-      </VStack>
+
+        <ChakraLink as={Link} to={reverse('users.register')} textDecoration="underline">
+          or register
+        </ChakraLink>
+      </FormActions>
     </form>
   );
 };

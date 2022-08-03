@@ -1,9 +1,9 @@
-import { Layout } from '@shared/components';
+import { OrganizationsPage } from '@organizations/pages';
+import { useUser } from '@users/contexts';
+import { LoginPage } from '@users/pages';
 
 export const HomePage: React.FC = () => {
-  return (
-    <Layout>
-      <></>
-    </Layout>
-  );
+  const { isLoggedIn } = useUser();
+
+  return isLoggedIn ? <OrganizationsPage /> : <LoginPage />;
 };

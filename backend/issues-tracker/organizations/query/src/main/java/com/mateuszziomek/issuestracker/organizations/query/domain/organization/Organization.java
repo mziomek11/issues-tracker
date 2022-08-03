@@ -1,8 +1,9 @@
-package com.mateuszziomek.issuestracker.organizations.query.domain;
+package com.mateuszziomek.issuestracker.organizations.query.domain.organization;
 
+import com.mateuszziomek.issuestracker.organizations.query.domain.member.Member;
+import com.mateuszziomek.issuestracker.organizations.query.domain.Project;
 import lombok.Data;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;
-import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberJoinedEvent;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationProjectCreatedEvent;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class Organization {
     private List<Project> projects;
     private List<Member> members;
 
-    public static Organization create(OrganizationCreatedEvent organizationCreatedEvent) {
+    public static Organization create(OrganizationCreatedEvent organizationCreatedEvent, Member member) {
         var organization = new Organization();
 
         organization.id = organizationCreatedEvent.getId();
@@ -25,13 +26,12 @@ public class Organization {
         organization.name = organizationCreatedEvent.getOrganizationName();
         organization.projects = new ArrayList<>();
         organization.members = new ArrayList<>();
-        organization.members.add(new Member(organization.getOwnerId()));
+        organization.members.add(member);
 
         return organization;
     }
 
-    public void joinMember(OrganizationMemberJoinedEvent organizationMemberJoinedEvent) {
-        var member = new Member(organizationMemberJoinedEvent.getMemberId());
+    public void joinMember(Member member) {
         members.add(member);
     }
 

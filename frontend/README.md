@@ -1,1 +1,0 @@
-# IssuesTracker - frontend

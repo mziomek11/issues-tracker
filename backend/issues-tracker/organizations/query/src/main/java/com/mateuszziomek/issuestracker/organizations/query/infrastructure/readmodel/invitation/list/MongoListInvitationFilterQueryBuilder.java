@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.query.infrastructure.readmodel.invitation.list;
 
-import com.mateuszziomek.issuestracker.organizations.query.domain.Invitation;
+import com.mateuszziomek.issuestracker.organizations.query.domain.invitation.Invitation;
 import com.mateuszziomek.issuestracker.organizations.query.readmodel.invitation.list.ListInvitationFilterQueryBuilder;
 import com.mateuszziomek.issuestracker.organizations.query.readmodel.invitation.list.ListInvitationMapper;
 import com.mateuszziomek.issuestracker.shared.readmodel.invitation.ListInvitation;

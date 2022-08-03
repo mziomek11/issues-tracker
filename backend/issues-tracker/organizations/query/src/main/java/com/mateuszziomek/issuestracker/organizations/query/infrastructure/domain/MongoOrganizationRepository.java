@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.organizations.query.infrastructure.domain;
 
-import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
-import com.mateuszziomek.issuestracker.organizations.query.domain.OrganizationRepository;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.Organization;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.OrganizationRepository;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 

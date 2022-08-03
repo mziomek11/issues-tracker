@@ -1,6 +1,6 @@
 package com.mateuszziomek.issuestracker.organizations.query.infrastructure.readmodel.organization.list;
 
-import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.Organization;
 import com.mateuszziomek.issuestracker.organizations.query.readmodel.organization.list.ListOrganizationFilterQueryBuilder;
 import com.mateuszziomek.issuestracker.organizations.query.readmodel.organization.list.ListOrganizationMapper;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.ListOrganization;

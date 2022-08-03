@@ -16,6 +16,8 @@ import {
   invalidateIssueVoted,
   invalidateOrganizationCreated,
   invalidateOrganizationProjectCreated,
+  invalidateOrganizationMemberJoined,
+  invalidateOrganizationMemberInvited,
 } from '@shared/helpers/invalidation-cache';
 
 const queryClient = new QueryClient({
@@ -57,7 +59,13 @@ export const CustomQueryClientProvider: React.FC<CustomQueryClientProviderProps>
       invalidateIssueVoted(data.projectId, data.issueId, queryClient)
     )
     .onOrganizationCreatedEvent(() => invalidateOrganizationCreated(queryClient))
-    .onOrganizationProjectCreatedEvent(() => invalidateOrganizationProjectCreated(queryClient));
+    .onOrganizationMemberInvitedEvent(() => invalidateOrganizationMemberInvited(queryClient))
+    .onOrganizationMemberJoinedEvent(({ data }) =>
+      invalidateOrganizationMemberJoined(data.organizationId, queryClient)
+    )
+    .onOrganizationProjectCreatedEvent(({ data }) =>
+      invalidateOrganizationProjectCreated(data.organizationId, queryClient)
+    );
 
   useSseSubscription(handler);
   const { jwt } = useUser();

@@ -6,7 +6,9 @@ export const OrganizationsPage: React.FC = () => {
   return (
     <Layout>
       <VStack>
-        <Text fontSize="6xl">Organizations</Text>
+        <Text fontSize="4xl" mb="6">
+          Organizations
+        </Text>
         <UserOrganizationsList />
       </VStack>
     </Layout>

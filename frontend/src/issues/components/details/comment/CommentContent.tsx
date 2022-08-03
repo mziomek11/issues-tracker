@@ -21,6 +21,8 @@ import {
   Textarea,
   FormErrorMessage,
   Button,
+  VStack,
+  Box,
 } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { IssueStatus } from '@issues/enums';
@@ -85,21 +87,23 @@ export const CommentContent: React.FC<CommentContentProps> = ({ comment, params,
 
   if (content === null) {
     return (
-      <Flex>
+      <Flex justify="space-between" align="center">
         <Text>{comment.content}</Text>
-        {issue.status === IssueStatus.OPENED && (
-          <IconButton
-            aria-label="Change content"
-            icon={<EditIcon />}
-            onClick={toggleChangeContent}
-          />
-        )}
+        <Box>
+          {issue.status === IssueStatus.OPENED && (
+            <IconButton
+              aria-label="Change content"
+              icon={<EditIcon />}
+              onClick={toggleChangeContent}
+            />
+          )}
+        </Box>
       </Flex>
     );
   }
 
   return (
-    <HStack as="form" onSubmit={handleSubmit}>
+    <VStack as="form" onSubmit={handleSubmit}>
       <FormControl isInvalid={!!contentError}>
         <FormLabel htmlFor="commentContent">Content</FormLabel>
         <Textarea
@@ -111,7 +115,7 @@ export const CommentContent: React.FC<CommentContentProps> = ({ comment, params,
         <FormErrorMessage>{contentError}</FormErrorMessage>
       </FormControl>
 
-      <Flex>
+      <HStack>
         <Button
           onClick={toggleChangeContent}
           isDisabled={isLoading || isWaitingForSse}
@@ -122,7 +126,7 @@ export const CommentContent: React.FC<CommentContentProps> = ({ comment, params,
         <Button isLoading={isLoading || isWaitingForSse} type="submit">
           Change content
         </Button>
-      </Flex>
-    </HStack>
+      </HStack>
+    </VStack>
   );
 };

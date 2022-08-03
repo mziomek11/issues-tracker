@@ -1,14 +1,17 @@
-import { Container } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react';
 import { Header } from './Header';
+import { Footer } from './Footer';
+import { Container } from './Container';
 
 interface LayoutProps {}
 
 export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
   return (
-    <Container maxW="80vw" height="100vh">
+    <Box display="flex" flexDirection="column" height="100vh">
       <Header />
-      {children}
-    </Container>
+      <Container flexGrow="1">{children}</Container>
+      <Footer />
+    </Box>
   );
 };

@@ -5,10 +5,10 @@ import {
   FormErrorMessage,
   Input,
   Button,
-  VStack,
   Alert,
   AlertIcon,
   AlertDescription,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
@@ -18,33 +18,33 @@ import { reverse } from '@shared/helpers/routing/reverse';
 import { mapValidationErrors } from '@shared/mappers/application-error';
 import { useRegister } from '@users/hooks/api/useRegister';
 import { RegisterUserDto } from '@users/dtos';
-import { registerValidation } from '@users/validation';
 import { HttpStatus } from '@shared/enums/http';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { FormActions, FormFields } from '@shared/components';
 
 interface RegisterFormValues {
   email: string;
   password: string;
-  repeatPassword: string;
 }
 
 const initialValues: RegisterFormValues = {
   email: '',
   password: '',
-  repeatPassword: '',
 };
 
 export const RegisterForm: React.FC = () => {
-  const { mutate: register, isSuccess } = useRegister();
+  const { mutate: register, isSuccess, isLoading } = useRegister();
 
   const handleSubmitForm = (values: RegisterFormValues): void =>
-    register({ email: values.email, password: values.password }, { onError: handleError });
+    register(
+      { email: values.email, password: values.password },
+      { onError: handleError, onSuccess: handleSuccess }
+    );
 
-  const { errors, touched, values, handleChange, handleSubmit, setErrors, setFieldError } =
+  const { errors, values, handleChange, handleSubmit, setErrors, setFieldError, resetForm } =
     useFormik<RegisterFormValues>({
       initialValues,
       onSubmit: handleSubmitForm,
-      validationSchema: registerValidation,
     });
 
   const handleError = (
@@ -55,15 +55,25 @@ export const RegisterForm: React.FC = () => {
       .onGenericEmailUnavailable(({ message }) => setFieldError('email', message))
       .handleAxiosError(error);
 
+  const handleSuccess = (): void => {
+    resetForm();
+  };
+
   return (
     <form onSubmit={handleSubmit}>
-      <VStack spacing={4} width="30vw">
-        {isSuccess && (
-          <Alert status="success">
-            <AlertIcon />
-            <AlertDescription>An account has been created. Now you can log in</AlertDescription>
-          </Alert>
-        )}
+      {isSuccess && (
+        <Alert status="success" mb="4">
+          <AlertIcon />
+          <AlertDescription>
+            Account has been successfully created. Now you can&nbsp;
+            <ChakraLink as={Link} to={reverse('users.login')} textDecoration="underline">
+              log in
+            </ChakraLink>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <FormFields>
         <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
@@ -73,35 +83,25 @@ export const RegisterForm: React.FC = () => {
             value={values.email}
             onChange={handleChange}
           />
-          {errors.email && touched.email && <FormErrorMessage>{errors.email}</FormErrorMessage>}
+          <FormErrorMessage>{errors.email}</FormErrorMessage>
         </FormControl>
 
         <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input id="password" type="password" value={values.password} onChange={handleChange} />
-          {errors.password && touched.password && (
-            <FormErrorMessage>{errors.password}</FormErrorMessage>
-          )}
+          <FormErrorMessage>{errors.password}</FormErrorMessage>
         </FormControl>
+      </FormFields>
 
-        <FormControl isInvalid={!!errors.repeatPassword}>
-          <FormLabel htmlFor="repeatPassword">Repeat password</FormLabel>
-          <Input
-            id="repeatPassword"
-            type="password"
-            value={values.repeatPassword}
-            onChange={handleChange}
-          />
-          {errors.repeatPassword && touched.repeatPassword && (
-            <FormErrorMessage>{errors.repeatPassword}</FormErrorMessage>
-          )}
-        </FormControl>
-
-        <Button size="lg" type="submit">
+      <FormActions>
+        <Button size="lg" type="submit" isLoading={isLoading}>
           Register
         </Button>
-        <Link to={reverse('users.login')}>or login</Link>
-      </VStack>
+
+        <ChakraLink as={Link} to={reverse('users.login')} textDecoration="underline">
+          or login
+        </ChakraLink>
+      </FormActions>
     </form>
   );
 };

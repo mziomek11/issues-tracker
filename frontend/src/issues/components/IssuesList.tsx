@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import {
+  Box,
   Button,
   Spinner,
   Stack,
@@ -21,6 +22,7 @@ import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { Link } from 'react-router-dom';
 import { reverse } from '@shared/helpers/routing';
+import { IssueStatus } from '@issues/enums';
 
 interface IssuesListProps {
   params: IssuesListParams;
@@ -53,18 +55,19 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
   if (isLoading || isFetching) return <Spinner />;
   else if (isSuccess) {
     return (
-      <Stack width={'65%'}>
+      <Box width={'65%'}>
         <Stack
           width={'100%'}
           direction={'row'}
           alignItems="center"
           justifyContent={'space-between'}
+          mb="4"
         >
-          <Text fontSize="6xl">
+          <Text fontSize="4xl">
             {projectData?.data.projects.find((project) => project.id === params.projectId)?.name}
           </Text>
           <Link to={reverse({ path: 'issues.create', params })}>
-            <Button variant={'outline'}>Add issue</Button>
+            <Button variant={'outline'}>Open issue</Button>
           </Link>
         </Stack>
         <Tabs
@@ -83,8 +86,12 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
           </TabList>
           <TabPanels>
             <TabPanel width={'100%'}>
+              {issues.data.filter((issue) => issue.status === IssueStatus.OPENED).length === 0 && (
+                <Text>Project has not any opened issue</Text>
+              )}
+
               {issues.data
-                .filter((issue) => issue.status === 'OPENED')
+                .filter((issue) => issue.status === IssueStatus.OPENED)
                 .map((issue) => (
                   <IssuesListElement
                     organizationId={params.organizationId}
@@ -95,8 +102,11 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
                 ))}
             </TabPanel>
             <TabPanel width={'100%'}>
+              {issues.data.filter((issue) => issue.status === IssueStatus.CLOSED).length === 0 && (
+                <Text>Project has not any closed issue</Text>
+              )}
               {issues.data
-                .filter((issue) => issue.status === 'CLOSED')
+                .filter((issue) => issue.status === IssueStatus.CLOSED)
                 .map((issue) => (
                   <IssuesListElement
                     organizationId={params.organizationId}
@@ -108,7 +118,7 @@ export const IssuesList: FC<IssuesListProps> = ({ params }) => {
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </Stack>
+      </Box>
     );
   } else {
     return <Text variant={'subtitle2'}>{error}</Text>;

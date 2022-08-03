@@ -1,15 +1,11 @@
 import { AxiosError } from 'axios';
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
-  Spinner,
-  VStack,
+  useToast,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -23,6 +19,9 @@ import { ApplicationErrorCode } from '@shared/enums/error-code';
 import { HttpStatus } from '@shared/enums/http';
 import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { mapValidationErrors } from '@shared/mappers/application-error';
+import { FormActions, FormFields } from '@shared/components';
+import { useNavigate } from 'react-router-dom';
+import { reverse } from '@shared/helpers/routing';
 
 const initialValues: MemberInvitationDto = {
   email: '',
@@ -30,27 +29,21 @@ const initialValues: MemberInvitationDto = {
 interface MemberInvitationFormProps extends OrganizationParams {}
 
 export const MemberInvitationForm: React.FC<MemberInvitationFormProps> = ({ organizationId }) => {
-  const { mutate: inviteMember, isSuccess, isLoading } = useInviteMember(organizationId);
-  const [isMemberInvitedEventReceived, setIsMemberInvitedEventReceived] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
+  const { mutate: inviteMember, isLoading } = useInviteMember(organizationId);
+  const [isWaitingForMemberInvitedEvent, setIsWaitingForMemberInvitedEvent] = useState(false);
   const [handler, setHandler] = useState(sseHandler());
   useSseSubscription(handler);
 
   const handleSubmitForm = (dto: MemberInvitationDto): void => {
     inviteMember(dto, { onError: handleInviteMemberFailure, onSuccess: handleInviteMemberSuccess });
   };
-  const {
-    errors,
-    touched,
-    values,
-    handleSubmit,
-    handleChange,
-    setFieldError,
-    setErrors,
-    resetForm,
-  } = useFormik<MemberInvitationDto>({
-    initialValues,
-    onSubmit: handleSubmitForm,
-  });
+  const { errors, values, handleSubmit, handleChange, setFieldError, setErrors } =
+    useFormik<MemberInvitationDto>({
+      initialValues,
+      onSubmit: handleSubmitForm,
+    });
 
   const handleInviteMemberFailure = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
@@ -66,35 +59,33 @@ export const MemberInvitationForm: React.FC<MemberInvitationFormProps> = ({ orga
       .handleAxiosError(error);
   };
   const handleInviteMemberSuccess = (): void => {
+    setIsWaitingForMemberInvitedEvent(true);
+
     setHandler(
       handler.onOrganizationMemberInvitedEvent(({ data }) => {
-        if (data.organizationId === organizationId) handleOrganizationMemberInvitedEvent();
+        if (data.organizationId === organizationId) {
+          toast({ status: 'success', title: 'Member has been successfully invited' });
+          navigate(reverse({ path: 'organizations.details', params: { organizationId } }));
+        }
       })
     );
   };
-  const handleOrganizationMemberInvitedEvent = (): void => {
-    setIsMemberInvitedEventReceived(true);
-    resetForm();
-  };
+
   return (
     <form onSubmit={handleSubmit}>
-      <VStack>
-        {isSuccess && isMemberInvitedEventReceived && (
-          <Alert status="success">
-            <AlertIcon />
-            <AlertDescription>An user has been invited.</AlertDescription>
-          </Alert>
-        )}
+      <FormFields>
         <FormControl isInvalid={!!errors.email}>
-          <FormLabel>User email</FormLabel>
-          <Input id="email" value={values.email} onChange={handleChange} />
-          {errors.email && touched.email && <FormErrorMessage>{errors.email}</FormErrorMessage>}
+          <FormLabel htmlFor="email">Member email</FormLabel>
+          <Input id="email" name="email" value={values.email} onChange={handleChange} />
+          <FormErrorMessage>{errors.email}</FormErrorMessage>
         </FormControl>
-        <Button type="submit" disabled={isLoading}>
-          Invite
+      </FormFields>
+
+      <FormActions>
+        <Button type="submit" isLoading={isLoading || isWaitingForMemberInvitedEvent}>
+          Invite member
         </Button>
-        {isLoading && <Spinner />}
-      </VStack>
+      </FormActions>
     </form>
   );
 };

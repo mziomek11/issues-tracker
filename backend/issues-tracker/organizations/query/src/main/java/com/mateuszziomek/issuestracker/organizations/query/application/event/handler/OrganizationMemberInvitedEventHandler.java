@@ -1,10 +1,10 @@
 package com.mateuszziomek.issuestracker.organizations.query.application.event.handler;
 
 import com.mateuszziomek.cqrs.event.ReactiveEventHandler;
-import com.mateuszziomek.issuestracker.organizations.query.domain.Invitation;
-import com.mateuszziomek.issuestracker.organizations.query.domain.InvitationRepository;
-import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
-import com.mateuszziomek.issuestracker.organizations.query.domain.OrganizationRepository;
+import com.mateuszziomek.issuestracker.organizations.query.domain.invitation.Invitation;
+import com.mateuszziomek.issuestracker.organizations.query.domain.invitation.InvitationRepository;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.Organization;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.OrganizationRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

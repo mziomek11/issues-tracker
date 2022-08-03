@@ -1,8 +1,8 @@
 package com.mateuszziomek.issuestracker.organizations.query.infrastructure.gateway.notification;
 
 import com.mateuszziomek.cqrs.event.BaseEvent;
-import com.mateuszziomek.issuestracker.organizations.query.domain.Member;
-import com.mateuszziomek.issuestracker.organizations.query.domain.OrganizationRepository;
+import com.mateuszziomek.issuestracker.organizations.query.domain.member.Member;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.OrganizationRepository;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationMemberInvitedEvent;
 import com.mateuszziomek.issuestracker.shared.ui.http.rest.v1.dto.notification.UserNotificationDto;
 import com.mateuszziomek.issuestracker.shared.domain.event.OrganizationCreatedEvent;

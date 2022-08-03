@@ -1,16 +1,5 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Spinner,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { sseHandler } from '@notifications/helpers/sse-handler';
@@ -22,6 +11,9 @@ import { applicationErrorHandler } from '@shared/helpers/application-error';
 import { mapValidationErrors } from '@shared/mappers/application-error';
 import { HttpStatus } from '@shared/enums/http';
 import { ApplicationErrorCode } from '@shared/enums/error-code';
+import { FormActions, FormFields } from '@shared/components';
+import { useNavigate } from 'react-router-dom';
+import { reverse } from '@shared/helpers/routing';
 
 const initialValues: CreateProjectDto = {
   name: '',
@@ -30,8 +22,9 @@ interface ProjectFormParms {
   organizationId: string;
 }
 export const ProjectForm: React.FC<ProjectFormParms> = ({ organizationId }) => {
-  const { mutate: createProject, isSuccess, isLoading } = useCreateProject();
-  const [isProjectCreatedEventReceived, setIsProjectCreatedEventReceived] = useState(false);
+  const navigate = useNavigate();
+  const { mutate: createProject, isLoading } = useCreateProject();
+  const [isWaitingForProjectCreatedEvent, setIsWaitingForProjectCreatedEvent] = useState(false);
   const [handler, setHandler] = useState(sseHandler());
   useSseSubscription(handler);
 
@@ -41,19 +34,11 @@ export const ProjectForm: React.FC<ProjectFormParms> = ({ organizationId }) => {
       { onError: handleCreateProjectFailure, onSuccess: handleCreateProjectSuccess }
     );
   };
-  const {
-    errors,
-    touched,
-    values,
-    handleSubmit,
-    handleChange,
-    setFieldError,
-    resetForm,
-    setErrors,
-  } = useFormik<CreateProjectDto>({
-    initialValues,
-    onSubmit: handleSubmitForm,
-  });
+  const { errors, values, handleSubmit, handleChange, setFieldError, setErrors } =
+    useFormik<CreateProjectDto>({
+      initialValues,
+      onSubmit: handleSubmitForm,
+    });
 
   const handleCreateProjectFailure = (
     error: AxiosError<ApplicationErrorDto<ApplicationErrorCode, HttpStatus>, unknown>
@@ -68,38 +53,31 @@ export const ProjectForm: React.FC<ProjectFormParms> = ({ organizationId }) => {
   const handleCreateProjectSuccess = (
     response: AxiosResponse<ProjectCreatedDto, CreateProjectDto>
   ): void => {
-    setIsProjectCreatedEventReceived(false);
+    setIsWaitingForProjectCreatedEvent(true);
     setHandler(
       handler.onOrganizationProjectCreatedEvent(({ data }) => {
-        if (response.data.id === data.projectId) handleProjectCreatedEvent();
+        if (response.data.id === data.projectId) {
+          navigate(reverse({ path: 'organizations.details', params: { organizationId } }));
+        }
       })
     );
   };
 
-  const handleProjectCreatedEvent = (): void => {
-    setIsProjectCreatedEventReceived(true);
-    resetForm();
-  };
-
   return (
     <form onSubmit={handleSubmit}>
-      <VStack>
-        {isSuccess && isProjectCreatedEventReceived && (
-          <Alert status="success">
-            <AlertIcon />
-            <AlertDescription>A project has been created.</AlertDescription>
-          </Alert>
-        )}
+      <FormFields>
         <FormControl isInvalid={!!errors.name}>
           <FormLabel>Project name</FormLabel>
           <Input id="name" value={values.name} onChange={handleChange} />
-          {errors.name && touched.name && <FormErrorMessage>{errors.name}</FormErrorMessage>}
+          <FormErrorMessage>{errors.name}</FormErrorMessage>
         </FormControl>
-        <Button type="submit" disabled={isLoading}>
-          Add
+      </FormFields>
+
+      <FormActions>
+        <Button type="submit" isLoading={isLoading || isWaitingForProjectCreatedEvent}>
+          Create
         </Button>
-        {isLoading && <Spinner />}
-      </VStack>
+      </FormActions>
     </form>
   );
 };

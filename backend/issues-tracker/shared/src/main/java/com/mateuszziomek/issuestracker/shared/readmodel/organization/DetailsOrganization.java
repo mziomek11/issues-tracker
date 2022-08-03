@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class DetailsOrganization {
     private UUID id;
     private UUID ownerId;
+    private String name;
     private List<Member> members;
     private List<Project> projects;
 
@@ -25,6 +26,7 @@ public class DetailsOrganization {
     @Builder
     public static class Member {
         private UUID id;
+        private String email;
     }
 
     @Getter

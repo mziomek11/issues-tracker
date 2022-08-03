@@ -1,7 +1,7 @@
 package com.mateuszziomek.issuestracker.organizations.query.readmodel.organization.details;
 
-import com.mateuszziomek.issuestracker.organizations.query.domain.Member;
-import com.mateuszziomek.issuestracker.organizations.query.domain.Organization;
+import com.mateuszziomek.issuestracker.organizations.query.domain.member.Member;
+import com.mateuszziomek.issuestracker.organizations.query.domain.organization.Organization;
 import com.mateuszziomek.issuestracker.organizations.query.domain.Project;
 import com.mateuszziomek.issuestracker.shared.readmodel.organization.DetailsOrganization;
 
@@ -15,6 +15,7 @@ public class DetailsOrganizationMapper {
                 .builder()
                 .id(organization.getId())
                 .ownerId(organization.getOwnerId())
+                .name(organization.getName())
                 .members(mapMembers(organization.getMembers()))
                 .projects(mapProjects(organization.getProjects()))
                 .build();
@@ -31,6 +32,7 @@ public class DetailsOrganizationMapper {
         return DetailsOrganization.Member
                 .builder()
                 .id(member.getId())
+                .email(member.getEmail())
                 .build();
     }
 
