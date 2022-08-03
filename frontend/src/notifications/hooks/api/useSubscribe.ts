@@ -9,7 +9,10 @@ export const useSubscribe = (
   const userAbortController = useRef<AbortController>(null as any);
   useEffect(() => {
     if (jwt) {
-      userAbortController.current = subscribe(jwt, handleSse);
+      userAbortController.current = subscribe(jwt, (sse) => {
+        console.log(sse);
+        handleSse(sse);
+      });
     } else if (userAbortController.current) {
       userAbortController.current.abort();
     }
