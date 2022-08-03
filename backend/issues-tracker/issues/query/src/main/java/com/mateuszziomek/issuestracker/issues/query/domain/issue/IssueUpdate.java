@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 public class IssueUpdate<T> {
     private IssueUpdateType type;
     private LocalDateTime updatedAt;
-    private T previousValues;
+    private T previousValue;
     private T currentValue;
 }

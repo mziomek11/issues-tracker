@@ -92,7 +92,7 @@ public class DetailsIssue {
     public static class CommentUpdate<T> {
         private CommentUpdateType type;
         private LocalDateTime updatedAt;
-        private T previousValues;
+        private T previousValue;
         private T currentValue;
     }
 }

@@ -31,12 +31,7 @@ public class OrganizationMemberJoinedEventHandler implements ReactiveEventHandle
                 })
                 .map(zip -> zip.getT1())
                 .flatMap(organizationRepository::save)
-                .flatMap(organization -> {
-                    System.out.println("REMOVING BY ID");
-                    System.out.println(organization.getId());
-
-                    return invitationRepository.deleteById(organization.getId());
-                })
+                .flatMap(organization -> invitationRepository.deleteById(organization.getId()))
                 .then();
     }
 }

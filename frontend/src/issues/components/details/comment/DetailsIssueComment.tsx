@@ -1,7 +1,16 @@
 import { useState } from 'react';
-import { Text, Box, Flex, Button, useToast, HStack } from '@chakra-ui/react';
+import {
+  Text,
+  Box,
+  Flex,
+  Button,
+  useToast,
+  HStack,
+  UnorderedList,
+  ListItem,
+} from '@chakra-ui/react';
 import { IssueDetailsCommentDto, IssueDetailsDto } from '@issues/dtos';
-import { CommentStatus, IssueStatus } from '@issues/enums';
+import { CommentStatus, CommentUpdateType, IssueStatus } from '@issues/enums';
 import { useUser } from '@users/contexts';
 import { sseHandler } from '@notifications/helpers/sse-handler';
 import { useHideComment } from '@issues/hooks';
@@ -77,29 +86,46 @@ export const DetailsIssueComment: React.FC<DetailsIssueCommentProps> = ({
   }
 
   return (
-    <Box border="1px" borderColor="gray.200" p="4" w="full">
-      <CommentContent
-        comment={comment}
-        issue={issue}
-        params={{ ...params, commentId: comment.id }}
-      />
-      <Text fontSize="sm">Commented by {comment.creator.email}</Text>
-
-      <Flex mt="8" justify="space-between">
-        <Box>
-          {(issue.status === IssueStatus.OPENED || comment.status === CommentStatus.HIDDEN) && (
-            <Button onClick={handleHide} isLoading={isHidingComment || isWaitingForSse}>
-              Hide
-            </Button>
-          )}
-        </Box>
-
-        <CommentVotes
+    <Box w="full">
+      <Box border="1px" borderColor="gray.200" p="4">
+        <CommentContent
           comment={comment}
           issue={issue}
           params={{ ...params, commentId: comment.id }}
         />
-      </Flex>
+        <Text fontSize="sm">Commented by {comment.creator.email}</Text>
+
+        <Flex mt="8" justify="space-between">
+          <Box>
+            {(issue.status === IssueStatus.OPENED || comment.status === CommentStatus.HIDDEN) && (
+              <Button onClick={handleHide} isLoading={isHidingComment || isWaitingForSse}>
+                Hide
+              </Button>
+            )}
+          </Box>
+
+          <CommentVotes
+            comment={comment}
+            issue={issue}
+            params={{ ...params, commentId: comment.id }}
+          />
+        </Flex>
+      </Box>
+
+      {comment.updates.length > 0 && (
+        <UnorderedList mt="4">
+          {comment.updates.map((update) => (
+            <ListItem key={update.updatedAt}>
+              {update.type === CommentUpdateType.CONTENT_CHANGED && (
+                <Text>
+                  Content changed from <strong>{update.previousValue}</strong> to{' '}
+                  <strong>{update.currentValue}</strong>
+                </Text>
+              )}
+            </ListItem>
+          ))}
+        </UnorderedList>
+      )}
     </Box>
   );
 };

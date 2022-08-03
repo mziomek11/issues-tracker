@@ -82,7 +82,7 @@ public class DetailsIssueMapper {
                 .type(update.getType())
                 .updatedAt(update.getUpdatedAt())
                 .currentValue(update.getCurrentValue())
-                .previousValue(update.getPreviousValues())
+                .previousValue(update.getPreviousValue())
                 .build();
     }
 
@@ -118,7 +118,7 @@ public class DetailsIssueMapper {
                 .type(update.getType())
                 .updatedAt(update.getUpdatedAt())
                 .currentValue(update.getCurrentValue())
-                .previousValues(update.getPreviousValues())
+                .previousValue(update.getPreviousValue())
                 .build();
     }
 }
